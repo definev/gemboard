@@ -1,0 +1,38 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$AskBoardIdImpl _$$AskBoardIdImplFromJson(Map<String, dynamic> json) =>
+    _$AskBoardIdImpl(
+      parentId: json['parent_id'] == null
+          ? const AskBoardParentId()
+          : AskBoardParentId.fromJson(
+              json['parent_id'] as Map<String, dynamic>),
+      id: json['id'] as String,
+    );
+
+Map<String, dynamic> _$$AskBoardIdImplToJson(_$AskBoardIdImpl instance) =>
+    <String, dynamic>{
+      'parent_id': AskBoardParentId.toJsonValue(instance.parentId),
+      'id': instance.id,
+    };
+
+_$AskBoardParentIdImpl _$$AskBoardParentIdImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AskBoardParentIdImpl();
+
+Map<String, dynamic> _$$AskBoardParentIdImplToJson(
+        _$AskBoardParentIdImpl instance) =>
+    <String, dynamic>{};
+
+_$AskBoardImpl _$$AskBoardImplFromJson(Map<String, dynamic> json) =>
+    _$AskBoardImpl(
+      id: AskBoardId.fromJson(json['id'] as Map<String, dynamic>),
+      title: json['title'] as String,
+    );
+
+Map<String, dynamic> _$$AskBoardImplToJson(_$AskBoardImpl instance) =>
+    <String, dynamic>{
+      'id': AskBoardId.toJsonValue(instance.id),
+      'title': instance.title,
+    };

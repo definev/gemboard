@@ -1,0 +1,10 @@
+# melos_managed_dependency_overrides: ask_board,design_system,genit_configuration,genit_navigator
+dependency_overrides:
+  ask_board:
+    path: ../../feature/ask_board
+  design_system:
+    path: ../../core/design_system
+  genit_configuration:
+    path: ../genit_configuration
+  genit_navigator:
+    path: ../genit_navigator

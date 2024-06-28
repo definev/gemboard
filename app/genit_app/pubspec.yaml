@@ -1,0 +1,34 @@
+name: genit_app
+description: "genit mobile app"
+publish_to: "none"
+version: 0.0.1+1
+
+environment: 
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  # Dependencies
+  flutter_riverpod: ^2.5.1
+
+  # Theme
+  design_system:
+    path: ../../core/design_system
+  
+  # Navigator
+  genit_navigator:
+    path: ../genit_navigator
+  
+  # Configuration
+  genit_configuration:
+    path: ../genit_configuration
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/feature/ask_board/melos_ask_board.iml" filepath="$PROJECT_DIR$/feature/ask_board/melos_ask_board.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/design_system/melos_design_system.iml" filepath="$PROJECT_DIR$/core/design_system/melos_design_system.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/genit_app/melos_genit_app.iml" filepath="$PROJECT_DIR$/app/genit_app/melos_genit_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/genit_configuration/melos_genit_configuration.iml" filepath="$PROJECT_DIR$/app/genit_configuration/melos_genit_configuration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/genit_navigator/melos_genit_navigator.iml" filepath="$PROJECT_DIR$/app/genit_navigator/melos_genit_navigator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/melos_genit.iml" filepath="$PROJECT_DIR$/melos_genit.iml" />
+    </modules>
+  </component>
+</project>

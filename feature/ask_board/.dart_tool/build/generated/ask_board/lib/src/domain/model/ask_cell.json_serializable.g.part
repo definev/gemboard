@@ -1,0 +1,67 @@
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$AskCellIdImpl _$$AskCellIdImplFromJson(Map<String, dynamic> json) =>
+    _$AskCellIdImpl(
+      parentId:
+          AskCellParentId.fromJson(json['parent_id'] as Map<String, dynamic>),
+      id: json['id'] as String,
+    );
+
+Map<String, dynamic> _$$AskCellIdImplToJson(_$AskCellIdImpl instance) =>
+    <String, dynamic>{
+      'parent_id': instance.parentId,
+      'id': instance.id,
+    };
+
+_$AskCellParentIdImpl _$$AskCellParentIdImplFromJson(
+        Map<String, dynamic> json) =>
+    _$AskCellParentIdImpl(
+      askBoardId: json['ask_board_id'] as String,
+      askPageId: json['ask_page_id'] as String,
+    );
+
+Map<String, dynamic> _$$AskCellParentIdImplToJson(
+        _$AskCellParentIdImpl instance) =>
+    <String, dynamic>{
+      'ask_board_id': instance.askBoardId,
+      'ask_page_id': instance.askPageId,
+    };
+
+_$CellImpl _$$CellImplFromJson(Map<String, dynamic> json) => _$CellImpl(
+      id: AskCellId.fromJson(json['id'] as Map<String, dynamic>),
+      position:
+          const OffsetConverter().fromJson(json['position'] as List<double>),
+      title: json['title'] as String? ?? '',
+      inputs: (json['inputs'] as List<dynamic>)
+          .map((e) => AskInput.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$CellImplToJson(_$CellImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'position': const OffsetConverter().toJson(instance.position),
+      'title': instance.title,
+      'inputs': instance.inputs,
+      'runtimeType': instance.$type,
+    };
+
+_$CellRefImpl _$$CellRefImplFromJson(Map<String, dynamic> json) =>
+    _$CellRefImpl(
+      id: AskCellId.fromJson(json['id'] as Map<String, dynamic>),
+      position:
+          const OffsetConverter().fromJson(json['position'] as List<double>),
+      refId: AskCellId.fromJson(json['ref_id'] as Map<String, dynamic>),
+      $type: json['runtimeType'] as String?,
+    );
+
+Map<String, dynamic> _$$CellRefImplToJson(_$CellRefImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'position': const OffsetConverter().toJson(instance.position),
+      'ref_id': instance.refId,
+      'runtimeType': instance.$type,
+    };

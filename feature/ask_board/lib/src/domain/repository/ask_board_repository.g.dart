@@ -1,0 +1,27 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'ask_board_repository.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$askBoardRepositoryHash() =>
+    r'1164c9dd6c20f2b1b79f5f6417e2431ea363b42c';
+
+/// See also [askBoardRepository].
+@ProviderFor(askBoardRepository)
+final askBoardRepositoryProvider =
+    AutoDisposeProvider<AskBoardRepository>.internal(
+  askBoardRepository,
+  name: r'askBoardRepositoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$askBoardRepositoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AskBoardRepositoryRef = AutoDisposeProviderRef<AskBoardRepository>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

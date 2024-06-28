@@ -1,0 +1,27 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'ask_cell_repository.dart';
+
+// **************************************************************************
+// RiverpodGenerator
+// **************************************************************************
+
+String _$askCellRepositoryMemoryHash() =>
+    r'2c0864093f3544600071c16640b72e373f182009';
+
+/// See also [askCellRepositoryMemory].
+@ProviderFor(askCellRepositoryMemory)
+final askCellRepositoryMemoryProvider =
+    Provider<AskCellRepositoryMemory>.internal(
+  askCellRepositoryMemory,
+  name: r'askCellRepositoryMemoryProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$askCellRepositoryMemoryHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AskCellRepositoryMemoryRef = ProviderRef<AskCellRepositoryMemory>;
+// ignore_for_file: type=lint
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

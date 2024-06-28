@@ -1,0 +1,53 @@
+name: genit
+
+packages:
+  - app/*
+  - core/*
+  - feature/*
+
+command:
+  bootstrap:
+    runPubGetInParallel: false
+
+    environment:
+      sdk: ">=3.0.0 <4.0.0"
+      flutter: ">=3.0.0 <4.0.0"
+
+    dependencies:
+      collection: ^1.18.0
+      flow_builder: ^0.1.0
+      go_router: ^14.2.0
+      flutter_riverpod: ^2.5.1
+      hooks_riverpod: ^2.5.1
+      flutter_hooks: ^0.20.5
+      riverpod_annotation: ^2.3.5
+      json_annotation: ^4.9.0
+      osum_serializable: 0.0.5
+    
+    dev_dependencies:
+      flutter_lints: ^4.0.0
+      build_runner: ^2.3.3
+      go_router_builder: ^2.7.0
+      riverpod_generator: ^2.4.0
+      json_serializable: ^6.8.0
+
+scripts:
+  build:all:
+    run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner build"
+    description: build_runner build all modules.
+  
+  watch:all:
+    run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner watch"
+    description: build_runner watch all modules.
+
+  build:all:force:
+    run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner build --delete-conflicting-outputs"
+    description: build_runner build all modules.
+
+  watch:all:force:
+    run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner watch --delete-conflicting-outputs"
+    description: build_runner watch all modules.
+  
+  pub:get:all:
+    run: dart pub global run melos exec "flutter pub get"
+    description: Run pub get on all modules.
