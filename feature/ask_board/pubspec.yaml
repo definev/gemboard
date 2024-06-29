@@ -19,6 +19,16 @@ dependencies:
   json_annotation: ^4.9.0
   osum_serializable: 0.0.5
 
+  # id
+  uuid: ^3.0.6
+
+  # widget canvas
+  boundless_stack:
+    git:
+      url: https://github.com/definev/boundless_stack.git
+      ref: main
+  equatable: ^2.0.5
+
   # design system
   design_system:
     path: ../../core/design_system
@@ -30,13 +40,4 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
 
 dependency_overrides:
-  json_annotation:
-    git:
-      url: https://github.com/definev/json_serializable.dart.git
-      ref: master
-      path: json_annotation
-  json_serializable:
-    git:
-      url: https://github.com/definev/json_serializable.dart.git
-      ref: master
-      path: json_serializable
+  uuid: ^3.0.6

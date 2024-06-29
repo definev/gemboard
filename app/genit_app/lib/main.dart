@@ -4,7 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:genit_app/di/di_initializer.dart';
 import 'package:genit_navigator/genit_navigator.dart' as nav;
 
-ProviderContainer container = ProviderContainer(overrides: initializeOverrides());
+ProviderContainer container =
+    ProviderContainer(overrides: initializeOverrides());
 
 void main() {
   runApp(

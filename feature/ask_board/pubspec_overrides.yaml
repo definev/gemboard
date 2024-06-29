@@ -1,14 +1,5 @@
-# melos_managed_dependency_overrides: design_system,json_annotation,json_serializable
+# melos_managed_dependency_overrides: design_system,uuid
 dependency_overrides:
   design_system:
     path: ../../core/design_system
-  json_annotation:
-    git:
-      url: https://github.com/definev/json_serializable.dart.git
-      ref: master
-      path: json_annotation
-  json_serializable:
-    git:
-      url: https://github.com/definev/json_serializable.dart.git
-      ref: master
-      path: json_serializable
+  uuid: ^3.0.6
