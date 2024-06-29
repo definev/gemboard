@@ -13,18 +13,18 @@ mixin class CrudDTORepositoryMemory<PID, ID extends HasParentId<PID>,
     return map[id.parentId]!.firstWhere((element) => element.id == id);
   }
 
-  void add({required PID parentId, required Data data}) {
+  Future<void> add({required PID parentId, required Data data}) async {
     if (map[parentId] == null) {
       map[parentId] = [];
     }
     map[parentId]!.add(data);
   }
 
-  void delete({required ID id}) {
+  Future<void> delete({required ID id}) async {
     map[id.parentId]?.removeWhere((element) => element.id == id);
   }
 
-  void update({required ID id, required Data data}) {
+  Future<void> update({required ID id, required Data data}) async {
     final index = map[id.parentId]!.indexWhere((element) => element.id == id);
     if (index == -1) return;
     map[id.parentId]![index] = data;

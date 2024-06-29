@@ -357,33 +357,35 @@ mixin _$AskCell {
   AskCellId get id => throw _privateConstructorUsedError;
   @OffsetConverter()
   Offset get position => throw _privateConstructorUsedError;
+  @SizeConverter()
+  Size get size => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)
+            @SizeConverter() Size size, String title, List<AskInput> inputs)
         cell,
-    required TResult Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)
+    required TResult Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)
         cellRef,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)?
+            @SizeConverter() Size size, String title, List<AskInput> inputs)?
         cell,
-    TResult? Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)?
+    TResult? Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)?
         cellRef,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)?
+            @SizeConverter() Size size, String title, List<AskInput> inputs)?
         cell,
-    TResult Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)?
+    TResult Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)?
         cellRef,
     required TResult orElse(),
   }) =>
@@ -417,7 +419,10 @@ abstract class $AskCellCopyWith<$Res> {
   factory $AskCellCopyWith(AskCell value, $Res Function(AskCell) then) =
       _$AskCellCopyWithImpl<$Res, AskCell>;
   @useResult
-  $Res call({AskCellId id, @OffsetConverter() Offset position});
+  $Res call(
+      {AskCellId id,
+      @OffsetConverter() Offset position,
+      @SizeConverter() Size size});
 
   $AskCellIdCopyWith<$Res> get id;
 }
@@ -437,6 +442,7 @@ class _$AskCellCopyWithImpl<$Res, $Val extends AskCell>
   $Res call({
     Object? id = null,
     Object? position = null,
+    Object? size = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -447,6 +453,10 @@ class _$AskCellCopyWithImpl<$Res, $Val extends AskCell>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as Offset,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as Size,
     ) as $Val);
   }
 
@@ -469,6 +479,7 @@ abstract class _$$CellImplCopyWith<$Res> implements $AskCellCopyWith<$Res> {
   $Res call(
       {AskCellId id,
       @OffsetConverter() Offset position,
+      @SizeConverter() Size size,
       String title,
       List<AskInput> inputs});
 
@@ -488,6 +499,7 @@ class __$$CellImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? position = null,
+    Object? size = null,
     Object? title = null,
     Object? inputs = null,
   }) {
@@ -500,6 +512,10 @@ class __$$CellImplCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as Offset,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as Size,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -518,6 +534,7 @@ class _$CellImpl implements _Cell {
   const _$CellImpl(
       {required this.id,
       @OffsetConverter() required this.position,
+      @SizeConverter() required this.size,
       this.title = '',
       required final List<AskInput> inputs,
       final String? $type})
@@ -532,6 +549,9 @@ class _$CellImpl implements _Cell {
   @override
   @OffsetConverter()
   final Offset position;
+  @override
+  @SizeConverter()
+  final Size size;
 //
   @override
   @JsonKey()
@@ -549,7 +569,7 @@ class _$CellImpl implements _Cell {
 
   @override
   String toString() {
-    return 'AskCell.cell(id: $id, position: $position, title: $title, inputs: $inputs)';
+    return 'AskCell.cell(id: $id, position: $position, size: $size, title: $title, inputs: $inputs)';
   }
 
   @override
@@ -560,13 +580,14 @@ class _$CellImpl implements _Cell {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.position, position) ||
                 other.position == position) &&
+            (identical(other.size, size) || other.size == size) &&
             (identical(other.title, title) || other.title == title) &&
             const DeepCollectionEquality().equals(other._inputs, _inputs));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, position, title,
+  int get hashCode => Object.hash(runtimeType, id, position, size, title,
       const DeepCollectionEquality().hash(_inputs));
 
   @JsonKey(ignore: true)
@@ -579,41 +600,41 @@ class _$CellImpl implements _Cell {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)
+            @SizeConverter() Size size, String title, List<AskInput> inputs)
         cell,
-    required TResult Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)
+    required TResult Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)
         cellRef,
   }) {
-    return cell(id, position, title, inputs);
+    return cell(id, position, size, title, inputs);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)?
+            @SizeConverter() Size size, String title, List<AskInput> inputs)?
         cell,
-    TResult? Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)?
+    TResult? Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)?
         cellRef,
   }) {
-    return cell?.call(id, position, title, inputs);
+    return cell?.call(id, position, size, title, inputs);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)?
+            @SizeConverter() Size size, String title, List<AskInput> inputs)?
         cell,
-    TResult Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)?
+    TResult Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)?
         cellRef,
     required TResult orElse(),
   }) {
     if (cell != null) {
-      return cell(id, position, title, inputs);
+      return cell(id, position, size, title, inputs);
     }
     return orElse();
   }
@@ -661,6 +682,7 @@ abstract class _Cell implements AskCell {
   const factory _Cell(
       {required final AskCellId id,
       @OffsetConverter() required final Offset position,
+      @SizeConverter() required final Size size,
       final String title,
       required final List<AskInput> inputs}) = _$CellImpl;
 
@@ -670,7 +692,10 @@ abstract class _Cell implements AskCell {
   AskCellId get id;
   @override
   @OffsetConverter()
-  Offset get position; //
+  Offset get position;
+  @override
+  @SizeConverter()
+  Size get size; //
   String get title;
   List<AskInput> get inputs;
   @override
@@ -687,7 +712,10 @@ abstract class _$$CellRefImplCopyWith<$Res> implements $AskCellCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {AskCellId id, @OffsetConverter() Offset position, AskCellId refId});
+      {AskCellId id,
+      @OffsetConverter() Offset position,
+      @SizeConverter() Size size,
+      AskCellId refId});
 
   @override
   $AskCellIdCopyWith<$Res> get id;
@@ -707,6 +735,7 @@ class __$$CellRefImplCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? position = null,
+    Object? size = null,
     Object? refId = null,
   }) {
     return _then(_$CellRefImpl(
@@ -718,6 +747,10 @@ class __$$CellRefImplCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as Offset,
+      size: null == size
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as Size,
       refId: null == refId
           ? _value.refId
           : refId // ignore: cast_nullable_to_non_nullable
@@ -740,6 +773,7 @@ class _$CellRefImpl implements _CellRef {
   const _$CellRefImpl(
       {required this.id,
       @OffsetConverter() required this.position,
+      @SizeConverter() required this.size,
       required this.refId,
       final String? $type})
       : $type = $type ?? 'cellRef';
@@ -752,6 +786,9 @@ class _$CellRefImpl implements _CellRef {
   @override
   @OffsetConverter()
   final Offset position;
+  @override
+  @SizeConverter()
+  final Size size;
 //
   @override
   final AskCellId refId;
@@ -761,7 +798,7 @@ class _$CellRefImpl implements _CellRef {
 
   @override
   String toString() {
-    return 'AskCell.cellRef(id: $id, position: $position, refId: $refId)';
+    return 'AskCell.cellRef(id: $id, position: $position, size: $size, refId: $refId)';
   }
 
   @override
@@ -772,12 +809,13 @@ class _$CellRefImpl implements _CellRef {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.position, position) ||
                 other.position == position) &&
+            (identical(other.size, size) || other.size == size) &&
             (identical(other.refId, refId) || other.refId == refId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, position, refId);
+  int get hashCode => Object.hash(runtimeType, id, position, size, refId);
 
   @JsonKey(ignore: true)
   @override
@@ -789,41 +827,41 @@ class _$CellRefImpl implements _CellRef {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)
+            @SizeConverter() Size size, String title, List<AskInput> inputs)
         cell,
-    required TResult Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)
+    required TResult Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)
         cellRef,
   }) {
-    return cellRef(id, position, refId);
+    return cellRef(id, position, size, refId);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)?
+            @SizeConverter() Size size, String title, List<AskInput> inputs)?
         cell,
-    TResult? Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)?
+    TResult? Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)?
         cellRef,
   }) {
-    return cellRef?.call(id, position, refId);
+    return cellRef?.call(id, position, size, refId);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(AskCellId id, @OffsetConverter() Offset position,
-            String title, List<AskInput> inputs)?
+            @SizeConverter() Size size, String title, List<AskInput> inputs)?
         cell,
-    TResult Function(
-            AskCellId id, @OffsetConverter() Offset position, AskCellId refId)?
+    TResult Function(AskCellId id, @OffsetConverter() Offset position,
+            @SizeConverter() Size size, AskCellId refId)?
         cellRef,
     required TResult orElse(),
   }) {
     if (cellRef != null) {
-      return cellRef(id, position, refId);
+      return cellRef(id, position, size, refId);
     }
     return orElse();
   }
@@ -871,6 +909,7 @@ abstract class _CellRef implements AskCell {
   const factory _CellRef(
       {required final AskCellId id,
       @OffsetConverter() required final Offset position,
+      @SizeConverter() required final Size size,
       required final AskCellId refId}) = _$CellRefImpl;
 
   factory _CellRef.fromJson(Map<String, dynamic> json) = _$CellRefImpl.fromJson;
@@ -879,7 +918,10 @@ abstract class _CellRef implements AskCell {
   AskCellId get id;
   @override
   @OffsetConverter()
-  Offset get position; //
+  Offset get position;
+  @override
+  @SizeConverter()
+  Size get size; //
   AskCellId get refId;
   @override
   @JsonKey(ignore: true)

@@ -1,5 +1,0 @@
-# melos_managed_dependency_overrides: design_system,uuid
-dependency_overrides:
-  design_system:
-    path: ../../core/design_system
-  uuid: ^3.0.6

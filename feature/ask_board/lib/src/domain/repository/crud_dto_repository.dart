@@ -6,10 +6,10 @@ abstract class CrudDTORepository<PID, ID extends HasParentId<PID>,
 
   Data get({required ID id});
 
-  void add({required PID parentId, required Data data});
+  Future<void> add({required PID parentId, required Data data});
 
-  void delete({required ID id});
+  Future<void> delete({required ID id});
 
-  void update({required ID id, required Data data});
+  Future<void> update({required ID id, required Data data});
 }
 

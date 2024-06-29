@@ -37,6 +37,7 @@ _$CellImpl _$$CellImplFromJson(Map<String, dynamic> json) => _$CellImpl(
       id: AskCellId.fromJson(json['id'] as Map<String, dynamic>),
       position:
           const OffsetConverter().fromJson(json['position'] as List<double>),
+      size: const SizeConverter().fromJson(json['size'] as List<double>),
       title: json['title'] as String? ?? '',
       inputs: (json['inputs'] as List<dynamic>)
           .map((e) => AskInput.fromJson(e as Map<String, dynamic>))
@@ -48,6 +49,7 @@ Map<String, dynamic> _$$CellImplToJson(_$CellImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'position': const OffsetConverter().toJson(instance.position),
+      'size': const SizeConverter().toJson(instance.size),
       'title': instance.title,
       'inputs': instance.inputs,
       'runtimeType': instance.$type,
@@ -58,6 +60,7 @@ _$CellRefImpl _$$CellRefImplFromJson(Map<String, dynamic> json) =>
       id: AskCellId.fromJson(json['id'] as Map<String, dynamic>),
       position:
           const OffsetConverter().fromJson(json['position'] as List<double>),
+      size: const SizeConverter().fromJson(json['size'] as List<double>),
       refId: AskCellId.fromJson(json['ref_id'] as Map<String, dynamic>),
       $type: json['runtimeType'] as String?,
     );
@@ -66,6 +69,7 @@ Map<String, dynamic> _$$CellRefImplToJson(_$CellRefImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'position': const OffsetConverter().toJson(instance.position),
+      'size': const SizeConverter().toJson(instance.size),
       'ref_id': instance.refId,
       'runtimeType': instance.$type,
     };

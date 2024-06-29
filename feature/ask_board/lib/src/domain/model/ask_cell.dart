@@ -39,6 +39,7 @@ class AskCell with _$AskCell, HasId<AskCellId> {
   const factory AskCell.cell({
     required AskCellId id,
     @OffsetConverter() required Offset position,
+    @SizeConverter() required Size size,
 
     //
     @Default('') String title,
@@ -48,6 +49,7 @@ class AskCell with _$AskCell, HasId<AskCellId> {
   const factory AskCell.cellRef({
     required AskCellId id,
     @OffsetConverter() required Offset position,
+    @SizeConverter() required Size size,
 
     //
     required AskCellId refId,

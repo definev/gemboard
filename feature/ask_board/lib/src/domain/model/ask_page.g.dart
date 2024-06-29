@@ -35,11 +35,13 @@ _$AskPageImpl _$$AskPageImplFromJson(Map<String, dynamic> json) =>
     _$AskPageImpl(
       id: AskPageId.fromJson(
           AskPageId.readValue(json, 'id') as Map<String, dynamic>),
+      emoji: json['emoji'] as String,
       title: json['title'] as String,
     );
 
 Map<String, dynamic> _$$AskPageImplToJson(_$AskPageImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'emoji': instance.emoji,
       'title': instance.title,
     };

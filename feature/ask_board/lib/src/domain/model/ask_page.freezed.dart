@@ -338,6 +338,7 @@ AskPage _$AskPageFromJson(Map<String, dynamic> json) {
 mixin _$AskPage {
   @JsonKey(readValue: AskPageId.readValue)
   AskPageId get id => throw _privateConstructorUsedError;
+  String get emoji => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -351,7 +352,9 @@ abstract class $AskPageCopyWith<$Res> {
       _$AskPageCopyWithImpl<$Res, AskPage>;
   @useResult
   $Res call(
-      {@JsonKey(readValue: AskPageId.readValue) AskPageId id, String title});
+      {@JsonKey(readValue: AskPageId.readValue) AskPageId id,
+      String emoji,
+      String title});
 
   $AskPageIdCopyWith<$Res> get id;
 }
@@ -370,6 +373,7 @@ class _$AskPageCopyWithImpl<$Res, $Val extends AskPage>
   @override
   $Res call({
     Object? id = null,
+    Object? emoji = null,
     Object? title = null,
   }) {
     return _then(_value.copyWith(
@@ -377,6 +381,10 @@ class _$AskPageCopyWithImpl<$Res, $Val extends AskPage>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as AskPageId,
+      emoji: null == emoji
+          ? _value.emoji
+          : emoji // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -401,7 +409,9 @@ abstract class _$$AskPageImplCopyWith<$Res> implements $AskPageCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: AskPageId.readValue) AskPageId id, String title});
+      {@JsonKey(readValue: AskPageId.readValue) AskPageId id,
+      String emoji,
+      String title});
 
   @override
   $AskPageIdCopyWith<$Res> get id;
@@ -419,6 +429,7 @@ class __$$AskPageImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? emoji = null,
     Object? title = null,
   }) {
     return _then(_$AskPageImpl(
@@ -426,6 +437,10 @@ class __$$AskPageImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as AskPageId,
+      emoji: null == emoji
+          ? _value.emoji
+          : emoji // ignore: cast_nullable_to_non_nullable
+              as String,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -439,6 +454,7 @@ class __$$AskPageImplCopyWithImpl<$Res>
 class _$AskPageImpl implements _AskPage {
   const _$AskPageImpl(
       {@JsonKey(readValue: AskPageId.readValue) required this.id,
+      required this.emoji,
       required this.title});
 
   factory _$AskPageImpl.fromJson(Map<String, dynamic> json) =>
@@ -448,11 +464,13 @@ class _$AskPageImpl implements _AskPage {
   @JsonKey(readValue: AskPageId.readValue)
   final AskPageId id;
   @override
+  final String emoji;
+  @override
   final String title;
 
   @override
   String toString() {
-    return 'AskPage(id: $id, title: $title)';
+    return 'AskPage(id: $id, emoji: $emoji, title: $title)';
   }
 
   @override
@@ -461,12 +479,13 @@ class _$AskPageImpl implements _AskPage {
         (other.runtimeType == runtimeType &&
             other is _$AskPageImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.emoji, emoji) || other.emoji == emoji) &&
             (identical(other.title, title) || other.title == title));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, title);
+  int get hashCode => Object.hash(runtimeType, id, emoji, title);
 
   @JsonKey(ignore: true)
   @override
@@ -485,6 +504,7 @@ class _$AskPageImpl implements _AskPage {
 abstract class _AskPage implements AskPage {
   const factory _AskPage(
       {@JsonKey(readValue: AskPageId.readValue) required final AskPageId id,
+      required final String emoji,
       required final String title}) = _$AskPageImpl;
 
   factory _AskPage.fromJson(Map<String, dynamic> json) = _$AskPageImpl.fromJson;
@@ -492,6 +512,8 @@ abstract class _AskPage implements AskPage {
   @override
   @JsonKey(readValue: AskPageId.readValue)
   AskPageId get id;
+  @override
+  String get emoji;
   @override
   String get title;
   @override

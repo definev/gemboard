@@ -38,6 +38,7 @@ class AskPageParentId with _$AskPageParentId {
 sealed class AskPage with _$AskPage, HasId<AskPageId> {
   const factory AskPage({
     @JsonKey(readValue: AskPageId.readValue) required AskPageId id,
+    required String emoji,
     required String title,
   }) = _AskPage;
 
