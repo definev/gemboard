@@ -5,10 +5,10 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'get_ask_cell_list.g.dart';
 
 @riverpod
-Future<List<AskCell>> getAskCellList(
+FutureOr<List<AskCell>> getAskCellList(
   GetAskCellListRef ref, {
   required AskCellParentId parentId,
-}) async {
+}) {
   final repository = ref.watch(askCellRepositoryProvider);
   return repository.getList(parentId: parentId);
 }

@@ -6,7 +6,7 @@ part of 'get_ask_cell_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAskCellListHash() => r'549aeafeedfe6580e8d3ef273bc173ea18f215ff';
+String _$getAskCellListHash() => r'11b17673357221cb9843b60892a936f7d13f67c8';
 
 /// Copied from Dart SDK
 class _SystemHash {
