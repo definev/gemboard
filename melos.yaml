@@ -51,3 +51,7 @@ scripts:
   pub:get:all:
     run: dart pub global run melos exec "flutter pub get"
     description: Run pub get on all modules.
+  
+  pub:upgrade:all:
+    run: dart pub global run melos exec "flutter pub upgrade"
+    description: Run pub upgrade on all modules.

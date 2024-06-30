@@ -54,7 +54,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: c733bb8e858ff7f56d892403547e03607a321179
+      resolved-ref: "149124a36eed6b50fb44135989491c92d758b0d4"
       url: "https://github.com/definev/boundless_stack.git"
     source: git
     version: "0.0.1"
@@ -209,14 +209,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
-  expand_tap_area:
-    dependency: transitive
-    description:
-      name: expand_tap_area
-      sha256: b3e178b5036a3eaa7950e2d02a01c536f34e5c1eb953dc0b3c15f06b1c9f75ac
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.1"
   file:
     dependency: transitive
     description:

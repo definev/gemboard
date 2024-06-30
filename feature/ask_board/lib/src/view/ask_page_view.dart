@@ -4,18 +4,53 @@ import 'package:ask_board/src/domain/model/ask_page.dart';
 import 'package:ask_board/src/provider/create_ask_cell.dart';
 import 'package:ask_board/src/provider/get_ask_cell_list.dart';
 import 'package:ask_board/src/provider/update_ask_cell.dart';
+import 'package:ask_board/src/view/ask_board_view.dart';
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'ask_page_view.freezed.dart';
+part 'ask_page_view.g.dart';
+
+@freezed
+class AskPageAppearanceData with _$AskPageAppearanceData {
+  const factory AskPageAppearanceData({
+    required AskPageId id,
+    required double scaleFactor,
+    required Offset offset,
+  }) = _AskPageAppearanceData;
+}
+
+@Riverpod(keepAlive: true)
+class AskPageAppearance extends _$AskPageAppearance {
+  AskPageAppearanceData build({
+    required String askBoardId,
+    required AskPageId id,
+  }) {
+    return AskPageAppearanceData(
+      scaleFactor: 1.0,
+      id: id,
+      offset: Offset.zero,
+    );
+  }
+
+  void update(AskPageAppearanceData data) {
+    state = data;
+  }
+}
 
 class AskPageView extends StatefulHookConsumerWidget {
   const AskPageView({
     super.key,
     required this.page,
+    this.appearance,
   });
 
   final AskPage page;
+  final AskBoardAppearanceData? appearance;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
@@ -27,12 +62,62 @@ class _AskPageViewState extends ConsumerState<AskPageView> {
   Map<AskCellId, GlobalKey> _askCellKeys = {};
   GlobalKey testKey = GlobalKey();
 
-  ScrollableDetails horizontalDetails = ScrollableDetails.horizontal(
-    controller: ScrollController(),
+  late ScrollableDetails horizontalDetails = ScrollableDetails.horizontal(
+    controller: ScrollController(
+      initialScrollOffset: appearanceOffset.dx,
+    ),
   );
-  ScrollableDetails verticalDetails = ScrollableDetails.vertical(
-    controller: ScrollController(),
+  late ScrollableDetails verticalDetails = ScrollableDetails.vertical(
+    controller: ScrollController(
+      initialScrollOffset: appearanceOffset.dy,
+    ),
   );
+
+  late Offset appearanceOffset = ref.read(askPageAppearanceProvider(
+    id: widget.page.id,
+    askBoardId: widget.appearance?.id ?? '',
+  ).select((a) => a.offset));
+
+  Offset get topLeft => Offset(
+        horizontalDetails.controller!.offset,
+        verticalDetails.controller!.offset,
+      );
+
+  void updateAppearanceOffset() {
+    final appearance = ref.read(
+      askPageAppearanceProvider(
+        id: widget.page.id,
+        askBoardId: widget.appearance?.id ?? '',
+      ),
+    );
+    final notifier = ref.read(
+      askPageAppearanceProvider(
+        id: widget.page.id,
+        askBoardId: widget.appearance?.id ?? '',
+      ).notifier,
+    );
+    notifier.update(
+      appearance.copyWith(offset: topLeft),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      horizontalDetails.controller!.jumpTo(appearanceOffset.dx);
+      verticalDetails.controller!.jumpTo(appearanceOffset.dy);
+    });
+    horizontalDetails.controller?.addListener(updateAppearanceOffset);
+    verticalDetails.controller?.addListener(updateAppearanceOffset);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    horizontalDetails.controller?.removeListener(updateAppearanceOffset);
+    verticalDetails.controller?.removeListener(updateAppearanceOffset);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +128,19 @@ class _AskPageViewState extends ConsumerState<AskPageView> {
 
     final cellsAsyncNotifier = ref.watch(
       getAskCellListProvider(parentId: parentId),
+    );
+
+    final askPageAppearance = ref.watch(
+      askPageAppearanceProvider(
+        id: widget.page.id,
+        askBoardId: widget.appearance?.id ?? '',
+      ),
+    );
+    final askPageAppearanceNotifier = ref.read(
+      askPageAppearanceProvider(
+        id: widget.page.id,
+        askBoardId: widget.appearance?.id ?? '',
+      ).notifier,
     );
 
     return switch (cellsAsyncNotifier) {
@@ -79,65 +177,73 @@ class _AskPageViewState extends ConsumerState<AskPageView> {
             ),
             // body: HomeView(),
             body: ZoomStackGestureDetector(
-              stack: (scaleFactor) => BoundlessStack(
-                scaleFactor: scaleFactor,
-                horizontalDetails: horizontalDetails,
-                verticalDetails: verticalDetails,
-                backgroundBuilder: gridBackgroundBuilder(
-                  gridThickness: 1.0,
-                  gridWidth: 100,
-                  gridHeight: 100,
-                  gridColor: Colors.grey.withOpacity(0.5),
+              scaleFactor: askPageAppearance.scaleFactor,
+              onScaleFactorChanged: (scaleFactor) {
+                askPageAppearanceNotifier.update(
+                  askPageAppearance.copyWith(scaleFactor: scaleFactor),
+                );
+              },
+              stack: (scaleFactor) {
+                return BoundlessStack(
                   scaleFactor: scaleFactor,
-                ),
-                delegate: BoundlessStackListDelegate(
-                  children: [
-                    for (final data in cells)
-                      StackPosition(
-                        key: _askCellKeys[data.id]!,
-                        moveable: StackMove(
-                          enable: true,
-                          snap: StackSnap(
-                            snap: true,
-                            heightSnap: 100,
-                            widthSnap: 100,
+                  horizontalDetails: horizontalDetails,
+                  verticalDetails: verticalDetails,
+                  backgroundBuilder: gridBackgroundBuilder(
+                    gridThickness: 1.0,
+                    gridWidth: 100,
+                    gridHeight: 100,
+                    gridColor: Colors.grey.withOpacity(0.5),
+                    scaleFactor: scaleFactor,
+                  ),
+                  delegate: BoundlessStackListDelegate(
+                    children: [
+                      for (final data in cells)
+                        StackPosition(
+                          key: _askCellKeys[data.id]!,
+                          moveable: StackMove(
+                            enable: true,
+                            snap: StackSnap(
+                              heightSnap: 100,
+                              widthSnap: 100,
+                            ),
                           ),
-                        ),
-                        data: StackPositionData(
-                          layer: 0,
-                          offset: data.position,
-                          height: data.size.height,
-                          width: data.size.width,
-                        ),
-                        builder: (context, notifier, child) => HookBuilder(
-                          builder: (context) {
-                            useEffect(() {
-                              void listener() {
-                                final offset = notifier.value.offset;
-                                if (offset != data.position) {
-                                  ref.read(updateAskCellProvider(
-                                      id: data.id,
-                                      data: data.copyWith(
-                                        position: offset,
+                          data: StackPositionData(
+                            layer: 0,
+                            offset: data.position,
+                            height: data.size.height,
+                            width: data.size.width,
+                          ),
+                          builder: (context, notifier, child) => HookBuilder(
+                            builder: (context) {
+                              useEffect(() {
+                                void listener() {
+                                  final offset = notifier.value.offset;
+                                  if (offset != data.position) {
+                                    ref.read(
+                                      updateAskCellProvider(
+                                        id: data.id,
+                                        data: data.copyWith(
+                                          position: offset,
+                                        ),
                                       ),
-                                    ),
-                                  );
+                                    );
+                                  }
                                 }
-                              }
 
-                              notifier.addListener(listener);
-                              return () {
-                                notifier.removeListener(listener);
-                              };
-                            }, []);
-                            return AskCellView(data: data);
-                          },
+                                notifier.addListener(listener);
+                                return () {
+                                  notifier.removeListener(listener);
+                                };
+                              }, []);
+                              return AskCellView(data: data);
+                            },
+                          ),
+                          scaleFactor: scaleFactor,
                         ),
-                        scaleFactor: scaleFactor,
-                      ),
-                  ],
-                ),
-              ),
+                    ],
+                  ),
+                );
+              },
             ),
           );
         }(),
@@ -162,160 +268,6 @@ class AskCellView extends StatelessWidget {
           TextField(),
           Text('${data.id.id}'),
         ],
-      ),
-    );
-  }
-}
-
-class HomeView extends StatefulWidget {
-  const HomeView({
-    super.key,
-  });
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  final GlobalKey _stack0PositionKey = GlobalKey();
-  final GlobalKey _stack1PositionKey = GlobalKey();
-
-  Offset referencefocalOriginal = Offset.zero;
-
-  final ScrollableDetails _horizontalDetails = ScrollableDetails.horizontal(
-    controller: ScrollController(
-      initialScrollOffset: -100,
-    ),
-  );
-  final ScrollableDetails _verticalDetails = ScrollableDetails.vertical(
-    controller: ScrollController(
-      initialScrollOffset: -100,
-    ),
-  );
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: ZoomStackGestureDetector(
-        stack: (scaleFactor) => BoundlessStack(
-          scaleFactor: scaleFactor,
-          backgroundBuilder: gridBackgroundBuilder(
-            gridThickness: 1.0,
-            gridWidth: 100,
-            gridHeight: 100,
-            gridColor: Colors.green,
-            scaleFactor: scaleFactor,
-          ),
-          horizontalDetails: _horizontalDetails,
-          verticalDetails: _verticalDetails,
-          delegate: BoundlessStackListDelegate(
-            children: [
-              StackPosition(
-                key: _stack0PositionKey,
-                scaleFactor: scaleFactor,
-                data: const StackPositionData(
-                  layer: 0,
-                  offset: Offset(400, 100),
-                  height: 300,
-                  width: 700,
-                ),
-                moveable: const StackMove(
-                  enable: true,
-                  snap: StackSnap(
-                    snap: true,
-                    heightSnap: 50,
-                    widthSnap: 50,
-                  ),
-                ),
-                builder: (context, notifier, child) {
-                  return ColoredBox(
-                    color: Colors.amber.shade50,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: FilledButton(
-                            onPressed: () {
-                              notifier.value = notifier.value.copyWith(
-                                height: notifier.value.height! + 10,
-                                width: notifier.value.width! + 10,
-                              );
-                            },
-                            child: const Text('Top Left'),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: FilledButton(
-                            onPressed: () {
-                              notifier.value = notifier.value.copyWith(
-                                height: notifier.value.height! - 10,
-                                width: notifier.value.width! - 10,
-                              );
-                            },
-                            child: const Text('Bottom Right'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-              StackPosition(
-                key: _stack1PositionKey,
-                scaleFactor: scaleFactor,
-                data: const StackPositionData(
-                  layer: 0,
-                  offset: Offset(400, 500),
-                  height: 300,
-                  width: 700,
-                ),
-                moveable: const StackMove(
-                  enable: true,
-                  snap: null,
-                  // snap: StackSnap(
-                  //   snap: true,
-                  //   heightSnap: 50,
-                  //   widthSnap: 50,
-                  // ),
-                ),
-                builder: (context, notifier, child) {
-                  return ColoredBox(
-                    color: Colors.amber.shade50,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: FilledButton(
-                            onPressed: () {
-                              notifier.value = notifier.value.copyWith(
-                                height: notifier.value.height! + 10,
-                                width: notifier.value.width! + 10,
-                              );
-                            },
-                            child: const Text('Top Left'),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: FilledButton(
-                            onPressed: () {
-                              notifier.value = notifier.value.copyWith(
-                                height: notifier.value.height! - 10,
-                                width: notifier.value.width! - 10,
-                              );
-                            },
-                            child: const Text('Bottom Right'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
