@@ -6,7 +6,7 @@ part of 'get_ask_page_list.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getAskPageListHash() => r'161e11d74349cb9acc94deaf226e72138bcab3b4';
+String _$getAskPageListHash() => r'0f61d5d2283ec04fcb89e960bb4f5518a5bf07ee';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -39,11 +39,11 @@ class GetAskPageListFamily extends Family<AsyncValue<List<AskPage>>> {
   const GetAskPageListFamily();
 
   /// See also [getAskPageList].
-  GetAskPageListProvider call(
-    AskPageParentId parentId,
-  ) {
+  GetAskPageListProvider call({
+    required AskPageParentId parentId,
+  }) {
     return GetAskPageListProvider(
-      parentId,
+      parentId: parentId,
     );
   }
 
@@ -52,7 +52,7 @@ class GetAskPageListFamily extends Family<AsyncValue<List<AskPage>>> {
     covariant GetAskPageListProvider provider,
   ) {
     return call(
-      provider.parentId,
+      parentId: provider.parentId,
     );
   }
 
@@ -74,12 +74,12 @@ class GetAskPageListFamily extends Family<AsyncValue<List<AskPage>>> {
 /// See also [getAskPageList].
 class GetAskPageListProvider extends AutoDisposeFutureProvider<List<AskPage>> {
   /// See also [getAskPageList].
-  GetAskPageListProvider(
-    AskPageParentId parentId,
-  ) : this._internal(
+  GetAskPageListProvider({
+    required AskPageParentId parentId,
+  }) : this._internal(
           (ref) => getAskPageList(
             ref as GetAskPageListRef,
-            parentId,
+            parentId: parentId,
           ),
           from: getAskPageListProvider,
           name: r'getAskPageListProvider',

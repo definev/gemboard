@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'create_ask_page.dart';
+part of 'update_ask_page.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createAskPageHash() => r'a29f3bacd6247ba8d2be1e42281be69f53ca5d43';
+String _$updateAskPageHash() => r'7ed0bf5ec233a56d4f3e73582609805601e9bfe3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,32 +29,32 @@ class _SystemHash {
   }
 }
 
-/// See also [createAskPage].
-@ProviderFor(createAskPage)
-const createAskPageProvider = CreateAskPageFamily();
+/// See also [updateAskPage].
+@ProviderFor(updateAskPage)
+const updateAskPageProvider = UpdateAskPageFamily();
 
-/// See also [createAskPage].
-class CreateAskPageFamily extends Family<AsyncValue<void>> {
-  /// See also [createAskPage].
-  const CreateAskPageFamily();
+/// See also [updateAskPage].
+class UpdateAskPageFamily extends Family<AsyncValue<void>> {
+  /// See also [updateAskPage].
+  const UpdateAskPageFamily();
 
-  /// See also [createAskPage].
-  CreateAskPageProvider call({
-    required AskPageParentId parentId,
+  /// See also [updateAskPage].
+  UpdateAskPageProvider call({
+    required AskPageId id,
     required AskPage data,
   }) {
-    return CreateAskPageProvider(
-      parentId: parentId,
+    return UpdateAskPageProvider(
+      id: id,
       data: data,
     );
   }
 
   @override
-  CreateAskPageProvider getProviderOverride(
-    covariant CreateAskPageProvider provider,
+  UpdateAskPageProvider getProviderOverride(
+    covariant UpdateAskPageProvider provider,
   ) {
     return call(
-      parentId: provider.parentId,
+      id: provider.id,
       data: provider.data,
     );
   }
@@ -71,62 +71,62 @@ class CreateAskPageFamily extends Family<AsyncValue<void>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'createAskPageProvider';
+  String? get name => r'updateAskPageProvider';
 }
 
-/// See also [createAskPage].
-class CreateAskPageProvider extends AutoDisposeFutureProvider<void> {
-  /// See also [createAskPage].
-  CreateAskPageProvider({
-    required AskPageParentId parentId,
+/// See also [updateAskPage].
+class UpdateAskPageProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [updateAskPage].
+  UpdateAskPageProvider({
+    required AskPageId id,
     required AskPage data,
   }) : this._internal(
-          (ref) => createAskPage(
-            ref as CreateAskPageRef,
-            parentId: parentId,
+          (ref) => updateAskPage(
+            ref as UpdateAskPageRef,
+            id: id,
             data: data,
           ),
-          from: createAskPageProvider,
-          name: r'createAskPageProvider',
+          from: updateAskPageProvider,
+          name: r'updateAskPageProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$createAskPageHash,
-          dependencies: CreateAskPageFamily._dependencies,
+                  : _$updateAskPageHash,
+          dependencies: UpdateAskPageFamily._dependencies,
           allTransitiveDependencies:
-              CreateAskPageFamily._allTransitiveDependencies,
-          parentId: parentId,
+              UpdateAskPageFamily._allTransitiveDependencies,
+          id: id,
           data: data,
         );
 
-  CreateAskPageProvider._internal(
+  UpdateAskPageProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.parentId,
+    required this.id,
     required this.data,
   }) : super.internal();
 
-  final AskPageParentId parentId;
+  final AskPageId id;
   final AskPage data;
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(CreateAskPageRef provider) create,
+    FutureOr<void> Function(UpdateAskPageRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: CreateAskPageProvider._internal(
-        (ref) => create(ref as CreateAskPageRef),
+      override: UpdateAskPageProvider._internal(
+        (ref) => create(ref as UpdateAskPageRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        parentId: parentId,
+        id: id,
         data: data,
       ),
     );
@@ -134,42 +134,42 @@ class CreateAskPageProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   AutoDisposeFutureProviderElement<void> createElement() {
-    return _CreateAskPageProviderElement(this);
+    return _UpdateAskPageProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is CreateAskPageProvider &&
-        other.parentId == parentId &&
+    return other is UpdateAskPageProvider &&
+        other.id == id &&
         other.data == data;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, parentId.hashCode);
+    hash = _SystemHash.combine(hash, id.hashCode);
     hash = _SystemHash.combine(hash, data.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin CreateAskPageRef on AutoDisposeFutureProviderRef<void> {
-  /// The parameter `parentId` of this provider.
-  AskPageParentId get parentId;
+mixin UpdateAskPageRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `id` of this provider.
+  AskPageId get id;
 
   /// The parameter `data` of this provider.
   AskPage get data;
 }
 
-class _CreateAskPageProviderElement
-    extends AutoDisposeFutureProviderElement<void> with CreateAskPageRef {
-  _CreateAskPageProviderElement(super.provider);
+class _UpdateAskPageProviderElement
+    extends AutoDisposeFutureProviderElement<void> with UpdateAskPageRef {
+  _UpdateAskPageProviderElement(super.provider);
 
   @override
-  AskPageParentId get parentId => (origin as CreateAskPageProvider).parentId;
+  AskPageId get id => (origin as UpdateAskPageProvider).id;
   @override
-  AskPage get data => (origin as CreateAskPageProvider).data;
+  AskPage get data => (origin as UpdateAskPageProvider).data;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

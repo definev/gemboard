@@ -6,7 +6,9 @@ part 'get_ask_page_list.g.dart';
 
 @riverpod
 Future<List<AskPage>> getAskPageList(
-    GetAskPageListRef ref, AskPageParentId parentId) async {
+  GetAskPageListRef ref, {
+  required AskPageParentId parentId,
+}) async {
   final repository = ref.watch(askPageRepositoryProvider);
   return repository.getList(parentId: parentId);
 }

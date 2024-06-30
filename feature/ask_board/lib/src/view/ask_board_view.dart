@@ -3,7 +3,9 @@ import 'package:ask_board/src/domain/model/ask_board.dart';
 import 'package:ask_board/src/domain/model/ask_page.dart';
 import 'package:ask_board/src/provider/create_ask_page.dart';
 import 'package:ask_board/src/provider/get_ask_page_list.dart';
+import 'package:ask_board/src/provider/update_ask_page.dart';
 import 'package:ask_board/src/view/ask_page_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -196,7 +198,7 @@ class AskBoardEditorSideBar extends ConsumerWidget {
             child: HookConsumer(
               builder: (context, ref, child) {
                 final askPageAsyncValue = ref.watch(
-                  getAskPageListProvider(parentId),
+                  getAskPageListProvider(parentId: parentId),
                 );
 
                 return NavigationDrawer(
@@ -210,7 +212,9 @@ class AskBoardEditorSideBar extends ConsumerWidget {
                   ),
                   selectedIndex: switch (askPageAsyncValue) {
                     AsyncData(:final value) when selectedIndex.value != null =>
-                      value.indexOf(selectedIndex.value!),
+                      value.indexWhere(
+                        (element) => element.id == selectedIndex.value!.id,
+                      ),
                     _ => -1,
                   },
                   onDestinationSelected: (index) async {
@@ -246,9 +250,9 @@ class AskBoardEditorSideBar extends ConsumerWidget {
                             ],
                           false => [
                               for (final page in value)
-                                NavigationDrawerDestination(
-                                  icon: Text(page.emoji),
-                                  label: Text(page.title),
+                                _buildAskPageNavigation(
+                                  theme: theme,
+                                  page: page,
                                 ),
                             ],
                         },
@@ -263,6 +267,47 @@ class AskBoardEditorSideBar extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  NavigationDrawerDestination _buildAskPageNavigation({
+    required ThemeData theme,
+    required AskPage page,
+  }) {
+    return NavigationDrawerDestination(
+      icon: Text('👉'),
+      selectedIcon: Text(page.emoji),
+      label: Expanded(
+        child: GestureDetector(
+          onTapUp: (_) {
+            selectedIndex.value = page;
+          },
+          child: HookConsumer(
+            builder: (context, ref, child) {
+              final controller = useTextEditingController(
+                text: page.title,
+              );
+              final style = DefaultTextStyle.of(context).style;
+          
+              final focusNode = useFocusNode();
+              return EditableText(
+                controller: controller,
+                focusNode: focusNode,
+                style: style,
+                cursorColor: theme.primaryColor,
+                backgroundCursorColor: CupertinoColors.inactiveGray,
+                selectionColor: theme.primaryColor,
+                onSubmitted: (value) => ref.read(
+                  UpdateAskPageProvider(
+                    id: page.id,
+                    data: page.copyWith(title: value),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
     );
   }
 }
