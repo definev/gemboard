@@ -54,7 +54,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "2b8ebf36f7d65a9f4364c86c59425afd1e59b6c5"
+      resolved-ref: "0004149a478efafba3733c2bf64f52d0b7acdc6c"
       url: "https://github.com/definev/boundless_stack.git"
     source: git
     version: "0.0.1"
