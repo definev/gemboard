@@ -15,7 +15,9 @@ dependencies:
   # Dependencies
   flutter_riverpod: ^2.5.1
 
+
   # Theme
+  mix:
   design_system:
     path: ../../core/design_system
   

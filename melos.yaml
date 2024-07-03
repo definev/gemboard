@@ -22,7 +22,7 @@ command:
       flutter_hooks: ^0.20.5
       riverpod_annotation: ^2.3.5
       json_annotation: ^4.9.0
-      osum_serializable: 0.0.5
+      melos:
     
     dev_dependencies:
       flutter_lints: ^4.0.0
@@ -35,10 +35,14 @@ scripts:
   build:all:
     run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner build"
     description: build_runner build all modules.
-  
+
   watch:all:
     run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner watch"
     description: build_runner watch all modules.
+  
+  watch:navigator:
+    run: dart pub global run melos exec --scope="*navigator*" --depends-on="build_runner" "flutter packages pub run build_runner watch --delete-conflicting-outputs"
+    description: build_runner watch navigator module.
 
   build:all:force:
     run: dart pub global run melos exec --depends-on="build_runner" "flutter packages pub run build_runner build --delete-conflicting-outputs"

@@ -22,11 +22,14 @@ dependencies:
   # id
   uuid: ^3.0.6
 
+  flextras: ^1.0.0
+
   # widget canvas
   boundless_stack:
-    git:
-      url: https://github.com/definev/boundless_stack.git
-      ref: main
+    path: ../../../boundless_stack
+    # git:
+    #   url: https://github.com/definev/boundless_stack.git
+    #   ref: main
   equatable: ^2.0.5
 
   # design system

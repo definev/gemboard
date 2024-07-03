@@ -1,12 +1,16 @@
 import 'dart:convert';
 
 import 'package:ask_board/ask_board.dart';
+import 'package:design_system/design_system.dart';
+import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:home/home.dart';
 
 part 'router.g.dart';
 part 'routes/board.id.dart';
 part 'routes/home.dart';
+part 'routes/root.dart';
 
 final router = GoRouter(
   routes: $appRoutes,

@@ -8,7 +8,7 @@ part of 'router.dart';
 
 List<RouteBase> get $appRoutes => [
       $askBoardRoute,
-      $homeRoute,
+      $homeShellRoute,
     ];
 
 RouteBase get $askBoardRoute => GoRouteData.$route(
@@ -38,10 +38,25 @@ extension $AskBoardRouteExtension on AskBoardRoute {
       context.replace(location, extra: $extra);
 }
 
-RouteBase get $homeRoute => GoRouteData.$route(
-      path: '/',
-      factory: $HomeRouteExtension._fromState,
+RouteBase get $homeShellRoute => ShellRouteData.$route(
+      navigatorKey: HomeShellRoute.$navigatorKey,
+      factory: $HomeShellRouteExtension._fromState,
+      routes: [
+        GoRouteData.$route(
+          path: '/',
+          factory: $HomeRouteExtension._fromState,
+        ),
+        GoRouteData.$route(
+          path: '/board/:id',
+          factory: $AskBoardRouteExtension._fromState,
+        ),
+      ],
     );
+
+extension $HomeShellRouteExtension on HomeShellRoute {
+  static HomeShellRoute _fromState(GoRouterState state) =>
+      const HomeShellRoute();
+}
 
 extension $HomeRouteExtension on HomeRoute {
   static HomeRoute _fromState(GoRouterState state) => const HomeRoute();

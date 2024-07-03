@@ -5,6 +5,7 @@ import 'package:ask_board/src/provider/create_ask_page.dart';
 import 'package:ask_board/src/provider/get_ask_page_list.dart';
 import 'package:ask_board/src/provider/update_ask_page.dart';
 import 'package:ask_board/src/view/ask_page_view.dart';
+import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -21,6 +22,8 @@ class AskBoardAppearanceData with _$AskBoardAppearanceData {
     required String id,
     required bool showSideBar,
   }) = _AskBoardAppearanceData;
+
+  static const sideBarWidthRatio = 1 / 3;
 }
 
 @riverpod
@@ -49,8 +52,6 @@ class AskBoardView extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final boardSessionId = useMemoized(() => Helper.createId());
     final appearance = ref.watch(askBoardAppearanceProvider(boardSessionId));
-    final appearanceNotifier =
-        ref.watch(askBoardAppearanceProvider(boardSessionId).notifier);
 
     final parentId = AskPageParentId(askBoardId: board.id.id);
 
@@ -58,96 +59,100 @@ class AskBoardView extends HookConsumerWidget {
 
     final selectedIndex = useState<AskPage?>(null);
 
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Positioned.fill(
-            child: ColoredBox(
-              color: switch (selectedIndex.value) {
-                null => theme.colorScheme.primaryFixed,
-                _ => theme.colorScheme.surface,
-              },
-              child: switch (selectedIndex.value) {
-                null => Center(
-                    child: Text('Select a page or create a new one'),
-                  ),
-                final page => AskPageView(
-                    key: ValueKey((boardSessionId, page.id.id)),
-                    page: page,
-                    appearance: appearance,
-                  ),
-              },
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipPath(
-                    clipper: ShapeBorderClipper(shape: theme.cardTheme.shape!),
-                    child: SizedBox(
-                      height: 56,
-                      child: AppBar(
-                        actions: [
-                          IconButton(
-                            icon: switch (appearance.showSideBar) {
-                              true => Icon(Icons.view_sidebar_rounded),
-                              false => Icon(Icons.view_sidebar_outlined),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(SpaceVariant.medium.resolve(context)),
+      child: DSCard(
+        kind: DSCardKind.outlined,
+        child: Scaffold(
+          body: Stack(
+            fit: StackFit.expand,
+            children: [
+              Positioned.fill(
+                child: ColoredBox(
+                  color: switch (selectedIndex.value) {
+                    null => theme.colorScheme.primaryFixed,
+                    _ => theme.colorScheme.surface,
+                  },
+                  child: switch (selectedIndex.value) {
+                    null => Center(
+                        child: Text('Select a page or create a new one'),
+                      ),
+                    final page => AskPageView(
+                        key: ValueKey((boardSessionId, page.id.id)),
+                        page: page,
+                        askBoardAppearance: appearance,
+                      ),
+                  },
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: SafeArea(
+                  bottom: false,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DSAppBar(
+                          // actions: [
+                          //   IconButton(
+                          //     icon: switch (appearance.showSideBar) {
+                          //       true => Icon(Icons.view_sidebar_rounded),
+                          //       false => Icon(Icons.view_sidebar_outlined),
+                          //     },
+                          //     onPressed: () => appearanceNotifier.update(
+                          //       appearance.copyWith(
+                          //         showSideBar: !appearance.showSideBar,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ],
+                          title: HookBuilder(
+                            builder: (context) {
+                              final controller = useTextEditingController(
+                                text: board.title,
+                              );
+                              final focusNode = useFocusNode();
+        
+                              final style = DefaultTextStyle.of(context).style;
+        
+                              return EditableText(
+                                controller: controller,
+                                focusNode: focusNode,
+                                style: style,
+                                cursorColor: theme.primaryColor,
+                                backgroundCursorColor: theme.secondaryHeaderColor,
+                              );
                             },
-                            onPressed: () => appearanceNotifier.update(
-                              appearance.copyWith(
-                                showSideBar: !appearance.showSideBar,
+                          ),
+                        ),
+                        if (appearance.showSideBar)
+                          Expanded(
+                            child: LayoutBuilder(
+                              builder: (context, constraints) => ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxWidth: 300,
+                                ),
+                                child: SizedBox(
+                                  width: constraints.maxWidth *
+                                      AskBoardAppearanceData.sideBarWidthRatio,
+                                  child: AskBoardEditorSideBar(
+                                    parentId: parentId,
+                                    selectedIndex: selectedIndex,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                        title: HookBuilder(
-                          builder: (context) {
-                            final controller = useTextEditingController(
-                              text: board.title,
-                            );
-                            final focusNode = useFocusNode();
-
-                            final style = DefaultTextStyle.of(context).style;
-
-                            return EditableText(
-                              controller: controller,
-                              focusNode: focusNode,
-                              style: style,
-                              cursorColor: theme.primaryColor,
-                              backgroundCursorColor: theme.secondaryHeaderColor,
-                            );
-                          },
-                        ),
-                      ),
+                          )
+                      ],
                     ),
                   ),
-                  if (appearance.showSideBar)
-                    Expanded(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) => ConstrainedBox(
-                          constraints: BoxConstraints(
-                            maxWidth: 300,
-                          ),
-                          child: SizedBox(
-                            width: constraints.maxWidth / 3,
-                            child: AskBoardEditorSideBar(
-                              parentId: parentId,
-                              selectedIndex: selectedIndex,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -288,7 +293,7 @@ class AskBoardEditorSideBar extends ConsumerWidget {
                 text: page.title,
               );
               final style = DefaultTextStyle.of(context).style;
-          
+
               final focusNode = useFocusNode();
               return EditableText(
                 controller: controller,
