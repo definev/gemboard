@@ -20,9 +20,11 @@ class HomeView extends StatelessWidget {
         position: DecorationPosition.foreground,
         child: Scaffold(
           appBar: DSAppBar(
-            title: StyledText('Your space'),
+            title: StyledText('Home'),
           ),
-          body: PaddedColumn(
+          body: SeparatedColumn(
+            separatorBuilder: () =>
+                SizedBox(height: SpaceVariant.medium.resolve(context)),
             padding: EdgeInsets.all(SpaceVariant.mediumLarge.resolve(context)),
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

@@ -1,0 +1,133 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "genit",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "genit_app",
+            "cwd": "app/genit_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "genit_app (profile mode)",
+            "cwd": "app/genit_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "genit_app (release mode)",
+            "cwd": "app/genit_app",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "genit_configuration",
+            "cwd": "app/genit_configuration",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "genit_configuration (profile mode)",
+            "cwd": "app/genit_configuration",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "genit_configuration (release mode)",
+            "cwd": "app/genit_configuration",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "genit_navigator",
+            "cwd": "app/genit_navigator",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "genit_navigator (profile mode)",
+            "cwd": "app/genit_navigator",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "genit_navigator (release mode)",
+            "cwd": "app/genit_navigator",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "design_system",
+            "cwd": "core/design_system",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "design_system (profile mode)",
+            "cwd": "core/design_system",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "design_system (release mode)",
+            "cwd": "core/design_system",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "ask_board",
+            "cwd": "feature/ask_board",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "ask_board (profile mode)",
+            "cwd": "feature/ask_board",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "ask_board (release mode)",
+            "cwd": "feature/ask_board",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "home",
+            "cwd": "feature/home",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "home (profile mode)",
+            "cwd": "feature/home",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "home (release mode)",
+            "cwd": "feature/home",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

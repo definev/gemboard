@@ -8,7 +8,7 @@ abstract base class RadiusVariant {
 }
 
 final radii = {
-  RadiusVariant.small: Radius.circular(8),
-  RadiusVariant.medium: Radius.circular(12),
-  RadiusVariant.large: Radius.circular(20),
+  RadiusVariant.small: Radius.circular(0),
+  RadiusVariant.medium: Radius.circular(8),
+  RadiusVariant.large: Radius.circular(12),
 };

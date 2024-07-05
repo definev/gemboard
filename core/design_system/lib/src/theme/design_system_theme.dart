@@ -1,11 +1,15 @@
-import 'package:design_system/src/token/opacity.dart';
+import 'package:design_system/design_system.dart';
+import 'package:design_system/src/token/font/font.variant.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 class DesignSystemTheme extends InheritedWidget {
-  const DesignSystemTheme(
-      {required super.child, required this.data, super.key});
+  const DesignSystemTheme({
+    required super.child,
+    required this.data,
+    super.key,
+  });
 
   static DesignSystemThemeData of(BuildContext context) {
     final themeData =
@@ -32,14 +36,24 @@ class DesignSystemTheme extends InheritedWidget {
 @immutable
 class DesignSystemThemeData with EquatableMixin {
   final StyledTokens<OpacityValueToken, OpacityValue> opacities;
+  final StyledTokens<TextStyleVariant, TextStyle> textStyles;
+  final FontVariant font;
 
-  const DesignSystemThemeData.raw({required this.opacities});
+  const DesignSystemThemeData.raw({
+    required this.opacities,
+    required this.textStyles,
+    required this.font,
+  });
 
   factory DesignSystemThemeData({
     Map<OpacityValueToken, OpacityValue>? opacities,
+    Map<TextStyleVariant, TextStyle>? textStyles,
+    FontVariant? font,
   }) {
     return DesignSystemThemeData.raw(
       opacities: StyledTokens(opacities ?? {}),
+      textStyles: StyledTokens(textStyles ?? {}),
+      font: font ?? FontVariant.garamond,
     );
   }
 

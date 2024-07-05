@@ -14,15 +14,9 @@ class OpacityValue {
 class OpacityValueToken extends MixToken<OpacityValue> {
   const OpacityValueToken(super.name);
 
-  /// Calls the [ColorToken] to create a [ColorRef] instance.
   @override
   OpacityValueRef call() => OpacityValueRef(this);
 
-  /// Resolves the color value based on the current [BuildContext].
-  ///
-  /// If the color value is not defined in the theme, an assertion error is thrown.
-  /// If the color value is a [OpacityValueResolver], it is resolved dynamically using the [BuildContext].
-  /// If the color value is null, [1.0] is returned.
   @override
   OpacityValue resolve(BuildContext context) {
     final themeValue = DesignSystemTheme.of(context).opacities[this];
@@ -75,16 +69,16 @@ class OpacityValueRef extends OpacityValue
 
 abstract base class OpacityVariant {
   static const opaque = OpacityValueToken('opaque');
-  static const disabled = OpacityValueToken('disabled');
-  static const dim = OpacityValueToken('dim');
-  static const highlight = OpacityValueToken('highlight');
+
+  static const hightlight = OpacityValueToken('hightlight');
+  static const blend = OpacityValueToken('blend');
+
   static const full = OpacityValueToken('full');
 }
 
 final opacities = {
   OpacityVariant.opaque: OpacityValue(0.0),
-  OpacityVariant.highlight: OpacityValue(0.12),
-  OpacityVariant.disabled: OpacityValue(0.38),
-  OpacityVariant.dim: OpacityValue(0.54),
+  OpacityVariant.hightlight: OpacityValue(0.12),
+  OpacityVariant.blend: OpacityValue(0.72),
   OpacityVariant.full: OpacityValue(1.0),
 };

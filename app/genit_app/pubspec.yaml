@@ -11,13 +11,19 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
+  # native things
+  bitsdojo_window: ^0.1.6
   
   # Dependencies
   flutter_riverpod: ^2.5.1
 
+  sliver_tools: ^0.2.12
+  iconly: ^1.0.1
+
 
   # Theme
-  mix:
+  mix: ^1.2.0
   design_system:
     path: ../../core/design_system
   

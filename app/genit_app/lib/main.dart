@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,14 @@ void main() {
       child: const GenitApp(),
     ),
   );
+
+  doWhenWindowReady(() {
+    const initialSize = Size(600, 450);
+    appWindow.minSize = initialSize;
+    appWindow.size = initialSize;
+    appWindow.alignment = Alignment.center;
+    appWindow.show();
+  });
 }
 
 class GenitApp extends StatelessWidget {
@@ -30,7 +39,7 @@ class GenitApp extends StatelessWidget {
       builder: (context, child) => MixTheme(
         data: mixTheme,
         child: DesignSystemTheme(
-          data: designSystemTheme,
+          data: designSystemThemeData,
           child: child!,
         ),
       ),

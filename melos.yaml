@@ -22,7 +22,7 @@ command:
       flutter_hooks: ^0.20.5
       riverpod_annotation: ^2.3.5
       json_annotation: ^4.9.0
-      melos:
+      mix: ^1.2.0
     
     dev_dependencies:
       flutter_lints: ^4.0.0

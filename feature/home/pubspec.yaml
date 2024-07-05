@@ -23,7 +23,7 @@ dependencies:
     path: ../../core/design_system
   
   
-  mix:
+  mix: ^1.2.0
   
   
   flextras:
