@@ -1,3 +1,4 @@
+import 'package:design_system/src/token/gesture/gesture.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
@@ -11,6 +12,22 @@ class GestureTool extends StatefulHookWidget {
     this.child,
     required this.builder,
   });
+
+  static HoverVariant convertHoverVariant(bool hover) {
+    return hover ? HoverVariant.hover : HoverVariant.unhover;
+  }
+
+  static FocusVariant convertFocusVariant(bool focus) {
+    return focus ? FocusVariant.focus : FocusVariant.unfocus;
+  }
+
+  static PressVariant convertPressVariant(bool? pressed) {
+    return switch (pressed) {
+      true => PressVariant.press,
+      false => PressVariant.unpress,
+      null => PressVariant.disabled,
+    };
+  }
 
   final FocusNode? focusNode;
 
