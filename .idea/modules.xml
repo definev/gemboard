@@ -5,7 +5,6 @@
       <module fileurl="file://$PROJECT_DIR$/feature/ask_board/melos_ask_board.iml" filepath="$PROJECT_DIR$/feature/ask_board/melos_ask_board.iml" />
       <module fileurl="file://$PROJECT_DIR$/packages/boundless_stack/melos_boundless_stack.iml" filepath="$PROJECT_DIR$/packages/boundless_stack/melos_boundless_stack.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/design_system/melos_design_system.iml" filepath="$PROJECT_DIR$/core/design_system/melos_design_system.iml" />
-      <module fileurl="file://$PROJECT_DIR$/packages/flutter-emoji-selector/melos_emoji_selector.iml" filepath="$PROJECT_DIR$/packages/flutter-emoji-selector/melos_emoji_selector.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/genit_app/melos_genit_app.iml" filepath="$PROJECT_DIR$/app/genit_app/melos_genit_app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/genit_configuration/melos_genit_configuration.iml" filepath="$PROJECT_DIR$/app/genit_configuration/melos_genit_configuration.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/genit_navigator/melos_genit_navigator.iml" filepath="$PROJECT_DIR$/app/genit_navigator/melos_genit_navigator.iml" />

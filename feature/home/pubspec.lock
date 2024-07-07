@@ -184,11 +184,13 @@ packages:
     source: path
     version: "0.0.0"
   emoji_selector:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../../packages/flutter-emoji-selector"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: "89c7edef608d39ce316b2fbb612af9fc0f3455b4"
+      url: "https://github.com/definev/flutter-emoji-selector.git"
+    source: git
     version: "0.0.6"
   equatable:
     dependency: transitive

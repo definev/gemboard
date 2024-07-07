@@ -28,6 +28,10 @@ command:
         git:
           url: https://github.com/definev/boundless_stack.git
           ref: main
+      emoji_selector:
+        git:
+          url: https://github.com/definev/flutter-emoji-selector.git
+          ref: main
     
     dev_dependencies:
       flutter_lints: ^4.0.0

@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: ask_board,boundless_stack,design_system,emoji_selector,home
+# melos_managed_dependency_overrides: ask_board,boundless_stack,design_system,home
 dependency_overrides:
   ask_board:
     path: ../../feature/ask_board
@@ -6,7 +6,5 @@ dependency_overrides:
     path: ../../packages/boundless_stack
   design_system:
     path: ../../core/design_system
-  emoji_selector:
-    path: ../../packages/flutter-emoji-selector
   home:
     path: ../../feature/home
