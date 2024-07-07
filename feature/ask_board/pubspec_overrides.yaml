@@ -1,7 +1,9 @@
-# melos_managed_dependency_overrides: boundless_stack,design_system,uuid
+# melos_managed_dependency_overrides: boundless_stack,design_system,uuid,emoji_selector
 dependency_overrides:
   boundless_stack:
     path: ../../packages/boundless_stack
   design_system:
     path: ../../core/design_system
+  emoji_selector:
+    path: ../../packages/flutter-emoji-selector
   uuid: ^3.0.6

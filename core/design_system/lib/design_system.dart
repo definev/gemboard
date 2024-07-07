@@ -7,6 +7,7 @@ export 'src/component/divider/vertical_divider.dart';
 export 'src/component/emoji_picker/emoji_picker.dart';
 export 'src/component/grid_background/grid_background.dart';
 export 'src/component/sidebar/sidebar.dart';
+export 'src/component/textbox/textbox.dart';
 export 'src/component/toolbar/toolbar.dart';
 export 'src/component/toolbar/toolbar_item.dart';
 export 'src/theme/design_system_theme.dart';

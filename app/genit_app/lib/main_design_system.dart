@@ -32,8 +32,9 @@ class DesignSystemApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MasterView(),
+    return MaterialApp(
+      theme: dsTheme,
+      home: const MasterView(),
     );
   }
 }
@@ -251,7 +252,12 @@ class MasterView extends StatelessWidget {
                           ),
                       ],
                     ),
-                    DSEmojiPicker(),
+                    const Column(
+                      children: [
+                        DSTextbox(),
+                        DSEmojiPicker(),
+                      ],
+                    ),
                   ].indexed)
                     StackPosition(
                       key: keys.value['child_$index'] ??
