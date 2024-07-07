@@ -97,7 +97,7 @@ class MasterView extends StatelessWidget {
                     ),
                     DSCard(
                       child: DSCardSection(
-                        header: StyledText('A Card'),
+                        header: const StyledText('A Card'),
                         content: Expanded(
                           child: StyledText('Lorem ipsum dolor sit amet ' * 20),
                         ),
@@ -109,7 +109,7 @@ class MasterView extends StatelessWidget {
                       child: DSCardSection(
                         background: ColorVariant.red,
                         kind: DSCardKind.outlined,
-                        header: StyledText('A Card'),
+                        header: const StyledText('A Card'),
                         content: Expanded(
                           child: StyledText('Lorem ipsum dolor sit amet ' * 20),
                         ),
@@ -121,7 +121,7 @@ class MasterView extends StatelessWidget {
                       child: DSCardSection(
                         background: ColorVariant.green,
                         kind: DSCardKind.outlined,
-                        header: StyledText('A Card'),
+                        header: const StyledText('A Card'),
                         content: Expanded(
                           child: StyledText('Lorem ipsum dolor sit amet ' * 20),
                         ),
@@ -133,7 +133,7 @@ class MasterView extends StatelessWidget {
                       child: DSCardSection(
                         background: ColorVariant.blue,
                         kind: DSCardKind.outlined,
-                        header: StyledText('A Card'),
+                        header: const StyledText('A Card'),
                         content: Expanded(
                           child: StyledText('Lorem ipsum dolor sit amet ' * 20),
                         ),
@@ -149,16 +149,16 @@ class MasterView extends StatelessWidget {
                           DSToolbar(
                             children: [
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.setting),
+                                child: const StyledIcon(IconlyLight.setting),
                               ),
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.image_2),
+                                child: const StyledIcon(IconlyLight.image_2),
                               ),
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.bookmark),
+                                child: const StyledIcon(IconlyLight.bookmark),
                               ),
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.ticket_star),
+                                child: const StyledIcon(IconlyLight.ticket_star),
                               ),
                             ],
                           ),
@@ -166,16 +166,16 @@ class MasterView extends StatelessWidget {
                             direction: Axis.vertical,
                             children: [
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.setting),
+                                child: const StyledIcon(IconlyLight.setting),
                               ),
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.image_2),
+                                child: const StyledIcon(IconlyLight.image_2),
                               ),
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.bookmark),
+                                child: const StyledIcon(IconlyLight.bookmark),
                               ),
                               DSToolbarItem(
-                                child: StyledIcon(IconlyLight.ticket_star),
+                                child: const StyledIcon(IconlyLight.ticket_star),
                               ),
                             ],
                           ),
@@ -189,7 +189,7 @@ class MasterView extends StatelessWidget {
                             keys.value['child_$index'] = GlobalKey();
                             return keys.value['child_$index']!;
                           }(),
-                      moveable: StackMove(
+                      moveable: const StackMove(
                         enable: true,
                         snap: StackSnap(
                           heightSnap: 10,
@@ -272,7 +272,7 @@ class _StaticComponentView extends StatelessWidget {
                     [
                       DSCard(
                         child: DSCardSection(
-                          header: StyledText('A Card'),
+                          header: const StyledText('A Card'),
                           content: Expanded(
                             child:
                                 StyledText('Lorem ipsum dolor sit amet ' * 20),
@@ -285,7 +285,7 @@ class _StaticComponentView extends StatelessWidget {
                         child: DSCardSection(
                           background: ColorVariant.red,
                           kind: DSCardKind.outlined,
-                          header: StyledText('A Card'),
+                          header: const StyledText('A Card'),
                           content: Expanded(
                             child:
                                 StyledText('Lorem ipsum dolor sit amet ' * 20),
@@ -298,7 +298,7 @@ class _StaticComponentView extends StatelessWidget {
                         child: DSCardSection(
                           background: ColorVariant.green,
                           kind: DSCardKind.outlined,
-                          header: StyledText('A Card'),
+                          header: const StyledText('A Card'),
                           content: Expanded(
                             child:
                                 StyledText('Lorem ipsum dolor sit amet ' * 20),
@@ -311,7 +311,7 @@ class _StaticComponentView extends StatelessWidget {
                         child: DSCardSection(
                           background: ColorVariant.blue,
                           kind: DSCardKind.outlined,
-                          header: StyledText('A Card'),
+                          header: const StyledText('A Card'),
                           content: Expanded(
                             child:
                                 StyledText('Lorem ipsum dolor sit amet ' * 20),
@@ -337,16 +337,16 @@ class _StaticComponentView extends StatelessWidget {
                       DSToolbar(
                         children: [
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.setting),
+                            child: const StyledIcon(IconlyLight.setting),
                           ),
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.image_2),
+                            child: const StyledIcon(IconlyLight.image_2),
                           ),
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.bookmark),
+                            child: const StyledIcon(IconlyLight.bookmark),
                           ),
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.ticket_star),
+                            child: const StyledIcon(IconlyLight.ticket_star),
                           ),
                         ],
                       ),
@@ -354,16 +354,16 @@ class _StaticComponentView extends StatelessWidget {
                         direction: Axis.vertical,
                         children: [
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.setting),
+                            child: const StyledIcon(IconlyLight.setting),
                           ),
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.image_2),
+                            child: const StyledIcon(IconlyLight.image_2),
                           ),
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.bookmark),
+                            child: const StyledIcon(IconlyLight.bookmark),
                           ),
                           DSToolbarItem(
-                            child: StyledIcon(IconlyLight.ticket_star),
+                            child: const StyledIcon(IconlyLight.ticket_star),
                           ),
                         ],
                       ),
