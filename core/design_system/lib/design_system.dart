@@ -5,6 +5,7 @@ export 'src/component/card/card.dart';
 export 'src/component/divider/horizontal_divider.dart';
 export 'src/component/divider/vertical_divider.dart';
 export 'src/component/grid_background/grid_background.dart';
+export 'src/component/sidebar/sidebar.dart';
 export 'src/component/toolbar/toolbar.dart';
 export 'src/component/toolbar/toolbar_item.dart';
 export 'src/theme/design_system_theme.dart';

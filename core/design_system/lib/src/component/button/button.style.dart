@@ -13,8 +13,8 @@ class ButtonStyle {
 
   Style call(BuildContext context) {
     return Style(
-      $box.padding.horizontal.ref(SpaceVariant.mediumLarge),
-      $box.padding.vertical.ref(SpaceVariant.medium),
+      $box.padding.horizontal.ref(SpaceVariant.gap),
+      $box.padding.vertical.ref(SpaceVariant.gap),
       $box.alignment.center(),
       $text.style.ref(TextStyleVariant.h6),
       $text.style.color.ref(ColorVariant.onSurface),

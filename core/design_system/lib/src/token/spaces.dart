@@ -11,7 +11,7 @@ class SpaceVariant extends SpaceToken {
 }
 
 final spaces = {
-  SpaceVariant.gap: 6.0,
+  SpaceVariant.gap: 4.0,
   SpaceVariant.small: 8.0,
   SpaceVariant.medium: 12.0,
   SpaceVariant.mediumLarge: 16.0,
