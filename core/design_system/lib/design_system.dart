@@ -4,6 +4,7 @@ export 'src/component/button/button.dart';
 export 'src/component/card/card.dart';
 export 'src/component/divider/horizontal_divider.dart';
 export 'src/component/divider/vertical_divider.dart';
+export 'src/component/emoji_picker/emoji_picker.dart';
 export 'src/component/grid_background/grid_background.dart';
 export 'src/component/sidebar/sidebar.dart';
 export 'src/component/toolbar/toolbar.dart';

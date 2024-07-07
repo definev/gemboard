@@ -25,7 +25,9 @@ dependencies:
 
   # Infinity canvas
   boundless_stack:
-    path: ../../../boundless_stack
+    git:
+      url: https://github.com/definev/boundless_stack.git
+      ref: main
 
   # Theme
   mix: ^1.2.0

@@ -18,13 +18,16 @@ dependencies:
   sliver_tools: ^0.2.12
 
   boundless_stack:
-    path: ../../../boundless_stack
+    git:
+      url: https://github.com/definev/boundless_stack.git
+      ref: main
 
   google_fonts: 
   mix: ^1.2.0
   iconly: ^1.0.1
 
   flutter_shaders: ^0.1.2
+  emoji_selector: ^0.0.6
 
 flutter:
   uses-material-design: true

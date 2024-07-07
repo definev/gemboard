@@ -4,6 +4,7 @@ packages:
   - app/*
   - core/*
   - feature/*
+  - packages/*
 
 command:
   bootstrap:
@@ -24,7 +25,9 @@ command:
       json_annotation: ^4.9.0
       mix: ^1.2.0
       boundless_stack:
-        path: ../../../boundless_stack
+        git:
+          url: https://github.com/definev/boundless_stack.git
+          ref: main
     
     dev_dependencies:
       flutter_lints: ^4.0.0

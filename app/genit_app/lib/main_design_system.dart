@@ -251,6 +251,7 @@ class MasterView extends StatelessWidget {
                           ),
                       ],
                     ),
+                    DSEmojiPicker(),
                   ].indexed)
                     StackPosition(
                       key: keys.value['child_$index'] ??
