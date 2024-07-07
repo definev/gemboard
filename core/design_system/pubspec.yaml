@@ -15,6 +15,7 @@ dependencies:
   equatable: 
   flextras:
   smooth_sheets: 
+  sliver_tools: ^0.2.12
 
   boundless_stack:
     path: ../../../boundless_stack

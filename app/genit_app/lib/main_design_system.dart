@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
-import 'package:sliver_tools/sliver_tools.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -158,7 +157,8 @@ class MasterView extends StatelessWidget {
                                 child: const StyledIcon(IconlyLight.bookmark),
                               ),
                               DSToolbarItem(
-                                child: const StyledIcon(IconlyLight.ticket_star),
+                                child:
+                                    const StyledIcon(IconlyLight.ticket_star),
                               ),
                             ],
                           ),
@@ -175,12 +175,81 @@ class MasterView extends StatelessWidget {
                                 child: const StyledIcon(IconlyLight.bookmark),
                               ),
                               DSToolbarItem(
-                                child: const StyledIcon(IconlyLight.ticket_star),
+                                child:
+                                    const StyledIcon(IconlyLight.ticket_star),
                               ),
                             ],
                           ),
                         ],
                       ),
+                    ),
+                    DSSidebar(
+                      sections: [
+                        for (final background in [
+                          ColorVariant.green,
+                          ColorVariant.blue,
+                          ColorVariant.purple,
+                          ColorVariant.red,
+                          ColorVariant.purple,
+                        ])
+                          DSSidebarSection(
+                            pinned: false,
+                            header: Box(
+                              style: Style(
+                                $box.color.ref(background),
+                                $box.padding.vertical.ref(SpaceVariant.gap),
+                                $box.padding.horizontal
+                                    .ref(SpaceVariant.medium),
+                                $text.style.ref(TextStyleVariant.h6),
+                                $text.style.color.ref(
+                                  ColorVariant.resolveOnBackground(
+                                      background, ColorVariant.onBackground),
+                                ),
+                              ),
+                              child: const StyledText('Astrology'),
+                            ),
+                            children: [
+                              for (final item in [
+                                ('🧞‍♂️', 'Astrology'),
+                                ('🦀', 'Crab'),
+                                ('🐶', 'Dog'),
+                                ('🐱', 'Cat'),
+                                ('♾️', 'Infinity'),
+                                ('🔱', 'Death'),
+                                ('🪄', 'Magic'),
+                                ('🦅', 'Bird'),
+                                ('🐵', 'Monkey'),
+                                ('🐸', 'Frog'),
+                                ('🐙', 'Octopus'),
+                                ('🐳', 'Whale'),
+                                ('🐋', 'Whale'),
+                                ('🐬', 'Dolphin'),
+                                ('🐟', 'Fish'),
+                                ('🐠', 'Fish'),
+                              ])
+                                Button(
+                                  kind: ButtonKind.flat,
+                                  background: background,
+                                  onPressed: () {},
+                                  child: StyledRow(
+                                    inherit: true,
+                                    style: Style(
+                                      $flex.gap.ref(SpaceVariant.gap),
+                                    ),
+                                    children: [
+                                      SizedBox.square(
+                                        dimension: 32,
+                                        child: Center(
+                                          child: StyledText(item.$1),
+                                        ),
+                                      ),
+                                      StyledText(item.$2),
+                                    ],
+                                  ),
+                                ),
+                            ],
+                          ),
+                      ],
                     ),
                   ].indexed)
                     StackPosition(
@@ -192,14 +261,17 @@ class MasterView extends StatelessWidget {
                       moveable: const StackMove(
                         enable: true,
                         snap: StackSnap(
-                          heightSnap: 10,
+                          heightSnap: 50,
                           widthSnap: 50,
                         ),
                       ),
                       data: StackPositionData(
                         id: 'child_$index',
                         layer: 0,
-                        offset: Offset(100.0 * 4 * index, 100),
+                        offset: Offset(
+                          400.0 * (index % 5),
+                          500.0 * (index ~/ 5),
+                        ),
                         height: 400,
                         width: 300,
                       ),
@@ -211,169 +283,12 @@ class MasterView extends StatelessWidget {
               ),
               backgroundBuilder: GridBackground.backgroundBuilder(
                 scale: scaleFactor,
-                dimension: 100,
                 dotSize: SpaceVariant.gap.resolve(context),
               ),
               scaleFactor: scaleFactor,
             ),
           );
         },
-      ),
-      // body: _StaticComponentView(),
-    );
-  }
-}
-
-class _StaticComponentView extends StatelessWidget {
-  const _StaticComponentView({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: EdgeInsets.all(SpaceVariant.large.resolve(context)),
-            sliver: MultiSliver(
-              children: [
-                Button(
-                  kind: ButtonKind.flat,
-                  background: ColorVariant.yellow,
-                  onPressed: () {},
-                  child: const StyledText('A Flat Button'),
-                ),
-                for (final background in [
-                  ColorVariant.blue,
-                  ColorVariant.cyan,
-                  ColorVariant.green,
-                  ColorVariant.pink,
-                  ColorVariant.purple,
-                ]) ...[
-                  SizedBox(height: SpaceVariant.medium.resolve(context)),
-                  Button(
-                    kind: ButtonKind.outline,
-                    background: background,
-                    onPressed: () {},
-                    child: const StyledText('An Outline Button'),
-                  ),
-                ],
-                SizedBox(height: SpaceVariant.medium.resolve(context)),
-                Button(
-                  kind: ButtonKind.filled,
-                  background: ColorVariant.yellow,
-                  onPressed: () {},
-                  child: const StyledText('An Outline Button'),
-                ),
-                SizedBox(height: SpaceVariant.medium.resolve(context)),
-                SliverGrid(
-                  delegate: SliverChildListDelegate(
-                    [
-                      DSCard(
-                        child: DSCardSection(
-                          header: const StyledText('A Card'),
-                          content: Expanded(
-                            child:
-                                StyledText('Lorem ipsum dolor sit amet ' * 20),
-                          ),
-                        ),
-                      ),
-                      DSCard(
-                        background: ColorVariant.red,
-                        kind: DSCardKind.outlined,
-                        child: DSCardSection(
-                          background: ColorVariant.red,
-                          kind: DSCardKind.outlined,
-                          header: const StyledText('A Card'),
-                          content: Expanded(
-                            child:
-                                StyledText('Lorem ipsum dolor sit amet ' * 20),
-                          ),
-                        ),
-                      ),
-                      DSCard(
-                        background: ColorVariant.green,
-                        kind: DSCardKind.elevated,
-                        child: DSCardSection(
-                          background: ColorVariant.green,
-                          kind: DSCardKind.outlined,
-                          header: const StyledText('A Card'),
-                          content: Expanded(
-                            child:
-                                StyledText('Lorem ipsum dolor sit amet ' * 20),
-                          ),
-                        ),
-                      ),
-                      DSCard(
-                        background: ColorVariant.blue,
-                        kind: DSCardKind.elevated,
-                        child: DSCardSection(
-                          background: ColorVariant.blue,
-                          kind: DSCardKind.outlined,
-                          header: const StyledText('A Card'),
-                          content: Expanded(
-                            child:
-                                StyledText('Lorem ipsum dolor sit amet ' * 20),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    crossAxisSpacing: SpaceVariant.medium.resolve(context),
-                    mainAxisSpacing: SpaceVariant.medium.resolve(context),
-                  ),
-                ),
-                SizedBox(height: SpaceVariant.medium.resolve(context)),
-                Center(
-                  child: HBox(
-                    style: Style(
-                      $flex.gap.ref(SpaceVariant.medium),
-                      $flex.mainAxisSize.min(),
-                    ),
-                    children: [
-                      DSToolbar(
-                        children: [
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.setting),
-                          ),
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.image_2),
-                          ),
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.bookmark),
-                          ),
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.ticket_star),
-                          ),
-                        ],
-                      ),
-                      DSToolbar(
-                        direction: Axis.vertical,
-                        children: [
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.setting),
-                          ),
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.image_2),
-                          ),
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.bookmark),
-                          ),
-                          DSToolbarItem(
-                            child: const StyledIcon(IconlyLight.ticket_star),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
