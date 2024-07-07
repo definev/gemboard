@@ -47,6 +47,14 @@ class GestureTool extends StatefulHookWidget {
 }
 
 class _GestureToolState extends State<GestureTool> {
+  FocusNode _focusNode = FocusNode();
+
+  late Map<Type, Action<Intent>> _actionMap = <Type, Action<Intent>>{
+    ActivateIntent: CallbackAction<ActivateIntent>(onInvoke: activateOnIntent),
+    ButtonActivateIntent:
+        CallbackAction<ButtonActivateIntent>(onInvoke: activateOnIntent),
+  };
+
   bool? pressed = null;
 
   VoidCallback? get onPressed {
@@ -67,11 +75,11 @@ class _GestureToolState extends State<GestureTool> {
     onPressed?.call();
   }
 
-  late Map<Type, Action<Intent>> _actionMap = <Type, Action<Intent>>{
-    ActivateIntent: CallbackAction<ActivateIntent>(onInvoke: activateOnIntent),
-    ButtonActivateIntent:
-        CallbackAction<ButtonActivateIntent>(onInvoke: activateOnIntent),
-  };
+  @override
+  void dispose() {
+    super.dispose();
+    _focusNode.dispose();
+  }
 
   @override
   void didUpdateWidget(covariant GestureTool oldWidget) {
@@ -97,7 +105,7 @@ class _GestureToolState extends State<GestureTool> {
     }
 
     return FocusableActionDetector(
-      focusNode: widget.focusNode,
+      focusNode: widget.focusNode ?? _focusNode,
       onShowHoverHighlight: onShowHoverHighlight,
       onShowFocusHighlight: onShowFocusHighlight,
       actions: _actionMap,
