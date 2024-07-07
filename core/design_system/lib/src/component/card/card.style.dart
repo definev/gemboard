@@ -1,11 +1,19 @@
 part of 'card.dart';
 
 class DSCardStyle {
-  const DSCardStyle(this.background, this.onBackground, this.kind);
+  const DSCardStyle(
+    this.background,
+    this.onBackground,
+    this.kind,
+    this.hoverHighlight,
+    this.focusHighlight,
+  );
 
   final ColorVariant background;
   final ColorVariant onBackground;
   final DSCardKind kind;
+  final bool hoverHighlight;
+  final bool focusHighlight;
 
   Style call(BuildContext context) {
     return Style(
@@ -27,11 +35,30 @@ class DSCardStyle {
           offset: const Offset(0, 4),
         ),
       ),
-      $with.scale(1),
-      $on.press(
-        $with.scale(0.98),
+      $with.scale(1.0),
+      HoverVariant.hover(
+        $box.color(
+          Color.lerp(
+            ColorVariant.surface.resolve(context),
+            background.resolve(context),
+            0.1,
+          )!,
+        ),
       ),
-    ).applyVariants([kind]).animate(
+      FocusVariant.focus(
+        $box.color(
+          Color.lerp(
+            ColorVariant.surface.resolve(context),
+            background.resolve(context),
+            0.3,
+          )!,
+        ),
+      ),
+    ).applyVariants([
+      kind,
+      hoverHighlight ? HoverVariant.hover : HoverVariant.unhover,
+      focusHighlight ? FocusVariant.focus : FocusVariant.unfocus,
+    ]).animate(
       curve: Easing.emphasizedDecelerate,
       duration: Duration(milliseconds: 200),
     );

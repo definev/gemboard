@@ -1,5 +1,7 @@
 import 'package:design_system/design_system.dart';
+import 'package:design_system/src/token/gesture/gesture.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mix/mix.dart';
 
 part 'card.style.dart';
@@ -14,6 +16,7 @@ class DSCard extends StyledWidget {
     this.kind = DSCardKind.flat,
     this.background = ColorVariant.yellow,
     this.onBackground = ColorVariant.onYellow,
+    this.focusNode,
     required this.child,
   });
 
@@ -21,24 +24,51 @@ class DSCard extends StyledWidget {
   final ColorVariant? onBackground;
   final DSCardKind kind;
 
+  final FocusNode? focusNode;
+
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return withMix(
-      context,
-      (context) {
-        final onBackground = this.onBackground ??
-            ColorVariant.resolveOnBackground(
+    return HookBuilder(
+      builder: (context) {
+        final hoverHighlight = useState(false);
+        void onShowHoverHighlight(bool hover) {
+          hoverHighlight.value = hover;
+        }
+
+        final focusHighlight = useState(false);
+        void onShowFocusHighlight(bool focus) {
+          focusHighlight.value = focus;
+        }
+
+        return withMix(
+          context,
+          (context) {
+            final onBackground = this.onBackground ??
+                ColorVariant.resolveOnBackground(
+                  background,
+                  ColorVariant.onSurface,
+                );
+
+            final dsCardStyle = DSCardStyle(
               background,
-              ColorVariant.onSurface,
+              onBackground,
+              kind,
+              hoverHighlight.value,
+              focusHighlight.value,
             );
 
-        final dsCardStyle = DSCardStyle(background, onBackground, kind);
-
-        return PressableBox(
-          style: dsCardStyle(context).merge(style),
-          child: child,
+            return FocusableActionDetector(
+              focusNode: focusNode,
+              onShowHoverHighlight: onShowHoverHighlight,
+              onShowFocusHighlight: onShowFocusHighlight,
+              child: Box(
+                style: dsCardStyle(context).merge(style),
+                child: child,
+              ),
+            );
+          },
         );
       },
     );
@@ -71,7 +101,13 @@ class DSCardSection extends StatelessWidget {
           background,
           ColorVariant.onSurface,
         );
-    final style = DSCardStyle(background, onBackground, kind);
+    final style = DSCardStyle(
+      background,
+      onBackground,
+      kind,
+      false,
+      false,
+    );
     return VBox(
       style: style.sectionStyle(context),
       children: [

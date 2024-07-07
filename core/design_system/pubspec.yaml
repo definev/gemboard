@@ -16,9 +16,16 @@ dependencies:
   flextras:
   smooth_sheets: 
 
+  boundless_stack:
+    path: ../../../boundless_stack
+
   google_fonts: 
   mix: ^1.2.0
   iconly: ^1.0.1
 
+  flutter_shaders: ^0.1.2
+
 flutter:
   uses-material-design: true
+  shaders:
+    - assets/shaders/grid_background.frag

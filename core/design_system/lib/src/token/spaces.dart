@@ -1,13 +1,17 @@
 import 'package:mix/mix.dart';
 
-abstract base class SpaceVariant {
-  static const small = SpaceToken('small');
-  static const medium = SpaceToken('medium');
-  static const mediumLarge = SpaceToken('mediumLarge');
-  static const large = SpaceToken('large');
+class SpaceVariant extends SpaceToken {
+  const SpaceVariant(super.name);
+
+  static const gap = SpaceVariant('gap');
+  static const small = SpaceVariant('small');
+  static const medium = SpaceVariant('medium');
+  static const mediumLarge = SpaceVariant('mediumLarge');
+  static const large = SpaceVariant('large');
 }
 
 final spaces = {
+  SpaceVariant.gap: 6.0,
   SpaceVariant.small: 8.0,
   SpaceVariant.medium: 12.0,
   SpaceVariant.mediumLarge: 16.0,

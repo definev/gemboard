@@ -17,10 +17,15 @@ dependencies:
   
   # Dependencies
   flutter_riverpod: ^2.5.1
+  flutter_hooks: ^0.20.5
+  hooks_riverpod: ^2.5.1
 
   sliver_tools: ^0.2.12
   iconly: ^1.0.1
 
+  # Infinity canvas
+  boundless_stack:
+    path: ../../../boundless_stack
 
   # Theme
   mix: ^1.2.0
