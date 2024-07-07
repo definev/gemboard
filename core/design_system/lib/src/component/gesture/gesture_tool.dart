@@ -64,6 +64,7 @@ class _GestureToolState extends State<GestureTool> {
           setState(() {});
           onPressed.call();
           await Future.delayed(Duration(milliseconds: 300));
+          if (!mounted)  return;
           pressed = false;
           setState(() {});
         },

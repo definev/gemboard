@@ -17,11 +17,15 @@ class DSTextbox extends StyledWidget {
     this.focusNode,
     this.autofocus = false,
     this.controller,
+    this.onChanged,
+    this.hintText,
   });
 
   final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
   final FocusNode? focusNode;
   final bool autofocus;
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +46,13 @@ class DSTextbox extends StyledWidget {
                 controller: controller,
                 focusNode: defaultFocusNode,
                 autofocus: autofocus,
+                onChanged: onChanged,
                 cursorColor: ColorVariant.onSurface.resolve(context),
                 cursorWidth: 1.5,
                 cursorHeight: textStyle.height,
                 style: textStyle,
                 decoration: InputDecoration.collapsed(
-                  hintText: '',
+                  hintText: hintText,
                   hintStyle: TextStyleVariant.p.resolve(context),
                   focusColor: Colors.red,
                   fillColor: Colors.red,

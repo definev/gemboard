@@ -184,12 +184,11 @@ packages:
     source: path
     version: "0.0.0"
   emoji_selector:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: emoji_selector
-      sha256: "6b549cf4dd3848f30cfe5907c81d49760a78094300534c50cb90db581d61182a"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../../packages/flutter-emoji-selector"
+      relative: true
+    source: path
     version: "0.0.6"
   equatable:
     dependency: transitive

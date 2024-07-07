@@ -27,7 +27,8 @@ dependencies:
   iconly: ^1.0.1
 
   flutter_shaders: ^0.1.2
-  emoji_selector: ^0.0.6
+  emoji_selector:
+    path: ../../../../definev/flutter-emoji-selector
 
 flutter:
   uses-material-design: true

@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: boundless_stack,design_system,uuid,emoji_selector
+# melos_managed_dependency_overrides: boundless_stack,design_system,emoji_selector,uuid
 dependency_overrides:
   boundless_stack:
     path: ../../packages/boundless_stack
