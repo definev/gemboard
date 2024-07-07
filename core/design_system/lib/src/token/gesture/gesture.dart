@@ -5,6 +5,7 @@ class PressVariant extends Variant {
 
   static const PressVariant press = PressVariant('press');
   static const PressVariant unpress = PressVariant('unpress');
+  static const PressVariant disabled = PressVariant('disabled');
 }
 
 class FocusVariant extends Variant {

@@ -7,7 +7,7 @@ class ButtonStyle {
   final ButtonKind kind;
   final ColorVariant background;
   final ColorVariant onBackground;
-  final bool pressed;
+  final bool? pressed;
   final bool hoverHighlight;
   final bool focusHighlight;
 
@@ -123,7 +123,11 @@ class ButtonStyle {
       ),
     ).applyVariants([
       kind,
-      pressed ? PressVariant.press : PressVariant.unpress,
+      switch (pressed) {
+        null => PressVariant.disabled,
+        true => PressVariant.press,
+        false => PressVariant.unpress,
+      },
       hoverHighlight ? HoverVariant.hover : HoverVariant.unhover,
       focusHighlight ? FocusVariant.focus : FocusVariant.unfocus,
     ]).animate(
