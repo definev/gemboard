@@ -1,7 +1,5 @@
-# melos_managed_dependency_overrides: ask_board,boundless_stack,design_system,genit_configuration,genit_navigator,home
+# melos_managed_dependency_overrides: boundless_stack,design_system,genit_configuration,genit_navigator
 dependency_overrides:
-  ask_board:
-    path: ../../feature/ask_board
   boundless_stack:
     path: ../../packages/boundless_stack
   design_system:
@@ -10,5 +8,3 @@ dependency_overrides:
     path: ../genit_configuration
   genit_navigator:
     path: ../genit_navigator
-  home:
-    path: ../../feature/home

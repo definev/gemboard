@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:design_system/src/token/font/font.variant.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mix/mix.dart';
@@ -18,6 +19,8 @@ class TextStyleVariant extends TextStyleToken {
   static const p3 = TextStyleVariant('p3');
   static const p4 = TextStyleVariant('p4');
   static const p5 = TextStyleVariant('p5');
+
+  static const emoji = TextStyleVariant('emoji');
 
   @override
   TextStyle resolve(BuildContext context) {
@@ -91,6 +94,12 @@ final baskervvilleTextStyles = {
     fontWeight: FontWeight.w400,
     letterSpacing: 1.5,
   ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
 };
 
 final bodoniTextStyles = {
@@ -147,6 +156,12 @@ final bodoniTextStyles = {
     fontWeight: FontWeight.w400,
     letterSpacing: 1.5,
   ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
 };
 
 final garamondTextStyles = {
@@ -203,6 +218,12 @@ final garamondTextStyles = {
     fontWeight: FontWeight.w400,
     letterSpacing: 1.5,
   ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
 };
 
 final interTextStyles = {
@@ -259,6 +280,12 @@ final interTextStyles = {
     fontWeight: FontWeight.w400,
     letterSpacing: 1.5,
   ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
 };
 
 extension FontFamilyX on TextStyleVariant {

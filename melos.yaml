@@ -68,3 +68,7 @@ scripts:
   pub:upgrade:all:
     run: dart pub global run melos exec "flutter pub upgrade"
     description: Run pub upgrade on all modules.
+  
+  delete:all:lock:
+    run: dart pub global run melos exec "rm -f pubspec.lock"
+    description: Delete all pubspec.lock files.

@@ -23,6 +23,8 @@ dependencies:
   sliver_tools: ^0.2.12
   iconly: ^1.0.1
 
+  flutter_portal: ^1.1.4
+
   # Infinity canvas
   boundless_stack:
     git:

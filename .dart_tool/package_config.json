@@ -51,9 +51,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/daiduong/.pub-cache/hosted/pub.dev/collection-1.18.0",
+      "rootUri": "file:///Users/daiduong/.pub-cache/hosted/pub.dev/collection-1.19.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "conventional_commit",
@@ -87,9 +87,9 @@
     },
     {
       "name": "http_parser",
-      "rootUri": "file:///Users/daiduong/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
+      "rootUri": "file:///Users/daiduong/.pub-cache/hosted/pub.dev/http_parser-4.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.4"
     },
     {
       "name": "intl",
@@ -219,9 +219,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/daiduong/.pub-cache/hosted/pub.dev/test_api-0.7.2",
+      "rootUri": "file:///Users/daiduong/.pub-cache/hosted/pub.dev/test_api-0.7.3",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "typed_data",
@@ -260,7 +260,10 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-07-07T12:46:40.891281Z",
+  "generated": "2024-07-08T17:56:49.608368Z",
   "generator": "pub",
-  "generatorVersion": "3.4.0-99.0.dev"
+  "generatorVersion": "3.5.0-299.0.dev",
+  "flutterRoot": "file:///Users/daiduong/fvm/versions/master",
+  "flutterVersion": "3.23.0-14.0.pre.33",
+  "pubCache": "file:///Users/daiduong/.pub-cache"
 }
