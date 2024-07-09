@@ -18,10 +18,8 @@ void main() {
   );
 
   doWhenWindowReady(() {
-    const initialSize = Size(600, 450);
+    const initialSize = Size(400, 600);
     appWindow.minSize = initialSize;
-    appWindow.size = initialSize;
-    appWindow.alignment = Alignment.center;
     appWindow.show();
   });
 }

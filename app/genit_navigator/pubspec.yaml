@@ -23,6 +23,8 @@ dependencies:
     path: ../../core/design_system
 
   # feature
+  home:
+    path: ../../feature/home
 
 dev_dependencies:
   build_runner: ^2.3.3
