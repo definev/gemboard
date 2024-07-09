@@ -43,6 +43,9 @@ dependencies:
   # Configuration
   genit_configuration:
     path: ../genit_configuration
+  
+  genit_common:
+    path: ../genit_common
 
 dev_dependencies:
   flutter_lints: ^4.0.0

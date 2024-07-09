@@ -4,14 +4,22 @@ import 'package:flutter/material.dart';
 class DSVerticalDivider extends StatelessWidget {
   const DSVerticalDivider({
     super.key,
+    this.thickness = 1,
+    this.color,
   });
+
+  final Color? color;
+  final double thickness;
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: ColorVariant.onSurface.resolve(context),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: color ?? ColorVariant.onSurface.resolve(context),
+        borderRadius: BorderRadius.circular(thickness / 2),
+      ),
       child: SizedBox(
-        width: 1,
+        width: thickness,
         height: 42,
       ),
     );
