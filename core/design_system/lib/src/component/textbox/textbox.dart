@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:design_system/design_system.dart';
 import 'package:design_system/src/component/gesture/gesture_tool.dart';
 import 'package:design_system/src/token/gesture/gesture.dart';
@@ -19,6 +21,8 @@ class DSTextbox extends StyledWidget {
     this.controller,
     this.onChanged,
     this.hintText,
+    this.minLines,
+    this.maxLines,
   });
 
   final TextEditingController? controller;
@@ -26,6 +30,8 @@ class DSTextbox extends StyledWidget {
   final FocusNode? focusNode;
   final bool autofocus;
   final String? hintText;
+  final int? minLines;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +49,7 @@ class DSTextbox extends StyledWidget {
             child: Padding(
               padding: EdgeInsets.only(top: 5, bottom: 5),
               child: TextFormField(
+                selectionHeightStyle: BoxHeightStyle.strut,
                 controller: controller,
                 focusNode: defaultFocusNode,
                 autofocus: autofocus,
@@ -51,6 +58,8 @@ class DSTextbox extends StyledWidget {
                 cursorWidth: 1.5,
                 cursorHeight: textStyle.height,
                 style: textStyle,
+                minLines: minLines,
+                maxLines: maxLines,
                 decoration: InputDecoration.collapsed(
                   hintText: hintText,
                   hintStyle: TextStyleVariant.p.resolve(context),

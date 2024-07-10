@@ -249,7 +249,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "7b3531e5d86eec9802b0b34fb7b07991a5dc5d51"
+      resolved-ref: e63587962099324589209367b8ca155f03f6d702
       url: "https://github.com/definev/flutter-emoji-selector.git"
     source: git
     version: "0.0.6"
@@ -352,10 +352,10 @@ packages:
     dependency: transitive
     description:
       name: freezed_annotation
-      sha256: f54946fdb1fa7b01f780841937b1a80783a20b393485f3f6cdf336fd6f4705f2
+      sha256: f9f6597ac43cc262fa7d7f2e65259a6060c23a560525d1f2631be374540f2a9b
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "2.4.3"
   frontend_server_client:
     dependency: transitive
     description:
@@ -622,10 +622,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_windows
-      sha256: "8bc9f22eee8690981c22aa7fc602f5c85b497a6fb2ceb35ee5a5e5ed85ad8170"
+      sha256: bd6f00dbd873bfb70d0761682da2b3a2c2fccc2b9e84c495821639601d81afe7
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.3.0"
   platform:
     dependency: transitive
     description:

@@ -8,18 +8,29 @@ class GenitEmojiButton extends StatelessWidget {
     required this.background,
     required this.emoji,
     required this.label,
+    required this.onPressed,
+    this.kind = ButtonKind.flat,
+    this.highlight = ButtonHighlight.defer,
+    this.style,
   });
 
   final ColorVariant background;
+  final ButtonHighlight highlight;
+  final ButtonKind kind;
+  final Style? style;
+
   final String emoji;
   final String label;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
     return Button(
-      kind: ButtonKind.flat,
+      style: style,
+      kind: kind,
+      highlight: highlight,
       background: background,
-      onPressed: () {},
+      onPressed: onPressed,
       child: StyledRow(
         inherit: true,
         style: Style(

@@ -40,11 +40,12 @@ class GenitApp extends StatelessWidget {
         return MediaQuery(
           data: md.copyWith(
             padding: md.padding.copyWith(
-              top: switch (defaultTargetPlatform) {
-                TargetPlatform.macOS => 26,
-                TargetPlatform.windows => 26,
-                _ => 0,
-              },
+              top: md.padding.top +
+                  switch (defaultTargetPlatform) {
+                    TargetPlatform.macOS => titlebarHeight,
+                    TargetPlatform.windows => titlebarHeight,
+                    _ => 0,
+                  },
             ),
           ),
           child: MixTheme(

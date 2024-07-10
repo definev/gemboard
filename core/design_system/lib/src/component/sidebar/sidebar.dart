@@ -27,29 +27,31 @@ class DSSidebarSectionHeader extends StatelessWidget {
       ColorVariant.onBackground,
     );
 
-    return Box(
-      style: Style(
-        $box.color.ref(background),
-        $box.padding.vertical.ref(SpaceVariant.gap),
-        $box.padding.horizontal.ref(SpaceVariant.medium),
-        $text.style.ref(TextStyleVariant.h6),
-        $text.style.color.ref(onBackground),
-        $icon.color.ref(onBackground),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: title,
-          ),
-          if (pinned != null)
-            GestureDetector(
-              onTap: () => onPinnedChanged?.call(!pinned!),
-              child: switch (pinned!) {
-                true => StyledIcon(IconlyBold.lock),
-                false => StyledIcon(IconlyBold.unlock),
-              },
+    return WindowMover(
+      child: Box(
+        style: Style(
+          $box.color.ref(background),
+          $box.padding.vertical.ref(SpaceVariant.gap),
+          $box.padding.horizontal.ref(SpaceVariant.medium),
+          $text.style.ref(TextStyleVariant.h6),
+          $text.style.color.ref(onBackground),
+          $icon.color.ref(onBackground),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: title,
             ),
-        ],
+            if (pinned != null)
+              GestureDetector(
+                onTap: () => onPinnedChanged?.call(!pinned!),
+                child: switch (pinned!) {
+                  true => StyledIcon(IconlyBold.lock),
+                  false => StyledIcon(IconlyBold.unlock),
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -60,11 +62,13 @@ class DSSidebarSection extends StatelessWidget {
     this.header,
     required this.pinned,
     required this.children,
+    this.gap,
   });
 
   final bool pinned;
   final Widget? header;
   final List<Widget> children;
+  final double? gap;
 
   @override
   Widget build(BuildContext context) {
@@ -75,13 +79,14 @@ class DSSidebarSection extends StatelessWidget {
           SliverPinnedHeader(
             child: header!,
           ),
-        StyledColumn(
-          style: Style(
-            $flex.crossAxisAlignment.stretch(),
-            $flex.gap.ref(SpaceVariant.gap),
-            $text.style.ref(TextStyleVariant.p),
-          ),
-          children: children,
+        MultiSliver(
+          children: [
+            for (final child in children) ...[
+              SizedBox(height: gap ?? SpaceVariant.gap.resolve(context)),
+              child,
+            ],
+            SizedBox(height: gap ?? SpaceVariant.gap.resolve(context)),
+          ],
         ),
       ],
     );

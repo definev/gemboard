@@ -224,8 +224,9 @@ class MasterView extends StatelessWidget {
                               ])
                                 GenitEmojiButton(
                                   background: background,
-                                  label: item.$1,
-                                  emoji: item.$2,
+                                  emoji: item.$1,
+                                  label: item.$2,
+                                  onPressed: () {},
                                 ),
                             ],
                           ),
@@ -233,7 +234,9 @@ class MasterView extends StatelessWidget {
                     ),
                     const Column(
                       children: [
-                        DSTextbox(),
+                        DSTextbox(
+                          maxLines: 5,
+                        ),
                       ],
                     ),
                     Column(

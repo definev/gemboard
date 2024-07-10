@@ -193,7 +193,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "7b3531e5d86eec9802b0b34fb7b07991a5dc5d51"
+      resolved-ref: e63587962099324589209367b8ca155f03f6d702
       url: "https://github.com/definev/flutter-emoji-selector.git"
     source: git
     version: "0.0.6"

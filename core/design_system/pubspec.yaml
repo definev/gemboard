@@ -26,6 +26,8 @@ dependencies:
   mix: ^1.2.0
   iconly: ^1.0.1
 
+  bitsdojo_window: ^0.1.6
+
   flutter_shaders: ^0.1.2
   emoji_selector:
     git:

@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: boundless_stack,design_system,home,genit_common,utils
+# melos_managed_dependency_overrides: boundless_stack,design_system,genit_common,home,utils
 dependency_overrides:
   boundless_stack:
     path: ../../packages/boundless_stack

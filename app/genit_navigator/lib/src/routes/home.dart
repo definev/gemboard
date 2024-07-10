@@ -5,15 +5,42 @@ class HomeShell extends ShellRouteData {
 
   static final $parentNavigatorKey = _RootShell.$navigatorKey;
   static final $navigatorKey = GlobalKey<NavigatorState>();
+  static final resizableController = ResizableController();
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
+    return _HomeShellView(
+      state: state,
+      navigator: navigator,
+    );
+  }
+}
+
+class _HomeShellView extends StatefulWidget {
+  const _HomeShellView({
+    required this.state,
+    required this.navigator,
+  });
+
+  final GoRouterState state;
+  final Widget navigator;
+
+  @override
+  State<_HomeShellView> createState() => _HomeShellViewState();
+}
+
+class _HomeShellViewState extends State<_HomeShellView> {
+  @override
+  Widget build(BuildContext context) {
     return Material(
       child: ResizableFlex(
+        controller: HomeShell.resizableController,
         direction: Axis.horizontal,
         initialSize: 300,
-        firstChild: GenitLeadSidebar(),
-        secondChild: navigator,
+        firstChild: GenitLeadSidebar(
+          resizableController: HomeShell.resizableController,
+        ),
+        secondChild: widget.navigator,
       ),
     );
   }

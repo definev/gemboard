@@ -8,11 +8,20 @@ import 'package:utils/utils.dart';
 
 /// TODO: Implement way to access and control or reactive state
 /// TODO: Done specifically for the sidebar
-class GenitLeadSidebar extends StatelessWidget {
-  const GenitLeadSidebar();
+class GenitLeadSidebar extends HookWidget {
+  const GenitLeadSidebar({
+    required this.resizableController,
+  });
+
+  final ResizableController resizableController;
 
   @override
   Widget build(BuildContext context) {
+    final panelSize = useListenableSelector(
+      resizableController,
+      () => resizableController.panelSize,
+    );
+
     return Column(
       children: [
         DSSidebarSectionHeader(
@@ -20,13 +29,18 @@ class GenitLeadSidebar extends StatelessWidget {
           title: SafeArea(
             child: Row(
               children: [
-                SizedBox.square(
-                  dimension: 60,
-                  child: ColoredBox(
-                    color: ColorVariant.background
-                        .resolve(context)
-                        .withOpacity(
-                            OpacityVariant.blend.resolve(context).value),
+                GestureDetector(
+                  onTap: () {
+                    resizableController.panelSize += 10;
+                  },
+                  child: SizedBox.square(
+                    dimension: 60,
+                    child: ColoredBox(
+                      color: ColorVariant.background //
+                          .resolve(context)
+                          .withOpacity(
+                              OpacityVariant.blend.resolve(context).value),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -67,15 +81,22 @@ class GenitLeadSidebar extends StatelessWidget {
                       children: [
                         GenitEmojiButton(
                           background: ColorVariant.yellow,
+                          highlight: ButtonHighlight.focus,
                           emoji: '🏠',
                           label: 'Zen\'s desk',
+                          onPressed: () {},
+                        ),
+                        PinnedHeaderSliver(
+                          child: GenitEmojiButton(
+                            background: ColorVariant.yellow,
+                            // highlight: ButtonHighlight.focus,
+                            kind: ButtonKind.outline,
+                            label: 'Create folder',
+                            emoji: '🗂️',
+                            onPressed: () {},
+                          ),
                         ),
                       ],
-                    ),
-                    Button(
-                      highlight: ButtonHighlight.focus,
-                      onPressed: () {},
-                      child: StyledText('Create new space'),
                     ),
                     HookBuilder(
                       builder: (context) {
@@ -89,24 +110,13 @@ class GenitLeadSidebar extends StatelessWidget {
                             title: StyledText('Draft'),
                           ),
                           children: [
-                            SizedBox(
-                              height: 100,
-                              child: Center(
-                                child: StyledColumn(
-                                  inherit: true,
-                                  style: Style(
-                                    $flex.crossAxisAlignment.center(),
-                                    $flex.mainAxisAlignment.center(),
-                                    $flex.gap.ref(SpaceVariant.gap),
-                                  ),
-                                  children: [
-                                    Icon(IconlyBroken.bookmark),
-                                    StyledText('No draft yet'),
-                                  ],
-                                ),
-                              ),
+                            GenitEmojiButton(
+                              background: ColorVariant.purple,
+                              highlight: ButtonHighlight.focus,
+                              emoji: '➕',
+                              label: 'Create board',
+                              onPressed: () {},
                             ),
-                            DSHorizontalDivider(thickness: 0.5),
                           ],
                         );
                       },
