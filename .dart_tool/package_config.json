@@ -260,10 +260,10 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-07-08T17:56:49.608368Z",
+  "generated": "2024-07-10T20:35:17.011267Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0-299.0.dev",
-  "flutterRoot": "file:///Users/daiduong/fvm/versions/master",
-  "flutterVersion": "3.23.0-14.0.pre.33",
+  "generatorVersion": "3.5.0-180.3.beta",
+  "flutterRoot": "file:///Users/daiduong/fvm/versions/beta",
+  "flutterVersion": "3.23.0-0.1.pre",
   "pubCache": "file:///Users/daiduong/.pub-cache"
 }

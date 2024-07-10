@@ -32,15 +32,19 @@ class _HomeShellView extends StatefulWidget {
 class _HomeShellViewState extends State<_HomeShellView> {
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: ResizableFlex(
-        controller: HomeShell.resizableController,
-        direction: Axis.horizontal,
-        initialSize: 300,
-        firstChild: GenitLeadSidebar(
-          resizableController: HomeShell.resizableController,
+    return Portal(
+      child: Material(
+        color: ColorVariant.surface.resolve(context),
+        child: ResizableFlex(
+          controller: HomeShell.resizableController,
+          direction: Axis.horizontal,
+          initialSize: 300,
+          minSize: 100,
+          firstChild: GenitLeadSidebar(
+            resizableController: HomeShell.resizableController,
+          ),
+          secondChild: widget.navigator,
         ),
-        secondChild: widget.navigator,
       ),
     );
   }

@@ -14,19 +14,6 @@ class ResizableController extends ChangeNotifier {
     _panelSize = value;
     notifyListeners();
   }
-
-  double? _prevPanelSize;
-
-  void hide() {
-    _prevPanelSize = _panelSize;
-    _panelSize = 0.0;
-    notifyListeners();
-  }
-
-  void show() {
-    _panelSize = _prevPanelSize ?? initialSize;
-    notifyListeners();
-  }
 }
 
 class ResizableFlex extends StatefulWidget {
@@ -36,6 +23,7 @@ class ResizableFlex extends StatefulWidget {
     required this.firstChild,
     this.secondChild,
     this.initialSize,
+    this.minSize = 0,
     this.controller,
   });
 
@@ -43,6 +31,7 @@ class ResizableFlex extends StatefulWidget {
   final Widget firstChild;
   final Widget? secondChild;
   final double? initialSize;
+  final double? minSize;
   final ResizableController? controller;
 
   @override
@@ -133,7 +122,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
 
                     final newSize = controller.panelSize + deltaAxis;
 
-                    if (newSize < 0) return;
+                    if (newSize < (widget.minSize ?? 0)) return;
                     if (newSize > totalSize - 1) return;
 
                     controller.panelSize = newSize;

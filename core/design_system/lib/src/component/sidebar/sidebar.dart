@@ -6,13 +6,16 @@ import 'package:sliver_tools/sliver_tools.dart';
 
 part 'sidebar.style.dart';
 
-class DSSidebarSectionHeader extends StatelessWidget {
+class DSSidebarSectionHeader extends StyledWidget {
   const DSSidebarSectionHeader({
     super.key,
     this.background = ColorVariant.background,
     required this.title,
     this.pinned,
     this.onPinnedChanged,
+    super.orderOfModifiers = const [],
+    super.inherit,
+    super.style,
   });
 
   final Widget title;
@@ -27,32 +30,37 @@ class DSSidebarSectionHeader extends StatelessWidget {
       ColorVariant.onBackground,
     );
 
-    return WindowMover(
-      child: Box(
-        style: Style(
-          $box.color.ref(background),
-          $box.padding.vertical.ref(SpaceVariant.gap),
-          $box.padding.horizontal.ref(SpaceVariant.medium),
-          $text.style.ref(TextStyleVariant.h6),
-          $text.style.color.ref(onBackground),
-          $icon.color.ref(onBackground),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: title,
-            ),
-            if (pinned != null)
-              GestureDetector(
-                onTap: () => onPinnedChanged?.call(!pinned!),
-                child: switch (pinned!) {
-                  true => StyledIcon(IconlyBold.lock),
-                  false => StyledIcon(IconlyBold.unlock),
-                },
+    return withMix(
+      context,
+      (context) {
+        return Box(
+          style: Style(
+            $box.minHeight(40),
+            $box.color.ref(background),
+            $box.padding.vertical.ref(SpaceVariant.gap),
+            $box.padding.left.ref(SpaceVariant.gap),
+            $box.padding.right.ref(SpaceVariant.small),
+            $text.style.ref(TextStyleVariant.h6),
+            $text.style.color.ref(onBackground),
+            $icon.color.ref(onBackground),
+          ).merge(style),
+          child: Row(
+            children: [
+              Expanded(
+                child: title,
               ),
-          ],
-        ),
-      ),
+              if (pinned != null)
+                GestureDetector(
+                  onTap: () => onPinnedChanged?.call(!pinned!),
+                  child: switch (pinned!) {
+                    true => StyledIcon(IconlyBold.lock),
+                    false => StyledIcon(IconlyBold.unlock),
+                  },
+                ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -93,12 +101,9 @@ class DSSidebarSection extends StatelessWidget {
   }
 }
 
-class DSSidebar extends StyledWidget {
+class DSSidebar extends StatelessWidget {
   const DSSidebar({
     super.key,
-    super.orderOfModifiers = const [],
-    super.inherit,
-    super.style,
     required this.sections,
   });
 
@@ -107,26 +112,14 @@ class DSSidebar extends StyledWidget {
 
   @override
   Widget build(BuildContext context) {
-    return withMix(
-      context,
-      (context) => VBox(
-        style: Style(
-          $box.color.ref(ColorVariant.surface),
-        ),
-        children: [
-          Expanded(
-            child: CustomScrollView(
-              slivers: [
-                MultiSliver(
-                  children: [
-                    for (final section in sections) section,
-                  ],
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
+    return CustomScrollView(
+      slivers: [
+        MultiSliver(
+          children: [
+            for (final section in sections) section,
+          ],
+        )
+      ],
     );
   }
 }

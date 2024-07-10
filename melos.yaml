@@ -1,5 +1,7 @@
 name: genit
 
+sdkPath: .fvm/flutter_sdk
+
 packages:
   - app/*
   - core/*

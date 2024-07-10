@@ -16,6 +16,9 @@ dependencies:
 
   freezed_annotation:
   json_annotation: ^4.9.0
+
+  flutter_portal: ^1.1.4
+  sliver_tools:
   
   boundless_stack:
     git:

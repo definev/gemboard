@@ -32,6 +32,7 @@ class ButtonStyle {
       $box.alignment.center(),
       $text.style.ref(TextStyleVariant.h6),
       $text.style.color.ref(ColorVariant.onSurface),
+      $icon.size(TextStyleVariant.h6.resolve(context).fontSize! * 29 / 20),
       $icon.color.ref(ColorVariant.onSurface),
       ButtonKind.flat(
         $box.color.ref(ColorVariant.surface),
@@ -47,10 +48,10 @@ class ButtonStyle {
       ),
       ButtonKind.outline(
         $box.color.ref(ColorVariant.surface),
-        $box.border.all.color(background
+        $box.foregroundDecoration.border.all.color(background
             .resolve(context)
             .withOpacity(OpacityVariant.blend.resolve(context).value)),
-        $box.border.all.width(2),
+        $box.foregroundDecoration.border.all.width(2),
         HoverVariant.hover(
           $box.color(boxBackground),
         ),

@@ -242,10 +242,11 @@ class MasterView extends StatelessWidget {
                     Column(
                       children: [
                         DSAppbar(
-                          child: GenitAppBarTitle(
+                          child: GenitEmojiLabelEditor(
                             emoji: '🪄',
-                            title: 'Magic',
+                            label: 'Magic',
                             onEmojiSelected: (value) => print(value),
+                            onLabelChanged: (value) => print(value),
                           ),
                         ),
                       ],

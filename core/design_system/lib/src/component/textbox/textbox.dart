@@ -16,6 +16,7 @@ class DSTextbox extends StyledWidget {
     super.orderOfModifiers = const [],
     super.inherit,
     super.style,
+    this.kind = DSTextboxKind.outline,
     this.focusNode,
     this.autofocus = false,
     this.controller,
@@ -24,6 +25,8 @@ class DSTextbox extends StyledWidget {
     this.minLines,
     this.maxLines,
   });
+
+  final DSTextboxKind kind;
 
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
@@ -39,7 +42,10 @@ class DSTextbox extends StyledWidget {
       builder: (context) {
         final defaultFocusNode = focusNode ?? useFocusNode();
         useListenable(defaultFocusNode);
-        final dsTextboxStyle = DSTextboxStyle(defaultFocusNode.hasFocus);
+        final dsTextboxStyle = DSTextboxStyle(
+          kind,
+          defaultFocusNode.hasFocus,
+        );
         final textStyle = TextStyleVariant.p.resolve(context);
 
         return withMix(

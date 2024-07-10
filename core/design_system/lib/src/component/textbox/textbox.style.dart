@@ -1,8 +1,9 @@
 part of 'textbox.dart';
 
 class DSTextboxStyle {
-  const DSTextboxStyle(this.focusHighlight);
+  const DSTextboxStyle(this.kind, this.focusHighlight);
 
+  final DSTextboxKind kind;
   final bool focusHighlight;
 
   Style call(BuildContext context) {
@@ -15,23 +16,28 @@ class DSTextboxStyle {
         bottom: SpaceVariant.gap.resolve(context),
       ),
       FocusVariant.focus(
-        $box.border.all(
-          width: 1.5,
-          color: ColorVariant.onSurface.resolve(context),
-          strokeAlign: BorderSide.strokeAlignInside,
+        DSTextboxKind.outline(
+          $box.border.all(
+            width: 1.5,
+            color: ColorVariant.onSurface.resolve(context),
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
         ),
       ),
       FocusVariant.unfocus(
-        $box.border.all(
-          width: 1.5,
-          color: ColorVariant.onSurface.resolve(context).withOpacity(
-                OpacityVariant.hightlight.resolve(context).value,
-              ),
-          strokeAlign: BorderSide.strokeAlignInside,
+        DSTextboxKind.outline(
+          $box.border.all(
+            width: 1.5,
+            color: ColorVariant.onSurface.resolve(context).withOpacity(
+                  OpacityVariant.hightlight.resolve(context).value,
+                ),
+            strokeAlign: BorderSide.strokeAlignInside,
+          ),
         ),
       ),
     ).applyVariants([
       GestureTool.convertFocusVariant(focusHighlight),
+      kind,
     ]).animate(
       duration: Duration(milliseconds: 200),
       curve: Curves.easeInOut,
