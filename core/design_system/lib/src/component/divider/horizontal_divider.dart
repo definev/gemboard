@@ -13,12 +13,15 @@ class DSHorizontalDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: ColorVariant.onSurface.resolve(context),
+        color: ColorVariant.outline.resolve(context),
         borderRadius: BorderRadius.circular(thickness / 2),
       ),
-      child: SizedBox(
-        width: 42,
-        height: thickness,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: 42,
+          minHeight: thickness,
+          maxHeight: thickness,
+        ),
       ),
     );
   }

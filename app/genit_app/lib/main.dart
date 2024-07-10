@@ -1,5 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:design_system/design_system.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:genit_app/di/di_initializer.dart';
@@ -34,13 +35,27 @@ class GenitApp extends StatelessWidget {
       routeInformationProvider: nav.routeInformationProvider,
       routeInformationParser: nav.routeInformationParser,
       routerDelegate: nav.routerDelegate,
-      builder: (context, child) => MixTheme(
-        data: mixTheme,
-        child: DesignSystemTheme(
-          data: designSystemThemeData,
-          child: child!,
-        ),
-      ),
+      builder: (context, child) {
+        final md = MediaQuery.of(context);
+        return MediaQuery(
+          data: md.copyWith(
+            padding: md.padding.copyWith(
+              top: switch (defaultTargetPlatform) {
+                TargetPlatform.macOS => 26,
+                TargetPlatform.windows => 26,
+                _ => 0,
+              },
+            ),
+          ),
+          child: MixTheme(
+            data: mixTheme,
+            child: DesignSystemTheme(
+              data: designSystemThemeData,
+              child: child!,
+            ),
+          ),
+        );
+      },
     );
   }
 }

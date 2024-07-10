@@ -1,10 +1,18 @@
 part of 'button.dart';
 
 class ButtonStyle {
-  ButtonStyle(this.kind, this.background, this.onBackground, this.pressed,
-      this.hoverHighlight, this.focusHighlight);
+  ButtonStyle(
+    this.kind,
+    this.highlight,
+    this.background,
+    this.onBackground,
+    this.pressed,
+    this.hoverHighlight,
+    this.focusHighlight,
+  );
 
   final ButtonKind kind;
+  final ButtonHighlight highlight;
   final ColorVariant background;
   final ColorVariant onBackground;
   final bool? pressed;
@@ -12,40 +20,29 @@ class ButtonStyle {
   final bool focusHighlight;
 
   Style call(BuildContext context) {
+    final boxBackground = Color.lerp(
+      ColorVariant.surface.resolve(context),
+      background.resolve(context),
+      OpacityVariant.hightlight.resolve(context).value,
+    )!;
+
     return Style(
       $box.padding.horizontal.ref(SpaceVariant.gap),
       $box.padding.vertical.ref(SpaceVariant.gap),
       $box.alignment.center(),
       $text.style.ref(TextStyleVariant.h6),
       $text.style.color.ref(ColorVariant.onSurface),
+      $icon.color.ref(ColorVariant.onSurface),
       ButtonKind.flat(
         $box.color.ref(ColorVariant.surface),
         HoverVariant.hover(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(boxBackground),
         ),
         PressVariant.press(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(boxBackground),
         ),
         FocusVariant.focus(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(boxBackground),
         ),
       ),
       ButtonKind.outline(
@@ -55,67 +52,43 @@ class ButtonStyle {
             .withOpacity(OpacityVariant.blend.resolve(context).value)),
         $box.border.all.width(2),
         HoverVariant.hover(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(boxBackground),
         ),
         PressVariant.press(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(boxBackground),
         ),
         FocusVariant.focus(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(boxBackground),
         ),
       ),
       ButtonKind.filled(
         $box.color.ref(background),
-        $text.style.color(
-          onBackground
-              .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value),
-        ),
+        $text.style.color.ref(onBackground),
+        $icon.color.ref(onBackground),
         HoverVariant.hover(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(background
+              .resolve(context)
+              .withOpacity(OpacityVariant.blend.resolve(context).value)),
         ),
         PressVariant.press(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(background
+              .resolve(context)
+              .withOpacity(OpacityVariant.blend.resolve(context).value)),
         ),
         FocusVariant.focus(
-          $box.color(
-            Color.lerp(
-              ColorVariant.surface.resolve(context),
-              background.resolve(context),
-              OpacityVariant.hightlight.resolve(context).value,
-            )!,
-          ),
+          $box.color(background
+              .resolve(context)
+              .withOpacity(OpacityVariant.blend.resolve(context).value)),
         ),
+      ),
+      ButtonHighlight.focus(
+        $box.color(boxBackground),
+      ),
+      ButtonHighlight.hover(
+        $box.color(boxBackground),
+      ),
+      ButtonHighlight.pressed(
+        $box.color(boxBackground),
       ),
       $with.scale(1.0),
       PressVariant.press(
@@ -123,6 +96,7 @@ class ButtonStyle {
       ),
     ).applyVariants([
       kind,
+      highlight,
       switch (pressed) {
         null => PressVariant.disabled,
         true => PressVariant.press,

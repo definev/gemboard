@@ -2,7 +2,11 @@ part of '../router.dart';
 
 @TypedShellRoute<_RootShell>(
   routes: [
-    TypedGoRoute<HomeRoute>(path: HomeRoute.location),
+    TypedShellRoute<HomeShell>(
+      routes: [
+        TypedGoRoute<MyDeskRoute>(path: MyDeskRoute.location)
+      ],
+    ),
   ],
 )
 class _RootShell extends ShellRouteData {

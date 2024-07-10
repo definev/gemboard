@@ -199,19 +199,9 @@ class MasterView extends StatelessWidget {
                         ])
                           DSSidebarSection(
                             pinned: false,
-                            header: Box(
-                              style: Style(
-                                $box.color.ref(background),
-                                $box.padding.vertical.ref(SpaceVariant.gap),
-                                $box.padding.horizontal
-                                    .ref(SpaceVariant.medium),
-                                $text.style.ref(TextStyleVariant.h6),
-                                $text.style.color.ref(
-                                  ColorVariant.resolveOnBackground(
-                                      background, ColorVariant.onBackground),
-                                ),
-                              ),
-                              child: const StyledText('Astrology'),
+                            header: DSSidebarSectionHeader(
+                              background: background,
+                              title: StyledText('Astrology'),
                             ),
                             children: [
                               for (final item in [

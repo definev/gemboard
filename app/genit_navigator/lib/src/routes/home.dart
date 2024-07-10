@@ -1,13 +1,20 @@
 part of '../router.dart';
 
-class HomeRoute extends GoRouteData {
-  const HomeRoute();
+class HomeShell extends ShellRouteData {
+  const HomeShell();
 
-  static const location = '/home';
   static final $parentNavigatorKey = _RootShell.$navigatorKey;
+  static final $navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  Widget build(BuildContext context, GoRouterState state) {
-    return HomeFlow();
+  Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
+    return Material(
+      child: ResizableFlex(
+        direction: Axis.horizontal,
+        initialSize: 300,
+        firstChild: GenitLeadSidebar(),
+        secondChild: navigator,
+      ),
+    );
   }
 }

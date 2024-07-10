@@ -7,22 +7,20 @@ class ResizableFlex extends StatefulWidget {
     required this.direction,
     required this.firstChild,
     this.secondChild,
-    this.fraction = 1000,
+    this.initialSize,
   });
 
   final Axis direction;
   final Widget firstChild;
   final Widget? secondChild;
-  final int fraction;
+  final double? initialSize;
 
   @override
   State<ResizableFlex> createState() => _ResizableFlexState();
 }
 
 class _ResizableFlexState extends State<ResizableFlex> {
-  late int firstFraction = widget.fraction;
-  late int secondFraction = widget.fraction;
-  int get totalFraction => firstFraction + secondFraction;
+  late double size = widget.initialSize ?? 100.0;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +34,15 @@ class _ResizableFlexState extends State<ResizableFlex> {
           direction: widget.direction,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              flex: firstFraction,
+            SizedBox(
+              height: switch (widget.direction) {
+                Axis.vertical => size,
+                Axis.horizontal => double.maxFinite,
+              },
+              width: switch (widget.direction) {
+                Axis.horizontal => size,
+                Axis.vertical => double.maxFinite,
+              },
               child: widget.firstChild,
             ),
             if (widget.secondChild != null) ...[
@@ -48,21 +53,12 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 },
                 child: GestureDetector(
                   onPanUpdate: (details) {
-                    final resizableFlexRenderBox =
-                        context.findRenderObject() as RenderBox;
-                    final position = resizableFlexRenderBox
-                        .globalToLocal(details.globalPosition);
+                    final deltaAxis = switch (widget.direction) {
+                      Axis.horizontal => details.delta.dx,
+                      Axis.vertical => details.delta.dy,
+                    };
 
-                    final targetPosition = widget.direction == Axis.horizontal
-                        ? position.dx
-                        : position.dy;
-                    final newFraction =
-                        ((targetPosition / totalSize) * totalFraction).toInt();
-                    
-                    if (newFraction < 5 || newFraction >= totalFraction - 5) return;
-
-                    firstFraction = newFraction;
-                    secondFraction = totalFraction - newFraction;
+                    size = size + deltaAxis;
                     setState(() {});
                   },
                   child: ColoredBox(
@@ -72,7 +68,6 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 ),
               ),
               Expanded(
-                flex: secondFraction,
                 child: widget.secondChild!,
               ),
             ],

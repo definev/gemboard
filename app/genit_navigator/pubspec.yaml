@@ -21,6 +21,9 @@ dependencies:
   flextras: ^1.0.0
   design_system:
     path: ../../core/design_system
+  mix: ^1.2.0
+  utils:
+    path: ../../core/utils
 
   # feature
   home:

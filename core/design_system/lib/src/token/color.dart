@@ -51,13 +51,13 @@ class ColorVariant extends ColorToken {
 }
 
 final colors = {
-  ColorVariant.outline: Color(0xFFC3ACD0),
+  ColorVariant.outline: Color.fromARGB(197, 146, 146, 146),
   ColorVariant.surface: Color(0xFFFFFFFF),
   ColorVariant.background: Color(0xFFEAE8E5),
   ColorVariant.onSurface: Color(0xFF030637),
   ColorVariant.onBackground: Color(0xFF222831),
   ColorVariant.yellow: Color(0xFFFEC457),
-  ColorVariant.onYellow: Color(0xFF181818),
+  ColorVariant.onYellow: Color(0xFF191208),
   ColorVariant.red: Color(0xFFEF9A9A),
   ColorVariant.onRed: Color(0xFF000000),
   ColorVariant.green: Color(0xFF81C784),

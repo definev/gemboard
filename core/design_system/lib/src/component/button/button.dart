@@ -14,6 +14,7 @@ class Button extends StyledWidget {
     super.style,
     super.inherit,
     this.kind = ButtonKind.flat,
+    this.highlight = ButtonHighlight.defer,
     this.background = ColorVariant.purple,
     this.onBackground,
     this.focusNode,
@@ -22,6 +23,7 @@ class Button extends StyledWidget {
   });
 
   final ButtonKind kind;
+  final ButtonHighlight highlight;
   final ColorVariant background;
   final ColorVariant? onBackground;
   final VoidCallback? onPressed;
@@ -47,6 +49,7 @@ class Button extends StyledWidget {
 
           final buttonStyle = ButtonStyle(
             kind,
+            highlight,
             background,
             onBackground,
             pressed,
