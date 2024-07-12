@@ -222,11 +222,14 @@ class MasterView extends StatelessWidget {
                                 ('🐟', 'Fish'),
                                 ('🐠', 'Fish'),
                               ])
-                                GenitEmojiButton(
+                                Button(
                                   background: background,
-                                  emoji: item.$1,
-                                  label: item.$2,
                                   onPressed: () {},
+                                  child: EmojiLabel(
+                                    kind: EmojiLabelKind.emojiWithLabel,
+                                    emoji: StyledText(item.$1),
+                                    label: StyledText(item.$2),
+                                  ),
                                 ),
                             ],
                           ),
@@ -242,7 +245,7 @@ class MasterView extends StatelessWidget {
                     Column(
                       children: [
                         DSAppbar(
-                          child: GenitEmojiLabelEditor(
+                          child: EmojiLabelEditor(
                             emoji: '🪄',
                             label: 'Magic',
                             onEmojiSelected: (value) => print(value),

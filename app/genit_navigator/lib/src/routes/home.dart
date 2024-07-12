@@ -39,7 +39,7 @@ class _HomeShellViewState extends State<_HomeShellView> {
           controller: HomeShell.resizableController,
           direction: Axis.horizontal,
           initialSize: 300,
-          minSize: 100,
+          minSize: 85,
           firstChild: GenitLeadSidebar(
             resizableController: HomeShell.resizableController,
           ),

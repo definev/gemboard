@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:design_system/design_system.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 class ResizableController extends ChangeNotifier {
@@ -11,8 +12,18 @@ class ResizableController extends ChangeNotifier {
   late double _panelSize = initialSize;
   double get panelSize => _panelSize;
   set panelSize(double value) {
+    _lastPanelSize = _panelSize;
     _panelSize = value;
     notifyListeners();
+  }
+
+  double _lastPanelSize = 0;
+  void hide() {
+    panelSize = 0;
+  }
+
+  void show() {
+    panelSize = _lastPanelSize;
   }
 }
 
@@ -82,6 +93,17 @@ class _ResizableFlexState extends State<ResizableFlex> {
 
   @override
   Widget build(BuildContext context) {
+    final gapSize = switch (defaultTargetPlatform) {
+      TargetPlatform.macOS ||
+      TargetPlatform.linux ||
+      TargetPlatform.windows =>
+        1.0,
+      TargetPlatform.android ||
+      TargetPlatform.iOS ||
+      TargetPlatform.fuchsia =>
+        8.0,
+    };
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalSize = widget.direction == Axis.horizontal
@@ -127,9 +149,19 @@ class _ResizableFlexState extends State<ResizableFlex> {
 
                     controller.panelSize = newSize;
                   },
+                  onDoubleTap: () {
+                    switch (controller.panelSize) {
+                      case 0:
+                        controller.show();
+                      default:
+                        controller.hide();
+                    }
+                  },
                   child: ColoredBox(
-                    color: ColorVariant.background.resolve(context),
-                    child: SizedBox.square(dimension: 1),
+                    color: ColorVariant.outline.resolve(context).withOpacity(
+                          OpacityVariant.hightlight.resolve(context).value,
+                        ),
+                    child: SizedBox.square(dimension: gapSize),
                   ),
                 ),
               ),

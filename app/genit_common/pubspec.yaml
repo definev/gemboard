@@ -22,6 +22,10 @@ dependencies:
   design_system:
     path: ../../core/design_system
   
+  # utils
+  utils:
+    path: ../../core/utils
+  
   
   mix: ^1.2.0
   flextras: ^1.0.0
