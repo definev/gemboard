@@ -59,7 +59,7 @@ class GenitSidebarHeader extends StatelessWidget {
                         ),
                         children: [
                           StyledText(
-                            'Hi, you!',
+                            'Hi, Zen!',
                             style: Style(
                               $text.style.ref(TextStyleVariant.h6),
                               $text.style.fontWeight.bold(),
