@@ -252,7 +252,7 @@ class GenitFolderBuilder extends HookWidget {
                   child: EmojiLabel(
                     kind: genitEmojiLabelKind,
                     emoji: StyledText('➕'),
-                    label: StyledText('Create whiteboard'),
+                    label: StyledText('Create folder'),
                   ),
                 ),
               );

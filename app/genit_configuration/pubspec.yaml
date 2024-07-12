@@ -2,7 +2,7 @@ name: genit_configuration
 description: "genit configuration for mobile app"
 
 environment: 
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:

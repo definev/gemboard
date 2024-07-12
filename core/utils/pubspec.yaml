@@ -2,7 +2,7 @@ name: utils
 description: utils feature
 
 environment: 
-  sdk: ">=3.0.0 <4.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -21,6 +21,8 @@ dependencies:
 
   flow_builder: ^0.1.0 
 
+
+  uuid: 
 
 
 dev_dependencies:
