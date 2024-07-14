@@ -30,6 +30,8 @@ dependencies:
   # feature
   home:
     path: ../../feature/home
+  whiteboard:
+    path: ../../feature/whiteboard
 
 dev_dependencies:
   build_runner: ^2.3.3

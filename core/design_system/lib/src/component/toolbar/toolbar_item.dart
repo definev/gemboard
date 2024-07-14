@@ -29,24 +29,36 @@ class DSToolbarItem extends StyledWidget {
           context,
           (context) => Box(
             style: Style(
+              $box.color.ref(ColorVariant.surface),
               switch (direction) {
-                Axis.vertical =>
-                  $box.border.left.color.ref(ColorVariant.onSurface),
-                Axis.horizontal =>
-                  $box.border.top.color.ref(ColorVariant.onSurface),
+                Axis.vertical => $box.border.left(
+                    color: ColorVariant.onSurface.resolve(context),
+                    width: 1.5,
+                  ),
+                Axis.horizontal => $box.border.top(
+                    color: ColorVariant.onSurface.resolve(context),
+                    width: 1.5,
+                  ),
               },
               switch (direction) {
-                Axis.vertical =>
-                  $box.border.right.color.ref(ColorVariant.onSurface),
-                Axis.horizontal =>
-                  $box.border.bottom.color.ref(ColorVariant.onSurface),
+                Axis.vertical => $box.border.right(
+                    color: ColorVariant.onSurface.resolve(context),
+                    width: 1.5,
+                  ),
+                Axis.horizontal => $box.border.bottom(
+                    color: ColorVariant.onSurface.resolve(context),
+                    width: 1.5,
+                  )
               },
               $box.height(42),
               $box.width(42),
               HoverVariant.hover(
                 $box.color(
-                  ColorVariant.yellow.resolve(context).withOpacity(
-                      OpacityVariant.hightlight.resolve(context).value),
+                  Color.lerp(
+                    ColorVariant.surface.resolve(context),
+                    ColorVariant.yellow.resolve(context),
+                    OpacityVariant.hightlight.resolve(context).value,
+                  )!,
                 ),
               ),
             ).applyVariants([

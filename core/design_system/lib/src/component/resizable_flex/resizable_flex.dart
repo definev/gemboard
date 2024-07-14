@@ -2,7 +2,10 @@ import 'dart:math' as math;
 
 import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:iconly/iconly.dart';
+import 'package:mix/mix.dart';
 
 class ResizableController extends ChangeNotifier {
   ResizableController({this.initialSize = 100});
@@ -106,29 +109,62 @@ class _ResizableFlexState extends State<ResizableFlex> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final totalSize = widget.direction == Axis.horizontal
+        final totalSize = (widget.direction == Axis.horizontal
             ? constraints.maxWidth
-            : constraints.maxHeight;
+            : constraints.maxHeight) - gapSize;
 
-        if (totalSize < controller._panelSize) {
-          controller._panelSize = totalSize - 1;
-        }
-
+        final firstChild = SizedBox(
+          height: switch (widget.direction) {
+            Axis.vertical => math.min(controller.panelSize, totalSize),
+            Axis.horizontal => double.maxFinite,
+          },
+          width: switch (widget.direction) {
+            Axis.horizontal => math.min(controller.panelSize, totalSize),
+            Axis.vertical => double.maxFinite,
+          },
+          child: widget.firstChild,
+        );
         return Flex(
           direction: widget.direction,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: switch (widget.direction) {
-                Axis.vertical => math.min(controller.panelSize, totalSize),
-                Axis.horizontal => double.maxFinite,
-              },
-              width: switch (widget.direction) {
-                Axis.horizontal => math.min(controller.panelSize, totalSize),
-                Axis.vertical => double.maxFinite,
-              },
-              child: widget.firstChild,
-            ),
+            if (totalSize - controller.panelSize < gapSize)
+              SizedBox(
+                height: switch (widget.direction) {
+                  Axis.vertical => math.min(controller.panelSize, totalSize),
+                  Axis.horizontal => double.maxFinite,
+                },
+                width: switch (widget.direction) {
+                  Axis.horizontal => math.min(controller.panelSize, totalSize),
+                  Axis.vertical => double.maxFinite,
+                },
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: firstChild,
+                    ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: SafeArea(
+                        child: Button(
+                          style: Style(
+                            $box.height(40),
+                            $box.width(40),
+                            $box.margin.all.ref(SpaceVariant.small),
+                          ),
+                          kind: ButtonKind.outline,
+                          background: ColorVariant.onSurface,
+                          onPressed: () => controller.panelSize =
+                              widget.minSize ?? widget.initialSize ?? 100,
+                          child: StyledIcon(IconlyLight.arrow_left_circle),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else
+              firstChild,
             if (widget.secondChild != null) ...[
               MouseRegion(
                 cursor: switch (widget.direction) {
@@ -145,7 +181,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                     final newSize = controller.panelSize + deltaAxis;
 
                     if (newSize < (widget.minSize ?? 0)) return;
-                    if (newSize > totalSize - 1) return;
+                    if (newSize > totalSize) return;
 
                     controller.panelSize = newSize;
                   },
@@ -165,9 +201,36 @@ class _ResizableFlexState extends State<ResizableFlex> {
                   ),
                 ),
               ),
-              Expanded(
-                child: widget.secondChild!,
-              ),
+              if (controller.panelSize <= 0)
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: widget.secondChild!,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: SafeArea(
+                          child: Button(
+                            style: Style(
+                              $box.height(40),
+                              $box.width(40),
+                              $box.margin.all.ref(SpaceVariant.small),
+                            ),
+                            kind: ButtonKind.outline,
+                            background: ColorVariant.onSurface,
+                            onPressed: () => controller.show(),
+                            child: StyledIcon(IconlyLight.arrow_right_circle),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                Expanded(
+                  child: widget.secondChild!,
+                ),
             ],
           ],
         );

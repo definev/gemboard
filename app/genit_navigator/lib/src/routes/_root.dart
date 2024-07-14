@@ -4,7 +4,8 @@ part of '../router.dart';
   routes: [
     TypedShellRoute<HomeShell>(
       routes: [
-        TypedGoRoute<MyDeskRoute>(path: MyDeskRoute.location)
+        TypedGoRoute<WhiteboardEditorRoute>(
+            path: WhiteboardEditorRoute.location),
       ],
     ),
   ],

@@ -215,7 +215,7 @@ WhiteboardParentId _$WhiteboardParentIdFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$WhiteboardParentId {
-  String get FolderId => throw _privateConstructorUsedError;
+  String? get folderId => throw _privateConstructorUsedError;
 
   /// Serializes this WhiteboardParentId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -233,7 +233,7 @@ abstract class $WhiteboardParentIdCopyWith<$Res> {
           WhiteboardParentId value, $Res Function(WhiteboardParentId) then) =
       _$WhiteboardParentIdCopyWithImpl<$Res, WhiteboardParentId>;
   @useResult
-  $Res call({String FolderId});
+  $Res call({String? folderId});
 }
 
 /// @nodoc
@@ -251,13 +251,13 @@ class _$WhiteboardParentIdCopyWithImpl<$Res, $Val extends WhiteboardParentId>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? FolderId = null,
+    Object? folderId = freezed,
   }) {
     return _then(_value.copyWith(
-      FolderId: null == FolderId
-          ? _value.FolderId
-          : FolderId // ignore: cast_nullable_to_non_nullable
-              as String,
+      folderId: freezed == folderId
+          ? _value.folderId
+          : folderId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -270,7 +270,7 @@ abstract class _$$WhiteboardParentIdImplCopyWith<$Res>
       __$$WhiteboardParentIdImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String FolderId});
+  $Res call({String? folderId});
 }
 
 /// @nodoc
@@ -286,13 +286,13 @@ class __$$WhiteboardParentIdImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? FolderId = null,
+    Object? folderId = freezed,
   }) {
     return _then(_$WhiteboardParentIdImpl(
-      FolderId: null == FolderId
-          ? _value.FolderId
-          : FolderId // ignore: cast_nullable_to_non_nullable
-              as String,
+      folderId: freezed == folderId
+          ? _value.folderId
+          : folderId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -300,17 +300,17 @@ class __$$WhiteboardParentIdImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$WhiteboardParentIdImpl implements _WhiteboardParentId {
-  const _$WhiteboardParentIdImpl({required this.FolderId});
+  const _$WhiteboardParentIdImpl({this.folderId});
 
   factory _$WhiteboardParentIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$WhiteboardParentIdImplFromJson(json);
 
   @override
-  final String FolderId;
+  final String? folderId;
 
   @override
   String toString() {
-    return 'WhiteboardParentId(FolderId: $FolderId)';
+    return 'WhiteboardParentId(folderId: $folderId)';
   }
 
   @override
@@ -318,13 +318,13 @@ class _$WhiteboardParentIdImpl implements _WhiteboardParentId {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WhiteboardParentIdImpl &&
-            (identical(other.FolderId, FolderId) ||
-                other.FolderId == FolderId));
+            (identical(other.folderId, folderId) ||
+                other.folderId == folderId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, FolderId);
+  int get hashCode => Object.hash(runtimeType, folderId);
 
   /// Create a copy of WhiteboardParentId
   /// with the given fields replaced by the non-null parameter values.
@@ -344,14 +344,14 @@ class _$WhiteboardParentIdImpl implements _WhiteboardParentId {
 }
 
 abstract class _WhiteboardParentId implements WhiteboardParentId {
-  const factory _WhiteboardParentId({required final String FolderId}) =
+  const factory _WhiteboardParentId({final String? folderId}) =
       _$WhiteboardParentIdImpl;
 
   factory _WhiteboardParentId.fromJson(Map<String, dynamic> json) =
       _$WhiteboardParentIdImpl.fromJson;
 
   @override
-  String get FolderId;
+  String? get folderId;
 
   /// Create a copy of WhiteboardParentId
   /// with the given fields replaced by the non-null parameter values.

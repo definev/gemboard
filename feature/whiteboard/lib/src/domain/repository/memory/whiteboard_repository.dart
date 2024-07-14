@@ -13,4 +13,18 @@ WhiteboardRepositoryMemory whiteboardRepositoryMemory(
 }
 
 class WhiteboardRepositoryMemory extends WhiteboardRepository
-    with CrudDTORepositoryMemory<WhiteboardParentId, WhiteboardId, Whiteboard> {}
+    with CrudDTORepositoryMemory<WhiteboardParentId, WhiteboardId, Whiteboard> {
+  @override
+  Map<WhiteboardParentId, List<Whiteboard>> map = {
+    const WhiteboardParentId(): [
+      Whiteboard(
+        id: WhiteboardId(
+          parentId: WhiteboardParentId(),
+          id: 'default',
+        ),
+        emoji: '🎨',
+        title: 'Zen\'s Desk',
+      ),
+    ],
+  };
+}

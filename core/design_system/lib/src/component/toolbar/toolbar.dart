@@ -26,7 +26,7 @@ class DSToolbar extends StyledWidget {
         final dsToolbarStyle = DSToolbarStyle();
 
         return Box(
-          style: dsToolbarStyle(context),
+          style: dsToolbarStyle(context).merge(style),
           child: StyledFlex(
             direction: direction,
             style: dsToolbarStyle.styledFlexStyle(context),

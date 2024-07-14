@@ -95,7 +95,7 @@ packages:
     source: hosted
     version: "2.1.1"
   boundless_stack:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "../../packages/boundless_stack"
       relative: true

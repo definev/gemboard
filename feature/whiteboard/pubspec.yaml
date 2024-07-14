@@ -25,6 +25,11 @@ dependencies:
   # utils
   utils:
     path: ../../core/utils 
+
+  boundless_stack:
+    git:
+      url: https://github.com/definev/boundless_stack.git
+      ref: main
   
   mix: ^1.2.0
   

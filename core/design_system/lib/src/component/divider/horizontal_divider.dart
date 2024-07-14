@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class DSHorizontalDivider extends StatelessWidget {
   const DSHorizontalDivider({
     super.key,
-    this.thickness = 1,
+    this.thickness = 1.5,
   });
 
   final double thickness;

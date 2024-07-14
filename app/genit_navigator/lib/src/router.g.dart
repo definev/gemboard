@@ -20,9 +20,9 @@ RouteBase get $_RootShell => ShellRouteData.$route(
           factory: $HomeShellExtension._fromState,
           routes: [
             GoRouteData.$route(
-              path: '/default-board',
-              parentNavigatorKey: MyDeskRoute.$parentNavigatorKey,
-              factory: $MyDeskRouteExtension._fromState,
+              path: '/whiteboard/:id',
+              parentNavigatorKey: WhiteboardEditorRoute.$parentNavigatorKey,
+              factory: $WhiteboardEditorRouteExtension._fromState,
             ),
           ],
         ),
@@ -37,11 +37,18 @@ extension $HomeShellExtension on HomeShell {
   static HomeShell _fromState(GoRouterState state) => const HomeShell();
 }
 
-extension $MyDeskRouteExtension on MyDeskRoute {
-  static MyDeskRoute _fromState(GoRouterState state) => const MyDeskRoute();
+extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
+  static WhiteboardEditorRoute _fromState(GoRouterState state) =>
+      WhiteboardEditorRoute(
+        id: state.pathParameters['id']!,
+        folderId: state.uri.queryParameters['folder-id'],
+      );
 
   String get location => GoRouteData.$location(
-        '/default-board',
+        '/whiteboard/${Uri.encodeComponent(id)}',
+        queryParams: {
+          if (folderId != null) 'folder-id': folderId,
+        },
       );
 
   void go(BuildContext context) => context.go(location);

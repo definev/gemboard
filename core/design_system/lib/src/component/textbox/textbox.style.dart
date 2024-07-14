@@ -15,6 +15,7 @@ class DSTextboxStyle {
         top: SpaceVariant.gap.resolve(context),
         bottom: SpaceVariant.gap.resolve(context),
       ),
+      $box.alignment.center(),
       FocusVariant.focus(
         DSTextboxKind.outline(
           $box.border.all(

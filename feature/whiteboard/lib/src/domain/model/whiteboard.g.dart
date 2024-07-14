@@ -23,13 +23,13 @@ Map<String, dynamic> _$$WhiteboardIdImplToJson(_$WhiteboardIdImpl instance) =>
 _$WhiteboardParentIdImpl _$$WhiteboardParentIdImplFromJson(
         Map<String, dynamic> json) =>
     _$WhiteboardParentIdImpl(
-      FolderId: json['FolderId'] as String,
+      folderId: json['folderId'] as String?,
     );
 
 Map<String, dynamic> _$$WhiteboardParentIdImplToJson(
         _$WhiteboardParentIdImpl instance) =>
     <String, dynamic>{
-      'FolderId': instance.FolderId,
+      'folderId': instance.folderId,
     };
 
 _$WhiteboardImpl _$$WhiteboardImplFromJson(Map<String, dynamic> json) =>

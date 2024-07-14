@@ -23,7 +23,7 @@ class WhiteboardId with _$WhiteboardId, HasParentId<WhiteboardParentId> {
 @freezed
 class WhiteboardParentId with _$WhiteboardParentId {
   const factory WhiteboardParentId({
-    required String FolderId,
+    String? folderId,
   }) = _WhiteboardParentId;
 
   factory WhiteboardParentId.fromJson(Map<String, dynamic> json) =>

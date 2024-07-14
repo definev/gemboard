@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: boundless_stack,design_system,genit_common,genit_configuration,genit_navigator,home,utils
+# melos_managed_dependency_overrides: boundless_stack,design_system,genit_common,genit_configuration,genit_navigator,home,utils,whiteboard
 dependency_overrides:
   boundless_stack:
     path: ../../packages/boundless_stack
@@ -14,3 +14,5 @@ dependency_overrides:
     path: ../../feature/home
   utils:
     path: ../../core/utils
+  whiteboard:
+    path: ../../feature/whiteboard
