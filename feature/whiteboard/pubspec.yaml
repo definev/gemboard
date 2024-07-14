@@ -17,10 +17,19 @@ dependencies:
   freezed_annotation: ^2.4.3
   json_annotation: ^4.9.0
   riverpod_annotation: ^2.3.5
+
+  iconly: ^1.0.1
+  
+  # Native
+  super_drag_and_drop: ^0.8.17 
   
   # design system
   design_system:
     path: ../../core/design_system
+  
+  # feature
+  cell:
+    path: ../../feature/cell
 
   # utils
   utils:

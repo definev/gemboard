@@ -5,10 +5,10 @@ import 'package:whiteboard/src/domain/repository/whiteboard_repository.dart';
 part 'get_whiteboard_by_id.g.dart';
 
 @riverpod
-Future<Whiteboard> getWhiteboardById(
+Stream<Whiteboard> getWhiteboardById(
   GetWhiteboardByIdRef ref, {
   required WhiteboardId id,
-}) async {
+}) async* {
   final repository = ref.watch(whiteboardRepositoryProvider);
-  return repository.get(id: id);
+  yield await repository.get(id: id);
 }

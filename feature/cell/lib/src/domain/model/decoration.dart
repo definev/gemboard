@@ -6,6 +6,21 @@ import 'package:utils/utils.dart';
 part 'decoration.freezed.dart';
 part 'decoration.g.dart';
 
+class CellDecorationConverter
+    implements JsonConverter<CellDecoration, Map<String, dynamic>> {
+  const CellDecorationConverter();
+
+  @override
+  CellDecoration fromJson(Map<String, dynamic> json) {
+    return CellDecoration.fromJson(json);
+  }
+
+  @override
+  Map<String, dynamic> toJson(CellDecoration object) {
+    return object.toJson();
+  }
+}
+
 @freezed
 class CellDecoration with _$CellDecoration {
   const factory CellDecoration({

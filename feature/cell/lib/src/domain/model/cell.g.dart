@@ -17,87 +17,119 @@ Map<String, dynamic> _$$CellParentIdImplToJson(_$CellParentIdImpl instance) =>
     };
 
 _$CellIdImpl _$$CellIdImplFromJson(Map<String, dynamic> json) => _$CellIdImpl(
-      parentId: CellParentId.fromJson(
-          CellParentId.readValue(json, 'parentId') as Map<String, dynamic>),
+      parentId: const CellParentIdConverter()
+          .fromJson(json['parentId'] as Map<String, dynamic>),
       id: json['id'] as String,
     );
 
 Map<String, dynamic> _$$CellIdImplToJson(_$CellIdImpl instance) =>
     <String, dynamic>{
-      'parentId': instance.parentId,
+      'parentId': const CellParentIdConverter().toJson(instance.parentId),
       'id': instance.id,
     };
 
 _$TextCellImpl _$$TextCellImplFromJson(Map<String, dynamic> json) =>
     _$TextCellImpl(
-      id: CellId.fromJson(CellId.readValue(json, 'id') as Map<String, dynamic>),
-      decoration:
-          CellDecoration.fromJson(json['decoration'] as Map<String, dynamic>),
+      layer: (json['layer'] as num?)?.toInt() ?? 10,
+      offset: const OffsetConverter().fromJson(json['offset'] as List),
+      id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num?)?.toDouble(),
+      decoration: const CellDecorationConverter()
+          .fromJson(json['decoration'] as Map<String, dynamic>),
       text: json['text'] as String,
-      $type: json['runtimeType'] as String?,
+      $type: json['cellType'] as String?,
     );
 
 Map<String, dynamic> _$$TextCellImplToJson(_$TextCellImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'decoration': instance.decoration,
+      'layer': instance.layer,
+      'offset': const OffsetConverter().toJson(instance.offset),
+      'id': const CellIdConverter().toJson(instance.id),
+      'width': instance.width,
+      'height': instance.height,
+      'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'text': instance.text,
-      'runtimeType': instance.$type,
+      'cellType': instance.$type,
     };
 
 _$ImageCellImpl _$$ImageCellImplFromJson(Map<String, dynamic> json) =>
     _$ImageCellImpl(
-      id: CellId.fromJson(CellId.readValue(json, 'id') as Map<String, dynamic>),
-      decoration:
-          CellDecoration.fromJson(json['decoration'] as Map<String, dynamic>),
+      layer: (json['layer'] as num?)?.toInt() ?? 10,
+      offset: const OffsetConverter().fromJson(json['offset'] as List),
+      id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num?)?.toDouble(),
+      decoration: const CellDecorationConverter()
+          .fromJson(json['decoration'] as Map<String, dynamic>),
       url: json['url'] as String?,
       filePath: json['filePath'] as String?,
-      $type: json['runtimeType'] as String?,
+      $type: json['cellType'] as String?,
     );
 
 Map<String, dynamic> _$$ImageCellImplToJson(_$ImageCellImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'decoration': instance.decoration,
+      'layer': instance.layer,
+      'offset': const OffsetConverter().toJson(instance.offset),
+      'id': const CellIdConverter().toJson(instance.id),
+      'width': instance.width,
+      'height': instance.height,
+      'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'url': instance.url,
       'filePath': instance.filePath,
-      'runtimeType': instance.$type,
+      'cellType': instance.$type,
     };
 
 _$ArticleCellImpl _$$ArticleCellImplFromJson(Map<String, dynamic> json) =>
     _$ArticleCellImpl(
-      id: CellId.fromJson(CellId.readValue(json, 'id') as Map<String, dynamic>),
-      decoration:
-          CellDecoration.fromJson(json['decoration'] as Map<String, dynamic>),
+      layer: (json['layer'] as num?)?.toInt() ?? 10,
+      offset: const OffsetConverter().fromJson(json['offset'] as List),
+      id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num?)?.toDouble(),
+      decoration: const CellDecorationConverter()
+          .fromJson(json['decoration'] as Map<String, dynamic>),
       title: json['title'] as String,
       content: json['content'] as String,
       editable: json['editable'] as bool,
-      $type: json['runtimeType'] as String?,
+      $type: json['cellType'] as String?,
     );
 
 Map<String, dynamic> _$$ArticleCellImplToJson(_$ArticleCellImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'decoration': instance.decoration,
+      'layer': instance.layer,
+      'offset': const OffsetConverter().toJson(instance.offset),
+      'id': const CellIdConverter().toJson(instance.id),
+      'width': instance.width,
+      'height': instance.height,
+      'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'title': instance.title,
       'content': instance.content,
       'editable': instance.editable,
-      'runtimeType': instance.$type,
+      'cellType': instance.$type,
     };
 
 _$UrlCellImpl _$$UrlCellImplFromJson(Map<String, dynamic> json) =>
     _$UrlCellImpl(
-      id: CellId.fromJson(CellId.readValue(json, 'id') as Map<String, dynamic>),
-      decoration:
-          CellDecoration.fromJson(json['decoration'] as Map<String, dynamic>),
+      layer: (json['layer'] as num?)?.toInt() ?? 10,
+      offset: const OffsetConverter().fromJson(json['offset'] as List),
+      id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num?)?.toDouble(),
+      decoration: const CellDecorationConverter()
+          .fromJson(json['decoration'] as Map<String, dynamic>),
       url: json['url'] as String,
-      $type: json['runtimeType'] as String?,
+      $type: json['cellType'] as String?,
     );
 
 Map<String, dynamic> _$$UrlCellImplToJson(_$UrlCellImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'decoration': instance.decoration,
+      'layer': instance.layer,
+      'offset': const OffsetConverter().toJson(instance.offset),
+      'id': const CellIdConverter().toJson(instance.id),
+      'width': instance.width,
+      'height': instance.height,
+      'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'url': instance.url,
-      'runtimeType': instance.$type,
+      'cellType': instance.$type,
     };

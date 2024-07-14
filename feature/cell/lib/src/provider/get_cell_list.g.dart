@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_whiteboard_by_id.dart';
+part of 'get_cell_list.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getWhiteboardByIdHash() => r'b41960a97d8dcfe295052fa0d2a99aa441a5fdff';
+String _$getCellListHash() => r'a76791622133f6939519080302cf434f1b3ecaff';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +29,30 @@ class _SystemHash {
   }
 }
 
-/// See also [getWhiteboardById].
-@ProviderFor(getWhiteboardById)
-const getWhiteboardByIdProvider = GetWhiteboardByIdFamily();
+/// See also [getCellList].
+@ProviderFor(getCellList)
+const getCellListProvider = GetCellListFamily();
 
-/// See also [getWhiteboardById].
-class GetWhiteboardByIdFamily extends Family<AsyncValue<Whiteboard>> {
-  /// See also [getWhiteboardById].
-  const GetWhiteboardByIdFamily();
+/// See also [getCellList].
+class GetCellListFamily extends Family<AsyncValue<List<Cell>>> {
+  /// See also [getCellList].
+  const GetCellListFamily();
 
-  /// See also [getWhiteboardById].
-  GetWhiteboardByIdProvider call({
-    required WhiteboardId id,
+  /// See also [getCellList].
+  GetCellListProvider call({
+    required CellParentId parentId,
   }) {
-    return GetWhiteboardByIdProvider(
-      id: id,
+    return GetCellListProvider(
+      parentId: parentId,
     );
   }
 
   @override
-  GetWhiteboardByIdProvider getProviderOverride(
-    covariant GetWhiteboardByIdProvider provider,
+  GetCellListProvider getProviderOverride(
+    covariant GetCellListProvider provider,
   ) {
     return call(
-      id: provider.id,
+      parentId: provider.parentId,
     );
   }
 
@@ -68,92 +68,91 @@ class GetWhiteboardByIdFamily extends Family<AsyncValue<Whiteboard>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'getWhiteboardByIdProvider';
+  String? get name => r'getCellListProvider';
 }
 
-/// See also [getWhiteboardById].
-class GetWhiteboardByIdProvider extends AutoDisposeStreamProvider<Whiteboard> {
-  /// See also [getWhiteboardById].
-  GetWhiteboardByIdProvider({
-    required WhiteboardId id,
+/// See also [getCellList].
+class GetCellListProvider extends AutoDisposeStreamProvider<List<Cell>> {
+  /// See also [getCellList].
+  GetCellListProvider({
+    required CellParentId parentId,
   }) : this._internal(
-          (ref) => getWhiteboardById(
-            ref as GetWhiteboardByIdRef,
-            id: id,
+          (ref) => getCellList(
+            ref as GetCellListRef,
+            parentId: parentId,
           ),
-          from: getWhiteboardByIdProvider,
-          name: r'getWhiteboardByIdProvider',
+          from: getCellListProvider,
+          name: r'getCellListProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$getWhiteboardByIdHash,
-          dependencies: GetWhiteboardByIdFamily._dependencies,
+                  : _$getCellListHash,
+          dependencies: GetCellListFamily._dependencies,
           allTransitiveDependencies:
-              GetWhiteboardByIdFamily._allTransitiveDependencies,
-          id: id,
+              GetCellListFamily._allTransitiveDependencies,
+          parentId: parentId,
         );
 
-  GetWhiteboardByIdProvider._internal(
+  GetCellListProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.id,
+    required this.parentId,
   }) : super.internal();
 
-  final WhiteboardId id;
+  final CellParentId parentId;
 
   @override
   Override overrideWith(
-    Stream<Whiteboard> Function(GetWhiteboardByIdRef provider) create,
+    Stream<List<Cell>> Function(GetCellListRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: GetWhiteboardByIdProvider._internal(
-        (ref) => create(ref as GetWhiteboardByIdRef),
+      override: GetCellListProvider._internal(
+        (ref) => create(ref as GetCellListRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        id: id,
+        parentId: parentId,
       ),
     );
   }
 
   @override
-  AutoDisposeStreamProviderElement<Whiteboard> createElement() {
-    return _GetWhiteboardByIdProviderElement(this);
+  AutoDisposeStreamProviderElement<List<Cell>> createElement() {
+    return _GetCellListProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetWhiteboardByIdProvider && other.id == id;
+    return other is GetCellListProvider && other.parentId == parentId;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin GetWhiteboardByIdRef on AutoDisposeStreamProviderRef<Whiteboard> {
-  /// The parameter `id` of this provider.
-  WhiteboardId get id;
+mixin GetCellListRef on AutoDisposeStreamProviderRef<List<Cell>> {
+  /// The parameter `parentId` of this provider.
+  CellParentId get parentId;
 }
 
-class _GetWhiteboardByIdProviderElement
-    extends AutoDisposeStreamProviderElement<Whiteboard>
-    with GetWhiteboardByIdRef {
-  _GetWhiteboardByIdProviderElement(super.provider);
+class _GetCellListProviderElement
+    extends AutoDisposeStreamProviderElement<List<Cell>> with GetCellListRef {
+  _GetCellListProviderElement(super.provider);
 
   @override
-  WhiteboardId get id => (origin as GetWhiteboardByIdProvider).id;
+  CellParentId get parentId => (origin as GetCellListProvider).parentId;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

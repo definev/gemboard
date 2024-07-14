@@ -171,7 +171,7 @@ CellId _$CellIdFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CellId {
-  @JsonKey(readValue: CellParentId.readValue)
+  @CellParentIdConverter()
   CellParentId get parentId => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
@@ -189,9 +189,7 @@ abstract class $CellIdCopyWith<$Res> {
   factory $CellIdCopyWith(CellId value, $Res Function(CellId) then) =
       _$CellIdCopyWithImpl<$Res, CellId>;
   @useResult
-  $Res call(
-      {@JsonKey(readValue: CellParentId.readValue) CellParentId parentId,
-      String id});
+  $Res call({@CellParentIdConverter() CellParentId parentId, String id});
 
   $CellParentIdCopyWith<$Res> get parentId;
 }
@@ -244,9 +242,7 @@ abstract class _$$CellIdImplCopyWith<$Res> implements $CellIdCopyWith<$Res> {
       __$$CellIdImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(readValue: CellParentId.readValue) CellParentId parentId,
-      String id});
+  $Res call({@CellParentIdConverter() CellParentId parentId, String id});
 
   @override
   $CellParentIdCopyWith<$Res> get parentId;
@@ -285,14 +281,13 @@ class __$$CellIdImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CellIdImpl implements _CellId {
   const _$CellIdImpl(
-      {@JsonKey(readValue: CellParentId.readValue) required this.parentId,
-      required this.id});
+      {@CellParentIdConverter() required this.parentId, required this.id});
 
   factory _$CellIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$CellIdImplFromJson(json);
 
   @override
-  @JsonKey(readValue: CellParentId.readValue)
+  @CellParentIdConverter()
   final CellParentId parentId;
   @override
   final String id;
@@ -334,14 +329,13 @@ class _$CellIdImpl implements _CellId {
 
 abstract class _CellId implements CellId {
   const factory _CellId(
-      {@JsonKey(readValue: CellParentId.readValue)
-      required final CellParentId parentId,
+      {@CellParentIdConverter() required final CellParentId parentId,
       required final String id}) = _$CellIdImpl;
 
   factory _CellId.fromJson(Map<String, dynamic> json) = _$CellIdImpl.fromJson;
 
   @override
-  @JsonKey(readValue: CellParentId.readValue)
+  @CellParentIdConverter()
   CellParentId get parentId;
   @override
   String get id;
@@ -355,7 +349,7 @@ abstract class _CellId implements CellId {
 }
 
 Cell _$CellFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
+  switch (json['cellType']) {
     case 'text':
       return _TextCell.fromJson(json);
     case 'image':
@@ -366,73 +360,148 @@ Cell _$CellFromJson(Map<String, dynamic> json) {
       return _UrlCell.fromJson(json);
 
     default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'Cell',
-          'Invalid union type "${json['runtimeType']}"!');
+      throw CheckedFromJsonException(json, 'cellType', 'Cell',
+          'Invalid union type "${json['cellType']}"!');
   }
 }
 
 /// @nodoc
 mixin _$Cell {
-  @JsonKey(readValue: CellId.readValue)
+  int get layer => throw _privateConstructorUsedError;
+  @OffsetConverter()
+  Offset get offset => throw _privateConstructorUsedError;
+  @CellIdConverter()
   CellId get id => throw _privateConstructorUsedError;
+  double get width => throw _privateConstructorUsedError;
+  double? get height => throw _privateConstructorUsedError;
+  @CellDecorationConverter()
   CellDecoration get decoration => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)
         text,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)
         image,
     required TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)
         article,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)
         url,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult? Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
     required TResult orElse(),
   }) =>
@@ -478,8 +547,12 @@ abstract class $CellCopyWith<$Res> {
       _$CellCopyWithImpl<$Res, Cell>;
   @useResult
   $Res call(
-      {@JsonKey(readValue: CellId.readValue) CellId id,
-      CellDecoration decoration});
+      {int layer,
+      @OffsetConverter() Offset offset,
+      @CellIdConverter() CellId id,
+      double width,
+      double? height,
+      @CellDecorationConverter() CellDecoration decoration});
 
   $CellIdCopyWith<$Res> get id;
   $CellDecorationCopyWith<$Res> get decoration;
@@ -500,14 +573,34 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? layer = null,
+    Object? offset = null,
     Object? id = null,
+    Object? width = null,
+    Object? height = freezed,
     Object? decoration = null,
   }) {
     return _then(_value.copyWith(
+      layer: null == layer
+          ? _value.layer
+          : layer // ignore: cast_nullable_to_non_nullable
+              as int,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
+      width: null == width
+          ? _value.width
+          : width // ignore: cast_nullable_to_non_nullable
+              as double,
+      height: freezed == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as double?,
       decoration: null == decoration
           ? _value.decoration
           : decoration // ignore: cast_nullable_to_non_nullable
@@ -544,8 +637,12 @@ abstract class _$$TextCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: CellId.readValue) CellId id,
-      CellDecoration decoration,
+      {int layer,
+      @OffsetConverter() Offset offset,
+      @CellIdConverter() CellId id,
+      double width,
+      double? height,
+      @CellDecorationConverter() CellDecoration decoration,
       String text});
 
   @override
@@ -567,15 +664,35 @@ class __$$TextCellImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? layer = null,
+    Object? offset = null,
     Object? id = null,
+    Object? width = null,
+    Object? height = freezed,
     Object? decoration = null,
     Object? text = null,
   }) {
     return _then(_$TextCellImpl(
+      layer: null == layer
+          ? _value.layer
+          : layer // ignore: cast_nullable_to_non_nullable
+              as int,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
+      width: null == width
+          ? _value.width
+          : width // ignore: cast_nullable_to_non_nullable
+              as double,
+      height: freezed == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as double?,
       decoration: null == decoration
           ? _value.decoration
           : decoration // ignore: cast_nullable_to_non_nullable
@@ -592,8 +709,12 @@ class __$$TextCellImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TextCellImpl implements _TextCell {
   const _$TextCellImpl(
-      {@JsonKey(readValue: CellId.readValue) required this.id,
-      required this.decoration,
+      {this.layer = 10,
+      @OffsetConverter() required this.offset,
+      @CellIdConverter() required this.id,
+      required this.width,
+      this.height,
+      @CellDecorationConverter() required this.decoration,
       required this.text,
       final String? $type})
       : $type = $type ?? 'text';
@@ -602,19 +723,30 @@ class _$TextCellImpl implements _TextCell {
       _$$TextCellImplFromJson(json);
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  @JsonKey()
+  final int layer;
+  @override
+  @OffsetConverter()
+  final Offset offset;
+  @override
+  @CellIdConverter()
   final CellId id;
   @override
+  final double width;
+  @override
+  final double? height;
+  @override
+  @CellDecorationConverter()
   final CellDecoration decoration;
   @override
   final String text;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.text(id: $id, decoration: $decoration, text: $text)';
+    return 'Cell.text(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, decoration: $decoration, text: $text)';
   }
 
   @override
@@ -622,7 +754,11 @@ class _$TextCellImpl implements _TextCell {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$TextCellImpl &&
+            (identical(other.layer, layer) || other.layer == layer) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.height, height) || other.height == height) &&
             (identical(other.decoration, decoration) ||
                 other.decoration == decoration) &&
             (identical(other.text, text) || other.text == text));
@@ -630,7 +766,8 @@ class _$TextCellImpl implements _TextCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, decoration, text);
+  int get hashCode => Object.hash(
+      runtimeType, layer, offset, id, width, height, decoration, text);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -643,72 +780,141 @@ class _$TextCellImpl implements _TextCell {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)
         text,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)
         image,
     required TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)
         article,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)
         url,
   }) {
-    return text(id, decoration, this.text);
+    return text(layer, offset, id, width, height, decoration, this.text);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult? Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
   }) {
-    return text?.call(id, decoration, this.text);
+    return text?.call(layer, offset, id, width, height, decoration, this.text);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
     required TResult orElse(),
   }) {
     if (text != null) {
-      return text(id, decoration, this.text);
+      return text(layer, offset, id, width, height, decoration, this.text);
     }
     return orElse();
   }
@@ -760,17 +966,31 @@ class _$TextCellImpl implements _TextCell {
 
 abstract class _TextCell implements Cell {
   const factory _TextCell(
-      {@JsonKey(readValue: CellId.readValue) required final CellId id,
-      required final CellDecoration decoration,
+      {final int layer,
+      @OffsetConverter() required final Offset offset,
+      @CellIdConverter() required final CellId id,
+      required final double width,
+      final double? height,
+      @CellDecorationConverter() required final CellDecoration decoration,
       required final String text}) = _$TextCellImpl;
 
   factory _TextCell.fromJson(Map<String, dynamic> json) =
       _$TextCellImpl.fromJson;
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  int get layer;
+  @override
+  @OffsetConverter()
+  Offset get offset;
+  @override
+  @CellIdConverter()
   CellId get id;
   @override
+  double get width;
+  @override
+  double? get height;
+  @override
+  @CellDecorationConverter()
   CellDecoration get decoration;
   String get text;
 
@@ -790,8 +1010,12 @@ abstract class _$$ImageCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: CellId.readValue) CellId id,
-      CellDecoration decoration,
+      {int layer,
+      @OffsetConverter() Offset offset,
+      @CellIdConverter() CellId id,
+      double width,
+      double? height,
+      @CellDecorationConverter() CellDecoration decoration,
       String? url,
       String? filePath});
 
@@ -814,16 +1038,36 @@ class __$$ImageCellImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? layer = null,
+    Object? offset = null,
     Object? id = null,
+    Object? width = null,
+    Object? height = freezed,
     Object? decoration = null,
     Object? url = freezed,
     Object? filePath = freezed,
   }) {
     return _then(_$ImageCellImpl(
+      layer: null == layer
+          ? _value.layer
+          : layer // ignore: cast_nullable_to_non_nullable
+              as int,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
+      width: null == width
+          ? _value.width
+          : width // ignore: cast_nullable_to_non_nullable
+              as double,
+      height: freezed == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as double?,
       decoration: null == decoration
           ? _value.decoration
           : decoration // ignore: cast_nullable_to_non_nullable
@@ -844,8 +1088,12 @@ class __$$ImageCellImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ImageCellImpl implements _ImageCell {
   const _$ImageCellImpl(
-      {@JsonKey(readValue: CellId.readValue) required this.id,
-      required this.decoration,
+      {this.layer = 10,
+      @OffsetConverter() required this.offset,
+      @CellIdConverter() required this.id,
+      required this.width,
+      this.height,
+      @CellDecorationConverter() required this.decoration,
       this.url,
       this.filePath,
       final String? $type})
@@ -855,21 +1103,32 @@ class _$ImageCellImpl implements _ImageCell {
       _$$ImageCellImplFromJson(json);
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  @JsonKey()
+  final int layer;
+  @override
+  @OffsetConverter()
+  final Offset offset;
+  @override
+  @CellIdConverter()
   final CellId id;
   @override
+  final double width;
+  @override
+  final double? height;
+  @override
+  @CellDecorationConverter()
   final CellDecoration decoration;
   @override
   final String? url;
   @override
   final String? filePath;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.image(id: $id, decoration: $decoration, url: $url, filePath: $filePath)';
+    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, decoration: $decoration, url: $url, filePath: $filePath)';
   }
 
   @override
@@ -877,7 +1136,11 @@ class _$ImageCellImpl implements _ImageCell {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ImageCellImpl &&
+            (identical(other.layer, layer) || other.layer == layer) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.height, height) || other.height == height) &&
             (identical(other.decoration, decoration) ||
                 other.decoration == decoration) &&
             (identical(other.url, url) || other.url == url) &&
@@ -887,7 +1150,8 @@ class _$ImageCellImpl implements _ImageCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, decoration, url, filePath);
+  int get hashCode => Object.hash(
+      runtimeType, layer, offset, id, width, height, decoration, url, filePath);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -900,72 +1164,144 @@ class _$ImageCellImpl implements _ImageCell {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)
         text,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)
         image,
     required TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)
         article,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)
         url,
   }) {
-    return image(id, decoration, this.url, filePath);
+    return image(
+        layer, offset, id, width, height, decoration, this.url, filePath);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult? Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
   }) {
-    return image?.call(id, decoration, this.url, filePath);
+    return image?.call(
+        layer, offset, id, width, height, decoration, this.url, filePath);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
     required TResult orElse(),
   }) {
     if (image != null) {
-      return image(id, decoration, this.url, filePath);
+      return image(
+          layer, offset, id, width, height, decoration, this.url, filePath);
     }
     return orElse();
   }
@@ -1017,8 +1353,12 @@ class _$ImageCellImpl implements _ImageCell {
 
 abstract class _ImageCell implements Cell {
   const factory _ImageCell(
-      {@JsonKey(readValue: CellId.readValue) required final CellId id,
-      required final CellDecoration decoration,
+      {final int layer,
+      @OffsetConverter() required final Offset offset,
+      @CellIdConverter() required final CellId id,
+      required final double width,
+      final double? height,
+      @CellDecorationConverter() required final CellDecoration decoration,
       final String? url,
       final String? filePath}) = _$ImageCellImpl;
 
@@ -1026,9 +1366,19 @@ abstract class _ImageCell implements Cell {
       _$ImageCellImpl.fromJson;
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  int get layer;
+  @override
+  @OffsetConverter()
+  Offset get offset;
+  @override
+  @CellIdConverter()
   CellId get id;
   @override
+  double get width;
+  @override
+  double? get height;
+  @override
+  @CellDecorationConverter()
   CellDecoration get decoration;
   String? get url;
   String? get filePath;
@@ -1049,8 +1399,12 @@ abstract class _$$ArticleCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: CellId.readValue) CellId id,
-      CellDecoration decoration,
+      {int layer,
+      @OffsetConverter() Offset offset,
+      @CellIdConverter() CellId id,
+      double width,
+      double? height,
+      @CellDecorationConverter() CellDecoration decoration,
       String title,
       String content,
       bool editable});
@@ -1074,17 +1428,37 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? layer = null,
+    Object? offset = null,
     Object? id = null,
+    Object? width = null,
+    Object? height = freezed,
     Object? decoration = null,
     Object? title = null,
     Object? content = null,
     Object? editable = null,
   }) {
     return _then(_$ArticleCellImpl(
+      layer: null == layer
+          ? _value.layer
+          : layer // ignore: cast_nullable_to_non_nullable
+              as int,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
+      width: null == width
+          ? _value.width
+          : width // ignore: cast_nullable_to_non_nullable
+              as double,
+      height: freezed == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as double?,
       decoration: null == decoration
           ? _value.decoration
           : decoration // ignore: cast_nullable_to_non_nullable
@@ -1109,8 +1483,12 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ArticleCellImpl implements _ArticleCell {
   const _$ArticleCellImpl(
-      {@JsonKey(readValue: CellId.readValue) required this.id,
-      required this.decoration,
+      {this.layer = 10,
+      @OffsetConverter() required this.offset,
+      @CellIdConverter() required this.id,
+      required this.width,
+      this.height,
+      @CellDecorationConverter() required this.decoration,
       required this.title,
       required this.content,
       required this.editable,
@@ -1121,9 +1499,20 @@ class _$ArticleCellImpl implements _ArticleCell {
       _$$ArticleCellImplFromJson(json);
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  @JsonKey()
+  final int layer;
+  @override
+  @OffsetConverter()
+  final Offset offset;
+  @override
+  @CellIdConverter()
   final CellId id;
   @override
+  final double width;
+  @override
+  final double? height;
+  @override
+  @CellDecorationConverter()
   final CellDecoration decoration;
   @override
   final String title;
@@ -1132,12 +1521,12 @@ class _$ArticleCellImpl implements _ArticleCell {
   @override
   final bool editable;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.article(id: $id, decoration: $decoration, title: $title, content: $content, editable: $editable)';
+    return 'Cell.article(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, decoration: $decoration, title: $title, content: $content, editable: $editable)';
   }
 
   @override
@@ -1145,7 +1534,11 @@ class _$ArticleCellImpl implements _ArticleCell {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ArticleCellImpl &&
+            (identical(other.layer, layer) || other.layer == layer) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.height, height) || other.height == height) &&
             (identical(other.decoration, decoration) ||
                 other.decoration == decoration) &&
             (identical(other.title, title) || other.title == title) &&
@@ -1156,8 +1549,8 @@ class _$ArticleCellImpl implements _ArticleCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, decoration, title, content, editable);
+  int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
+      decoration, title, content, editable);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -1170,72 +1563,144 @@ class _$ArticleCellImpl implements _ArticleCell {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)
         text,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)
         image,
     required TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)
         article,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)
         url,
   }) {
-    return article(id, decoration, title, content, editable);
+    return article(
+        layer, offset, id, width, height, decoration, title, content, editable);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult? Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
   }) {
-    return article?.call(id, decoration, title, content, editable);
+    return article?.call(
+        layer, offset, id, width, height, decoration, title, content, editable);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
     required TResult orElse(),
   }) {
     if (article != null) {
-      return article(id, decoration, title, content, editable);
+      return article(layer, offset, id, width, height, decoration, title,
+          content, editable);
     }
     return orElse();
   }
@@ -1287,8 +1752,12 @@ class _$ArticleCellImpl implements _ArticleCell {
 
 abstract class _ArticleCell implements Cell {
   const factory _ArticleCell(
-      {@JsonKey(readValue: CellId.readValue) required final CellId id,
-      required final CellDecoration decoration,
+      {final int layer,
+      @OffsetConverter() required final Offset offset,
+      @CellIdConverter() required final CellId id,
+      required final double width,
+      final double? height,
+      @CellDecorationConverter() required final CellDecoration decoration,
       required final String title,
       required final String content,
       required final bool editable}) = _$ArticleCellImpl;
@@ -1297,9 +1766,19 @@ abstract class _ArticleCell implements Cell {
       _$ArticleCellImpl.fromJson;
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  int get layer;
+  @override
+  @OffsetConverter()
+  Offset get offset;
+  @override
+  @CellIdConverter()
   CellId get id;
   @override
+  double get width;
+  @override
+  double? get height;
+  @override
+  @CellDecorationConverter()
   CellDecoration get decoration;
   String get title;
   String get content;
@@ -1321,8 +1800,12 @@ abstract class _$$UrlCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: CellId.readValue) CellId id,
-      CellDecoration decoration,
+      {int layer,
+      @OffsetConverter() Offset offset,
+      @CellIdConverter() CellId id,
+      double width,
+      double? height,
+      @CellDecorationConverter() CellDecoration decoration,
       String url});
 
   @override
@@ -1344,15 +1827,35 @@ class __$$UrlCellImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? layer = null,
+    Object? offset = null,
     Object? id = null,
+    Object? width = null,
+    Object? height = freezed,
     Object? decoration = null,
     Object? url = null,
   }) {
     return _then(_$UrlCellImpl(
+      layer: null == layer
+          ? _value.layer
+          : layer // ignore: cast_nullable_to_non_nullable
+              as int,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
+      width: null == width
+          ? _value.width
+          : width // ignore: cast_nullable_to_non_nullable
+              as double,
+      height: freezed == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as double?,
       decoration: null == decoration
           ? _value.decoration
           : decoration // ignore: cast_nullable_to_non_nullable
@@ -1369,8 +1872,12 @@ class __$$UrlCellImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$UrlCellImpl implements _UrlCell {
   const _$UrlCellImpl(
-      {@JsonKey(readValue: CellId.readValue) required this.id,
-      required this.decoration,
+      {this.layer = 10,
+      @OffsetConverter() required this.offset,
+      @CellIdConverter() required this.id,
+      required this.width,
+      this.height,
+      @CellDecorationConverter() required this.decoration,
       required this.url,
       final String? $type})
       : $type = $type ?? 'url';
@@ -1379,19 +1886,30 @@ class _$UrlCellImpl implements _UrlCell {
       _$$UrlCellImplFromJson(json);
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  @JsonKey()
+  final int layer;
+  @override
+  @OffsetConverter()
+  final Offset offset;
+  @override
+  @CellIdConverter()
   final CellId id;
   @override
+  final double width;
+  @override
+  final double? height;
+  @override
+  @CellDecorationConverter()
   final CellDecoration decoration;
   @override
   final String url;
 
-  @JsonKey(name: 'runtimeType')
+  @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.url(id: $id, decoration: $decoration, url: $url)';
+    return 'Cell.url(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, decoration: $decoration, url: $url)';
   }
 
   @override
@@ -1399,7 +1917,11 @@ class _$UrlCellImpl implements _UrlCell {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UrlCellImpl &&
+            (identical(other.layer, layer) || other.layer == layer) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.height, height) || other.height == height) &&
             (identical(other.decoration, decoration) ||
                 other.decoration == decoration) &&
             (identical(other.url, url) || other.url == url));
@@ -1407,7 +1929,8 @@ class _$UrlCellImpl implements _UrlCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, decoration, url);
+  int get hashCode => Object.hash(
+      runtimeType, layer, offset, id, width, height, decoration, url);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -1420,72 +1943,141 @@ class _$UrlCellImpl implements _UrlCell {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)
         text,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)
         image,
     required TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)
         article,
-    required TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)
         url,
   }) {
-    return url(id, decoration, this.url);
+    return url(layer, offset, id, width, height, decoration, this.url);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult? Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult? Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
   }) {
-    return url?.call(id, decoration, this.url);
+    return url?.call(layer, offset, id, width, height, decoration, this.url);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String text)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String text)?
         text,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String? url, String? filePath)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String? url,
+            String? filePath)?
         image,
     TResult Function(
-            @JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration,
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
             String title,
             String content,
             bool editable)?
         article,
-    TResult Function(@JsonKey(readValue: CellId.readValue) CellId id,
-            CellDecoration decoration, String url)?
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double width,
+            double? height,
+            @CellDecorationConverter() CellDecoration decoration,
+            String url)?
         url,
     required TResult orElse(),
   }) {
     if (url != null) {
-      return url(id, decoration, this.url);
+      return url(layer, offset, id, width, height, decoration, this.url);
     }
     return orElse();
   }
@@ -1537,16 +2129,30 @@ class _$UrlCellImpl implements _UrlCell {
 
 abstract class _UrlCell implements Cell {
   const factory _UrlCell(
-      {@JsonKey(readValue: CellId.readValue) required final CellId id,
-      required final CellDecoration decoration,
+      {final int layer,
+      @OffsetConverter() required final Offset offset,
+      @CellIdConverter() required final CellId id,
+      required final double width,
+      final double? height,
+      @CellDecorationConverter() required final CellDecoration decoration,
       required final String url}) = _$UrlCellImpl;
 
   factory _UrlCell.fromJson(Map<String, dynamic> json) = _$UrlCellImpl.fromJson;
 
   @override
-  @JsonKey(readValue: CellId.readValue)
+  int get layer;
+  @override
+  @OffsetConverter()
+  Offset get offset;
+  @override
+  @CellIdConverter()
   CellId get id;
   @override
+  double get width;
+  @override
+  double? get height;
+  @override
+  @CellDecorationConverter()
   CellDecoration get decoration;
   String get url;
 
