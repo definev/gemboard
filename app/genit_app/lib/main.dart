@@ -18,11 +18,15 @@ void main() {
     ),
   );
 
-  doWhenWindowReady(() {
-    const initialSize = Size(400, 600);
-    appWindow.minSize = initialSize;
-    appWindow.show();
-  });
+  if (defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.windows ||
+      defaultTargetPlatform == TargetPlatform.linux) {
+    doWhenWindowReady(() {
+      const initialSize = Size(400, 600);
+      appWindow.minSize = initialSize;
+      appWindow.show();
+    });
+  }
 }
 
 class GenitApp extends StatelessWidget {
