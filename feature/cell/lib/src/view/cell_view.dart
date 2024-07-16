@@ -10,7 +10,7 @@ class CellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DSCard(
+    Widget child = DSCard(
       background: ColorVariant.blue,
       kind: DSCardKind.outlined,
       child: DSCardSection(
@@ -29,5 +29,16 @@ class CellView extends StatelessWidget {
         ),
       ),
     );
+
+    if (cell.height == null) {
+      child = Align(
+        alignment: Alignment.topCenter,
+        child: IntrinsicHeight(
+          child: child,
+        ),
+      );
+    }
+
+    return child;
   }
 }
