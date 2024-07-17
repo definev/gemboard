@@ -19,6 +19,13 @@ class WhiteboardEditorFlow extends ConsumerWidget {
 
   final WhiteboardId id;
 
+  static const allowedOperations = [
+    DropOperation.link,
+    DropOperation.move,
+    DropOperation.copy,
+    DropOperation.userCancelled,
+  ];
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final whiteboard = ref.watch(getWhiteboardByIdProvider(id: id));
@@ -64,16 +71,10 @@ class WhiteboardEditorFlow extends ConsumerWidget {
                         dragItemProvider: (request) {
                           final localPosition = (itemKey.currentContext!
                                   .findRenderObject()! as RenderBox)
-                              .globalToLocal(
-                            request.location,
-                          );
-                          print(
-                              'Global: ${request.location} | Local: $localPosition');
+                              .globalToLocal(request.location);
 
                           return DragItem(
-                            // This data is only accessible when dropping within same
-                            // application. (optional)
-                            localData: Cell.text(
+                            localData: Cell.article(
                               id: CellId(
                                 parentId: CellParentId(whiteboardId: id.id),
                                 id: Helper.createId(),
@@ -81,16 +82,13 @@ class WhiteboardEditorFlow extends ConsumerWidget {
                               offset: localPosition,
                               width: 200,
                               decoration: CellDecoration(color: 'red'),
-                              text: 'Hello World',
+                              title: 'How to use Whiteboard',
+                              content: 'Whiteboard is a tool for collaboration',
+                              editable: false,
                             ).toJson(),
                           );
                         },
-                        allowedOperations: () => [
-                          DropOperation.link,
-                          DropOperation.move,
-                          DropOperation.copy,
-                          DropOperation.userCancelled,
-                        ],
+                        allowedOperations: () => allowedOperations,
                         child: DraggableWidget(
                           child: DSTooltip(
                             alignment: Alignment.centerLeft,
@@ -103,6 +101,90 @@ class WhiteboardEditorFlow extends ConsumerWidget {
                               ),
                               onPressed: () {},
                               child: Icon(IconlyLight.discovery),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  HookBuilder(
+                    builder: (context) {
+                      final itemKey = useMemoized(() => GlobalKey());
+                      return DragItemWidget(
+                        key: itemKey,
+                        dragItemProvider: (request) {
+                          final localPosition = (itemKey.currentContext!
+                                  .findRenderObject()! as RenderBox)
+                              .globalToLocal(request.location);
+
+                          return DragItem(
+                            localData: Cell.text(
+                              id: CellId(
+                                parentId: CellParentId(whiteboardId: id.id),
+                                id: Helper.createId(),
+                              ),
+                              offset: localPosition,
+                              width: 200,
+                              decoration: CellDecoration(color: 'red'),
+                              text: 'Hello World',
+                            ).toJson(),
+                          );
+                        },
+                        allowedOperations: () => allowedOperations,
+                        child: DraggableWidget(
+                          child: DSTooltip(
+                            alignment: Alignment.centerLeft,
+                            label: StyledText('Notes'),
+                            child: Button(
+                              style: Style(
+                                $box.height(40),
+                                $box.width(40),
+                                $box.alignment.center(),
+                              ),
+                              onPressed: () {},
+                              child: Icon(IconlyLight.document),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  HookBuilder(
+                    builder: (context) {
+                      final itemKey = useMemoized(() => GlobalKey());
+                      return DragItemWidget(
+                        key: itemKey,
+                        dragItemProvider: (request) {
+                          final localPosition = (itemKey.currentContext!
+                                  .findRenderObject()! as RenderBox)
+                              .globalToLocal(request.location);
+
+                          return DragItem(
+                            localData: Cell.text(
+                              id: CellId(
+                                parentId: CellParentId(whiteboardId: id.id),
+                                id: Helper.createId(),
+                              ),
+                              offset: localPosition,
+                              width: 200,
+                              decoration: CellDecoration(color: 'red'),
+                              text: 'Hello World',
+                            ).toJson(),
+                          );
+                        },
+                        allowedOperations: () => allowedOperations,
+                        child: DraggableWidget(
+                          child: DSTooltip(
+                            alignment: Alignment.centerLeft,
+                            label: StyledText('Chat'),
+                            child: Button(
+                              style: Style(
+                                $box.height(40),
+                                $box.width(40),
+                                $box.alignment.center(),
+                              ),
+                              onPressed: () {},
+                              child: Icon(IconlyLight.chat),
                             ),
                           ),
                         ),

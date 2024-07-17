@@ -1,15 +1,8 @@
-import 'dart:math';
-import 'dart:ui';
-
-import 'package:atreeon_get_child_size/atreeon_get_child_size.dart';
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconly/iconly.dart';
-import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
@@ -279,7 +272,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     },
                     moveable: StackMove(enable: true),
                     builder: (context, notifier, child) =>
-                        ResiableStackPosition(
+                        ResizableStackPosition(
                       notifier: notifier,
                       onSizeChanged: (size) {
                         final newCell = cell.copyWith(
@@ -290,8 +283,11 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                         setState(() {});
                         widget.onCellUpdated(cell, newCell);
                       },
-                      thumbColor: CellDecorationExtension(cell.decoration)
-                          .colorValue(context),
+                      height: cell.height,
+                      thumb: DSThumb(
+                        color: CellDecorationExtension(cell.decoration)
+                            .colorValue(context),
+                      ),
                       child: child!,
                     ),
                     child: CellView(cell: cell),
@@ -306,73 +302,3 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
   }
 }
 
-class ResiableStackPosition extends HookWidget {
-  const ResiableStackPosition({
-    super.key,
-    required this.notifier,
-    required this.child,
-    required this.onSizeChanged,
-    required this.thumbColor,
-  });
-
-  final ValueNotifier<StackPositionData> notifier;
-  final Widget child;
-  final void Function(Size size) onSizeChanged;
-  final Color thumbColor;
-
-  @override
-  Widget build(BuildContext context) {
-    final size = useState<Size?>(null);
-
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: GetChildSize(
-            onChange: (childSize) => size.value = childSize,
-            child: IntrinsicHeight(
-              child: child,
-            ),
-          ),
-        ),
-        if (size.value case final size?)
-          SizedBox.fromSize(
-            size: size,
-            child: Align(
-              alignment: Alignment.bottomRight,
-              child: GestureDetector(
-                supportedDevices: {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
-                },
-                trackpadScrollCausesScale: false,
-                onPanUpdate: (details) {
-                  notifier.value = notifier.value.copyWith(
-                    height: (notifier.value.height ?? size.height) +
-                        details.delta.dy,
-                    width:
-                        (notifier.value.width ?? size.width) + details.delta.dx,
-                  );
-                  onSizeChanged(
-                    Size(
-                      notifier.value.width!,
-                      notifier.value.height!,
-                    ),
-                  );
-                },
-                child: Transform.rotate(
-                  angle: pi + pi / 4,
-                  child: StyledIcon(
-                    IconlyLight.arrow_left_2,
-                    style: Style(
-                      $icon.color(thumbColor),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-      ],
-    );
-  }
-}

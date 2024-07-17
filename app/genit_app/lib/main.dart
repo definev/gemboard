@@ -52,11 +52,19 @@ class GenitApp extends StatelessWidget {
                   },
             ),
           ),
-          child: MixTheme(
-            data: mixTheme,
-            child: DesignSystemTheme(
-              data: designSystemThemeData,
-              child: child!,
+          child: GestureDetector(
+            onTap: () {
+              final focusNode = FocusManager.instance.primaryFocus;
+              if (focusNode != null) {
+                focusNode.unfocus();
+              }
+            },
+            child: MixTheme(
+              data: mixTheme,
+              child: DesignSystemTheme(
+                data: designSystemThemeData,
+                child: child!,
+              ),
             ),
           ),
         );

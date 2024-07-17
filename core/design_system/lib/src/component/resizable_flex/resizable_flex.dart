@@ -118,6 +118,24 @@ class _ResizableFlexState extends State<ResizableFlex> {
         8.0,
     };
 
+    final expandButton = Button(
+      style: Style(
+        $box.padding.all.ref(SpaceVariant.gap),
+        $box.margin.all.ref(SpaceVariant.small),
+        $box.borderRadius.all.ref(RadiusVariant.medium),
+      ),
+      kind: ButtonKind.flat,
+      background: ColorVariant.onSurface,
+      onPressed: () => switch (controller.shown) {
+        true => controller.hide(),
+        false => controller.show(),
+      },
+      child: switch (controller.shown) {
+        true => StyledIcon(IconlyLight.arrow_left_square),
+        false => StyledIcon(IconlyLight.arrow_right_2),
+      },
+    );
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalSize = (widget.direction == Axis.horizontal
@@ -162,23 +180,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                       -1 + value * 2,
                       0.0,
                     ),
-                    child: Button(
-                      style: Style(
-                        $box.padding.all.ref(SpaceVariant.gap),
-                        $box.margin.all.ref(SpaceVariant.small),
-                        $box.borderRadius.all.ref(RadiusVariant.medium),
-                      ),
-                      kind: ButtonKind.flat,
-                      background: ColorVariant.onSurface,
-                      onPressed: () => switch (controller.shown) {
-                        true => controller.hide(),
-                        false => controller.show(),
-                      },
-                      child: switch (controller.shown) {
-                        true => StyledIcon(IconlyLight.arrow_left_square),
-                        false => StyledIcon(IconlyLight.arrow_right_2),
-                      },
-                    ),
+                    child: expandButton,
                   ),
                 ],
               );
@@ -272,19 +274,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                       ),
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: SafeArea(
-                          child: Button(
-                            style: Style(
-                              $box.height(40),
-                              $box.width(40),
-                              $box.margin.all.ref(SpaceVariant.small),
-                            ),
-                            kind: ButtonKind.outline,
-                            background: ColorVariant.onSurface,
-                            onPressed: () => controller.show(),
-                            child: StyledIcon(IconlyLight.arrow_right_circle),
-                          ),
-                        ),
+                        child: expandButton,
                       ),
                     ],
                   ),

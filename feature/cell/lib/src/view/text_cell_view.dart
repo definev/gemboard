@@ -18,10 +18,8 @@ class TextCellView extends StatelessWidget {
       style: Style(
         $box.padding.all.ref(SpaceVariant.medium),
       ),
-      child: Center(
-        child: StyledText(
-          cell.mapOrNull(text: (cell) => cell.text) ?? '',
-        ),
+      child: StyledText(
+        cell.mapOrNull(text: (cell) => cell.text) ?? '',
       ),
     );
 

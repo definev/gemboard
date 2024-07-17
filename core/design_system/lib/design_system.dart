@@ -11,6 +11,7 @@ export 'src/component/grid_background/grid_background.dart';
 export 'src/component/resizable_flex/resizable_flex.dart';
 export 'src/component/sidebar/sidebar.dart';
 export 'src/component/textbox/textbox.dart';
+export 'src/component/thumb/thumb.dart';
 export 'src/component/toolbar/toolbar.dart';
 export 'src/component/toolbar/toolbar_item.dart';
 export 'src/component/tooltip/tooltip.dart';
