@@ -17,6 +17,9 @@ dependencies:
   freezed_annotation:
   json_annotation: ^4.9.0
   riverpod_annotation: ^2.3.5
+
+  flutter_portal: 
+  atreeon_get_child_size: ^0.1.1+1
   
   # design system
   design_system:

@@ -3,30 +3,41 @@ import 'dart:math' as math;
 import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 
 class ResizableController extends ChangeNotifier {
-  ResizableController({this.initialSize = 100});
+  ResizableController({
+    this.initialSize = 100,
+    this.shown = true,
+  });
 
   final double initialSize;
+  bool shown = true;
 
   late double _panelSize = initialSize;
   double get panelSize => _panelSize;
   set panelSize(double value) {
     _lastPanelSize = _panelSize;
     _panelSize = value;
+    if (_panelSize < 0) _panelSize = 0;
+    if (_panelSize > 0) {
+      shown = true;
+    } else {
+      shown = false;
+    }
     notifyListeners();
   }
 
   double _lastPanelSize = 0;
   void hide() {
     panelSize = 0;
+    shown = false;
   }
 
   void show() {
     panelSize = _lastPanelSize;
+    shown = true;
   }
 }
 
@@ -110,8 +121,9 @@ class _ResizableFlexState extends State<ResizableFlex> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalSize = (widget.direction == Axis.horizontal
-            ? constraints.maxWidth
-            : constraints.maxHeight) - gapSize;
+                ? constraints.maxWidth
+                : constraints.maxHeight) -
+            gapSize;
 
         final firstChild = SizedBox(
           height: switch (widget.direction) {
@@ -124,6 +136,56 @@ class _ResizableFlexState extends State<ResizableFlex> {
           },
           child: widget.firstChild,
         );
+
+        if (totalSize < 680) {
+          return TweenAnimationBuilder(
+            duration: Duration(milliseconds: 500),
+            tween: Tween<double>(
+              begin: switch (controller.shown) { false => 0, true => 1 },
+              end: switch (controller.shown) { false => 0, true => 1 },
+            ),
+            curve: Easing.standard,
+            builder: (context, value, child) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    left: -(1 - value) * constraints.maxWidth,
+                    right: (1 - value) * constraints.maxWidth,
+                    child: widget.firstChild,
+                  ),
+                  Positioned.fill(
+                    left: value * constraints.maxWidth,
+                    child: widget.secondChild ?? SizedBox(),
+                  ),
+                  Align(
+                    alignment: Alignment(
+                      -1 + value * 2,
+                      0.0,
+                    ),
+                    child: Button(
+                      style: Style(
+                        $box.padding.all.ref(SpaceVariant.gap),
+                        $box.margin.all.ref(SpaceVariant.small),
+                        $box.borderRadius.all.ref(RadiusVariant.medium),
+                      ),
+                      kind: ButtonKind.flat,
+                      background: ColorVariant.onSurface,
+                      onPressed: () => switch (controller.shown) {
+                        true => controller.hide(),
+                        false => controller.show(),
+                      },
+                      child: switch (controller.shown) {
+                        true => StyledIcon(IconlyLight.arrow_left_square),
+                        false => StyledIcon(IconlyLight.arrow_right_2),
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+
         return Flex(
           direction: widget.direction,
           crossAxisAlignment: CrossAxisAlignment.stretch,

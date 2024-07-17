@@ -29,7 +29,6 @@ class ButtonStyle {
     return Style(
       $box.padding.horizontal.ref(SpaceVariant.gap),
       $box.padding.vertical.ref(SpaceVariant.gap),
-      $box.alignment.center(),
       $text.style.ref(TextStyleVariant.h6),
       $text.style.color.ref(ColorVariant.onSurface),
       $icon.size(TextStyleVariant.h6.resolve(context).fontSize! * 29 / 20),

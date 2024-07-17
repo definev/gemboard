@@ -351,13 +351,13 @@ abstract class _CellId implements CellId {
 Cell _$CellFromJson(Map<String, dynamic> json) {
   switch (json['cellType']) {
     case 'text':
-      return _TextCell.fromJson(json);
+      return TextCell.fromJson(json);
     case 'image':
-      return _ImageCell.fromJson(json);
+      return ImageCell.fromJson(json);
     case 'article':
-      return _ArticleCell.fromJson(json);
+      return ArticleCell.fromJson(json);
     case 'url':
-      return _UrlCell.fromJson(json);
+      return UrlCell.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'cellType', 'Cell',
@@ -508,26 +508,26 @@ mixin _$Cell {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_TextCell value) text,
-    required TResult Function(_ImageCell value) image,
-    required TResult Function(_ArticleCell value) article,
-    required TResult Function(_UrlCell value) url,
+    required TResult Function(TextCell value) text,
+    required TResult Function(ImageCell value) image,
+    required TResult Function(ArticleCell value) article,
+    required TResult Function(UrlCell value) url,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_TextCell value)? text,
-    TResult? Function(_ImageCell value)? image,
-    TResult? Function(_ArticleCell value)? article,
-    TResult? Function(_UrlCell value)? url,
+    TResult? Function(TextCell value)? text,
+    TResult? Function(ImageCell value)? image,
+    TResult? Function(ArticleCell value)? article,
+    TResult? Function(UrlCell value)? url,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_TextCell value)? text,
-    TResult Function(_ImageCell value)? image,
-    TResult Function(_ArticleCell value)? article,
-    TResult Function(_UrlCell value)? url,
+    TResult Function(TextCell value)? text,
+    TResult Function(ImageCell value)? image,
+    TResult Function(ArticleCell value)? article,
+    TResult Function(UrlCell value)? url,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -707,7 +707,7 @@ class __$$TextCellImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TextCellImpl implements _TextCell {
+class _$TextCellImpl implements TextCell {
   const _$TextCellImpl(
       {this.layer = 10,
       @OffsetConverter() required this.offset,
@@ -922,10 +922,10 @@ class _$TextCellImpl implements _TextCell {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_TextCell value) text,
-    required TResult Function(_ImageCell value) image,
-    required TResult Function(_ArticleCell value) article,
-    required TResult Function(_UrlCell value) url,
+    required TResult Function(TextCell value) text,
+    required TResult Function(ImageCell value) image,
+    required TResult Function(ArticleCell value) article,
+    required TResult Function(UrlCell value) url,
   }) {
     return text(this);
   }
@@ -933,10 +933,10 @@ class _$TextCellImpl implements _TextCell {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_TextCell value)? text,
-    TResult? Function(_ImageCell value)? image,
-    TResult? Function(_ArticleCell value)? article,
-    TResult? Function(_UrlCell value)? url,
+    TResult? Function(TextCell value)? text,
+    TResult? Function(ImageCell value)? image,
+    TResult? Function(ArticleCell value)? article,
+    TResult? Function(UrlCell value)? url,
   }) {
     return text?.call(this);
   }
@@ -944,10 +944,10 @@ class _$TextCellImpl implements _TextCell {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_TextCell value)? text,
-    TResult Function(_ImageCell value)? image,
-    TResult Function(_ArticleCell value)? article,
-    TResult Function(_UrlCell value)? url,
+    TResult Function(TextCell value)? text,
+    TResult Function(ImageCell value)? image,
+    TResult Function(ArticleCell value)? article,
+    TResult Function(UrlCell value)? url,
     required TResult orElse(),
   }) {
     if (text != null) {
@@ -964,8 +964,8 @@ class _$TextCellImpl implements _TextCell {
   }
 }
 
-abstract class _TextCell implements Cell {
-  const factory _TextCell(
+abstract class TextCell implements Cell {
+  const factory TextCell(
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
@@ -974,7 +974,7 @@ abstract class _TextCell implements Cell {
       @CellDecorationConverter() required final CellDecoration decoration,
       required final String text}) = _$TextCellImpl;
 
-  factory _TextCell.fromJson(Map<String, dynamic> json) =
+  factory TextCell.fromJson(Map<String, dynamic> json) =
       _$TextCellImpl.fromJson;
 
   @override
@@ -1086,7 +1086,7 @@ class __$$ImageCellImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ImageCellImpl implements _ImageCell {
+class _$ImageCellImpl implements ImageCell {
   const _$ImageCellImpl(
       {this.layer = 10,
       @OffsetConverter() required this.offset,
@@ -1309,10 +1309,10 @@ class _$ImageCellImpl implements _ImageCell {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_TextCell value) text,
-    required TResult Function(_ImageCell value) image,
-    required TResult Function(_ArticleCell value) article,
-    required TResult Function(_UrlCell value) url,
+    required TResult Function(TextCell value) text,
+    required TResult Function(ImageCell value) image,
+    required TResult Function(ArticleCell value) article,
+    required TResult Function(UrlCell value) url,
   }) {
     return image(this);
   }
@@ -1320,10 +1320,10 @@ class _$ImageCellImpl implements _ImageCell {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_TextCell value)? text,
-    TResult? Function(_ImageCell value)? image,
-    TResult? Function(_ArticleCell value)? article,
-    TResult? Function(_UrlCell value)? url,
+    TResult? Function(TextCell value)? text,
+    TResult? Function(ImageCell value)? image,
+    TResult? Function(ArticleCell value)? article,
+    TResult? Function(UrlCell value)? url,
   }) {
     return image?.call(this);
   }
@@ -1331,10 +1331,10 @@ class _$ImageCellImpl implements _ImageCell {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_TextCell value)? text,
-    TResult Function(_ImageCell value)? image,
-    TResult Function(_ArticleCell value)? article,
-    TResult Function(_UrlCell value)? url,
+    TResult Function(TextCell value)? text,
+    TResult Function(ImageCell value)? image,
+    TResult Function(ArticleCell value)? article,
+    TResult Function(UrlCell value)? url,
     required TResult orElse(),
   }) {
     if (image != null) {
@@ -1351,8 +1351,8 @@ class _$ImageCellImpl implements _ImageCell {
   }
 }
 
-abstract class _ImageCell implements Cell {
-  const factory _ImageCell(
+abstract class ImageCell implements Cell {
+  const factory ImageCell(
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
@@ -1362,7 +1362,7 @@ abstract class _ImageCell implements Cell {
       final String? url,
       final String? filePath}) = _$ImageCellImpl;
 
-  factory _ImageCell.fromJson(Map<String, dynamic> json) =
+  factory ImageCell.fromJson(Map<String, dynamic> json) =
       _$ImageCellImpl.fromJson;
 
   @override
@@ -1481,7 +1481,7 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ArticleCellImpl implements _ArticleCell {
+class _$ArticleCellImpl implements ArticleCell {
   const _$ArticleCellImpl(
       {this.layer = 10,
       @OffsetConverter() required this.offset,
@@ -1708,10 +1708,10 @@ class _$ArticleCellImpl implements _ArticleCell {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_TextCell value) text,
-    required TResult Function(_ImageCell value) image,
-    required TResult Function(_ArticleCell value) article,
-    required TResult Function(_UrlCell value) url,
+    required TResult Function(TextCell value) text,
+    required TResult Function(ImageCell value) image,
+    required TResult Function(ArticleCell value) article,
+    required TResult Function(UrlCell value) url,
   }) {
     return article(this);
   }
@@ -1719,10 +1719,10 @@ class _$ArticleCellImpl implements _ArticleCell {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_TextCell value)? text,
-    TResult? Function(_ImageCell value)? image,
-    TResult? Function(_ArticleCell value)? article,
-    TResult? Function(_UrlCell value)? url,
+    TResult? Function(TextCell value)? text,
+    TResult? Function(ImageCell value)? image,
+    TResult? Function(ArticleCell value)? article,
+    TResult? Function(UrlCell value)? url,
   }) {
     return article?.call(this);
   }
@@ -1730,10 +1730,10 @@ class _$ArticleCellImpl implements _ArticleCell {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_TextCell value)? text,
-    TResult Function(_ImageCell value)? image,
-    TResult Function(_ArticleCell value)? article,
-    TResult Function(_UrlCell value)? url,
+    TResult Function(TextCell value)? text,
+    TResult Function(ImageCell value)? image,
+    TResult Function(ArticleCell value)? article,
+    TResult Function(UrlCell value)? url,
     required TResult orElse(),
   }) {
     if (article != null) {
@@ -1750,8 +1750,8 @@ class _$ArticleCellImpl implements _ArticleCell {
   }
 }
 
-abstract class _ArticleCell implements Cell {
-  const factory _ArticleCell(
+abstract class ArticleCell implements Cell {
+  const factory ArticleCell(
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
@@ -1762,7 +1762,7 @@ abstract class _ArticleCell implements Cell {
       required final String content,
       required final bool editable}) = _$ArticleCellImpl;
 
-  factory _ArticleCell.fromJson(Map<String, dynamic> json) =
+  factory ArticleCell.fromJson(Map<String, dynamic> json) =
       _$ArticleCellImpl.fromJson;
 
   @override
@@ -1870,7 +1870,7 @@ class __$$UrlCellImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UrlCellImpl implements _UrlCell {
+class _$UrlCellImpl implements UrlCell {
   const _$UrlCellImpl(
       {this.layer = 10,
       @OffsetConverter() required this.offset,
@@ -2085,10 +2085,10 @@ class _$UrlCellImpl implements _UrlCell {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_TextCell value) text,
-    required TResult Function(_ImageCell value) image,
-    required TResult Function(_ArticleCell value) article,
-    required TResult Function(_UrlCell value) url,
+    required TResult Function(TextCell value) text,
+    required TResult Function(ImageCell value) image,
+    required TResult Function(ArticleCell value) article,
+    required TResult Function(UrlCell value) url,
   }) {
     return url(this);
   }
@@ -2096,10 +2096,10 @@ class _$UrlCellImpl implements _UrlCell {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_TextCell value)? text,
-    TResult? Function(_ImageCell value)? image,
-    TResult? Function(_ArticleCell value)? article,
-    TResult? Function(_UrlCell value)? url,
+    TResult? Function(TextCell value)? text,
+    TResult? Function(ImageCell value)? image,
+    TResult? Function(ArticleCell value)? article,
+    TResult? Function(UrlCell value)? url,
   }) {
     return url?.call(this);
   }
@@ -2107,10 +2107,10 @@ class _$UrlCellImpl implements _UrlCell {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_TextCell value)? text,
-    TResult Function(_ImageCell value)? image,
-    TResult Function(_ArticleCell value)? article,
-    TResult Function(_UrlCell value)? url,
+    TResult Function(TextCell value)? text,
+    TResult Function(ImageCell value)? image,
+    TResult Function(ArticleCell value)? article,
+    TResult Function(UrlCell value)? url,
     required TResult orElse(),
   }) {
     if (url != null) {
@@ -2127,8 +2127,8 @@ class _$UrlCellImpl implements _UrlCell {
   }
 }
 
-abstract class _UrlCell implements Cell {
-  const factory _UrlCell(
+abstract class UrlCell implements Cell {
+  const factory UrlCell(
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
@@ -2137,7 +2137,7 @@ abstract class _UrlCell implements Cell {
       @CellDecorationConverter() required final CellDecoration decoration,
       required final String url}) = _$UrlCellImpl;
 
-  factory _UrlCell.fromJson(Map<String, dynamic> json) = _$UrlCellImpl.fromJson;
+  factory UrlCell.fromJson(Map<String, dynamic> json) = _$UrlCellImpl.fromJson;
 
   @override
   int get layer;

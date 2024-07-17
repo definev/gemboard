@@ -1,7 +1,10 @@
 import 'package:cell/cell.dart';
-import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:mix/mix.dart';
+
+import 'article_cell_view.dart';
+import 'image_cell_view.dart';
+import 'text_cell_view.dart';
+import 'url_cell_view.dart';
 
 class CellView extends StatelessWidget {
   const CellView({super.key, required this.cell});
@@ -10,35 +13,11 @@ class CellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = DSCard(
-      background: ColorVariant.blue,
-      kind: DSCardKind.outlined,
-      child: DSCardSection(
-        background: ColorVariant.blue,
-        kind: DSCardKind.outlined,
-        header: StyledText(
-          cell.map(
-            text: (_) => 'text',
-            image: (_) => 'image',
-            article: (_) => 'article',
-            url: (_) => 'url',
-          ),
-        ),
-        content: Text(
-          cell.mapOrNull(text: (cell) => cell.text) ?? '',
-        ),
-      ),
+    return cell.map(
+      text: (cell) => TextCellView(cell: cell),
+      image: (cell) => ImageCellView(cell: cell),
+      article: (cell) => ArticleCellView(cell: cell),
+      url: (cell) => UrlCellView(cell: cell),
     );
-
-    if (cell.height == null) {
-      child = Align(
-        alignment: Alignment.topCenter,
-        child: IntrinsicHeight(
-          child: child,
-        ),
-      );
-    }
-
-    return child;
   }
 }

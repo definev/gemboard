@@ -13,6 +13,7 @@ export 'src/component/sidebar/sidebar.dart';
 export 'src/component/textbox/textbox.dart';
 export 'src/component/toolbar/toolbar.dart';
 export 'src/component/toolbar/toolbar_item.dart';
+export 'src/component/tooltip/tooltip.dart';
 export 'src/theme/design_system_theme.dart';
 export 'src/theme/theme.dart';
 export 'src/token/breakpont.dart';

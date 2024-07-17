@@ -12,123 +12,122 @@ import 'package:sliver_tools/sliver_tools.dart';
 /// TODO: Done specifically for the sidebar
 class GenitLeadSidebar extends HookWidget {
   const GenitLeadSidebar({
-    required this.resizableController,
     this.minSize = _minSize,
   });
 
   static const double _minSize = 120;
 
-  final ResizableController resizableController;
   final double minSize;
 
   @override
   Widget build(BuildContext context) {
-    final panelSize = useListenableSelector(
-      resizableController,
-      () => resizableController.panelSize,
-    );
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final panelSize = constraints.biggest.width;
 
-    final genitEmojiLabelKind = switch (panelSize) {
-      < _minSize => EmojiLabelKind.emojiOnly,
-      _ => EmojiLabelKind.emojiWithLabel,
-    };
+        final genitEmojiLabelKind = switch (panelSize) {
+          < _minSize => EmojiLabelKind.emojiOnly,
+          _ => EmojiLabelKind.emojiWithLabel,
+        };
 
-    if (panelSize <= 0) return SizedBox();
+        if (panelSize <= 0) return SizedBox();
 
-    return Column(
-      children: [
-        GenitSidebarHeader(
-          panelSize: panelSize,
-          minSize: _minSize,
-        ),
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: DSSidebar(
-                  sections: [
-                    DSSidebarSection(
-                      pinned: true,
-                      header: Button(
-                        child: EmojiLabel(
-                          kind: genitEmojiLabelKind,
-                          emoji: StyledText('🏠'),
-                          label: StyledText('Zen\'s desk'),
-                        ),
-                        background: ColorVariant.yellow,
-                        highlight: ButtonHighlight.focus,
-                        onPressed: () {},
-                      ),
-                      children: [
-                        SliverPinnedHeader(
-                          child: HookBuilder(
-                            builder: (context) {
-                              final showCreateForm = useState(false);
-
-                              return EmojiLabelEditorPopup(
-                                background: ColorVariant.yellow,
-                                visible: showCreateForm.value,
-                                child: Button(
-                                  background: ColorVariant.yellow,
-                                  kind: ButtonKind.outline,
-                                  onPressed: () => showCreateForm.value =
-                                      !showCreateForm.value,
-                                  child: EmojiLabel(
-                                    kind: genitEmojiLabelKind,
-                                    emoji: StyledText('🗂️'),
-                                    label: StyledText('Create folder'),
-                                  ),
-                                  // highlight: ButtonHighlight.focus,
-                                ),
-                                pickerSize: panelSize,
-                              );
-                            },
+        return Column(
+          children: [
+            GenitSidebarHeader(
+              panelSize: panelSize,
+              minSize: _minSize,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: DSSidebar(
+                      sections: [
+                        DSSidebarSection(
+                          pinned: true,
+                          header: Button(
+                            child: EmojiLabel(
+                              kind: genitEmojiLabelKind,
+                              emoji: StyledText('🏠'),
+                              label: StyledText('Zen\'s desk'),
+                            ),
+                            background: ColorVariant.yellow,
+                            highlight: ButtonHighlight.focus,
+                            onPressed: () {},
                           ),
+                          children: [
+                            SliverPinnedHeader(
+                              child: HookBuilder(
+                                builder: (context) {
+                                  final showCreateForm = useState(false);
+
+                                  return EmojiLabelEditorPopup(
+                                    background: ColorVariant.yellow,
+                                    visible: showCreateForm.value,
+                                    child: Button(
+                                      background: ColorVariant.yellow,
+                                      kind: ButtonKind.outline,
+                                      onPressed: () => showCreateForm.value =
+                                          !showCreateForm.value,
+                                      child: EmojiLabel(
+                                        kind: genitEmojiLabelKind,
+                                        emoji: StyledText('🗂️'),
+                                        label: StyledText('Create folder'),
+                                      ),
+                                      // highlight: ButtonHighlight.focus,
+                                    ),
+                                    pickerSize: panelSize,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                        GenitFolderBuilder(
+                          background: ColorVariant.purple,
+                          genitEmojiLabelKind: genitEmojiLabelKind,
+                          emoji: '🔭',
+                          label: 'Explore',
+                          onChangeEmojiLabel: (emoji, label) {},
+                          children: [],
                         ),
                       ],
                     ),
-                    GenitFolderBuilder(
-                      background: ColorVariant.purple,
-                      genitEmojiLabelKind: genitEmojiLabelKind,
-                      emoji: '🔭',
-                      label: 'Explore',
-                      onChangeEmojiLabel: (emoji, label) {},
-                      children: [],
-                    ),
-                  ],
-                ),
-              ),
-              Button(
-                onPressed: () {},
-                background: ColorVariant.green,
-                kind: ButtonKind.filled,
-                style: Style(
-                  $box.padding.all.ref(SpaceVariant.large),
-                ),
-                child: StyledRow(
-                  inherit: true,
-                  style: Style(
-                    $flex.gap.ref(SpaceVariant.medium),
-                    $flex.mainAxisAlignment.center(),
                   ),
-                  children: [
-                    StyledIcon(IconlyLight.upload),
-                    if (panelSize > _minSize)
-                      Expanded(
-                        child: StyledText(
-                          'Input sources',
-                          style: Style(
-                            $text.overflow.ellipsis(),
-                          ),
-                        ),
+                  Button(
+                    onPressed: () {},
+                    background: ColorVariant.green,
+                    kind: ButtonKind.filled,
+                    style: Style(
+                      $box.padding.all.ref(SpaceVariant.large),
+                    ),
+                    child: StyledRow(
+                      inherit: true,
+                      style: Style(
+                        $flex.gap.ref(SpaceVariant.medium),
+                        $flex.mainAxisAlignment.center(),
                       ),
-                  ],
-                ),
+                      children: [
+                        StyledIcon(IconlyLight.upload),
+                        if (panelSize > _minSize)
+                          Expanded(
+                            child: StyledText(
+                              'Input sources',
+                              style: Style(
+                                $text.overflow.ellipsis(),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -34,16 +34,27 @@ class WhiteboardEditorFlow extends ConsumerWidget {
                 cellsStreamProvider: getCellListProvider(
                   parentId: CellParentId(whiteboardId: id.id),
                 ),
-                onCellUpdated: (oldValue, newValue) {},
+                onCellCreated: (value) => ref.read(
+                  createCellProvider(
+                    parentId: CellParentId(whiteboardId: id.id),
+                    data: value,
+                  ).future,
+                ),
+                onCellUpdated: (oldValue, newValue) => ref.read(
+                  updateCellProvider(
+                    id: newValue.id,
+                    data: newValue,
+                  ).future,
+                ),
               ),
             ),
             Align(
-              alignment: Alignment.bottomCenter,
+              alignment: Alignment.centerRight,
               child: DSToolbar(
                 style: Style(
-                  $box.margin.all.ref(SpaceVariant.large),
+                  $box.margin.all.ref(SpaceVariant.medium),
                 ),
-                direction: Axis.horizontal,
+                direction: Axis.vertical,
                 children: [
                   HookBuilder(
                     builder: (context) {
@@ -80,43 +91,24 @@ class WhiteboardEditorFlow extends ConsumerWidget {
                           DropOperation.copy,
                           DropOperation.userCancelled,
                         ],
-                        dragBuilder: (context, child) => Row(
-                          children: [
-                            DSVerticalDivider(),
-                            child,
-                            DSVerticalDivider(),
-                          ],
-                        ),
-                        liftBuilder: (context, child) => Row(
-                          children: [
-                            DSVerticalDivider(),
-                            child,
-                            DSVerticalDivider(),
-                          ],
-                        ),
                         child: DraggableWidget(
-                          child: DSToolbarItem(
-                            direction: Axis.horizontal,
-                            child: Icon(IconlyLight.discovery),
+                          child: DSTooltip(
+                            alignment: Alignment.centerLeft,
+                            label: StyledText('Brainstorming'),
+                            child: Button(
+                              style: Style(
+                                $box.height(40),
+                                $box.width(40),
+                                $box.alignment.center(),
+                              ),
+                              onPressed: () {},
+                              child: Icon(IconlyLight.discovery),
+                            ),
                           ),
                         ),
                       );
                     },
                   ),
-                  DSToolbarItem(child: Icon(IconlyLight.bookmark)),
-                  DSToolbarItem(child: Icon(IconlyLight.voice)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: SpaceVariant.gap.resolve(context)),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxHeight: 42,
-                        maxWidth: 200,
-                      ),
-                      child: DSTextbox(hintText: 'Type your question'),
-                    ),
-                  ),
-                  DSToolbarItem(child: Icon(IconlyLight.arrow_up_circle)),
                 ],
               ),
             ),

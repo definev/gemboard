@@ -46,6 +46,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  atreeon_get_child_size:
+    dependency: "direct main"
+    description:
+      name: atreeon_get_child_size
+      sha256: fc958dc7e8d1496227cf598195d6b7df09899d06eeebfdabe565e4991e9114c7
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1+1"
   bitsdojo_window:
     dependency: transitive
     description:
@@ -329,6 +337,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_animate:
+    dependency: transitive
+    description:
+      name: flutter_animate
+      sha256: "7c8a6594a9252dad30cc2ef16e33270b6248c4dedc3b3d06c86c4f3f4dc05ae5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.0"
   flutter_hooks:
     dependency: "direct main"
     description:
@@ -343,7 +359,7 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_portal:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_portal
       sha256: "4601b3dc24f385b3761721bd852a3f6c09cddd4e943dd184ed58ee1f43006257"

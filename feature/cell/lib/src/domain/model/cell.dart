@@ -73,7 +73,7 @@ class Cell with _$Cell, HasId<CellId> {
     double? height,
     @CellDecorationConverter() required CellDecoration decoration,
     required String text,
-  }) = _TextCell;
+  }) = TextCell;
 
   const factory Cell.image({
     @Default(10) int layer,
@@ -84,7 +84,7 @@ class Cell with _$Cell, HasId<CellId> {
     @CellDecorationConverter() required CellDecoration decoration,
     String? url,
     String? filePath,
-  }) = _ImageCell;
+  }) = ImageCell;
 
   const factory Cell.article({
     @Default(10) int layer,
@@ -96,7 +96,7 @@ class Cell with _$Cell, HasId<CellId> {
     required String title,
     required String content,
     required bool editable,
-  }) = _ArticleCell;
+  }) = ArticleCell;
 
   const factory Cell.url({
     @Default(10) int layer,
@@ -106,7 +106,7 @@ class Cell with _$Cell, HasId<CellId> {
     double? height,
     @CellDecorationConverter() required CellDecoration decoration,
     required String url,
-  }) = _UrlCell;
+  }) = UrlCell;
 
   factory Cell.fromJson(Map<String, dynamic> json) => _$CellFromJson(json);
 }

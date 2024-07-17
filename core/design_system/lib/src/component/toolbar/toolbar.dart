@@ -31,22 +31,12 @@ class DSToolbar extends StyledWidget {
             direction: direction,
             style: dsToolbarStyle.styledFlexStyle(context),
             children: [
-              if (direction == Axis.vertical)
-                DSHorizontalDivider()
-              else
-                DSVerticalDivider(),
-              ...[
-                for (final child in children) ...[
-                  switch (child) {
-                    DSToolbarItem() => child..direction = direction,
-                    _ => child,
-                  },
-                  if (direction == Axis.vertical)
-                    DSHorizontalDivider()
-                  else
-                    DSVerticalDivider(),
-                ],
-              ]
+              for (final child in children) ...[
+                switch (child) {
+                  DSToolbarItem() => child..direction = direction,
+                  _ => child,
+                },
+              ],
             ],
           ),
         );

@@ -15,7 +15,7 @@ class Button extends StyledWidget {
     super.inherit,
     this.kind = ButtonKind.flat,
     this.highlight = ButtonHighlight.defer,
-    this.background = ColorVariant.purple,
+    this.background = ColorVariant.yellow,
     this.onBackground,
     this.focusNode,
     required this.onPressed,

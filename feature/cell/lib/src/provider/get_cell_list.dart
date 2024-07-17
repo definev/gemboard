@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cell/src/domain/repository/cell_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -6,10 +8,33 @@ import '../domain/model/cell.dart';
 part 'get_cell_list.g.dart';
 
 @riverpod
+StreamController<List<Cell>> getCellListStreamController(
+  GetCellListStreamControllerRef ref, {
+  required CellParentId parentId,
+}) {
+  final controller = StreamController<List<Cell>>.broadcast(
+    onListen: () {
+      print('Listening to cell list stream');
+    },
+    onCancel: () {
+      print('Cancel listening to cell list stream');
+    },
+  );
+  final repository = ref.watch(cellRepositoryProvider);
+  controller.sink.addStream(repository.watchList(parentId: parentId));
+  ref.onDispose(() {
+    controller.close();
+    print('Disposed cell list stream');
+  });
+  return controller;
+}
+
+@riverpod
 Stream<List<Cell>> getCellList(
   GetCellListRef ref, {
   required CellParentId parentId,
 }) async* {
-  final repository = ref.watch(cellRepositoryProvider);
-  yield* repository.watchList(parentId: parentId);
+  yield* ref
+      .watch(getCellListStreamControllerProvider(parentId: parentId))
+      .stream;
 }

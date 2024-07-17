@@ -1,9 +1,17 @@
+import 'dart:math';
+import 'dart:ui';
+
+import 'package:atreeon_get_child_size/atreeon_get_child_size.dart';
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
+import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
+import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
 
 class WhiteboardView extends ConsumerStatefulWidget {
@@ -11,6 +19,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
     super.key,
     required this.data,
     required this.cellsStreamProvider,
+    required this.onCellCreated,
     required this.onCellUpdated,
     this.scaleFactor,
     this.horizontalDetails,
@@ -20,6 +29,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final Whiteboard data;
   final AutoDisposeStreamProvider<List<Cell>> cellsStreamProvider;
   final void Function(Cell oldValue, Cell newValue) onCellUpdated;
+  final void Function(Cell value) onCellCreated;
 
   /// Whiteboard infinite scrollable configuration
   final ValueNotifier<double>? scaleFactor;
@@ -43,16 +53,14 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     AsyncValue<List<Cell>> next,
   ) updateCellKeys =
       (AsyncValue<List<Cell>>? previous, AsyncValue<List<Cell>> next) {
-    final previousCells = Map<String, Cell>.fromIterable(
-      previous?.valueOrNull ?? <Cell>[],
-      key: (element) => (element as Cell).id.id,
-      value: (element) => element as Cell,
-    );
+    final previousCells = {...cellKeys};
     final nextCells = next.valueOrNull ?? <Cell>[];
 
     for (final cell in nextCells) {
       if (previousCells[cell.id.id] != null) {
         previousCells.remove(cell.id.id);
+        final oldCellKey = cellKeys[cell.id.id]!;
+        cellKeys[cell.id.id] = (oldCellKey.$1, cell);
       }
 
       if (cellKeys[cell.id.id] == null) {
@@ -65,7 +73,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
       }
     }
 
-    for (final cell in previousCells.values) {
+    for (final (_, cell) in previousCells.values) {
       cellKeys.remove(cell.id.id);
     }
   };
@@ -128,9 +136,29 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     return (topLeft + offset) / scaleFactor.value;
   }
 
+  bool handleLocalData(Object? localData, Offset position) {
+    if (localData case Map<String, dynamic>()) {
+      try {
+        var cell = Cell.fromJson(localData);
+        cell = cell.copyWith(
+          offset: _offsetToViewport(
+            position - cell.offset,
+          ),
+        );
+
+        widget.onCellCreated(cell);
+      } catch (e) {
+        print('Error reading cell $e');
+      }
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     ref.listen(widget.cellsStreamProvider, updateCellKeys);
+    ref.watch(widget.cellsStreamProvider);
 
     return DropRegion(
       // Formats this region can accept.
@@ -169,29 +197,39 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
         // is over.
         for (final item in event.session.items) {
           // data reader is available now
-          final localData = item.localData;
-          if (localData case Map<String, dynamic>()) {
-            try {
-              final cell = Cell.fromJson(localData);
-
-              cellKeys[cell.id.id] = (
-                GlobalKey(
-                  debugLabel: 'WhiteboardView.cell | ${cell.id.id}',
-                ),
-                cell.copyWith(
-                  offset: _offsetToViewport(
-                    event.position.local - cell.offset,
-                  ),
-                ),
-              );
-              setState(() {});
-            } catch (e) {
-              print('Error reading cell $e');
-            }
-            continue;
-          }
+          bool handled = handleLocalData(item.localData, event.position.local);
+          if (handled) continue;
 
           final reader = item.dataReader!;
+          if (reader.canProvide(Formats.jpeg)) {
+            print('Dropped image: ${item}');
+            if (reader.canProvide(Formats.uri)) {
+              reader.getValue<NamedUri>(Formats.uri, (value) {
+                if (value != null) {
+                  // You can access values through the `value` property.
+                  print('Dropped image: ${value.name} | ${value.uri}');
+                  final cell = Cell.image(
+                    id: CellId(
+                      id: Helper.createId(),
+                      parentId: CellParentId(
+                        whiteboardId: widget.data.id.id,
+                      ),
+                    ),
+                    offset: _offsetToViewport(event.position.local),
+                    width: 200,
+                    decoration: CellDecoration(color: 'blue'),
+                    url: value.uri.toString(),
+                  );
+
+                  widget.onCellCreated(cell);
+                }
+              }, onError: (error) {
+                print('Error reading value $error');
+              });
+              continue;
+            }
+          }
+
           if (reader.canProvide(Formats.uri)) {
             reader.getValue<NamedUri>(Formats.uri, (value) {
               if (value != null) {
@@ -228,23 +266,35 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       width: cell.width,
                       offset: cell.offset,
                     ),
-                    onDataUpdated: (oldValue, newValue) =>
-                        widget.onCellUpdated(
-                      cell,
-                      cell.copyWith(
+                    onDataUpdated: (oldValue, newValue) {
+                      final newCell = cell.copyWith(
                         layer: newValue.layer,
                         offset: newValue.offset,
                         height: newValue.height,
                         width: newValue.width ?? cell.width,
-                      ),
+                      );
+                      cellKeys[newValue.id] = (key, newCell);
+                      setState(() {});
+                      widget.onCellUpdated(cell, newCell);
+                    },
+                    moveable: StackMove(enable: true),
+                    builder: (context, notifier, child) =>
+                        ResiableStackPosition(
+                      notifier: notifier,
+                      onSizeChanged: (size) {
+                        final newCell = cell.copyWith(
+                          height: size.height,
+                          width: size.width,
+                        );
+                        cellKeys[cell.id.id] = (key, newCell);
+                        setState(() {});
+                        widget.onCellUpdated(cell, newCell);
+                      },
+                      thumbColor: CellDecorationExtension(cell.decoration)
+                          .colorValue(context),
+                      child: child!,
                     ),
-                    moveable: StackMove(
-                      enable: true,
-                      snap: StackSnap.square(snap: 50),
-                    ),
-                    builder: (context, notifier, child) => CellView(
-                      cell: cell,
-                    ),
+                    child: CellView(cell: cell),
                   ),
               ],
             ),
@@ -252,6 +302,77 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ResiableStackPosition extends HookWidget {
+  const ResiableStackPosition({
+    super.key,
+    required this.notifier,
+    required this.child,
+    required this.onSizeChanged,
+    required this.thumbColor,
+  });
+
+  final ValueNotifier<StackPositionData> notifier;
+  final Widget child;
+  final void Function(Size size) onSizeChanged;
+  final Color thumbColor;
+
+  @override
+  Widget build(BuildContext context) {
+    final size = useState<Size?>(null);
+
+    return Stack(
+      children: [
+        Align(
+          alignment: Alignment.topCenter,
+          child: GetChildSize(
+            onChange: (childSize) => size.value = childSize,
+            child: IntrinsicHeight(
+              child: child,
+            ),
+          ),
+        ),
+        if (size.value case final size?)
+          SizedBox.fromSize(
+            size: size,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: GestureDetector(
+                supportedDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                },
+                trackpadScrollCausesScale: false,
+                onPanUpdate: (details) {
+                  notifier.value = notifier.value.copyWith(
+                    height: (notifier.value.height ?? size.height) +
+                        details.delta.dy,
+                    width:
+                        (notifier.value.width ?? size.width) + details.delta.dx,
+                  );
+                  onSizeChanged(
+                    Size(
+                      notifier.value.width!,
+                      notifier.value.height!,
+                    ),
+                  );
+                },
+                child: Transform.rotate(
+                  angle: pi + pi / 4,
+                  child: StyledIcon(
+                    IconlyLight.arrow_left_2,
+                    style: Style(
+                      $icon.color(thumbColor),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

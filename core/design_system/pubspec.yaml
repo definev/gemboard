@@ -16,6 +16,8 @@ dependencies:
   flextras:
   smooth_sheets: 
   sliver_tools: ^0.2.12
+  flutter_portal:
+  flutter_animate:
 
   boundless_stack:
     git:
