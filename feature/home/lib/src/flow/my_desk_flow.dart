@@ -19,6 +19,8 @@ class MyDeskFlow extends HookWidget {
 
     return ZoomStackGestureDetector(
       scaleFactor: scaleFactor.value,
+      enableMoveByMouse: true,
+      enableMoveByTouch: true,
       onScaleFactorChanged: (value) => scaleFactor.value = value,
       stack: (key, scaleFactor) => BoundlessStack(
         key: key,

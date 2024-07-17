@@ -65,6 +65,20 @@ class CellId with _$CellId, HasParentId<CellParentId> {
 
 @Freezed(unionKey: 'cellType')
 class Cell with _$Cell, HasId<CellId> {
+  const factory Cell.unknown({
+    @Default(10) int layer,
+    @OffsetConverter() required Offset offset,
+    @Default(CellId(parentId: CellParentId(whiteboardId: ''), id: ''))
+    @CellIdConverter()
+    CellId id,
+    @Default(100) double width,
+    double? height,
+    @Default(CellDecoration(color: ''))
+    @CellDecorationConverter()
+    CellDecoration decoration,
+    @Default(false) bool selected,
+  }) = UnknownCell;
+
   const factory Cell.text({
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
@@ -72,6 +86,7 @@ class Cell with _$Cell, HasId<CellId> {
     required double width,
     double? height,
     @CellDecorationConverter() required CellDecoration decoration,
+    @Default(false) bool selected,
     required String text,
   }) = TextCell;
 
@@ -82,6 +97,7 @@ class Cell with _$Cell, HasId<CellId> {
     required double width,
     double? height,
     @CellDecorationConverter() required CellDecoration decoration,
+    @Default(false) bool selected,
     String? url,
     String? filePath,
   }) = ImageCell;
@@ -93,6 +109,7 @@ class Cell with _$Cell, HasId<CellId> {
     required double width,
     double? height,
     @CellDecorationConverter() required CellDecoration decoration,
+    @Default(false) bool selected,
     required String title,
     required String content,
     required bool editable,
@@ -105,6 +122,7 @@ class Cell with _$Cell, HasId<CellId> {
     required double width,
     double? height,
     @CellDecorationConverter() required CellDecoration decoration,
+    @Default(false) bool selected,
     required String url,
   }) = UrlCell;
 

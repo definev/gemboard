@@ -14,7 +14,11 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.cellsStreamProvider,
     required this.onCellCreated,
     required this.onCellUpdated,
+    required this.enableMoveByMouse,
+    required this.enableMoveByTouch,
     this.scaleFactor,
+    this.onScaleStart,
+    this.onScaleEnd,
     this.horizontalDetails,
     this.verticalDetails,
   });
@@ -26,8 +30,13 @@ class WhiteboardView extends ConsumerStatefulWidget {
 
   /// Whiteboard infinite scrollable configuration
   final ValueNotifier<double>? scaleFactor;
+  final VoidCallback? onScaleStart;
+  final VoidCallback? onScaleEnd;
+
   final ScrollableDetails? verticalDetails;
   final ScrollableDetails? horizontalDetails;
+  final bool enableMoveByMouse;
+  final bool enableMoveByTouch;
 
   @override
   ConsumerState<WhiteboardView> createState() => _WhiteboardViewState();
@@ -238,7 +247,11 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
       child: ListenableBuilder(
         listenable: scaleFactor,
         builder: (context, child) => ZoomStackGestureDetector(
+          enableMoveByMouse: widget.enableMoveByMouse,
+          enableMoveByTouch: widget.enableMoveByTouch,
           scaleFactor: scaleFactor.value,
+          onScaleStart: widget.onScaleStart,
+          onScaleEnd: widget.onScaleEnd,
           onScaleFactorChanged: (value) => scaleFactor.value = value,
           stack: (key, scaleFactor) => BoundlessStack(
             horizontalDetails: horizontalDetails,
@@ -301,4 +314,3 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 }
-

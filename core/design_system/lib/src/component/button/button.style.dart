@@ -44,6 +44,15 @@ class ButtonStyle {
         FocusVariant.focus(
           $box.color(boxBackground),
         ),
+        ButtonHighlight.focus(
+          $box.color(boxBackground),
+        ),
+        ButtonHighlight.hover(
+          $box.color(boxBackground),
+        ),
+        ButtonHighlight.pressed(
+          $box.color(boxBackground),
+        ),
       ),
       ButtonKind.outline(
         $box.color.ref(ColorVariant.surface),
@@ -58,6 +67,15 @@ class ButtonStyle {
           $box.color(boxBackground),
         ),
         FocusVariant.focus(
+          $box.color(boxBackground),
+        ),
+        ButtonHighlight.focus(
+          $box.color(boxBackground),
+        ),
+        ButtonHighlight.hover(
+          $box.color(boxBackground),
+        ),
+        ButtonHighlight.pressed(
           $box.color(boxBackground),
         ),
       ),
@@ -80,15 +98,21 @@ class ButtonStyle {
               .resolve(context)
               .withOpacity(OpacityVariant.blend.resolve(context).value)),
         ),
-      ),
-      ButtonHighlight.focus(
-        $box.color(boxBackground),
-      ),
-      ButtonHighlight.hover(
-        $box.color(boxBackground),
-      ),
-      ButtonHighlight.pressed(
-        $box.color(boxBackground),
+        ButtonHighlight.focus(
+          $box.color(background
+              .resolve(context)
+              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+        ),
+        ButtonHighlight.hover(
+          $box.color(background
+              .resolve(context)
+              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+        ),
+        ButtonHighlight.pressed(
+          $box.color(background
+              .resolve(context)
+              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+        ),
       ),
       $with.scale(1.0),
       PressVariant.press(

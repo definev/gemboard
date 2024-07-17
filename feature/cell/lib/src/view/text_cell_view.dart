@@ -17,6 +17,7 @@ class TextCellView extends StatelessWidget {
       kind: DSCardKind.outlined,
       style: Style(
         $box.padding.all.ref(SpaceVariant.medium),
+        cell.selected ? $box.color.ref(ColorVariant.yellow) : null,
       ),
       child: StyledText(
         cell.mapOrNull(text: (cell) => cell.text) ?? '',

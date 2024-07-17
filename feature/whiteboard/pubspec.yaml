@@ -19,6 +19,7 @@ dependencies:
   riverpod_annotation: ^2.3.5
 
   iconly: ^1.0.1
+  line_icons: ^2.0.2
 
   flutter_portal: 
   atreeon_get_child_size: 

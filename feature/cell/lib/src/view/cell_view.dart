@@ -18,6 +18,7 @@ class CellView extends StatelessWidget {
       image: (cell) => ImageCellView(cell: cell),
       article: (cell) => ArticleCellView(cell: cell),
       url: (cell) => UrlCellView(cell: cell),
+      unknown: (_) => SizedBox(),
     );
   }
 }

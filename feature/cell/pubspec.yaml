@@ -20,6 +20,8 @@ dependencies:
 
   flutter_portal: 
   atreeon_get_child_size: ^0.1.1+1
+
+  collection: 
   
   # design system
   design_system:
