@@ -44,50 +44,49 @@ class EmojiLabelEditor extends HookWidget {
     useListenable(controller);
 
     final labelStyle = this.labelStyle ??
-        TextStyleVariant.h6.resolve(context).copyWith(
-              color: ColorVariant.onSurface.resolve(context),
-            );
+        TextStyleVariant.h6
+            .resolve(context)
+            .copyWith(color: ColorVariant.onSurface.resolve(context));
 
     return IgnorePointer(
       ignoring: readOnly,
-      child: StyledRow(
-        inherit: true,
-        style: Style(
-          $flex.gap.ref(SpaceVariant.gap),
+      child: PortalTarget(
+        visible: openEmojiPicker.value,
+        anchor: const Aligned(
+          target: Alignment.bottomLeft,
+          follower: Alignment.topLeft,
         ),
-        children: [
-          PortalTarget(
-            visible: openEmojiPicker.value,
-            anchor: const Aligned(
-              target: Alignment.bottomLeft,
-              follower: Alignment.topLeft,
-            ),
-            portalFollower: Padding(
-              padding: EdgeInsets.only(
-                top: SpaceVariant.gap.resolve(context) +
-                    SpaceVariant.gap.resolve(context),
-              ),
-              child: SizedBox(
-                width: 285,
-                child: Align(
-                  heightFactor: 1.0,
-                  alignment: Alignment.centerLeft,
-                  child: Box(
-                    style: Style(
-                      $box.height(284),
-                      $box.width(emojiPickerWidth),
-                    ),
-                    child: DSEmojiPicker(
-                      onSelected: (emoji) {
-                        openEmojiPicker.value = false;
-                        onEmojiSelected?.call(emoji);
-                      },
-                    ),
-                  ),
+        portalFollower: Padding(
+          padding: EdgeInsets.only(
+            top: SpaceVariant.gap.resolve(context) * 2,
+          ),
+          child: SizedBox(
+            width: 280,
+            child: Align(
+              heightFactor: 1.0,
+              alignment: Alignment.centerLeft,
+              child: Box(
+                style: Style(
+                  $box.height(284),
+                  $box.width(emojiPickerWidth),
+                ),
+                child: DSEmojiPicker(
+                  onSelected: (emoji) {
+                    openEmojiPicker.value = false;
+                    onEmojiSelected?.call(emoji);
+                  },
                 ),
               ),
             ),
-            child: SizedBox.square(
+          ),
+        ),
+        child: StyledRow(
+          inherit: true,
+          style: Style(
+            $flex.gap.ref(SpaceVariant.gap),
+          ),
+          children: [
+            SizedBox.square(
               dimension: 32,
               child: Center(
                 child: GestureDetector(
@@ -101,49 +100,49 @@ class EmojiLabelEditor extends HookWidget {
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: Stack(
-              fit: StackFit.loose,
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: EditableText(
-                    controller: controller,
-                    focusNode: focusNode,
-                    autofocus: autofocus,
-                    style: labelStyle,
-                    onChanged: onLabelChanged,
-                    onSubmitted: (_) => onSubmitted?.call(),
-                    selectionHeightStyle: ui.BoxHeightStyle.strut,
-                    cursorColor: textSelectionTheme.cursorColor!,
-                    backgroundCursorColor:
-                        textSelectionTheme.selectionHandleColor!,
-                    selectionColor: textSelectionTheme.selectionColor!,
-                  ),
-                ),
-                if (controller.text.isEmpty)
+            Expanded(
+              child: Stack(
+                fit: StackFit.loose,
+                children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: IgnorePointer(
-                      child: Text(
-                        'Type your label',
-                        style: labelStyle.copyWith(
-                          color: ColorVariant.onSurface
-                              .resolve(context)
-                              .withOpacity(
-                                OpacityVariant.hightlight
-                                    .resolve(context)
-                                    .value,
-                              ),
+                    child: EditableText(
+                      controller: controller,
+                      focusNode: focusNode,
+                      autofocus: autofocus,
+                      style: labelStyle,
+                      onChanged: onLabelChanged,
+                      onSubmitted: (_) => onSubmitted?.call(),
+                      selectionHeightStyle: ui.BoxHeightStyle.strut,
+                      cursorColor: textSelectionTheme.cursorColor!,
+                      backgroundCursorColor:
+                          textSelectionTheme.selectionHandleColor!,
+                      selectionColor: textSelectionTheme.selectionColor!,
+                    ),
+                  ),
+                  if (controller.text.isEmpty)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IgnorePointer(
+                        child: Text(
+                          'Type your label',
+                          style: labelStyle.copyWith(
+                            color: ColorVariant.onSurface
+                                .resolve(context)
+                                .withOpacity(
+                                  OpacityVariant.hightlight
+                                      .resolve(context)
+                                      .value,
+                                ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,15 @@
+import 'dart:math' as math;
+import 'dart:ui';
+
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconly/iconly.dart';
+import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
@@ -14,6 +21,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.cellsStreamProvider,
     required this.onCellCreated,
     required this.onCellUpdated,
+    required this.onCellsUpdated,
     required this.enableMoveByMouse,
     required this.enableMoveByTouch,
     this.scaleFactor,
@@ -26,6 +34,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final Whiteboard data;
   final AutoDisposeStreamProvider<List<Cell>> cellsStreamProvider;
   final void Function(Cell oldValue, Cell newValue) onCellUpdated;
+  final void Function(List<Cell> cells) onCellsUpdated;
   final void Function(Cell value) onCellCreated;
 
   /// Whiteboard infinite scrollable configuration
@@ -253,64 +262,232 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           onScaleStart: widget.onScaleStart,
           onScaleEnd: widget.onScaleEnd,
           onScaleFactorChanged: (value) => scaleFactor.value = value,
-          stack: (key, scaleFactor) => BoundlessStack(
-            horizontalDetails: horizontalDetails,
-            verticalDetails: verticalDetails,
-            backgroundBuilder: GridBackground.backgroundBuilder(
-              scale: scaleFactor,
-            ),
-            delegate: BoundlessStackListDelegate(
-              children: [
-                for (final (key, cell) in cellKeys.values)
-                  StackPosition(
-                    key: key,
-                    scaleFactor: scaleFactor,
-                    data: StackPositionData(
-                      id: cell.id.id,
-                      layer: cell.layer,
-                      height: cell.height,
-                      width: cell.width,
-                      offset: cell.offset,
-                    ),
-                    onDataUpdated: (oldValue, newValue) {
+          stack: (key, scaleFactor) {
+            List<StackPosition> stackPositions = [];
+            Offset? selectionStart;
+            Offset? selectionEnd;
+            List<(GlobalKey, Cell)> selectedCells = [];
+
+            for (final (key, cell) in cellKeys.values) {
+              if (cell.selected) {
+                selectedCells.add((key, cell));
+
+                if (selectionStart == null) {
+                  selectionStart = cell.offset;
+                }
+                if (selectionEnd == null) {
+                  selectionEnd = cell.offset;
+                }
+
+                selectionStart = Offset(
+                  math.min(selectionStart.dx, cell.offset.dx),
+                  math.min(selectionStart.dy, cell.offset.dy),
+                );
+                selectionEnd = Offset(
+                  math.max(selectionEnd.dx, cell.offset.dx + cell.width),
+                  math.max(
+                      selectionEnd.dy, cell.offset.dy + (cell.height ?? 100)),
+                );
+              }
+              stackPositions.add(
+                StackPosition(
+                  key: key,
+                  scaleFactor: scaleFactor,
+                  data: StackPositionData(
+                    id: cell.id.id,
+                    layer: cell.layer,
+                    height: cell.height,
+                    width: cell.width,
+                    offset: cell.offset,
+                  ),
+                  onDataUpdated: (oldValue, newValue) {
+                    final newCell = cell.copyWith(
+                      layer: newValue.layer,
+                      offset: newValue.offset,
+                      height: newValue.height,
+                      width: newValue.width ?? cell.width,
+                    );
+                    cellKeys[newValue.id] = (key, newCell);
+                    setState(() {});
+                    widget.onCellUpdated(cell, newCell);
+                  },
+                  moveable: StackMove(enable: true),
+                  builder: (context, notifier, child) => ResizableStackPosition(
+                    notifier: notifier,
+                    onSizeChanged: (size) {
                       final newCell = cell.copyWith(
-                        layer: newValue.layer,
-                        offset: newValue.offset,
-                        height: newValue.height,
-                        width: newValue.width ?? cell.width,
+                        height: size.height,
+                        width: size.width,
                       );
-                      cellKeys[newValue.id] = (key, newCell);
+                      cellKeys[cell.id.id] = (key, newCell);
                       setState(() {});
                       widget.onCellUpdated(cell, newCell);
                     },
-                    moveable: StackMove(enable: true),
-                    builder: (context, notifier, child) =>
-                        ResizableStackPosition(
-                      notifier: notifier,
-                      onSizeChanged: (size) {
-                        final newCell = cell.copyWith(
-                          height: size.height,
-                          width: size.width,
-                        );
-                        cellKeys[cell.id.id] = (key, newCell);
-                        setState(() {});
-                        widget.onCellUpdated(cell, newCell);
-                      },
-                      height: cell.height,
-                      thumb: DSThumb(
-                        color: CellDecorationExtension(cell.decoration)
-                            .colorValue(context),
-                      ),
-                      child: child!,
+                    height: cell.height,
+                    thumb: DSThumb(
+                      color: CellDecorationExtension(cell.decoration)
+                          .colorValue(context),
                     ),
-                    child: CellView(cell: cell),
+                    child: child!,
                   ),
-              ],
-            ),
-            scaleFactor: scaleFactor,
-          ),
+                  child: CellView(cell: cell),
+                ),
+              );
+            }
+
+            return BoundlessStack(
+              horizontalDetails: horizontalDetails,
+              verticalDetails: verticalDetails,
+              backgroundBuilder: GridBackground.backgroundBuilder(
+                scale: scaleFactor,
+              ),
+              foregroundBuilder: switch (selectedCells.isEmpty) {
+                true => null,
+                false => buildSuggectionForSelection(
+                    selectionStart!,
+                    selectionEnd!,
+                    selectedCells,
+                    scaleFactor,
+                  ),
+              },
+              delegate: BoundlessStackListDelegate(
+                children: stackPositions,
+              ),
+              scaleFactor: scaleFactor,
+            );
+          },
         ),
       ),
     );
+  }
+
+  TwoDimensionalViewportBuilder buildSuggectionForSelection(
+    Offset selectionStart,
+    Offset selectionEnd,
+    List<(GlobalKey<State<StatefulWidget>>, Cell)> selectedCells,
+    double scaleFactor,
+  ) {
+    return (context, verticalPosition, horizontalPosition) {
+      final topLeft = Offset(
+        horizontalDetails.controller!.offset,
+        verticalDetails.controller!.offset,
+      );
+
+      final spacingOffset = Offset(
+        SpaceVariant.small.resolve(context),
+        SpaceVariant.small.resolve(context),
+      );
+
+      final viewportSelectionStart =
+          ((selectionStart - topLeft / scaleFactor) - spacingOffset) *
+              scaleFactor;
+      final viewportSelectionEnd =
+          ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
+              scaleFactor;
+
+      return HookBuilder(
+        builder: (context) {
+          final showChat = useState(false);
+
+          return Stack(
+            children: [
+              Positioned.fromRect(
+                rect: Rect.fromPoints(
+                  viewportSelectionStart,
+                  viewportSelectionEnd,
+                ),
+                child: PortalTarget(
+                  anchor: Aligned(
+                    follower: Alignment.bottomCenter,
+                    target: Alignment.topCenter,
+                  ),
+                  portalFollower: Transform.scale(
+                    scale: scaleFactor,
+                    alignment: Alignment.bottomCenter,
+                    child: StyledColumn(
+                      style: Style(
+                        $flex.mainAxisSize.min(),
+                        $flex.gap.ref(SpaceVariant.small),
+                      ),
+                      children: [
+                        if (showChat.value)
+                          IntrinsicHeight(
+                            child: ConstrainedBox(
+                              constraints: BoxConstraints(maxWidth: 600),
+                              child: DSTextbox(
+                                autofocus: true,
+                                style: Style(
+                                  $box.margin.horizontal.ref(SpaceVariant.small),
+                                ),
+                                hintText: 'Ask a question',
+                                minLines: 1,
+                                maxLines: 10,
+                                trailing: Button(
+                                  style: Style(
+                                    $box.margin.horizontal.ref(SpaceVariant.small),
+                                  ),
+                                  onPressed: () {
+                                    showChat.value = false;
+                                  },
+                                  child: Icon(IconlyLight.send),
+                                ),
+                              ),
+                            ),
+                          ),
+                        DSToolbar(
+                          style: Style(
+                            $box.margin.bottom.ref(SpaceVariant.small),
+                          ),
+                          direction: Axis.horizontal,
+                          children: [
+                            Button(
+                              onPressed: () => showChat.value = !showChat.value,
+                              child: Icon(IconlyLight.chat),
+                            ),
+                            Button(
+                              onPressed: () {},
+                              child: Icon(IconlyLight.delete),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  child: GestureDetector(
+                    supportedDevices: {
+                      ...PointerDeviceKind.values,
+                    }..remove(PointerDeviceKind.trackpad),
+                    onPanUpdate: (details) {
+                      widget.onCellsUpdated(
+                        selectedCells.map((e) {
+                          final cell = e.$2;
+                          final newCell = cell.copyWith(
+                            offset: cell.offset + details.delta / scaleFactor,
+                          );
+                          cellKeys[cell.id.id] = (e.$1, newCell);
+                          return newCell;
+                        }).toList(),
+                      );
+                    },
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: ColorVariant.yellow.resolve(context).withOpacity(
+                          OpacityVariant.hightlight.resolve(context).value,
+                        ),
+                        border: Border.all(
+                          color: ColorVariant.yellow.resolve(context),
+                          width: 2 * scaleFactor,
+                        ),
+                      ),
+                      child: const SizedBox.expand(),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    };
   }
 }

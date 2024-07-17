@@ -286,6 +286,12 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   data: newValue,
                 ).future,
               ),
+              onCellsUpdated: (cells) => ref.read(
+                updateCellsProvider(
+                  parentId: CellParentId(whiteboardId: id.id),
+                  cells: cells,
+                ).future,
+              )
             ),
           );
           return Stack(
