@@ -11,9 +11,9 @@ class DSTextboxStyle {
       $box.color.ref(ColorVariant.surface),
       $box.padding.only(
         left: SpaceVariant.medium.resolve(context),
-        right: SpaceVariant.medium.resolve(context),
-        top: SpaceVariant.gap.resolve(context),
-        bottom: SpaceVariant.gap.resolve(context),
+        right: SpaceVariant.gap.resolve(context),
+        top: SpaceVariant.gap.resolve(context) + 5,
+        bottom: SpaceVariant.gap.resolve(context) + 5,
       ),
       $box.alignment.center(),
       FocusVariant.focus(

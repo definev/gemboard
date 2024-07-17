@@ -24,6 +24,8 @@ class DSTextbox extends StyledWidget {
     this.hintText,
     this.minLines,
     this.maxLines,
+    this.textStyle,
+    this.trailing,
   });
 
   final DSTextboxKind kind;
@@ -35,6 +37,8 @@ class DSTextbox extends StyledWidget {
   final String? hintText;
   final int? minLines;
   final int? maxLines;
+  final TextStyle? textStyle;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -46,33 +50,41 @@ class DSTextbox extends StyledWidget {
           kind,
           defaultFocusNode.hasFocus,
         );
-        final textStyle = TextStyleVariant.p.resolve(context);
+
+        final textStyle = this.textStyle ?? TextStyleVariant.p.resolve(context);
 
         return withMix(
           context,
           (context) => Box(
             style: dsTextboxStyle(context).merge(style),
-            child: Padding(
-              padding: EdgeInsets.only(top: 5, bottom: 5),
-              child: TextFormField(
-                selectionHeightStyle: BoxHeightStyle.strut,
-                controller: controller,
-                focusNode: defaultFocusNode,
-                autofocus: autofocus,
-                onChanged: onChanged,
-                cursorColor: ColorVariant.onSurface.resolve(context),
-                cursorWidth: 1.5,
-                cursorHeight: textStyle.height,
-                style: textStyle,
-                minLines: minLines,
-                maxLines: maxLines,
-                decoration: InputDecoration.collapsed(
-                  hintText: hintText,
-                  hintStyle: TextStyleVariant.p.resolve(context),
-                  focusColor: Colors.red,
-                  fillColor: Colors.red,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    selectionHeightStyle: BoxHeightStyle.strut,
+                    controller: controller,
+                    focusNode: defaultFocusNode,
+                    autofocus: autofocus,
+                    onChanged: onChanged,
+                    cursorColor: ColorVariant.onSurface.resolve(context),
+                    cursorWidth: 1.5,
+                    cursorHeight: textStyle.height,
+                    style: textStyle,
+                    minLines: minLines,
+                    maxLines: maxLines,
+                    decoration: InputDecoration.collapsed(
+                      hintText: hintText,
+                      hintStyle: textStyle.copyWith(
+                        color: Colors.grey.shade400,
+                      ),
+                      focusColor: Colors.red,
+                      fillColor: Colors.red,
+                    ),
+                  ),
                 ),
-              ),
+                if (trailing case final trailing?) trailing,
+              ],
             ),
           ),
         );
