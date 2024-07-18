@@ -49,6 +49,7 @@ class ResizableFlex extends StatefulWidget {
     this.secondChild,
     this.initialSize,
     this.minSize = 0,
+    this.mobileBreakpoint = 750,
     this.controller,
   });
 
@@ -57,6 +58,7 @@ class ResizableFlex extends StatefulWidget {
   final Widget? secondChild;
   final double? initialSize;
   final double? minSize;
+  final double mobileBreakpoint;
   final ResizableController? controller;
 
   @override
@@ -155,7 +157,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
           child: widget.firstChild,
         );
 
-        if (totalSize < 680) {
+        if (totalSize < widget.mobileBreakpoint) {
           return TweenAnimationBuilder(
             duration: Duration(milliseconds: 500),
             tween: Tween<double>(
