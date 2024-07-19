@@ -40,8 +40,7 @@ class _HomeShellViewState extends State<_HomeShellView> {
           direction: Axis.horizontal,
           initialSize: 300,
           minSize: 85,
-          firstChild: GenitLeadSidebar(
-          ),
+          firstChild: GenitLeadSidebar(),
           secondChild: Portal(
             child: widget.navigator,
           ),

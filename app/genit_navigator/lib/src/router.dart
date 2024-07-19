@@ -14,4 +14,5 @@ part 'routes/whiteboard.dart';
 final router = GoRouter(
   routes: $appRoutes,
   initialLocation: MyDeskRoute.location,
+  initialExtra: HomeShell.resizableController,
 );

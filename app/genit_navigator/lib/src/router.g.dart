@@ -42,6 +42,7 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
       WhiteboardEditorRoute(
         id: state.pathParameters['id']!,
         folderId: state.uri.queryParameters['folder-id'],
+        $extra: state.extra as ResizableController?,
       );
 
   String get location => GoRouteData.$location(
@@ -51,12 +52,14 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
         },
       );
 
-  void go(BuildContext context) => context.go(location);
+  void go(BuildContext context) => context.go(location, extra: $extra);
 
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+  Future<T?> push<T>(BuildContext context) =>
+      context.push<T>(location, extra: $extra);
 
   void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
+      context.pushReplacement(location, extra: $extra);
 
-  void replace(BuildContext context) => context.replace(location);
+  void replace(BuildContext context) =>
+      context.replace(location, extra: $extra);
 }

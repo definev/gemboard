@@ -9,6 +9,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  
+  cupertino_icons: ^1.0.8
 
   flutter_riverpod: ^2.5.1
   hooks_riverpod: ^2.5.1
@@ -30,6 +32,8 @@ dependencies:
   # design system
   design_system:
     path: ../../core/design_system
+  genit_common:
+    path: ../../app/genit_common
   
   # feature
   cell:

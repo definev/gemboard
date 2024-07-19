@@ -1,3 +1,4 @@
+import 'package:design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whiteboard/whiteboard.dart';
 
@@ -9,5 +10,6 @@ abstract class WhiteboardNavigation {
   void openWhiteboardEditor(
     WhiteboardId id, {
     Whiteboard? whiteboard,
+    required ResizableController? hostController,
   });
 }

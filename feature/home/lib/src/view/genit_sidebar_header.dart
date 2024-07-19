@@ -18,12 +18,8 @@ class GenitSidebarHeader extends StatelessWidget {
     return WindowMover(
       child: DSSidebarSectionHeader(
         style: Style(
-          $box.padding.horizontal.ref(
-            panelSize < minSize ? SpaceVariant.small : SpaceVariant.medium,
-          ),
-          $box.padding.bottom.ref(
-            panelSize < minSize ? SpaceVariant.small : SpaceVariant.medium,
-          ),
+          $box.padding.all.ref(SpaceVariant.small),
+          // $box.padding.all(0),
         ),
         background: ColorVariant.yellow,
         title: SafeArea(
@@ -36,17 +32,15 @@ class GenitSidebarHeader extends StatelessWidget {
               children: switch (panelSize > minSize) {
                 true => [
                     SizedBox(
-                      height: 76,
-                      child: Center(
-                        child: SizedBox.square(
-                          dimension: 60,
-                          child: ColoredBox(
-                            color: ColorVariant.background //
-                                .resolve(context)
-                                .withOpacity(OpacityVariant.blend
-                                    .resolve(context)
-                                    .value),
-                          ),
+                      height: 60,
+                      child: AspectRatio(
+                        aspectRatio: 1,
+                        child: ColoredBox(
+                          color: ColorVariant.background //
+                              .resolve(context)
+                              .withOpacity(OpacityVariant.blend
+                                  .resolve(context)
+                                  .value),
                         ),
                       ),
                     ),

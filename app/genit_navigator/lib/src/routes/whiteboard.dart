@@ -4,6 +4,7 @@ class WhiteboardEditorRoute extends GoRouteData {
   const WhiteboardEditorRoute({
     required this.id,
     this.folderId,
+    required this.$extra,
   });
 
   static const location = '/whiteboard/:id';
@@ -11,16 +12,16 @@ class WhiteboardEditorRoute extends GoRouteData {
 
   final String id;
   final String? folderId;
+  final ResizableController? $extra;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return WhiteboardEditorFlow(
       id: WhiteboardId(
-        parentId: WhiteboardParentId(
-          folderId: folderId,
-        ),
+        parentId: WhiteboardParentId(folderId: folderId),
         id: id,
       ),
+      resizableController: $extra,
     );
   }
 }

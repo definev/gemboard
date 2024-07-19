@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:design_system/design_system.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
@@ -38,6 +39,15 @@ class ResizableController extends ChangeNotifier {
   void show() {
     panelSize = _lastPanelSize;
     shown = true;
+  }
+
+  void toggle() {
+    switch (shown) {
+      case true:
+        hide();
+      case false:
+        show();
+    }
   }
 }
 
@@ -125,17 +135,12 @@ class _ResizableFlexState extends State<ResizableFlex> {
         $box.padding.all.ref(SpaceVariant.gap),
         $box.margin.all.ref(SpaceVariant.small),
         $box.borderRadius.all.ref(RadiusVariant.medium),
+        $icon.size(24),
       ),
       kind: ButtonKind.flat,
       background: ColorVariant.onSurface,
-      onPressed: () => switch (controller.shown) {
-        true => controller.hide(),
-        false => controller.show(),
-      },
-      child: switch (controller.shown) {
-        true => StyledIcon(IconlyLight.arrow_left_square),
-        false => StyledIcon(IconlyLight.arrow_right_2),
-      },
+      onPressed: () => controller.toggle(),
+      child: StyledIcon(CupertinoIcons.sidebar_left),
     );
 
     return LayoutBuilder(
@@ -168,21 +173,21 @@ class _ResizableFlexState extends State<ResizableFlex> {
             builder: (context, value, child) {
               return Stack(
                 children: [
+                  widget.secondChild ?? SizedBox(),
                   Positioned.fill(
                     left: -(1 - value) * constraints.maxWidth,
                     right: (1 - value) * constraints.maxWidth,
                     child: widget.firstChild,
                   ),
-                  Positioned.fill(
-                    left: value * constraints.maxWidth,
-                    child: widget.secondChild ?? SizedBox(),
-                  ),
                   Align(
                     alignment: Alignment(
                       -1 + value * 2,
-                      0.0,
+                      -1,
                     ),
-                    child: expandButton,
+                    child: SafeArea(
+                      bottom: false,
+                      child: expandButton,
+                    ),
                   ),
                 ],
               );

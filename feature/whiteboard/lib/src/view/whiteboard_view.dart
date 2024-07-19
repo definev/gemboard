@@ -417,14 +417,16 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                               child: DSTextbox(
                                 autofocus: true,
                                 style: Style(
-                                  $box.margin.horizontal.ref(SpaceVariant.small),
+                                  $box.margin.horizontal
+                                      .ref(SpaceVariant.small),
                                 ),
                                 hintText: 'Ask a question',
                                 minLines: 1,
                                 maxLines: 10,
                                 trailing: Button(
                                   style: Style(
-                                    $box.margin.horizontal.ref(SpaceVariant.small),
+                                    $box.margin.horizontal
+                                        .ref(SpaceVariant.small),
                                   ),
                                   onPressed: () {
                                     showChat.value = false;
@@ -472,8 +474,8 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     child: DecoratedBox(
                       decoration: BoxDecoration(
                         color: ColorVariant.yellow.resolve(context).withOpacity(
-                          OpacityVariant.hightlight.resolve(context).value,
-                        ),
+                              OpacityVariant.hightlight.resolve(context).value,
+                            ),
                         border: Border.all(
                           color: ColorVariant.yellow.resolve(context),
                           width: 2 * scaleFactor,
