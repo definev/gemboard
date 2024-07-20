@@ -289,7 +289,6 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
             Offset? selectionStart;
             Offset? selectionEnd;
             List<(GlobalKey, Cell)> selectedCells = [];
-            Map<String, ValueNotifier<StackPositionData>> cellPositionMaps = {};
 
             for (final (key, cell) in cellKeys.values) {
               if (cell.selected) {
@@ -358,7 +357,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
               );
             }
 
-            /// TODO: Kind of stuttering, need to somehow access to `notifier` 
+            /// TODO: Kind of stuttering, need to somehow access to `notifier`
             /// to get the latest stack position data instead of using `cellKeys`
             for (final (key, edge) in edgeKeys.values) {
               final first = cellKeys[edge.source];
