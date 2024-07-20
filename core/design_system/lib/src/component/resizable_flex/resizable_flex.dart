@@ -175,7 +175,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 begin: switch (controller.shown) { false => 0, true => 1 },
                 end: switch (controller.shown) { false => 0, true => 1 },
               ),
-              curve: Easing.emphasizedAccelerate,
+              curve: Curves.easeOutCirc,
               builder: (context, value, child) => Stack(
                 children: [
                   Positioned.fill(
@@ -277,13 +277,15 @@ class _ResizableFlexState extends State<ResizableFlex> {
                             ignoring: value == 0,
                             child: GestureDetector(
                               onTap: () => controller.hide(),
-                              onHorizontalDragEnd: (details) => controller.hide(),
+                              onHorizontalDragEnd: (details) =>
+                                  controller.hide(),
                               child: ColoredBox(
                                 color: ColorVariant.onBackground
                                     .resolve(context)
                                     .withOpacity(OpacityVariant.hightlight
-                                        .resolve(context)
-                                        .value * value),
+                                            .resolve(context)
+                                            .value *
+                                        value),
                               ),
                             ),
                           ),
@@ -396,8 +398,11 @@ class _ResizableFlexState extends State<ResizableFlex> {
                             child: widget.secondChild!,
                           ),
                           Align(
-                            alignment: Alignment.centerLeft,
-                            child: expandButton,
+                            alignment: Alignment.topLeft,
+                            child: SafeArea(
+                              bottom: false,
+                              child: expandButton,
+                            ),
                           ),
                         ],
                       ),
