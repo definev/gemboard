@@ -59,7 +59,8 @@ class ResizableFlex extends StatefulWidget {
     this.secondChild,
     this.initialSize,
     this.minSize = 0,
-    this.mobileBreakpoint = 750,
+    this.mobileBreakpoint = 550,
+    this.tabletBreakpoint = 750,
     this.controller,
   });
 
@@ -69,6 +70,7 @@ class ResizableFlex extends StatefulWidget {
   final double? initialSize;
   final double? minSize;
   final double mobileBreakpoint;
+  final double tabletBreakpoint;
   final ResizableController? controller;
 
   @override
@@ -130,6 +132,9 @@ class _ResizableFlexState extends State<ResizableFlex> {
         8.0,
     };
 
+    final expandButtonSize = 24 +
+        SpaceVariant.small.resolve(context) * 2 +
+        SpaceVariant.gap.resolve(context) * 2;
     final expandButton = Button(
       style: Style(
         $box.padding.all.ref(SpaceVariant.gap),
@@ -162,137 +167,249 @@ class _ResizableFlexState extends State<ResizableFlex> {
           child: widget.firstChild,
         );
 
-        if (totalSize < widget.mobileBreakpoint) {
-          return TweenAnimationBuilder(
-            duration: Duration(milliseconds: 500),
-            tween: Tween<double>(
-              begin: switch (controller.shown) { false => 0, true => 1 },
-              end: switch (controller.shown) { false => 0, true => 1 },
-            ),
-            curve: Easing.standard,
-            builder: (context, value, child) {
-              return Stack(
+        return switch (totalSize) {
+          final totalSize when totalSize < widget.mobileBreakpoint =>
+            TweenAnimationBuilder(
+              duration: Duration(milliseconds: 500),
+              tween: Tween<double>(
+                begin: switch (controller.shown) { false => 0, true => 1 },
+                end: switch (controller.shown) { false => 0, true => 1 },
+              ),
+              curve: Easing.emphasizedAccelerate,
+              builder: (context, value, child) => Stack(
                 children: [
-                  widget.secondChild ?? SizedBox(),
                   Positioned.fill(
-                    left: -(1 - value) * constraints.maxWidth,
-                    right: (1 - value) * constraints.maxWidth,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: widget.secondChild ?? SizedBox(),
+                        ),
+                        GestureDetector(
+                          onHorizontalDragEnd: (details) {
+                            if (details.primaryVelocity! > 0) {
+                              controller.show();
+                            } else {
+                              controller.hide();
+                            }
+                          },
+                          child: ColoredBox(
+                            color: Colors.transparent,
+                            child: SizedBox(
+                              height: double.maxFinite,
+                              width: 25,
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            ignoring: value == 0,
+                            child: GestureDetector(
+                              onTap: () => controller.hide(),
+                              onHorizontalDragEnd: (details) =>
+                                  controller.hide(),
+                              child: ColoredBox(
+                                color: ColorVariant.onBackground
+                                    .resolve(context)
+                                    .withOpacity(OpacityVariant.hightlight
+                                            .resolve(context)
+                                            .value *
+                                        value),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: -constraints.maxWidth + value * constraints.maxWidth,
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
                     child: widget.firstChild,
                   ),
-                  Align(
-                    alignment: Alignment(
-                      -1 + value * 2,
-                      -1,
-                    ),
+                  Positioned(
+                    left: value * (constraints.maxWidth - expandButtonSize),
                     child: SafeArea(
                       bottom: false,
                       child: expandButton,
                     ),
                   ),
                 ],
-              );
-            },
-          );
-        }
-
-        return Flex(
-          direction: widget.direction,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            if (totalSize - controller.panelSize < gapSize)
-              SizedBox(
-                height: switch (widget.direction) {
-                  Axis.vertical => math.min(controller.panelSize, totalSize),
-                  Axis.horizontal => double.maxFinite,
-                },
-                width: switch (widget.direction) {
-                  Axis.horizontal => math.min(controller.panelSize, totalSize),
-                  Axis.vertical => double.maxFinite,
-                },
-                child: Stack(
-                  children: [
-                    Positioned.fill(
-                      child: firstChild,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SafeArea(
-                        child: Button(
-                          style: Style(
-                            $box.height(40),
-                            $box.width(40),
-                            $box.margin.all.ref(SpaceVariant.small),
-                          ),
-                          kind: ButtonKind.outline,
-                          background: ColorVariant.onSurface,
-                          onPressed: () => controller.panelSize =
-                              widget.minSize ?? widget.initialSize ?? 100,
-                          child: StyledIcon(IconlyLight.arrow_left_circle),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            else
-              firstChild,
-            if (widget.secondChild != null) ...[
-              MouseRegion(
-                cursor: switch (widget.direction) {
-                  Axis.horizontal => SystemMouseCursors.resizeLeftRight,
-                  Axis.vertical => SystemMouseCursors.resizeUpDown,
-                },
-                child: GestureDetector(
-                  onPanUpdate: (details) {
-                    final deltaAxis = switch (widget.direction) {
-                      Axis.horizontal => details.delta.dx,
-                      Axis.vertical => details.delta.dy,
-                    };
-
-                    final newSize = controller.panelSize + deltaAxis;
-
-                    if (newSize < (widget.minSize ?? 0)) return;
-                    if (newSize > totalSize) return;
-
-                    controller.panelSize = newSize;
-                  },
-                  onDoubleTap: () {
-                    switch (controller.panelSize) {
-                      case 0:
-                        controller.show();
-                      default:
-                        controller.hide();
-                    }
-                  },
-                  child: ColoredBox(
-                    color: ColorVariant.outline.resolve(context).withOpacity(
-                          OpacityVariant.hightlight.resolve(context).value,
-                        ),
-                    child: SizedBox.square(dimension: gapSize),
-                  ),
-                ),
               ),
-              if (controller.panelSize <= 0)
-                Expanded(
-                  child: Stack(
-                    children: [
-                      Positioned.fill(
-                        child: widget.secondChild!,
-                      ),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: expandButton,
-                      ),
-                    ],
+            ),
+          final totalSize when totalSize < widget.tabletBreakpoint =>
+            TweenAnimationBuilder(
+              duration: Duration(milliseconds: 500),
+              tween: Tween<double>(
+                begin: switch (controller.shown) { false => 0, true => 1 },
+                end: switch (controller.shown) { false => 0, true => 1 },
+              ),
+              curve: Easing.standard,
+              builder: (context, value, child) => Stack(
+                children: [
+                  Positioned.fill(
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 250 * value),
+                            child: widget.secondChild ?? SizedBox(),
+                          ),
+                        ),
+                        GestureDetector(
+                          onHorizontalDragEnd: (details) {
+                            if (details.primaryVelocity! > 0) {
+                              controller.show();
+                            } else {
+                              controller.hide();
+                            }
+                          },
+                          child: ColoredBox(
+                            color: Colors.transparent,
+                            child: SizedBox(
+                              height: double.maxFinite,
+                              width: 25,
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            ignoring: value == 0,
+                            child: GestureDetector(
+                              onTap: () => controller.hide(),
+                              onHorizontalDragEnd: (details) => controller.hide(),
+                              child: ColoredBox(
+                                color: ColorVariant.onBackground
+                                    .resolve(context)
+                                    .withOpacity(OpacityVariant.hightlight
+                                        .resolve(context)
+                                        .value * value),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                )
-              else
-                Expanded(
-                  child: widget.secondChild!,
-                ),
-            ],
-          ],
-        );
+                  Positioned(
+                    left: -250 + value * 250,
+                    height: constraints.maxHeight,
+                    width: 250,
+                    child: widget.firstChild,
+                  ),
+                  Positioned(
+                    left: value * 202,
+                    child: SafeArea(
+                      bottom: false,
+                      child: expandButton,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          _ => Flex(
+              direction: widget.direction,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (totalSize - controller.panelSize < gapSize)
+                  SizedBox(
+                    height: switch (widget.direction) {
+                      Axis.vertical =>
+                        math.min(controller.panelSize, totalSize),
+                      Axis.horizontal => double.maxFinite,
+                    },
+                    width: switch (widget.direction) {
+                      Axis.horizontal =>
+                        math.min(controller.panelSize, totalSize),
+                      Axis.vertical => double.maxFinite,
+                    },
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: firstChild,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: SafeArea(
+                            child: Button(
+                              style: Style(
+                                $box.height(40),
+                                $box.width(40),
+                                $box.margin.all.ref(SpaceVariant.small),
+                              ),
+                              kind: ButtonKind.outline,
+                              background: ColorVariant.onSurface,
+                              onPressed: () => controller.panelSize =
+                                  widget.minSize ?? widget.initialSize ?? 100,
+                              child: StyledIcon(IconlyLight.arrow_left_circle),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                else
+                  firstChild,
+                if (widget.secondChild != null) ...[
+                  MouseRegion(
+                    cursor: switch (widget.direction) {
+                      Axis.horizontal => SystemMouseCursors.resizeLeftRight,
+                      Axis.vertical => SystemMouseCursors.resizeUpDown,
+                    },
+                    child: GestureDetector(
+                      onPanUpdate: (details) {
+                        final deltaAxis = switch (widget.direction) {
+                          Axis.horizontal => details.delta.dx,
+                          Axis.vertical => details.delta.dy,
+                        };
+
+                        final newSize = controller.panelSize + deltaAxis;
+
+                        if (newSize < (widget.minSize ?? 0)) return;
+                        if (newSize > totalSize) return;
+
+                        controller.panelSize = newSize;
+                      },
+                      onDoubleTap: () {
+                        switch (controller.panelSize) {
+                          case 0:
+                            controller.show();
+                          default:
+                            controller.hide();
+                        }
+                      },
+                      child: ColoredBox(
+                        color: ColorVariant.outline
+                            .resolve(context)
+                            .withOpacity(
+                              OpacityVariant.hightlight.resolve(context).value,
+                            ),
+                        child: SizedBox.square(dimension: gapSize),
+                      ),
+                    ),
+                  ),
+                  if (controller.panelSize <= 0)
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: widget.secondChild!,
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: expandButton,
+                          ),
+                        ],
+                      ),
+                    )
+                  else
+                    Expanded(
+                      child: widget.secondChild!,
+                    ),
+                ],
+              ],
+            ),
+        };
       },
     );
   }

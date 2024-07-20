@@ -318,6 +318,13 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                 Box(
                   style: Style(
                     $box.color.ref(ColorVariant.surface),
+                    $box.shadow(
+                        blurRadius: 10,
+                        color: ColorVariant.onSurface
+                            .resolve(context)
+                            .withOpacity(OpacityVariant.hightlight
+                                .resolve(context)
+                                .value)),
                     $box.padding.all.ref(SpaceVariant.small),
                     $flex.mainAxisAlignment.center(),
                   ),
