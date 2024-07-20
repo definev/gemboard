@@ -264,7 +264,6 @@ class MasterView extends StatelessWidget {
                             return keys.value['child_$index']!;
                           }(),
                       moveable: const StackMove(
-                        enable: true,
                         snap: StackSnap(
                           heightSnap: 50,
                           widthSnap: 50,

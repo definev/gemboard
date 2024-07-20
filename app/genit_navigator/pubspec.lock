@@ -989,6 +989,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
+  touchable:
+    dependency: transitive
+    description:
+      path: "."
+      ref: master
+      resolved-ref: f28436442d75492658884185c97b719e38c5380f
+      url: "https://github.com/definev/touchable.git"
+    source: git
+    version: "1.0.1"
   typed_data:
     dependency: transitive
     description:

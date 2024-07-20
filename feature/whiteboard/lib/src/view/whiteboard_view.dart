@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:math' as math;
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:boundless_stack/boundless_stack.dart';
@@ -61,6 +62,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
   Map<String, (GlobalKey, Cell)> cellKeys = {};
   Map<String, (GlobalKey, Edge)> edgeKeys = {};
+  Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap = {};
 
   late void Function(
     AsyncValue<List<Cell>>? previous,
@@ -87,6 +89,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
       }
     }
 
+    // Cleanup
     for (final (_, cell) in previousCells.values) {
       cellKeys.remove(cell.id.id);
     }
@@ -161,14 +164,15 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
         );
 
         // Mocking the edge
-        if (cellKeys.length == 1) {
-          final firstCell = cellKeys.values.first.$2;
+        if (cellKeys.length >= 1) {
+          final randomCell =
+              cellKeys.values.elementAt(random.nextInt(cellKeys.length)).$2;
           final edge = Edge(
             id: EdgeId(
               id: Helper.createId(),
               parentId: EdgeParentId(),
             ),
-            source: firstCell.id.id,
+            source: randomCell.id.id,
             target: cell.id.id,
           );
           edgeKeys[edge.id.id] = (
@@ -186,6 +190,40 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
       return true;
     }
     return false;
+  }
+
+  Rect _computeCellBound((GlobalKey<State<StatefulWidget>>, Cell) value) {
+    final (sourceKey, sourceCell) = value;
+
+    final sourceCellRect = Rect.fromLTWH(
+      sourceCell.offset.dx,
+      sourceCell.offset.dy,
+      sourceCell.width,
+      sourceCell.height ?? 100,
+    );
+
+    return sourceCellRect;
+  }
+
+  (Rect, Rect, Rect) computeEdgeBounds(
+    (GlobalKey<State<StatefulWidget>>, Cell) source,
+    (GlobalKey<State<StatefulWidget>>, Cell) target,
+  ) {
+    Rect sourceCellRect = _computeCellBound(source);
+    Rect targetCellRect = _computeCellBound(target);
+
+    final edgeTopLeft = Offset(
+      min(sourceCellRect.left, targetCellRect.left),
+      min(sourceCellRect.top, targetCellRect.top),
+    );
+    final edgeBottomRight = Offset(
+      max(sourceCellRect.right, targetCellRect.right),
+      max(sourceCellRect.bottom, targetCellRect.bottom),
+    );
+
+    final edgeRect = Rect.fromPoints(edgeTopLeft, edgeBottomRight);
+
+    return (sourceCellRect, targetCellRect, edgeRect);
   }
 
   @override
@@ -322,9 +360,8 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     width: cell.width,
                     offset: cell.offset,
                   ),
-                  onDataUpdated: (oldValue, newValue) {
+                  onDataUpdated: (newValue) {
                     final newCell = cell.copyWith(
-                      layer: newValue.layer,
                       offset: newValue.offset,
                       height: newValue.height,
                       width: newValue.width ?? cell.width,
@@ -333,26 +370,23 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     setState(() {});
                     widget.onCellUpdated(cell, newCell);
                   },
-                  moveable: StackMove(enable: true),
-                  builder: (context, notifier, child) => ResizableStackPosition(
-                    notifier: notifier,
-                    onSizeChanged: (size) {
-                      final newCell = cell.copyWith(
-                        height: size.height,
-                        width: size.width,
-                      );
-                      cellKeys[cell.id.id] = (key, newCell);
-                      setState(() {});
-                      widget.onCellUpdated(cell, newCell);
-                    },
+                  moveable: StackMove(),
+                  resizable: StackResize(
                     height: cell.height,
                     thumb: DSThumb(
                       color: CellDecorationExtension(cell.decoration)
                           .colorValue(context),
                     ),
-                    child: child!,
                   ),
-                  child: CellView(cell: cell),
+                  builder: (context, notifier, child) {
+                    final oldNotifier = stackPositionDataMap[cell.id.id];
+                    if (oldNotifier == null) {
+                      stackPositionDataMap[cell.id.id] = notifier;
+                    } else if (oldNotifier != notifier) {
+                      stackPositionDataMap[cell.id.id] = notifier;
+                    }
+                    return CellView(cell: cell);
+                  },
                 ),
               );
             }
@@ -360,40 +394,78 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
             /// TODO: Kind of stuttering, need to somehow access to `notifier`
             /// to get the latest stack position data instead of using `cellKeys`
             for (final (key, edge) in edgeKeys.values) {
-              final first = cellKeys[edge.source];
-              final second = cellKeys[edge.target];
-              if (first == null || second == null) {
-                continue;
-              }
-              final (firstKey, firstCell) = first;
-              final (secondKey, secondCell) = second;
-
-              final edgeRect = Rect.fromLTRB(
-                math.min(firstCell.offset.dx, secondCell.offset.dx),
-                math.min(firstCell.offset.dy, secondCell.offset.dy),
-                math.max(
-                  firstCell.offset.dx + firstCell.width,
-                  secondCell.offset.dx + secondCell.width,
-                ),
-                math.max(
-                  firstCell.offset.dy + (firstCell.height ?? 100),
-                  secondCell.offset.dy + (secondCell.height ?? 100),
-                ),
-              );
-
               stackPositions.addFirst(
                 StackPosition(
                   key: key,
                   scaleFactor: scaleFactor,
                   data: StackPositionData(
+                    id: edge.id.id,
                     layer: edge.layer,
-                    offset: edgeRect.topLeft,
-                    height: edgeRect.height,
-                    width: edgeRect.width,
+
+                    /// Compute offset and size for edge based on source and target cell
+                    offset: Offset(0, 0),
+                    height: 0,
+                    width: 0,
+
+                    /// Compute offset and size for edge based on source and target cell
                   ),
-                  moveable: StackMove(enable: false),
-                  builder: (context, notifier, child) => child!,
-                  child: EdgeView(data: edge),
+                  builder: (context, notifier, child) {
+                    return HookBuilder(
+                      builder: (context) {
+                        final sourceStackPositionData =
+                            stackPositionDataMap[edge.source];
+                        final targetStackPositionData =
+                            stackPositionDataMap[edge.target];
+                        final sourceCellRect = useState(Rect.zero);
+                        final targetCellRect = useState(Rect.zero);
+
+                        final updateEdge = useCallback(() {
+                          final source = cellKeys[edge.source];
+                          final target = cellKeys[edge.target];
+                          if (source == null || target == null) {
+                            return;
+                          }
+                          final (
+                            newSourceCellRect,
+                            newTargetCellRect,
+                            edgeRect
+                          ) = computeEdgeBounds(source, target);
+                          notifier.value = StackPositionData(
+                            layer: edge.layer,
+                            offset: edgeRect.topLeft,
+                            height: edgeRect.height,
+                            width: edgeRect.width,
+                          );
+
+                          sourceCellRect.value = newSourceCellRect;
+                          targetCellRect.value = newTargetCellRect;
+                        });
+                        useEffect(() {
+                          sourceStackPositionData?.addListener(updateEdge);
+                          targetStackPositionData?.addListener(updateEdge);
+                          return () {
+                            sourceStackPositionData?.removeListener(updateEdge);
+                            targetStackPositionData?.removeListener(updateEdge);
+                          };
+                        }, [
+                          Listenable.merge([
+                            sourceStackPositionData,
+                            targetStackPositionData,
+                          ])
+                        ]);
+                        useEffect(() {
+                          updateEdge();
+                          return null;
+                        }, []);
+
+                        return EdgeView(
+                          data: edge,
+                          source: sourceCellRect.value,
+                          target: targetCellRect.value,
+                        );
+                      },
+                    );
+                  },
                 ),
               );
             }

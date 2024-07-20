@@ -34,6 +34,10 @@ command:
         git:
           url: https://github.com/definev/flutter-emoji-selector.git
           ref: main
+      touchable: 
+        git:
+          url: https://github.com/definev/touchable.git
+          ref: master
     
     dev_dependencies:
       flutter_lints: ^4.0.0

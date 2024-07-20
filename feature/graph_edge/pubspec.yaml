@@ -27,8 +27,12 @@ dependencies:
   
   mix: ^1.2.0
   
-  
   flextras:
+
+  touchable:
+    git:
+      url: https://github.com/definev/touchable.git
+      ref: master 
   
 
 dev_dependencies:
