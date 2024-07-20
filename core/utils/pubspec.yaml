@@ -21,8 +21,9 @@ dependencies:
 
   flow_builder: ^0.1.0 
 
-
   uuid: 
+
+  boxy: ^2.2.0
 
 
 dev_dependencies:

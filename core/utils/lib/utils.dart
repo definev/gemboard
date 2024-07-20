@@ -11,3 +11,4 @@ export 'src/mixin/mixin.dart';
 export 'src/money.dart';
 export 'src/repository/crud_dto_repository.dart';
 export 'src/string.dart';
+export 'src/widget/widget_size_listener.dart';
