@@ -1,4 +1,4 @@
-# melos_managed_dependency_overrides: boundless_stack,cell,design_system,genit_common,home,utils,whiteboard
+# melos_managed_dependency_overrides: boundless_stack,cell,design_system,genit_common,graph_edge,home,utils,whiteboard
 dependency_overrides:
   boundless_stack:
     path: ../../packages/boundless_stack
@@ -8,6 +8,8 @@ dependency_overrides:
     path: ../../core/design_system
   genit_common:
     path: ../genit_common
+  graph_edge:
+    path: ../../feature/graph_edge
   home:
     path: ../../feature/home
   utils:

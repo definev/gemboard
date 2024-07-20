@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:graph_edge/graph_edge.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
@@ -58,6 +60,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
   late ScrollableDetails horizontalDetails;
 
   Map<String, (GlobalKey, Cell)> cellKeys = {};
+  Map<String, (GlobalKey, Edge)> edgeKeys = {};
 
   late void Function(
     AsyncValue<List<Cell>>? previous,
@@ -156,6 +159,25 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
             position - cell.offset,
           ),
         );
+
+        // Mocking the edge
+        if (cellKeys.length == 1) {
+          final firstCell = cellKeys.values.first.$2;
+          final edge = Edge(
+            id: EdgeId(
+              id: Helper.createId(),
+              parentId: EdgeParentId(),
+            ),
+            source: firstCell.id.id,
+            target: cell.id.id,
+          );
+          edgeKeys[edge.id.id] = (
+            GlobalKey(
+              debugLabel: 'WhiteboardView.edge | ${edge.id.id}',
+            ),
+            edge,
+          );
+        }
 
         widget.onCellCreated(cell);
       } catch (e) {
@@ -263,10 +285,11 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           onScaleEnd: widget.onScaleEnd,
           onScaleFactorChanged: (value) => scaleFactor.value = value,
           stack: (key, scaleFactor) {
-            List<StackPosition> stackPositions = [];
+            Queue<StackPosition> stackPositions = Queue.from([]);
             Offset? selectionStart;
             Offset? selectionEnd;
             List<(GlobalKey, Cell)> selectedCells = [];
+            Map<String, ValueNotifier<StackPositionData>> cellPositionMaps = {};
 
             for (final (key, cell) in cellKeys.values) {
               if (cell.selected) {
@@ -289,7 +312,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       selectionEnd.dy, cell.offset.dy + (cell.height ?? 100)),
                 );
               }
-              stackPositions.add(
+              stackPositions.addLast(
                 StackPosition(
                   key: key,
                   scaleFactor: scaleFactor,
@@ -335,6 +358,47 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
               );
             }
 
+            /// TODO: Kind of stuttering, need to somehow access to `notifier` 
+            /// to get the latest stack position data instead of using `cellKeys`
+            for (final (key, edge) in edgeKeys.values) {
+              final first = cellKeys[edge.source];
+              final second = cellKeys[edge.target];
+              if (first == null || second == null) {
+                continue;
+              }
+              final (firstKey, firstCell) = first;
+              final (secondKey, secondCell) = second;
+
+              final edgeRect = Rect.fromLTRB(
+                math.min(firstCell.offset.dx, secondCell.offset.dx),
+                math.min(firstCell.offset.dy, secondCell.offset.dy),
+                math.max(
+                  firstCell.offset.dx + firstCell.width,
+                  secondCell.offset.dx + secondCell.width,
+                ),
+                math.max(
+                  firstCell.offset.dy + (firstCell.height ?? 100),
+                  secondCell.offset.dy + (secondCell.height ?? 100),
+                ),
+              );
+
+              stackPositions.addFirst(
+                StackPosition(
+                  key: key,
+                  scaleFactor: scaleFactor,
+                  data: StackPositionData(
+                    layer: edge.layer,
+                    offset: edgeRect.topLeft,
+                    height: edgeRect.height,
+                    width: edgeRect.width,
+                  ),
+                  moveable: StackMove(enable: false),
+                  builder: (context, notifier, child) => child!,
+                  child: EdgeView(data: edge),
+                ),
+              );
+            }
+
             return BoundlessStack(
               horizontalDetails: horizontalDetails,
               verticalDetails: verticalDetails,
@@ -351,7 +415,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   ),
               },
               delegate: BoundlessStackListDelegate(
-                children: stackPositions,
+                children: stackPositions.toList(),
               ),
               scaleFactor: scaleFactor,
             );

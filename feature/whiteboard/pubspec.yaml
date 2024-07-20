@@ -38,6 +38,8 @@ dependencies:
   # feature
   cell:
     path: ../../feature/cell
+  graph_edge:
+    path: ../../feature/graph_edge
 
   # utils
   utils:
