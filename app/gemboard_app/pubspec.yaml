@@ -1,0 +1,54 @@
+name: gemboard_app
+description: "gemboard mobile app"
+publish_to: "none"
+version: 0.0.1+1
+
+environment: 
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # native things
+  bitsdojo_window: ^0.1.6
+  
+  # Dependencies
+  flutter_riverpod: ^2.5.1
+  flutter_hooks: ^0.20.5
+  hooks_riverpod: ^2.5.1
+
+  sliver_tools: ^0.2.12
+  iconly: ^1.0.1
+
+  flutter_portal: ^1.1.4
+
+  # Infinity canvas
+  boundless_stack:
+    git:
+      url: https://github.com/definev/boundless_stack.git
+      ref: main
+
+  # Theme
+  mix: ^1.2.0
+  design_system:
+    path: ../../core/design_system
+  
+  # Navigator
+  gemboard_navigator:
+    path: ../gemboard_navigator
+  
+  # Configuration
+  gemboard_configuration:
+    path: ../gemboard_configuration
+  
+  gemboard_common:
+    path: ../gemboard_common
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

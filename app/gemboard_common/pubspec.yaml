@@ -1,0 +1,38 @@
+name: gemboard_common
+description: gemboard_common feature
+
+environment: 
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  flutter_riverpod: ^2.5.1
+  hooks_riverpod: ^2.5.1
+  flutter_hooks: ^0.20.5
+
+  freezed_annotation:
+  json_annotation: ^4.9.0
+
+  
+  # design system
+  design_system:
+    path: ../../core/design_system
+  
+  # utils
+  utils:
+    path: ../../core/utils
+  
+  
+  mix: ^1.2.0
+  flextras: ^1.0.0
+  flutter_portal: ^1.1.4
+  
+
+dev_dependencies:
+  build_runner: ^2.3.3
+  freezed:
+  json_serializable: ^6.8.0

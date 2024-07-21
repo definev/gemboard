@@ -1,0 +1,14 @@
+name: gemboard_configuration
+description: "gemboard configuration for mobile app"
+
+environment: 
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  
+  flutter_riverpod: ^2.5.1
+  go_router: ^14.2.0
