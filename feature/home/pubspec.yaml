@@ -30,8 +30,8 @@ dependencies:
     path: ../../core/design_system
   
   # common
-  genit_common:
-    path: ../../app/genit_common
+  gemboard_common:
+    path: ../../app/gemboard_common
   
   utils:
     path: ../../core/utils

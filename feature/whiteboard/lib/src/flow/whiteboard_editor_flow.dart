@@ -3,7 +3,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:genit_common/genit_common.dart';
+import 'package:gemboard_common/gemboard_common.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';

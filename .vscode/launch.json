@@ -5,66 +5,66 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "genit",
+            "name": "gemboard",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "genit_app",
-            "cwd": "app/genit_app",
+            "name": "gemboard_app",
+            "cwd": "app/gemboard_app",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "genit_app (profile mode)",
-            "cwd": "app/genit_app",
+            "name": "gemboard_app (profile mode)",
+            "cwd": "app/gemboard_app",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "genit_app (release mode)",
-            "cwd": "app/genit_app",
+            "name": "gemboard_app (release mode)",
+            "cwd": "app/gemboard_app",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
         },
         {
-            "name": "genit_configuration",
-            "cwd": "app/genit_configuration",
+            "name": "gemboard_configuration",
+            "cwd": "app/gemboard_configuration",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "genit_configuration (profile mode)",
-            "cwd": "app/genit_configuration",
+            "name": "gemboard_configuration (profile mode)",
+            "cwd": "app/gemboard_configuration",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "genit_configuration (release mode)",
-            "cwd": "app/genit_configuration",
+            "name": "gemboard_configuration (release mode)",
+            "cwd": "app/gemboard_configuration",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
         },
         {
-            "name": "genit_navigator",
-            "cwd": "app/genit_navigator",
+            "name": "gemboard_navigator",
+            "cwd": "app/gemboard_navigator",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "genit_navigator (profile mode)",
-            "cwd": "app/genit_navigator",
+            "name": "gemboard_navigator (profile mode)",
+            "cwd": "app/gemboard_navigator",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "genit_navigator (release mode)",
-            "cwd": "app/genit_navigator",
+            "name": "gemboard_navigator (release mode)",
+            "cwd": "app/gemboard_navigator",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

@@ -793,7 +793,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: f28436442d75492658884185c97b719e38c5380f
+      resolved-ref: c6803d669569c2b13499f09575ca42be68e90185
       url: "https://github.com/definev/touchable.git"
     source: git
     version: "1.0.1"

@@ -34,8 +34,8 @@ dependencies:
   # design system
   design_system:
     path: ../../core/design_system
-  genit_common:
-    path: ../../app/genit_common
+  gemboard_common:
+    path: ../../app/gemboard_common
   
   # feature
   cell:

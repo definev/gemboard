@@ -1,21 +1,18 @@
 import 'dart:collection';
 import 'dart:math' as math;
-import 'dart:math';
-import 'dart:ui';
 
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_portal/flutter_portal.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graph_edge/graph_edge.dart';
-import 'package:iconly/iconly.dart';
-import 'package:mix/mix.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
+import 'package:whiteboard/src/widget/cell_builder.dart';
+import 'package:whiteboard/src/widget/edge_builder.dart';
+import 'package:whiteboard/src/widget/selection_cells_view.dart';
 
 class WhiteboardView extends ConsumerStatefulWidget {
   const WhiteboardView({
@@ -84,15 +81,25 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           GlobalKey(
             debugLabel: 'WhiteboardView.cell | ${cell.id.id}',
           ),
-          cell
+          cell,
         );
       }
     }
 
+    final oldEdgeKeys = {...edgeKeys};
     // Cleanup
     for (final (_, cell) in previousCells.values) {
       cellKeys.remove(cell.id.id);
+      stackPositionDataMap[cell.id.id]?.dispose();
       stackPositionDataMap.remove(cell.id.id);
+
+      for (final MapEntry(key: key, value: (_, edge)) in oldEdgeKeys.entries) {
+        if (edge.source == cell.id.id || edge.target == cell.id.id) {
+          edgeKeys.remove(key);
+          stackPositionDataMap[edge.id.id]?.dispose();
+          stackPositionDataMap.remove(edge.id.id);
+        }
+      }
     }
   };
 
@@ -191,40 +198,6 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
       return true;
     }
     return false;
-  }
-
-  Rect _computeCellBound((GlobalKey<State<StatefulWidget>>, Cell) value) {
-    final (sourceKey, sourceCell) = value;
-
-    final sourceCellRect = Rect.fromLTWH(
-      sourceCell.offset.dx,
-      sourceCell.offset.dy,
-      sourceCell.width,
-      sourceCell.height ?? 100,
-    );
-
-    return sourceCellRect;
-  }
-
-  (Rect, Rect, Rect) computeEdgeBounds(
-    (GlobalKey<State<StatefulWidget>>, Cell) source,
-    (GlobalKey<State<StatefulWidget>>, Cell) target,
-  ) {
-    Rect sourceCellRect = _computeCellBound(source);
-    Rect targetCellRect = _computeCellBound(target);
-
-    final edgeTopLeft = Offset(
-      min(sourceCellRect.left, targetCellRect.left),
-      min(sourceCellRect.top, targetCellRect.top),
-    );
-    final edgeBottomRight = Offset(
-      max(sourceCellRect.right, targetCellRect.right),
-      max(sourceCellRect.bottom, targetCellRect.bottom),
-    );
-
-    final edgeRect = Rect.fromPoints(edgeTopLeft, edgeBottomRight);
-
-    return (sourceCellRect, targetCellRect, edgeRect);
   }
 
   void onEdgeUpdated() {
@@ -364,6 +337,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     height: cell.height,
                     width: cell.width,
                     offset: cell.offset,
+                    keepAlive: cell.selected,
                   ),
                   onDataUpdated: (newValue) {
                     final newCell = cell.copyWith(
@@ -383,36 +357,22 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                           .colorValue(context),
                     ),
                   ),
-                  builder: (context, notifier, child) {
-                    return HookBuilder(
-                      builder: (context) {
-                        useEffect(() {
-                          final oldNotifier = stackPositionDataMap[cell.id.id];
-                          final newNotifier = notifier;
-
-                          if (oldNotifier == newNotifier)
-                            return () {
-                              print('Removing listener for cell ${cell.id.id}');
-                              stackPositionDataMap.remove(cell.id.id);
-                            };
-
-                          if (oldNotifier == null || oldNotifier != notifier) {
-                            stackPositionDataMap[cell.id.id] = newNotifier;
-                          }
-                          return () {};
-                        }, [notifier]);
-
-                        return CellView(cell: cell);
-                      },
-                    );
-                  },
+                  builder: (context, notifier, child) => CellBuilder(
+                    notifier: notifier,
+                    stackPositionDataMap: stackPositionDataMap,
+                    cell: cell,
+                  ),
                 ),
               );
             }
 
-            /// TODO: Kind of stuttering, need to somehow access to `notifier`
-            /// to get the latest stack position data instead of using `cellKeys`
             for (final (key, edge) in edgeKeys.values) {
+              final source = cellKeys[edge.source];
+              final target = cellKeys[edge.target];
+              if (source == null || target == null) continue;
+              final (_, _, edgeRect) =
+                  EdgeBuilder.computeEdgeBounds(source, target);
+
               stackPositions.addFirst(
                 StackPosition(
                   key: key,
@@ -422,13 +382,16 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     layer: edge.layer,
 
                     /// Compute offset and size for edge based on source and target cell
-                    offset: Offset.zero,
-                    height: 0,
-                    width: 0,
+                    offset: edgeRect.topLeft,
+                    height: edgeRect.height,
+                    width: edgeRect.width,
                   ),
-                  builder: (context, notifier, child) {
-                    return _buildEdge(notifier, edge);
-                  },
+                  builder: (context, notifier, child) => EdgeBuilder(
+                    notifier: notifier,
+                    cellKeys: cellKeys,
+                    stackPositionDataMap: stackPositionDataMap,
+                    edge: edge,
+                  ),
                 ),
               );
             }
@@ -459,65 +422,6 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  Widget _buildEdge(ValueNotifier<StackPositionData> notifier, Edge edge) {
-    return HookBuilder(
-      builder: (context) {
-        final sourceCellRect = useState(Rect.zero);
-        final targetCellRect = useState(Rect.zero);
-
-        final sourceStackPositionDataNotifier =
-            stackPositionDataMap[edge.source];
-        final targetStackPositionDataNotifier =
-            stackPositionDataMap[edge.target];
-        final listenableNotifier = useMemoized(
-          () => Listenable.merge([
-            sourceStackPositionDataNotifier,
-            targetStackPositionDataNotifier,
-          ]),
-          [
-            sourceStackPositionDataNotifier,
-            targetStackPositionDataNotifier,
-          ],
-        );
-
-        VoidCallback updateEdgePosition = () {};
-        updateEdgePosition = useCallback(() {
-          final (newSourceCellRect, newTargetCellRect, edgeRect) =
-              computeEdgeBounds(cellKeys[edge.source]!, cellKeys[edge.target]!);
-
-          if (!context.mounted) {
-            sourceStackPositionDataNotifier?.removeListener(updateEdgePosition);
-            targetStackPositionDataNotifier?.removeListener(updateEdgePosition);
-            return;
-          }
-
-          sourceCellRect.value = newSourceCellRect;
-          targetCellRect.value = newTargetCellRect;
-
-          notifier.value = StackPositionData(
-            id: edge.id.id,
-            layer: edge.layer,
-            offset: edgeRect.topLeft,
-            height: edgeRect.height,
-            width: edgeRect.width,
-          );
-        }, []);
-
-        useEffect(() {
-          updateEdgePosition();
-          listenableNotifier.addListener(updateEdgePosition);
-          return () => listenableNotifier.removeListener(updateEdgePosition);
-        }, [listenableNotifier]);
-
-        return EdgeView(
-          data: edge,
-          source: sourceCellRect.value,
-          target: targetCellRect.value,
-        );
-      },
-    );
-  }
-
   TwoDimensionalViewportBuilder buildSuggectionForSelection(
     Offset selectionStart,
     Offset selectionEnd,
@@ -542,7 +446,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
               scaleFactor;
 
-      return _SelectionCellsView(
+      return SelectionCellsView(
         selectedCells: selectedCells,
         viewportSelectionStart: viewportSelectionStart,
         viewportSelectionEnd: viewportSelectionEnd,
@@ -558,132 +462,5 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
         },
       );
     };
-  }
-}
-
-class _SelectionCellsView extends HookWidget {
-  const _SelectionCellsView({
-    super.key,
-    required this.viewportSelectionStart,
-    required this.viewportSelectionEnd,
-    required this.scaleFactor,
-    required this.selectedCells,
-    required this.onSelectionMove,
-  });
-
-  final Offset viewportSelectionStart;
-  final Offset viewportSelectionEnd;
-  final double scaleFactor;
-  final List<(GlobalKey, Cell)> selectedCells;
-  final void Function(List<Cell> cells) onSelectionMove;
-
-  @override
-  Widget build(BuildContext context) {
-    final showChat = useState(false);
-    final initialLocalPosition = useRef(Offset.zero);
-    final initialSelectedCells = useRef(<Cell>[]);
-
-    return Stack(
-      children: [
-        Positioned.fromRect(
-          rect: Rect.fromPoints(
-            viewportSelectionStart,
-            viewportSelectionEnd,
-          ),
-          child: PortalTarget(
-            anchor: Aligned(
-              follower: Alignment.bottomCenter,
-              target: Alignment.topCenter,
-            ),
-            portalFollower: Transform.scale(
-              scale: scaleFactor,
-              alignment: Alignment.bottomCenter,
-              child: StyledColumn(
-                style: Style(
-                  $flex.mainAxisSize.min(),
-                  $flex.gap.ref(SpaceVariant.small),
-                ),
-                children: [
-                  if (showChat.value)
-                    IntrinsicHeight(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: 600),
-                        child: DSTextbox(
-                          autofocus: true,
-                          style: Style(
-                            $box.margin.horizontal.ref(SpaceVariant.small),
-                          ),
-                          hintText: 'Ask a question',
-                          minLines: 1,
-                          maxLines: 10,
-                          trailing: Button(
-                            style: Style(
-                              $box.margin.horizontal.ref(SpaceVariant.small),
-                            ),
-                            onPressed: () {
-                              showChat.value = false;
-                            },
-                            child: Icon(IconlyLight.send),
-                          ),
-                        ),
-                      ),
-                    ),
-                  DSToolbar(
-                    style: Style(
-                      $box.margin.bottom.ref(SpaceVariant.small),
-                    ),
-                    direction: Axis.horizontal,
-                    children: [
-                      Button(
-                        onPressed: () => showChat.value = !showChat.value,
-                        child: Icon(IconlyLight.chat),
-                      ),
-                      Button(
-                        onPressed: () {},
-                        child: Icon(IconlyLight.delete),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            child: GestureDetector(
-              supportedDevices: {
-                ...PointerDeviceKind.values,
-              }..remove(PointerDeviceKind.trackpad),
-              onPanStart: (details) {
-                initialLocalPosition.value = details.globalPosition;
-                initialSelectedCells.value =
-                    selectedCells.map((e) => e.$2).toList();
-              },
-              onPanUpdate: (details) {
-                final delta =
-                    details.globalPosition - initialLocalPosition.value;
-                final newSelectedCells = initialSelectedCells.value.map((cell) {
-                  return cell.copyWith(
-                      offset: cell.offset + delta / scaleFactor);
-                }).toList();
-                onSelectionMove(newSelectedCells);
-              },
-              onPanEnd: (details) {
-                initialLocalPosition.value = Offset.zero;
-                initialSelectedCells.value = [];
-              },
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: ColorVariant.yellow.resolve(context).withOpacity(
-                      OpacityVariant.hightlight.resolve(context).value),
-                  border: Border.all(
-                    color: ColorVariant.yellow.resolve(context),
-                    width: 2 * scaleFactor,
-                  ),
-                ),
-                child: const SizedBox.expand(),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

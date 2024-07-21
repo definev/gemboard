@@ -41,66 +41,14 @@ class EdgeVisual extends CustomPainter {
   final Rect source;
   final Rect target;
 
-  Rect snappingRect(Rect rect, Rect sizeRect) {
-    if (rect.left < 0) {
-      rect = rect.translate(-rect.left, 0);
-    }
-    if (rect.top < 0) {
-      rect = rect.translate(0, -rect.top);
-    }
-    if (rect.right > sizeRect.width) {
-      rect = rect.translate(sizeRect.width - rect.right, 0);
-    }
-    if (rect.bottom > sizeRect.height) {
-      rect = rect.translate(0, sizeRect.height - rect.bottom);
-    }
-
-    final corners = [
-      rect.topLeft,
-      rect.topRight,
-      rect.bottomRight,
-      rect.bottomLeft,
-    ];
-    final sizeCorners = [
-      sizeRect.topLeft,
-      sizeRect.topRight,
-      sizeRect.bottomRight,
-      sizeRect.bottomLeft,
-    ];
-
-    double distance = double.infinity;
-    Offset diff = Offset.zero;
-    for (var index = 0; index < corners.length; index++) {
-      final corner = corners[index];
-      final sizeCorner = sizeCorners[index];
-      final newDiff = sizeCorner - corner;
-      final newDistance = newDiff.distanceSquared;
-      if (newDistance < distance) {
-        distance = newDistance;
-        diff = newDiff;
-      }
-    }
-
-    rect = rect.translate(diff.dx, diff.dy);
-
-    return rect;
-  }
-
   (Rect normalizedSource, Rect normalizedTarget) normalizeRects(Size size) {
     final topLeft = -Offset(
       min(source.left, target.left),
       min(source.top, target.top),
     );
-    final sizeRect = Offset.zero & size;
 
     var normalizedSource = source.translate(topLeft.dx, topLeft.dy);
     var normalizedTarget = target.translate(topLeft.dx, topLeft.dy);
-
-
-    (normalizedSource, normalizedTarget) = (
-      snappingRect(normalizedSource, sizeRect),
-      snappingRect(normalizedTarget, sizeRect),
-    );
 
     return (normalizedSource, normalizedTarget);
   }
@@ -114,9 +62,9 @@ class EdgeVisual extends CustomPainter {
         ..moveTo(normalizedSource.center.dx, normalizedSource.center.dy)
         ..lineTo(normalizedTarget.center.dx, normalizedTarget.center.dy),
       Paint() //
-        ..color = ColorVariant.red
+        ..color = ColorVariant.onSurface
             .resolve(context)
-            .withOpacity(OpacityVariant.blend.resolve(context).value)
+            .withOpacity(OpacityVariant.hightlight.resolve(context).value)
         ..strokeWidth = 10
         ..style = PaintingStyle.stroke,
     );
