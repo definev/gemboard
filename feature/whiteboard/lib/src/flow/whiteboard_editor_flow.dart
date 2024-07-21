@@ -315,34 +315,36 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
             alignment: Alignment.topCenter,
             child: Column(
               children: [
-                Box(
-                  style: Style(
-                    $box.color.ref(ColorVariant.surface),
-                    $box.shadow(
-                        blurRadius: 10,
-                        color: ColorVariant.onSurface
-                            .resolve(context)
-                            .withOpacity(OpacityVariant.hightlight
-                                .resolve(context)
-                                .value)),
-                    $box.padding.all.ref(SpaceVariant.small),
-                    $flex.mainAxisAlignment.center(),
-                  ),
-                  child: SafeArea(
-                    child: StyledRow(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: IntrinsicWidth(
-                              child: EmojiLabelEditor(
-                                readOnly: true,
-                                emoji: value.emoji,
-                                label: value.title,
+                WindowMover(
+                  child: Box(
+                    style: Style(
+                      $box.color.ref(ColorVariant.surface),
+                      $box.shadow(
+                          blurRadius: 10,
+                          color: ColorVariant.onSurface
+                              .resolve(context)
+                              .withOpacity(OpacityVariant.hightlight
+                                  .resolve(context)
+                                  .value)),
+                      $box.padding.all.ref(SpaceVariant.small),
+                      $flex.mainAxisAlignment.center(),
+                    ),
+                    child: SafeArea(
+                      child: StyledRow(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: IntrinsicWidth(
+                                child: EmojiLabelEditor(
+                                  readOnly: true,
+                                  emoji: value.emoji,
+                                  label: value.title,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

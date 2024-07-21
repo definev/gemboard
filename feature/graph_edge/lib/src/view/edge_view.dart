@@ -1,10 +1,9 @@
-import 'dart:ui' as ui;
+import 'dart:math';
 
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:graph_edge/src/domain/model/edge.dart';
-import 'package:touchable/touchable.dart';
 
 class EdgeView extends HookWidget {
   const EdgeView({
@@ -18,45 +17,13 @@ class EdgeView extends HookWidget {
   final Rect source;
   final Rect target;
 
-  (Rect normalizedSource, Rect normalizedTarget) normalizeRects() {
-    final topLeft = Offset(
-      source.left < target.left ? source.left : target.left,
-      source.top < target.top ? source.top : target.top,
-    );
-
-    final normalizedSource = Rect.fromPoints(
-      source.topLeft - topLeft,
-      source.bottomRight - topLeft,
-    );
-
-    final normalizedTarget = Rect.fromPoints(
-      target.topLeft - topLeft,
-      target.bottomRight - topLeft,
-    );
-
-    return (normalizedSource, normalizedTarget);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final (normalizedSource, normalizedTarget) = normalizeRects();
-
-    final hovered = useState(false);
-
-    return CanvasTouchDetector(
-      gesturesToOverride: [
-        GestureType.onTapDown,
-        GestureType.onPanUpdate,
-      ],
-      supportedDevices: {...ui.PointerDeviceKind.values}
-        ..remove(ui.PointerDeviceKind.trackpad),
-      builder: (context) => CustomPaint(
-        painter: EdgeVisual(
-          context: context,
-          source: normalizedSource,
-          target: normalizedTarget,
-          hovered: hovered,
-        ),
+    return CustomPaint(
+      painter: EdgeVisual(
+        context: context,
+        source: source,
+        target: target,
       ),
     );
   }
@@ -68,34 +35,95 @@ class EdgeVisual extends CustomPainter {
     required this.context,
     required this.source,
     required this.target,
-    required this.hovered,
   });
 
   final BuildContext context;
   final Rect source;
   final Rect target;
 
-  final ValueNotifier<bool> hovered;
+  Rect snappingRect(Rect rect, Rect sizeRect) {
+    if (rect.left < 0) {
+      rect = rect.translate(-rect.left, 0);
+    }
+    if (rect.top < 0) {
+      rect = rect.translate(0, -rect.top);
+    }
+    if (rect.right > sizeRect.width) {
+      rect = rect.translate(sizeRect.width - rect.right, 0);
+    }
+    if (rect.bottom > sizeRect.height) {
+      rect = rect.translate(0, sizeRect.height - rect.bottom);
+    }
+
+    final corners = [
+      rect.topLeft,
+      rect.topRight,
+      rect.bottomRight,
+      rect.bottomLeft,
+    ];
+    final sizeCorners = [
+      sizeRect.topLeft,
+      sizeRect.topRight,
+      sizeRect.bottomRight,
+      sizeRect.bottomLeft,
+    ];
+
+    double distance = double.infinity;
+    Offset diff = Offset.zero;
+    for (var index = 0; index < corners.length; index++) {
+      final corner = corners[index];
+      final sizeCorner = sizeCorners[index];
+      final newDiff = sizeCorner - corner;
+      final newDistance = newDiff.distanceSquared;
+      if (newDistance < distance) {
+        distance = newDistance;
+        diff = newDiff;
+      }
+    }
+
+    rect = rect.translate(diff.dx, diff.dy);
+
+    return rect;
+  }
+
+  (Rect normalizedSource, Rect normalizedTarget) normalizeRects(Size size) {
+    final topLeft = -Offset(
+      min(source.left, target.left),
+      min(source.top, target.top),
+    );
+    final sizeRect = Offset.zero & size;
+
+    var normalizedSource = source.translate(topLeft.dx, topLeft.dy);
+    var normalizedTarget = target.translate(topLeft.dx, topLeft.dy);
+
+
+    (normalizedSource, normalizedTarget) = (
+      snappingRect(normalizedSource, sizeRect),
+      snappingRect(normalizedTarget, sizeRect),
+    );
+
+    return (normalizedSource, normalizedTarget);
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    final touchyCanvas = TouchyCanvas(context, canvas);
-    touchyCanvas.drawPath(
+    final (normalizedSource, normalizedTarget) = normalizeRects(size);
+
+    canvas.drawPath(
       Path()
-        ..moveTo(source.center.dx, source.center.dy)
-        ..lineTo(target.center.dx, target.center.dy),
+        ..moveTo(normalizedSource.center.dx, normalizedSource.center.dy)
+        ..lineTo(normalizedTarget.center.dx, normalizedTarget.center.dy),
       Paint() //
-        ..color = (hovered.value ? ColorVariant.onBackground : ColorVariant.red)
+        ..color = ColorVariant.red
             .resolve(context)
             .withOpacity(OpacityVariant.blend.resolve(context).value)
         ..strokeWidth = 10
         ..style = PaintingStyle.stroke,
-      onTapDown: (_) => hovered.value = !hovered.value,
     );
   }
 
   @override
   bool shouldRepaint(covariant EdgeVisual oldDelegate) {
-    return oldDelegate.hovered.value != hovered.value;
+    return false;
   }
 }

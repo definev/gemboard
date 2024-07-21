@@ -92,6 +92,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     // Cleanup
     for (final (_, cell) in previousCells.values) {
       cellKeys.remove(cell.id.id);
+      stackPositionDataMap.remove(cell.id.id);
     }
   };
 
@@ -224,6 +225,10 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     final edgeRect = Rect.fromPoints(edgeTopLeft, edgeBottomRight);
 
     return (sourceCellRect, targetCellRect, edgeRect);
+  }
+
+  void onEdgeUpdated() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -379,13 +384,27 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     ),
                   ),
                   builder: (context, notifier, child) {
-                    final oldNotifier = stackPositionDataMap[cell.id.id];
-                    if (oldNotifier == null) {
-                      stackPositionDataMap[cell.id.id] = notifier;
-                    } else if (oldNotifier != notifier) {
-                      stackPositionDataMap[cell.id.id] = notifier;
-                    }
-                    return CellView(cell: cell);
+                    return HookBuilder(
+                      builder: (context) {
+                        useEffect(() {
+                          final oldNotifier = stackPositionDataMap[cell.id.id];
+                          final newNotifier = notifier;
+
+                          if (oldNotifier == newNotifier)
+                            return () {
+                              print('Removing listener for cell ${cell.id.id}');
+                              stackPositionDataMap.remove(cell.id.id);
+                            };
+
+                          if (oldNotifier == null || oldNotifier != notifier) {
+                            stackPositionDataMap[cell.id.id] = newNotifier;
+                          }
+                          return () {};
+                        }, [notifier]);
+
+                        return CellView(cell: cell);
+                      },
+                    );
                   },
                 ),
               );
@@ -403,68 +422,12 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     layer: edge.layer,
 
                     /// Compute offset and size for edge based on source and target cell
-                    offset: Offset(0, 0),
+                    offset: Offset.zero,
                     height: 0,
                     width: 0,
-
-                    /// Compute offset and size for edge based on source and target cell
                   ),
                   builder: (context, notifier, child) {
-                    return HookBuilder(
-                      builder: (context) {
-                        final sourceStackPositionData =
-                            stackPositionDataMap[edge.source];
-                        final targetStackPositionData =
-                            stackPositionDataMap[edge.target];
-                        final sourceCellRect = useState(Rect.zero);
-                        final targetCellRect = useState(Rect.zero);
-
-                        final updateEdge = useCallback(() {
-                          final source = cellKeys[edge.source];
-                          final target = cellKeys[edge.target];
-                          if (source == null || target == null) {
-                            return;
-                          }
-                          final (
-                            newSourceCellRect,
-                            newTargetCellRect,
-                            edgeRect
-                          ) = computeEdgeBounds(source, target);
-                          notifier.value = StackPositionData(
-                            layer: edge.layer,
-                            offset: edgeRect.topLeft,
-                            height: edgeRect.height,
-                            width: edgeRect.width,
-                          );
-
-                          sourceCellRect.value = newSourceCellRect;
-                          targetCellRect.value = newTargetCellRect;
-                        });
-                        useEffect(() {
-                          sourceStackPositionData?.addListener(updateEdge);
-                          targetStackPositionData?.addListener(updateEdge);
-                          return () {
-                            sourceStackPositionData?.removeListener(updateEdge);
-                            targetStackPositionData?.removeListener(updateEdge);
-                          };
-                        }, [
-                          Listenable.merge([
-                            sourceStackPositionData,
-                            targetStackPositionData,
-                          ])
-                        ]);
-                        useEffect(() {
-                          updateEdge();
-                          return null;
-                        }, []);
-
-                        return EdgeView(
-                          data: edge,
-                          source: sourceCellRect.value,
-                          target: targetCellRect.value,
-                        );
-                      },
-                    );
+                    return _buildEdge(notifier, edge);
                   },
                 ),
               );
@@ -496,6 +459,65 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
+  Widget _buildEdge(ValueNotifier<StackPositionData> notifier, Edge edge) {
+    return HookBuilder(
+      builder: (context) {
+        final sourceCellRect = useState(Rect.zero);
+        final targetCellRect = useState(Rect.zero);
+
+        final sourceStackPositionDataNotifier =
+            stackPositionDataMap[edge.source];
+        final targetStackPositionDataNotifier =
+            stackPositionDataMap[edge.target];
+        final listenableNotifier = useMemoized(
+          () => Listenable.merge([
+            sourceStackPositionDataNotifier,
+            targetStackPositionDataNotifier,
+          ]),
+          [
+            sourceStackPositionDataNotifier,
+            targetStackPositionDataNotifier,
+          ],
+        );
+
+        VoidCallback updateEdgePosition = () {};
+        updateEdgePosition = useCallback(() {
+          final (newSourceCellRect, newTargetCellRect, edgeRect) =
+              computeEdgeBounds(cellKeys[edge.source]!, cellKeys[edge.target]!);
+
+          if (!context.mounted) {
+            sourceStackPositionDataNotifier?.removeListener(updateEdgePosition);
+            targetStackPositionDataNotifier?.removeListener(updateEdgePosition);
+            return;
+          }
+
+          sourceCellRect.value = newSourceCellRect;
+          targetCellRect.value = newTargetCellRect;
+
+          notifier.value = StackPositionData(
+            id: edge.id.id,
+            layer: edge.layer,
+            offset: edgeRect.topLeft,
+            height: edgeRect.height,
+            width: edgeRect.width,
+          );
+        }, []);
+
+        useEffect(() {
+          updateEdgePosition();
+          listenableNotifier.addListener(updateEdgePosition);
+          return () => listenableNotifier.removeListener(updateEdgePosition);
+        }, [listenableNotifier]);
+
+        return EdgeView(
+          data: edge,
+          source: sourceCellRect.value,
+          target: targetCellRect.value,
+        );
+      },
+    );
+  }
+
   TwoDimensionalViewportBuilder buildSuggectionForSelection(
     Offset selectionStart,
     Offset selectionEnd,
@@ -520,111 +542,148 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
               scaleFactor;
 
-      return HookBuilder(
-        builder: (context) {
-          final showChat = useState(false);
-
-          return Stack(
-            children: [
-              Positioned.fromRect(
-                rect: Rect.fromPoints(
-                  viewportSelectionStart,
-                  viewportSelectionEnd,
-                ),
-                child: PortalTarget(
-                  anchor: Aligned(
-                    follower: Alignment.bottomCenter,
-                    target: Alignment.topCenter,
-                  ),
-                  portalFollower: Transform.scale(
-                    scale: scaleFactor,
-                    alignment: Alignment.bottomCenter,
-                    child: StyledColumn(
-                      style: Style(
-                        $flex.mainAxisSize.min(),
-                        $flex.gap.ref(SpaceVariant.small),
-                      ),
-                      children: [
-                        if (showChat.value)
-                          IntrinsicHeight(
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(maxWidth: 600),
-                              child: DSTextbox(
-                                autofocus: true,
-                                style: Style(
-                                  $box.margin.horizontal
-                                      .ref(SpaceVariant.small),
-                                ),
-                                hintText: 'Ask a question',
-                                minLines: 1,
-                                maxLines: 10,
-                                trailing: Button(
-                                  style: Style(
-                                    $box.margin.horizontal
-                                        .ref(SpaceVariant.small),
-                                  ),
-                                  onPressed: () {
-                                    showChat.value = false;
-                                  },
-                                  child: Icon(IconlyLight.send),
-                                ),
-                              ),
-                            ),
-                          ),
-                        DSToolbar(
-                          style: Style(
-                            $box.margin.bottom.ref(SpaceVariant.small),
-                          ),
-                          direction: Axis.horizontal,
-                          children: [
-                            Button(
-                              onPressed: () => showChat.value = !showChat.value,
-                              child: Icon(IconlyLight.chat),
-                            ),
-                            Button(
-                              onPressed: () {},
-                              child: Icon(IconlyLight.delete),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  child: GestureDetector(
-                    supportedDevices: {
-                      ...PointerDeviceKind.values,
-                    }..remove(PointerDeviceKind.trackpad),
-                    onPanUpdate: (details) {
-                      widget.onCellsUpdated(
-                        selectedCells.map((e) {
-                          final cell = e.$2;
-                          final newCell = cell.copyWith(
-                            offset: cell.offset + details.delta / scaleFactor,
-                          );
-                          cellKeys[cell.id.id] = (e.$1, newCell);
-                          return newCell;
-                        }).toList(),
-                      );
-                    },
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: ColorVariant.yellow.resolve(context).withOpacity(
-                              OpacityVariant.hightlight.resolve(context).value,
-                            ),
-                        border: Border.all(
-                          color: ColorVariant.yellow.resolve(context),
-                          width: 2 * scaleFactor,
-                        ),
-                      ),
-                      child: const SizedBox.expand(),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
+      return _SelectionCellsView(
+        selectedCells: selectedCells,
+        viewportSelectionStart: viewportSelectionStart,
+        viewportSelectionEnd: viewportSelectionEnd,
+        scaleFactor: scaleFactor,
+        onSelectionMove: (newCells) {
+          for (final newCell in newCells) {
+            final (key, cell) = cellKeys[newCell.id.id]!;
+            final updatedCell = cell.copyWith(offset: newCell.offset);
+            cellKeys[newCell.id.id] = (key, updatedCell);
+          }
+          setState(() {});
+          widget.onCellsUpdated(newCells);
         },
       );
     };
+  }
+}
+
+class _SelectionCellsView extends HookWidget {
+  const _SelectionCellsView({
+    super.key,
+    required this.viewportSelectionStart,
+    required this.viewportSelectionEnd,
+    required this.scaleFactor,
+    required this.selectedCells,
+    required this.onSelectionMove,
+  });
+
+  final Offset viewportSelectionStart;
+  final Offset viewportSelectionEnd;
+  final double scaleFactor;
+  final List<(GlobalKey, Cell)> selectedCells;
+  final void Function(List<Cell> cells) onSelectionMove;
+
+  @override
+  Widget build(BuildContext context) {
+    final showChat = useState(false);
+    final initialLocalPosition = useRef(Offset.zero);
+    final initialSelectedCells = useRef(<Cell>[]);
+
+    return Stack(
+      children: [
+        Positioned.fromRect(
+          rect: Rect.fromPoints(
+            viewportSelectionStart,
+            viewportSelectionEnd,
+          ),
+          child: PortalTarget(
+            anchor: Aligned(
+              follower: Alignment.bottomCenter,
+              target: Alignment.topCenter,
+            ),
+            portalFollower: Transform.scale(
+              scale: scaleFactor,
+              alignment: Alignment.bottomCenter,
+              child: StyledColumn(
+                style: Style(
+                  $flex.mainAxisSize.min(),
+                  $flex.gap.ref(SpaceVariant.small),
+                ),
+                children: [
+                  if (showChat.value)
+                    IntrinsicHeight(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(maxWidth: 600),
+                        child: DSTextbox(
+                          autofocus: true,
+                          style: Style(
+                            $box.margin.horizontal.ref(SpaceVariant.small),
+                          ),
+                          hintText: 'Ask a question',
+                          minLines: 1,
+                          maxLines: 10,
+                          trailing: Button(
+                            style: Style(
+                              $box.margin.horizontal.ref(SpaceVariant.small),
+                            ),
+                            onPressed: () {
+                              showChat.value = false;
+                            },
+                            child: Icon(IconlyLight.send),
+                          ),
+                        ),
+                      ),
+                    ),
+                  DSToolbar(
+                    style: Style(
+                      $box.margin.bottom.ref(SpaceVariant.small),
+                    ),
+                    direction: Axis.horizontal,
+                    children: [
+                      Button(
+                        onPressed: () => showChat.value = !showChat.value,
+                        child: Icon(IconlyLight.chat),
+                      ),
+                      Button(
+                        onPressed: () {},
+                        child: Icon(IconlyLight.delete),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            child: GestureDetector(
+              supportedDevices: {
+                ...PointerDeviceKind.values,
+              }..remove(PointerDeviceKind.trackpad),
+              onPanStart: (details) {
+                initialLocalPosition.value = details.globalPosition;
+                initialSelectedCells.value =
+                    selectedCells.map((e) => e.$2).toList();
+              },
+              onPanUpdate: (details) {
+                final delta =
+                    details.globalPosition - initialLocalPosition.value;
+                final newSelectedCells = initialSelectedCells.value.map((cell) {
+                  return cell.copyWith(
+                      offset: cell.offset + delta / scaleFactor);
+                }).toList();
+                onSelectionMove(newSelectedCells);
+              },
+              onPanEnd: (details) {
+                initialLocalPosition.value = Offset.zero;
+                initialSelectedCells.value = [];
+              },
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: ColorVariant.yellow.resolve(context).withOpacity(
+                      OpacityVariant.hightlight.resolve(context).value),
+                  border: Border.all(
+                    color: ColorVariant.yellow.resolve(context),
+                    width: 2 * scaleFactor,
+                  ),
+                ),
+                child: const SizedBox.expand(),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
