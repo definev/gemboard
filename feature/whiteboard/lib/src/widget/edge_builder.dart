@@ -187,13 +187,10 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
   Widget build(BuildContext context) {
     onStackPositionValueNotifierUpdated();
 
-    return ColoredBox(
-      color: Colors.yellow.withOpacity(0.1),
-      child: EdgeView(
-        data: widget.edge,
-        source: sourceCellRect,
-        target: targetCellRect,
-      ),
+    return EdgeView(
+      data: widget.edge,
+      source: sourceCellRect,
+      target: targetCellRect,
     );
   }
 }

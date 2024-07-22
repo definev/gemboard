@@ -171,30 +171,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
         );
 
-        cell.mapOrNull(
-          text: (value) {
-            Stream<String> stream = () async* {
-              for (var index = 0; index < 200; index += 1) {
-                yield ' $index ';
-                await Future.delayed(Duration(milliseconds: 100));
-              }
-            }();
-            stream.listen((value) {
-              if (cellKeys[cell.id.id] == null) return;
-              var (latestKey, latestCell) = cellKeys[cell.id.id]!;
-              latestCell = latestCell.maybeMap(
-                orElse: () => latestCell,
-                text: (cell) => cell.copyWith(text: cell.text + value),
-              );
-
-              cellKeys[cell.id.id] = (latestKey, latestCell);
-              setState(() {});
-              widget.onCellUpdated(cell, latestCell);
-              cell = latestCell;
-            });
-          },
-        );
-
         // Mocking the edge
         if (cellKeys.length >= 1) {
           final randomCell =
@@ -346,7 +322,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   math.min(selectionStart.dy, cell.offset.dy),
                 );
                 selectionEnd = Offset(
-                  math.max(selectionEnd.dx, cell.offset.dx + cell.width),
+                  math.max(
+                    selectionEnd.dx,
+                    cell.offset.dx + cell.width,
+                  ),
                   math.max(
                     selectionEnd.dy,
                     cell.offset.dy +
@@ -374,7 +353,9 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                         null => null,
                         _ => newValue.height,
                       },
-                      preferredHeight: newValue.height ?? cell.preferredHeight,
+                      preferredHeight: newValue.height ??
+                          newValue.preferredHeight ??
+                          cell.preferredHeight,
                       width: newValue.width ?? cell.width,
                     );
                     cellKeys[newValue.id] = (key, newCell);

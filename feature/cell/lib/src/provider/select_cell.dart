@@ -14,7 +14,10 @@ Future<void> selectCell(
 
   for (final cell in cellList) {
     final cellRect = cell.offset &
-        Size(cell.width, cell.height ?? cell.preferredHeight ?? 100);
+        Size(
+          cell.width,
+          cell.height ?? cell.preferredHeight ?? 100,
+        );
     final selected = selection.overlaps(cellRect);
     await ref.read(
       updateCellProvider(

@@ -108,7 +108,7 @@ class SelectionCellsView extends HookWidget {
               },
               onPanUpdate: (details) {
                 final delta =
-                    details.globalPosition - initialLocalPosition.value;
+                    (details.globalPosition - initialLocalPosition.value) / scaleFactor;
                 final newSelectedCells = {
                   for (var i = 0; i < selectedCellIds.length; i++)
                     selectedCellIds[i]:

@@ -109,7 +109,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     offset: localPosition,
                     width: 200,
                     decoration: CellDecoration(color: 'red'),
-                    text: 'Dm Tri Perci',
+                    text: '',
                   ).toJson(),
                 );
               },
@@ -151,7 +151,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     offset: localPosition,
                     width: 200,
                     decoration: CellDecoration(color: 'red'),
-                    text: 'Dm Tri Perci',
+                    text: '',
                   ).toJson(),
                 );
               },
