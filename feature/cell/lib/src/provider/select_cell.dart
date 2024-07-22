@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:cell/cell.dart';
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'select_cell.g.dart';
@@ -14,7 +13,8 @@ Future<void> selectCell(
   var cellList = await ref.read(getCellListProvider(parentId: parentId).future);
 
   for (final cell in cellList) {
-    final cellRect = cell.offset & Size(cell.width, cell.height ?? 100);
+    final cellRect = cell.offset &
+        Size(cell.width, cell.height ?? cell.preferredHeight ?? 100);
     final selected = selection.overlaps(cellRect);
     await ref.read(
       updateCellProvider(

@@ -73,6 +73,9 @@ class Cell with _$Cell, HasId<CellId> {
     CellId id,
     @Default(100) double width,
     double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
     @Default(CellDecoration(color: ''))
     @CellDecorationConverter()
     CellDecoration decoration,
@@ -85,6 +88,9 @@ class Cell with _$Cell, HasId<CellId> {
     @CellIdConverter() required CellId id,
     required double width,
     double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
     required String text,
@@ -96,6 +102,9 @@ class Cell with _$Cell, HasId<CellId> {
     @CellIdConverter() required CellId id,
     required double width,
     double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
     String? url,
@@ -108,6 +117,9 @@ class Cell with _$Cell, HasId<CellId> {
     @CellIdConverter() required CellId id,
     required double width,
     double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
     required String title,
@@ -121,6 +133,9 @@ class Cell with _$Cell, HasId<CellId> {
     @CellIdConverter() required CellId id,
     required double width,
     double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
     required String url,

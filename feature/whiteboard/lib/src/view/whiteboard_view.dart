@@ -48,10 +48,10 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final bool enableMoveByTouch;
 
   @override
-  ConsumerState<WhiteboardView> createState() => _WhiteboardViewState();
+  ConsumerState<WhiteboardView> createState() => WhiteboardViewState();
 }
 
-class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
+class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   late ValueNotifier<double> scaleFactor;
 
   late ScrollableDetails verticalDetails;
@@ -169,6 +169,30 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
           offset: _offsetToViewport(
             position - cell.offset,
           ),
+        );
+
+        cell.mapOrNull(
+          text: (value) {
+            Stream<String> stream = () async* {
+              for (var index = 0; index < 200; index += 1) {
+                yield ' $index ';
+                await Future.delayed(Duration(milliseconds: 100));
+              }
+            }();
+            stream.listen((value) {
+              if (cellKeys[cell.id.id] == null) return;
+              var (latestKey, latestCell) = cellKeys[cell.id.id]!;
+              latestCell = latestCell.maybeMap(
+                orElse: () => latestCell,
+                text: (cell) => cell.copyWith(text: cell.text + value),
+              );
+
+              cellKeys[cell.id.id] = (latestKey, latestCell);
+              setState(() {});
+              widget.onCellUpdated(cell, latestCell);
+              cell = latestCell;
+            });
+          },
         );
 
         // Mocking the edge
@@ -304,11 +328,11 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
             Queue<StackPosition> stackPositions = Queue.from([]);
             Offset? selectionStart;
             Offset? selectionEnd;
-            List<(GlobalKey, Cell)> selectedCells = [];
+            List<String> selectedCells = [];
 
             for (final (key, cell) in cellKeys.values) {
               if (cell.selected) {
-                selectedCells.add((key, cell));
+                selectedCells.add(cell.id.id);
 
                 if (selectionStart == null) {
                   selectionStart = cell.offset;
@@ -324,7 +348,10 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                 selectionEnd = Offset(
                   math.max(selectionEnd.dx, cell.offset.dx + cell.width),
                   math.max(
-                      selectionEnd.dy, cell.offset.dy + (cell.height ?? 100)),
+                    selectionEnd.dy,
+                    cell.offset.dy +
+                        (cell.height ?? cell.preferredHeight ?? 100),
+                  ),
                 );
               }
               stackPositions.addLast(
@@ -335,6 +362,7 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     id: cell.id.id,
                     layer: cell.layer,
                     height: cell.height,
+                    preferredHeight: cell.preferredHeight,
                     width: cell.width,
                     offset: cell.offset,
                     keepAlive: cell.selected,
@@ -342,7 +370,11 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   onDataUpdated: (newValue) {
                     final newCell = cell.copyWith(
                       offset: newValue.offset,
-                      height: newValue.height,
+                      height: switch (cell.height) {
+                        null => null,
+                        _ => newValue.height,
+                      },
+                      preferredHeight: newValue.height ?? cell.preferredHeight,
                       width: newValue.width ?? cell.width,
                     );
                     cellKeys[newValue.id] = (key, newCell);
@@ -351,13 +383,29 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   },
                   moveable: StackMove(),
                   resizable: StackResize(
+                    width: cell.width,
+                    // Cell have fiex width so same as width
+                    preferredWidth: cell.width,
                     height: cell.height,
+                    preferredHeight: cell.preferredHeight,
                     thumb: DSThumb(
                       color: CellDecorationExtension(cell.decoration)
                           .colorValue(context),
                     ),
+                    onSizeChanged: (newSize) {
+                      final (_, latestCell) = cellKeys[cell.id.id]!;
+                      final newCell = latestCell.copyWith(
+                        height: newSize.height,
+                        preferredHeight: newSize.height,
+                        width: newSize.width,
+                      );
+                      cellKeys[cell.id.id] = (key, newCell);
+                      setState(() {});
+                      widget.onCellUpdated(cell, newCell);
+                    },
                   ),
                   builder: (context, notifier, child) => CellBuilder(
+                    key: ValueKey('CellBuilder | ${cell.id.id}'),
                     notifier: notifier,
                     stackPositionDataMap: stackPositionDataMap,
                     cell: cell,
@@ -405,10 +453,10 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
               foregroundBuilder: switch (selectedCells.isEmpty) {
                 true => null,
                 false => buildSuggectionForSelection(
-                    selectionStart!,
-                    selectionEnd!,
-                    selectedCells,
-                    scaleFactor,
+                    selectionStart: selectionStart!,
+                    selectionEnd: selectionEnd!,
+                    selectedCells: selectedCells,
+                    scaleFactor: scaleFactor,
                   ),
               },
               delegate: BoundlessStackListDelegate(
@@ -422,12 +470,12 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  TwoDimensionalViewportBuilder buildSuggectionForSelection(
-    Offset selectionStart,
-    Offset selectionEnd,
-    List<(GlobalKey<State<StatefulWidget>>, Cell)> selectedCells,
-    double scaleFactor,
-  ) {
+  TwoDimensionalViewportBuilder buildSuggectionForSelection({
+    required Offset selectionStart,
+    required Offset selectionEnd,
+    required List<String> selectedCells,
+    required double scaleFactor,
+  }) {
     return (context, verticalPosition, horizontalPosition) {
       final topLeft = Offset(
         horizontalDetails.controller!.offset,
@@ -447,17 +495,21 @@ class _WhiteboardViewState extends ConsumerState<WhiteboardView> {
               scaleFactor;
 
       return SelectionCellsView(
-        selectedCells: selectedCells,
+        selectedCellIds: selectedCells,
+        cellMaps: cellKeys,
         viewportSelectionStart: viewportSelectionStart,
         viewportSelectionEnd: viewportSelectionEnd,
         scaleFactor: scaleFactor,
-        onSelectionMove: (newCells) {
-          for (final newCell in newCells) {
-            final (key, cell) = cellKeys[newCell.id.id]!;
-            final updatedCell = cell.copyWith(offset: newCell.offset);
-            cellKeys[newCell.id.id] = (key, updatedCell);
+        onSelectionMove: (newCellOffsets) {
+          List<Cell> newCells = [];
+          for (final MapEntry(key: id, value: newOffset)
+              in newCellOffsets.entries) {
+            final (key, cell) = cellKeys[id]!;
+            final newCell = cell.copyWith(offset: newOffset);
+            newCells.add(newCell);
+            cellKeys[id] = (key, newCell);
+            setState(() {});
           }
-          setState(() {});
           widget.onCellsUpdated(newCells);
         },
       );

@@ -13,21 +13,23 @@ class SelectionCellsView extends HookWidget {
     required this.viewportSelectionStart,
     required this.viewportSelectionEnd,
     required this.scaleFactor,
-    required this.selectedCells,
+    required this.selectedCellIds,
+    required this.cellMaps,
     required this.onSelectionMove,
   });
 
   final Offset viewportSelectionStart;
   final Offset viewportSelectionEnd;
   final double scaleFactor;
-  final List<(GlobalKey, Cell)> selectedCells;
-  final void Function(List<Cell> cells) onSelectionMove;
+  final List<String> selectedCellIds;
+  final Map<String, (GlobalKey, Cell)> cellMaps;
+  final void Function(Map<String, Offset> newOffsets) onSelectionMove;
 
   @override
   Widget build(BuildContext context) {
     final showChat = useState(false);
     final initialLocalPosition = useRef(Offset.zero);
-    final initialSelectedCells = useRef(<Cell>[]);
+    final initialSelectedCells = useRef(<String, Offset>{});
 
     return Stack(
       children: [
@@ -99,24 +101,24 @@ class SelectionCellsView extends HookWidget {
               }..remove(PointerDeviceKind.trackpad),
               onPanStart: (details) {
                 initialLocalPosition.value = details.globalPosition;
-                initialSelectedCells.value =
-                    selectedCells.map((e) => e.$2).toList();
+                initialSelectedCells.value = {
+                  for (var i = 0; i < selectedCellIds.length; i++)
+                    selectedCellIds[i]: cellMaps[selectedCellIds[i]]!.$2.offset,
+                };
               },
               onPanUpdate: (details) {
                 final delta =
                     details.globalPosition - initialLocalPosition.value;
-                final newSelectedCells = initialSelectedCells.value
-                    .map(
-                      (cell) => cell.copyWith(
-                        offset: cell.offset + delta / scaleFactor,
-                      ),
-                    )
-                    .toList();
+                final newSelectedCells = {
+                  for (var i = 0; i < selectedCellIds.length; i++)
+                    selectedCellIds[i]:
+                        initialSelectedCells.value[selectedCellIds[i]]! + delta,
+                };
                 onSelectionMove(newSelectedCells);
               },
               onPanEnd: (details) {
                 initialLocalPosition.value = Offset.zero;
-                initialSelectedCells.value = [];
+                initialSelectedCells.value = {};
               },
               child: DecoratedBox(
                 decoration: BoxDecoration(

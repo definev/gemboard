@@ -50,16 +50,16 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
   (GlobalKey, Cell) get target => widget.cellKeys[widget.edge.target]!;
 
   static Rect _computeCellBound((GlobalKey, Cell) value) {
-    final (sourceKey, sourceCell) = value;
+    final (_, sourceCell) = value;
 
-    final sourceCellRect = Rect.fromLTWH(
+    final cellRect = Rect.fromLTWH(
       sourceCell.offset.dx,
       sourceCell.offset.dy,
       sourceCell.width,
-      sourceCell.height ?? 100,
+      sourceCell.height ?? sourceCell.preferredHeight ?? 100,
     );
 
-    return sourceCellRect;
+    return cellRect;
   }
 
   static Rect _computeEdgeRect(Rect newSourceCellRect, Rect newTargetCellRect) {
@@ -94,8 +94,11 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
       final position => Rect.fromLTWH(
           position.offset.dx,
           position.offset.dy,
-          position.width ?? 100,
-          position.height ?? 100,
+          position.width ?? source.$2.width,
+          position.height ??
+              source.$2.height ??
+              source.$2.preferredHeight ??
+              100,
         ),
     };
     Rect newTargetCellRect = switch (targetPosition) {
@@ -103,8 +106,11 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
       final position => Rect.fromLTWH(
           position.offset.dx,
           position.offset.dy,
-          position.width ?? 100,
-          position.height ?? 100,
+          position.width ?? target.$2.width,
+          position.height ??
+              target.$2.height ??
+              target.$2.preferredHeight ??
+              100,
         ),
     };
 
@@ -181,10 +187,13 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
   Widget build(BuildContext context) {
     onStackPositionValueNotifierUpdated();
 
-    return EdgeView(
-      data: widget.edge,
-      source: sourceCellRect,
-      target: targetCellRect,
+    return ColoredBox(
+      color: Colors.yellow.withOpacity(0.1),
+      child: EdgeView(
+        data: widget.edge,
+        source: sourceCellRect,
+        target: targetCellRect,
+      ),
     );
   }
 }

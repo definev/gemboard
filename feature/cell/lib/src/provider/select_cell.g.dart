@@ -6,7 +6,7 @@ part of 'select_cell.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$selectCellHash() => r'1f24dbbc3164cfe4d611c705c904e221b9110b1d';
+String _$selectCellHash() => r'85297a778e34db552604712e581b1cf6ddd531f1';
 
 /// Copied from Dart SDK
 class _SystemHash {

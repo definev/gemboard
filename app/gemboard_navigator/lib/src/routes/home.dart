@@ -5,7 +5,7 @@ class HomeShell extends ShellRouteData {
 
   static final $parentNavigatorKey = _RootShell.$navigatorKey;
   static final $navigatorKey = GlobalKey<NavigatorState>();
-  static final resizableController = ResizableController();
+  static final resizableController = ResizableController(shown: false);
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget navigator) {

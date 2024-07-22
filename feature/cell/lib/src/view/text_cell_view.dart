@@ -24,12 +24,18 @@ class TextCellView extends StatelessWidget {
       ),
     );
 
-    if (cell.height == null) {
-      child = child;
-    } else {
+    if (cell.height != null) {
       child = SizedBox(
         height: cell.height,
+        width: cell.width,
         child: child,
+      );
+    } else {
+      child = IntrinsicHeight(
+        child: SizedBox(
+          width: cell.width,
+          child: child,
+        ),
       );
     }
 

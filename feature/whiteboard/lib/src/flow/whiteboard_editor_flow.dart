@@ -109,7 +109,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     offset: localPosition,
                     width: 200,
                     decoration: CellDecoration(color: 'red'),
-                    text: 'Hello World',
+                    text: 'Dm Tri Perci',
                   ).toJson(),
                 );
               },
@@ -151,7 +151,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     offset: localPosition,
                     width: 200,
                     decoration: CellDecoration(color: 'red'),
-                    text: 'Hello World',
+                    text: 'Dm Tri Perci',
                   ).toJson(),
                 );
               },
@@ -241,6 +241,8 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
       ),
     );
     final scaleFactor = useState(0.5);
+    final whiteboardKey = useMemoized(() =>
+        GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
 
     return switch (whiteboard) {
       AsyncLoading() => const Center(
@@ -273,13 +275,9 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                 ).future,
               );
             },
-            whiteboardBuilder: (
-              enableMoveByMouse,
-              enableMoveByTouch,
-              onGrab,
-            ) =>
+            whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
                 WhiteboardView(
-              key: ValueKey('whiteboard ${id.id}'),
+              key: whiteboardKey,
               scaleFactor: scaleFactor,
               enableMoveByMouse: cursorMode.value == CursorMode.handTool,
               enableMoveByTouch: cursorMode.value == CursorMode.handTool,
