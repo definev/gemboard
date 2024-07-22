@@ -3,6 +3,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gemboard_common/gemboard_common.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
@@ -249,64 +250,66 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
           child: CircularProgressIndicator(),
         ),
       AsyncData(:final value) => () {
-          var whiteboardBuilder = WhiteboardCursorTool(
-            cursorMode: cursorMode,
-            horizontalDetails: horizontalDetails,
-            verticalDetails: verticalDetails,
-            onSelectionStart: () => ref.read(
-              deselectCellProvider(
-                parentId: CellParentId(whiteboardId: id.id),
-              ).future,
-            ),
-            onSelection: (rect) async {
-              final viewportTopLeft = Offset(
-                horizontalDetails.controller!.offset,
-                verticalDetails.controller!.offset,
-              );
-              final viewportRect = Rect.fromPoints(
-                (rect.topLeft + viewportTopLeft) / scaleFactor.value,
-                (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
-              );
-
-              await ref.read(
-                selectCellProvider(
-                  parentId: CellParentId(whiteboardId: id.id),
-                  selection: viewportRect,
-                ).future,
-              );
-            },
-            whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
-                WhiteboardView(
-              key: whiteboardKey,
-              scaleFactor: scaleFactor,
-              enableMoveByMouse: cursorMode.value == CursorMode.handTool,
-              enableMoveByTouch: cursorMode.value == CursorMode.handTool,
-              verticalDetails: verticalDetails,
+          var whiteboardBuilder = Portal(
+            child: WhiteboardCursorTool(
+              cursorMode: cursorMode,
               horizontalDetails: horizontalDetails,
-              onScaleStart: () => onGrab.value = true,
-              onScaleEnd: () => onGrab.value = false,
-              data: value,
-              cellsStreamProvider: getCellListProvider(
-                parentId: CellParentId(whiteboardId: id.id),
-              ),
-              onCellCreated: (value) => ref.read(
-                createCellProvider(
+              verticalDetails: verticalDetails,
+              onSelectionStart: () => ref.read(
+                deselectCellProvider(
                   parentId: CellParentId(whiteboardId: id.id),
-                  data: value,
                 ).future,
               ),
-              onCellUpdated: (oldValue, newValue) => ref.read(
-                updateCellProvider(
-                  id: newValue.id,
-                  data: newValue,
-                ).future,
-              ),
-              onCellsUpdated: (cells) => ref.read(
-                updateCellsProvider(
-                  parentId: CellParentId(whiteboardId: id.id),
-                  cells: cells,
-                ).future,
-              ),
+              onSelection: (rect) async {
+                final viewportTopLeft = Offset(
+                  horizontalDetails.controller!.offset,
+                  verticalDetails.controller!.offset,
+                );
+                final viewportRect = Rect.fromPoints(
+                  (rect.topLeft + viewportTopLeft) / scaleFactor.value,
+                  (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
+                );
+            
+                await ref.read(
+                  selectCellProvider(
+                    parentId: CellParentId(whiteboardId: id.id),
+                    selection: viewportRect,
+                  ).future,
+                );
+              },
+              whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
+                  WhiteboardView(
+                    key: whiteboardKey,
+                    scaleFactor: scaleFactor,
+                    enableMoveByMouse: cursorMode.value == CursorMode.handTool,
+                    enableMoveByTouch: cursorMode.value == CursorMode.handTool,
+                    verticalDetails: verticalDetails,
+                    horizontalDetails: horizontalDetails,
+                    onScaleStart: () => onGrab.value = true,
+                    onScaleEnd: () => onGrab.value = false,
+                    data: value,
+                    cellsStreamProvider: getCellListProvider(
+                      parentId: CellParentId(whiteboardId: id.id),
+                    ),
+                    onCellCreated: (value) => ref.read(
+                      createCellProvider(
+                        parentId: CellParentId(whiteboardId: id.id),
+                        data: value,
+                      ).future,
+                    ),
+                    onCellUpdated: (oldValue, newValue) => ref.read(
+                      updateCellProvider(
+                        id: newValue.id,
+                        data: newValue,
+                      ).future,
+                    ),
+                    onCellsUpdated: (cells) => ref.read(
+                      updateCellsProvider(
+                        parentId: CellParentId(whiteboardId: id.id),
+                        cells: cells,
+                      ).future,
+                    ),
+                  ),
             ),
           );
           final appBar = Align(
@@ -347,27 +350,37 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(SpaceVariant.small.resolve(context)),
-                  child: StyledFlex(
-                    direction: Axis.horizontal,
-                    style: Style(
-                      $flex.mainAxisSize.min(),
-                      $flex.gap.ref(SpaceVariant.medium),
-                    ),
-                    children: [
-                      actionTool,
-                      cursorModeTool,
-                    ],
-                  ),
-                ),
               ],
             ),
           );
-          return Stack(
+          return Column(
             children: [
-              Positioned.fill(child: whiteboardBuilder),
               appBar,
+              Expanded(
+                child: Stack(
+                  children: [
+                    Positioned.fill(child: whiteboardBuilder),
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding:
+                            EdgeInsets.all(SpaceVariant.small.resolve(context)),
+                        child: StyledFlex(
+                          direction: Axis.horizontal,
+                          style: Style(
+                            $flex.mainAxisSize.min(),
+                            $flex.gap.ref(SpaceVariant.medium),
+                          ),
+                          children: [
+                            actionTool,
+                            cursorModeTool,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           );
         }(),

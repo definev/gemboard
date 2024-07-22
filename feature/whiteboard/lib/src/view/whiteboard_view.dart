@@ -386,6 +386,9 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     },
                   ),
                   builder: (context, notifier, child) => CellBuilder(
+                    scaleFactor: scaleFactor,
+                    horizontalDetails: horizontalDetails,
+                    verticalDetails: verticalDetails,
                     key: ValueKey('CellBuilder | ${cell.id.id}'),
                     notifier: notifier,
                     stackPositionDataMap: stackPositionDataMap,
