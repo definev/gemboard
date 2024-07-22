@@ -330,6 +330,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                       $flex.mainAxisAlignment.center(),
                     ),
                     child: SafeArea(
+                      bottom: false,
                       child: StyledRow(
                         children: [
                           Expanded(
