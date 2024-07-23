@@ -54,6 +54,7 @@ dependencies:
   
   # Database
   hive: ^2.2.3
+  shared_preferences: 
   
   mix: ^1.2.0
   

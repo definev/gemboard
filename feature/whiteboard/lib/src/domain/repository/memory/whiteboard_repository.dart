@@ -1,8 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
-
-import '../../model/whiteboard.dart';
-import '../whiteboard_repository.dart';
+import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
+import 'package:whiteboard/whiteboard.dart';
 
 part 'whiteboard_repository.g.dart';
 
@@ -14,17 +13,23 @@ WhiteboardRepositoryMemory whiteboardRepositoryMemory(
 
 class WhiteboardRepositoryMemory extends WhiteboardRepository
     with CrudDTORepositoryMemory<WhiteboardParentId, WhiteboardId, Whiteboard> {
+  WhiteboardPosition? _position;
+
+  static const undefined = 'position undefined';
+
   @override
-  Map<WhiteboardParentId, List<Whiteboard>> map = {
-    const WhiteboardParentId(): [
-      Whiteboard(
-        id: WhiteboardId(
-          parentId: WhiteboardParentId(),
-          id: 'default',
-        ),
-        emoji: '🎨',
-        title: 'Zen\'s Desk',
-      ),
-    ],
-  };
+  Future<WhiteboardPosition?> getWhiteboardPosition({
+    required WhiteboardId id,
+  }) async {
+    if (_position == null) throw undefined;
+    return _position!;
+  }
+
+  @override
+  Future<void> setWhiteboardPosition({
+    required WhiteboardId id,
+    required WhiteboardPosition position,
+  }) async {
+    _position = position;
+  }
 }

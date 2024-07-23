@@ -3,7 +3,6 @@ import 'package:flextras/flextras.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
-import 'package:whiteboard/whiteboard.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key, required this.onOpenSidebar});
@@ -15,7 +14,7 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          DSAppBar(
+          DSAppbar(
             title: StyledText(
               inherit: true,
               'Home',

@@ -12,8 +12,11 @@ import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/cursor_mode.dart';
+import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
 import 'package:whiteboard/src/provider/get_whiteboard_by_id.dart';
+import 'package:whiteboard/src/provider/get_whiteboard_position.dart';
+import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
 import 'package:whiteboard/src/view/whiteboard_view.dart';
 import 'package:whiteboard/src/widget/whiteboard_cursor_tool.dart';
 
@@ -217,6 +220,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
       ],
     );
 
+    final scaleFactor = useState(0.5);
     final verticalScrollController = useScrollController();
     final verticalDetails = useMemoized(
       () => ScrollableDetails.vertical(
@@ -241,7 +245,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
         },
       ),
     );
-    final scaleFactor = useState(0.5);
+
     final whiteboardKey = useMemoized(() =>
         GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
 
@@ -317,7 +321,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
             alignment: Alignment.topCenter,
             child: Column(
               children: [
-                DSAppBar(
+                DSAppbar(
                   title: IntrinsicWidth(
                     child: EmojiLabelEditor(
                       readOnly: true,
@@ -329,35 +333,94 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
               ],
             ),
           );
-          return Column(
-            children: [
-              appBar,
-              Expanded(
-                child: Stack(
-                  children: [
-                    Positioned.fill(child: whiteboardBuilder),
-                    Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding:
-                            EdgeInsets.all(SpaceVariant.small.resolve(context)),
-                        child: StyledFlex(
-                          direction: Axis.horizontal,
-                          style: Style(
-                            $flex.mainAxisSize.min(),
-                            $flex.gap.ref(SpaceVariant.medium),
+          return HookConsumer(
+            builder: (context, ref, child) {
+              ref.listen(
+                getWhiteboardPositionProvider(id: id),
+                (previous, next) {
+                  if (next.valueOrNull case WhiteboardPosition position) {
+                    final WhiteboardPosition(:offset, :scale) = position;
+                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                      scaleFactor.value = scale;
+                      while (!(verticalScrollController.hasClients &&
+                          horizontalScrollController.hasClients)) {
+                        await Future.delayed(Duration(milliseconds: 1));
+                      }
+                      if (verticalScrollController.offset != offset.dy) {
+                        verticalScrollController.jumpTo(offset.dy);
+                      }
+
+                      if (horizontalScrollController.offset != offset.dx) {
+                        horizontalScrollController.jumpTo(offset.dx);
+                      }
+                    });
+                  }
+                },
+              );
+              useEffect(() {
+                Debouncer debouncer = Debouncer();
+
+                void onMove() {
+                  debouncer.run(
+                    () {
+                      ref.read(
+                        setWhiteboardPositionProvider(
+                          id: id,
+                          position: WhiteboardPosition(
+                            scale: scaleFactor.value,
+                            offset: Offset(
+                              horizontalScrollController.offset,
+                              verticalScrollController.offset,
+                            ),
                           ),
-                          children: [
-                            actionTool,
-                            cursorModeTool,
-                          ],
+                        ).future,
+                      );
+                    },
+                    Duration(milliseconds: 800),
+                  );
+                }
+
+                horizontalScrollController.addListener(onMove);
+                verticalScrollController.addListener(onMove);
+                scaleFactor.addListener(onMove);
+                return () {
+                  horizontalScrollController.removeListener(onMove);
+                  verticalScrollController.removeListener(onMove);
+                  scaleFactor.removeListener(onMove);
+                };
+              }, []);
+              return child!;
+            },
+            child: Column(
+              children: [
+                appBar,
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(child: whiteboardBuilder),
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              SpaceVariant.small.resolve(context)),
+                          child: StyledFlex(
+                            direction: Axis.horizontal,
+                            style: Style(
+                              $flex.mainAxisSize.min(),
+                              $flex.gap.ref(SpaceVariant.medium),
+                            ),
+                            children: [
+                              actionTool,
+                              cursorModeTool,
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         }(),
       AsyncError(:final error, stackTrace: final _) => Center(
@@ -365,53 +428,5 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
         ),
       _ => SizedBox(),
     };
-  }
-}
-
-class DSAppBar extends StatelessWidget {
-  const DSAppBar({
-    super.key,
-    required this.title,
-  });
-
-  final Widget title;
-
-  @override
-  Widget build(BuildContext context) {
-    return WindowMover(
-      child: Box(
-        style: Style(
-          $box.color.ref(ColorVariant.surface),
-          $box.shadow(
-              blurRadius: 10,
-              color: ColorVariant.onSurface.resolve(context).withOpacity(
-                  OpacityVariant.hightlight.resolve(context).value)),
-          $box.padding.all.ref(SpaceVariant.small),
-          $flex.mainAxisAlignment.center(),
-        ),
-        child: SafeArea(
-          bottom: false,
-          child: Box(
-            style: Style(
-              $box.minHeight(32),
-            ),
-            child: StyledRow(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Mix(
-                      data: Style(
-                        $text.style.ref(TextStyleVariant.h6),
-                      ).of(context),
-                      child: title,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

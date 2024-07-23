@@ -1,5 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
+import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 
 import '../model/whiteboard.dart';
 import 'adaptive/whiteboard_repository.dart';
@@ -12,4 +13,11 @@ WhiteboardRepository whiteboardRepository(WhiteboardRepositoryRef ref) {
 }
 
 abstract class WhiteboardRepository
-    extends CrudDTORepository<WhiteboardParentId, WhiteboardId, Whiteboard> {}
+    extends CrudDTORepository<WhiteboardParentId, WhiteboardId, Whiteboard> {
+  Future<WhiteboardPosition?> getWhiteboardPosition({required WhiteboardId id});
+
+  Future<void> setWhiteboardPosition({
+    required WhiteboardId id,
+    required WhiteboardPosition position,
+  });
+}
