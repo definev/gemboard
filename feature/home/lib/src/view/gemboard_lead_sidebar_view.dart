@@ -16,11 +16,13 @@ import 'package:whiteboard/whiteboard.dart';
 class GemboardLeadSidebar extends HookConsumerWidget {
   const GemboardLeadSidebar({
     this.minSize = _minSize,
+    required this.resizableController,
   });
 
   static const double _minSize = 120;
 
   final double minSize;
+  final ResizableController resizableController;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -62,7 +64,17 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                               ),
                               background: ColorVariant.yellow,
                               highlight: ButtonHighlight.focus,
-                              onPressed: () {},
+                              onPressed: () {
+                                resizableController.hide();
+                                whiteboardNavigation.openWhiteboardEditor(
+                                  context,
+                                  id: const WhiteboardId(
+                                    parentId: WhiteboardParentId(),
+                                    id: 'default',
+                                  ),
+                                  resiableController: resizableController,
+                                );
+                              },
                             ),
                             children: [
                               SliverPinnedHeader(
@@ -104,7 +116,10 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                       ),
                     ),
                     Button(
-                      onPressed: () => settingsNavigation.pushSettingsFlow(),
+                      onPressed: () {
+                        resizableController.hide();
+                        settingsNavigation.pushSettingsFlow();
+                      },
                       background: ColorVariant.green,
                       kind: ButtonKind.filled,
                       style: Style(

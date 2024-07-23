@@ -8,6 +8,8 @@ class WhiteboardEditorRoute extends GoRouteData {
   });
 
   static const location = '/whiteboard/:id';
+  static const subLocation = 'whiteboard/:id';
+
   static final $parentNavigatorKey = HomeShell.$navigatorKey;
 
   final String id;
@@ -22,6 +24,14 @@ class WhiteboardEditorRoute extends GoRouteData {
         id: id,
       ),
       resizableController: $extra,
+    );
+  }
+
+  @override
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
+    return MaterialPage<void>(
+      key: state.pageKey,
+      child: build(context, state),
     );
   }
 }

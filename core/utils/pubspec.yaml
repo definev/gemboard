@@ -25,6 +25,8 @@ dependencies:
 
   boxy: ^2.2.0
 
+  # database
+  hive: ^4.0.0-dev.2 
 
 dev_dependencies:
   build_runner: ^2.3.3

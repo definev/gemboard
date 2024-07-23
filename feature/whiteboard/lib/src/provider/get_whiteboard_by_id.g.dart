@@ -6,7 +6,7 @@ part of 'get_whiteboard_by_id.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getWhiteboardByIdHash() => r'b41960a97d8dcfe295052fa0d2a99aa441a5fdff';
+String _$getWhiteboardByIdHash() => r'408bb660f497bde1b1d4de30c5938a3e99066117';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -72,7 +72,7 @@ class GetWhiteboardByIdFamily extends Family<AsyncValue<Whiteboard>> {
 }
 
 /// See also [getWhiteboardById].
-class GetWhiteboardByIdProvider extends AutoDisposeStreamProvider<Whiteboard> {
+class GetWhiteboardByIdProvider extends AutoDisposeFutureProvider<Whiteboard> {
   /// See also [getWhiteboardById].
   GetWhiteboardByIdProvider({
     required WhiteboardId id,
@@ -107,7 +107,7 @@ class GetWhiteboardByIdProvider extends AutoDisposeStreamProvider<Whiteboard> {
 
   @override
   Override overrideWith(
-    Stream<Whiteboard> Function(GetWhiteboardByIdRef provider) create,
+    FutureOr<Whiteboard> Function(GetWhiteboardByIdRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -124,7 +124,7 @@ class GetWhiteboardByIdProvider extends AutoDisposeStreamProvider<Whiteboard> {
   }
 
   @override
-  AutoDisposeStreamProviderElement<Whiteboard> createElement() {
+  AutoDisposeFutureProviderElement<Whiteboard> createElement() {
     return _GetWhiteboardByIdProviderElement(this);
   }
 
@@ -142,13 +142,13 @@ class GetWhiteboardByIdProvider extends AutoDisposeStreamProvider<Whiteboard> {
   }
 }
 
-mixin GetWhiteboardByIdRef on AutoDisposeStreamProviderRef<Whiteboard> {
+mixin GetWhiteboardByIdRef on AutoDisposeFutureProviderRef<Whiteboard> {
   /// The parameter `id` of this provider.
   WhiteboardId get id;
 }
 
 class _GetWhiteboardByIdProviderElement
-    extends AutoDisposeStreamProviderElement<Whiteboard>
+    extends AutoDisposeFutureProviderElement<Whiteboard>
     with GetWhiteboardByIdRef {
   _GetWhiteboardByIdProviderElement(super.provider);
 

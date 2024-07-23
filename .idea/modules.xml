@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/gemboard_app/melos_gemboard_app.iml" filepath="$PROJECT_DIR$/app/gemboard_app/melos_gemboard_app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/gemboard_common/melos_gemboard_common.iml" filepath="$PROJECT_DIR$/app/gemboard_common/melos_gemboard_common.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/gemboard_configuration/melos_gemboard_configuration.iml" filepath="$PROJECT_DIR$/app/gemboard_configuration/melos_gemboard_configuration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/gemboard_database/melos_gemboard_database.iml" filepath="$PROJECT_DIR$/app/gemboard_database/melos_gemboard_database.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/gemboard_navigator/melos_gemboard_navigator.iml" filepath="$PROJECT_DIR$/app/gemboard_navigator/melos_gemboard_navigator.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature/graph_edge/melos_graph_edge.iml" filepath="$PROJECT_DIR$/feature/graph_edge/melos_graph_edge.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature/home/melos_home.iml" filepath="$PROJECT_DIR$/feature/home/melos_home.iml" />

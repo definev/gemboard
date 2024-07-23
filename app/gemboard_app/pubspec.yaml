@@ -44,6 +44,10 @@ dependencies:
   gemboard_configuration:
     path: ../gemboard_configuration
   
+  # Database
+  gemboard_database:
+    path: ../gemboard_database
+  
   gemboard_common:
     path: ../gemboard_common
 

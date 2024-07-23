@@ -66,8 +66,8 @@ class __$$EdgeParentIdImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$EdgeParentIdImpl implements _EdgeParentId {
-  const _$EdgeParentIdImpl();
+class _$EdgeParentIdImpl extends _EdgeParentId {
+  const _$EdgeParentIdImpl() : super._();
 
   factory _$EdgeParentIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$EdgeParentIdImplFromJson(json);
@@ -95,8 +95,9 @@ class _$EdgeParentIdImpl implements _EdgeParentId {
   }
 }
 
-abstract class _EdgeParentId implements EdgeParentId {
+abstract class _EdgeParentId extends EdgeParentId {
   const factory _EdgeParentId() = _$EdgeParentIdImpl;
+  const _EdgeParentId._() : super._();
 
   factory _EdgeParentId.fromJson(Map<String, dynamic> json) =
       _$EdgeParentIdImpl.fromJson;

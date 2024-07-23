@@ -20,9 +20,16 @@ RouteBase get $_RootShell => ShellRouteData.$route(
           factory: $HomeShellExtension._fromState,
           routes: [
             GoRouteData.$route(
-              path: '/whiteboard/:id',
-              parentNavigatorKey: WhiteboardEditorRoute.$parentNavigatorKey,
-              factory: $WhiteboardEditorRouteExtension._fromState,
+              path: '/',
+              parentNavigatorKey: HomeGreetingRoute.$parentNavigatorKey,
+              factory: $HomeGreetingRouteExtension._fromState,
+              routes: [
+                GoRouteData.$route(
+                  path: 'whiteboard/:id',
+                  parentNavigatorKey: WhiteboardEditorRoute.$parentNavigatorKey,
+                  factory: $WhiteboardEditorRouteExtension._fromState,
+                ),
+              ],
             ),
           ],
         ),
@@ -40,6 +47,24 @@ extension $_RootShellExtension on _RootShell {
 
 extension $HomeShellExtension on HomeShell {
   static HomeShell _fromState(GoRouterState state) => const HomeShell();
+}
+
+extension $HomeGreetingRouteExtension on HomeGreetingRoute {
+  static HomeGreetingRoute _fromState(GoRouterState state) =>
+      const HomeGreetingRoute();
+
+  String get location => GoRouteData.$location(
+        '/',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {

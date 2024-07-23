@@ -8,5 +8,9 @@ part 'get_folder_by_id.g.dart';
 @riverpod
 Future<Folder> getFolderById(GetFolderByIdRef ref, String id) async {
   final repository = ref.read(folderRepositoryProvider);
-  return repository.get(id: FolderId(id: id));
+  final data = await repository.get(id: FolderId(id: id));
+  if (data == null) {
+    throw Exception('Folder not found');
+  }
+  return data;
 }

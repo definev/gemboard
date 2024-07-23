@@ -4,13 +4,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gemboard_app/di/di_initializer.dart';
+import 'package:gemboard_database/gemboard_database.dart';
 import 'package:gemboard_navigator/gemboard_navigator.dart' as nav;
 import 'package:mix/mix.dart';
 
 ProviderContainer container =
     ProviderContainer(overrides: initializeOverrides());
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await container.read(initializeDatabaseProvider.future);
+
   runApp(
     UncontrolledProviderScope(
       container: container,

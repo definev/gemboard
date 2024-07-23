@@ -8,15 +8,14 @@ part of 'whiteboard.dart';
 
 _$WhiteboardIdImpl _$$WhiteboardIdImplFromJson(Map<String, dynamic> json) =>
     _$WhiteboardIdImpl(
-      parentId: WhiteboardParentId.fromJson(
-          WhiteboardParentId.readValue(json, 'parentId')
-              as Map<String, dynamic>),
+      parentId: const WhiteboardParentIdConverter()
+          .fromJson(json['parentId'] as Map<String, dynamic>),
       id: json['id'] as String,
     );
 
 Map<String, dynamic> _$$WhiteboardIdImplToJson(_$WhiteboardIdImpl instance) =>
     <String, dynamic>{
-      'parentId': instance.parentId,
+      'parentId': const WhiteboardParentIdConverter().toJson(instance.parentId),
       'id': instance.id,
     };
 
@@ -34,15 +33,15 @@ Map<String, dynamic> _$$WhiteboardParentIdImplToJson(
 
 _$WhiteboardImpl _$$WhiteboardImplFromJson(Map<String, dynamic> json) =>
     _$WhiteboardImpl(
-      id: WhiteboardId.fromJson(
-          WhiteboardId.readValue(json, 'id') as Map<String, dynamic>),
+      id: const WhiteboardIdConverter()
+          .fromJson(json['id'] as Map<String, dynamic>),
       emoji: json['emoji'] as String,
       title: json['title'] as String,
     );
 
 Map<String, dynamic> _$$WhiteboardImplToJson(_$WhiteboardImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'id': const WhiteboardIdConverter().toJson(instance.id),
       'emoji': instance.emoji,
       'title': instance.title,
     };

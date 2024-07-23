@@ -5,10 +5,33 @@ import 'package:whiteboard/src/domain/repository/whiteboard_repository.dart';
 part 'get_whiteboard_by_id.g.dart';
 
 @riverpod
-Stream<Whiteboard> getWhiteboardById(
+Future<Whiteboard> getWhiteboardById(
   GetWhiteboardByIdRef ref, {
   required WhiteboardId id,
-}) async* {
+}) async {
   final repository = ref.watch(whiteboardRepositoryProvider);
-  yield await repository.get(id: id);
+  var data = await repository.get(id: id);
+  if (id == WhiteboardId.defaultValue) {
+    if (data == null) {
+      await repository.add(
+        parentId: id.parentId,
+        data: Whiteboard(
+          id: id,
+          emoji: '🏡',
+          title: 'Desktop',
+        ),
+      );
+      data = await repository.get(id: id);
+      if (data == null) {
+        throw Exception('Whiteboard not found');
+      }
+      return data;
+    }
+  }
+
+  if (data == null) {
+    throw Exception('Whiteboard not found');
+  }
+
+  return data;
 }

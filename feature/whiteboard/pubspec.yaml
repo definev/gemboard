@@ -52,6 +52,9 @@ dependencies:
       url: https://github.com/definev/boundless_stack.git
       ref: main
   
+  # Database
+  hive: ^4.0.0-dev.2
+  
   mix: ^1.2.0
   
   flextras:

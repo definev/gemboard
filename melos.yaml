@@ -26,6 +26,9 @@ command:
       riverpod_annotation: ^2.3.5
       json_annotation: ^4.9.0
       mix: ^1.2.0
+      hive: ^4.0.0-dev.2
+      isar_flutter_libs: ^4.0.0-dev.13
+      path_provider: ^2.1.0
       boundless_stack:
         git:
           url: https://github.com/definev/boundless_stack.git

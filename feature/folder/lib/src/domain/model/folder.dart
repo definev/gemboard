@@ -6,7 +6,7 @@ part 'folder.freezed.dart';
 part 'folder.g.dart';
 
 @freezed
-class FolderId with _$FolderId, HasParentId<FolderParentId> {
+class FolderId with _$FolderId, HasIdentity, HasParentId<FolderParentId> {
   const factory FolderId({
     @JsonKey(readValue: FolderParentId.readValue)
     @Default(const FolderParentId())
@@ -22,7 +22,9 @@ class FolderId with _$FolderId, HasParentId<FolderParentId> {
 }
 
 @freezed
-class FolderParentId with _$FolderParentId {
+class FolderParentId with _$FolderParentId, HasIdentity {
+  const FolderParentId._();
+
   const factory FolderParentId({
     String? folderId,
   }) = _FolderParentId;
@@ -32,6 +34,9 @@ class FolderParentId with _$FolderParentId {
 
   static Object? readValue(Map map, String _) =>
       FolderParentId.fromJson(map as Map<String, dynamic>);
+
+  @override
+  String get id => folderId ?? '';
 }
 
 @freezed

@@ -10,12 +10,14 @@ import 'package:whiteboard/whiteboard.dart';
 part 'router.g.dart';
 part 'routes/_root.dart';
 part 'routes/home.dart';
+part 'routes/home.greeting.dart';
 part 'routes/my_desk.dart';
 part 'routes/settings.dart';
 part 'routes/whiteboard.dart';
 
 final router = GoRouter(
   routes: $appRoutes,
-  initialLocation: MyDeskRoute.location,
+  initialLocation: HomeGreetingRoute.location,
+  // initialLocation: MyDeskRoute.location,
   initialExtra: HomeShell.resizableController,
 );

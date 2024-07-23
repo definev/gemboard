@@ -5,11 +5,16 @@ part 'edge.freezed.dart';
 part 'edge.g.dart';
 
 @freezed
-class EdgeParentId with _$EdgeParentId {
+class EdgeParentId with _$EdgeParentId, HasIdentity {
+  const EdgeParentId._();
+
   const factory EdgeParentId() = _EdgeParentId;
 
   factory EdgeParentId.fromJson(Map<String, dynamic> json) =>
       _$EdgeParentIdFromJson(json);
+
+  @override
+  String get id => '';
 }
 
 @freezed

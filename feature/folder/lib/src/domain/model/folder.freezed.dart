@@ -297,8 +297,8 @@ class __$$FolderParentIdImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$FolderParentIdImpl implements _FolderParentId {
-  const _$FolderParentIdImpl({this.folderId});
+class _$FolderParentIdImpl extends _FolderParentId {
+  const _$FolderParentIdImpl({this.folderId}) : super._();
 
   factory _$FolderParentIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$FolderParentIdImplFromJson(json);
@@ -341,9 +341,10 @@ class _$FolderParentIdImpl implements _FolderParentId {
   }
 }
 
-abstract class _FolderParentId implements FolderParentId {
+abstract class _FolderParentId extends FolderParentId {
   const factory _FolderParentId({final String? folderId}) =
       _$FolderParentIdImpl;
+  const _FolderParentId._() : super._();
 
   factory _FolderParentId.fromJson(Map<String, dynamic> json) =
       _$FolderParentIdImpl.fromJson;

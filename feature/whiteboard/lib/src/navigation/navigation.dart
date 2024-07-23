@@ -1,4 +1,5 @@
 import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whiteboard/whiteboard.dart';
 
@@ -8,8 +9,9 @@ abstract class WhiteboardNavigation {
           'You must provide a WhiteboardNavigation implementation in your app module'));
 
   void openWhiteboardEditor(
-    WhiteboardId id, {
+    BuildContext context, {
+    required WhiteboardId id,
     Whiteboard? whiteboard,
-    required ResizableController? hostController,
+    required ResizableController? resiableController,
   });
 }

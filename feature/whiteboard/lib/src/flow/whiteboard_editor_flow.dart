@@ -43,7 +43,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cursorMode = useState(defaultCursorMode);
 
-    final whiteboard = ref.watch(getWhiteboardByIdProvider(id: id));
+    final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
 
     var actionTool = DSToolbar(
       children: [
@@ -245,7 +245,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
     final whiteboardKey = useMemoized(() =>
         GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
 
-    return switch (whiteboard) {
+    return switch (whiteboardAsyncValue) {
       AsyncLoading() => const Center(
           child: CircularProgressIndicator(),
         ),
@@ -269,7 +269,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   (rect.topLeft + viewportTopLeft) / scaleFactor.value,
                   (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
                 );
-            
+
                 await ref.read(
                   selectCellProvider(
                     parentId: CellParentId(whiteboardId: id.id),
@@ -277,76 +277,52 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   ).future,
                 );
               },
-              whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
-                  WhiteboardView(
-                    key: whiteboardKey,
-                    scaleFactor: scaleFactor,
-                    enableMoveByMouse: cursorMode.value == CursorMode.handTool,
-                    enableMoveByTouch: cursorMode.value == CursorMode.handTool,
-                    verticalDetails: verticalDetails,
-                    horizontalDetails: horizontalDetails,
-                    onScaleStart: () => onGrab.value = true,
-                    onScaleEnd: () => onGrab.value = false,
+              whiteboardBuilder:
+                  (enableMoveByMouse, enableMoveByTouch, onGrab) =>
+                      WhiteboardView(
+                key: whiteboardKey,
+                scaleFactor: scaleFactor,
+                enableMoveByMouse: cursorMode.value == CursorMode.handTool,
+                enableMoveByTouch: cursorMode.value == CursorMode.handTool,
+                verticalDetails: verticalDetails,
+                horizontalDetails: horizontalDetails,
+                onScaleStart: () => onGrab.value = true,
+                onScaleEnd: () => onGrab.value = false,
+                data: value,
+                cellsStreamProvider: getCellListProvider(
+                  parentId: CellParentId(whiteboardId: id.id),
+                ),
+                onCellCreated: (value) => ref.read(
+                  createCellProvider(
+                    parentId: CellParentId(whiteboardId: id.id),
                     data: value,
-                    cellsStreamProvider: getCellListProvider(
-                      parentId: CellParentId(whiteboardId: id.id),
-                    ),
-                    onCellCreated: (value) => ref.read(
-                      createCellProvider(
-                        parentId: CellParentId(whiteboardId: id.id),
-                        data: value,
-                      ).future,
-                    ),
-                    onCellUpdated: (oldValue, newValue) => ref.read(
-                      updateCellProvider(
-                        id: newValue.id,
-                        data: newValue,
-                      ).future,
-                    ),
-                    onCellsUpdated: (cells) => ref.read(
-                      updateCellsProvider(
-                        parentId: CellParentId(whiteboardId: id.id),
-                        cells: cells,
-                      ).future,
-                    ),
-                  ),
+                  ).future,
+                ),
+                onCellUpdated: (oldValue, newValue) => ref.read(
+                  updateCellProvider(
+                    id: newValue.id,
+                    data: newValue,
+                  ).future,
+                ),
+                onCellsUpdated: (cells) => ref.read(
+                  updateCellsProvider(
+                    parentId: CellParentId(whiteboardId: id.id),
+                    cells: cells,
+                  ).future,
+                ),
+              ),
             ),
           );
           final appBar = Align(
             alignment: Alignment.topCenter,
             child: Column(
               children: [
-                WindowMover(
-                  child: Box(
-                    style: Style(
-                      $box.color.ref(ColorVariant.surface),
-                      $box.shadow(
-                          blurRadius: 10,
-                          color: ColorVariant.onSurface
-                              .resolve(context)
-                              .withOpacity(OpacityVariant.hightlight
-                                  .resolve(context)
-                                  .value)),
-                      $box.padding.all.ref(SpaceVariant.small),
-                      $flex.mainAxisAlignment.center(),
-                    ),
-                    child: SafeArea(
-                      bottom: false,
-                      child: StyledRow(
-                        children: [
-                          Expanded(
-                            child: Center(
-                              child: IntrinsicWidth(
-                                child: EmojiLabelEditor(
-                                  readOnly: true,
-                                  emoji: value.emoji,
-                                  label: value.title,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                DSAppBar(
+                  title: IntrinsicWidth(
+                    child: EmojiLabelEditor(
+                      readOnly: true,
+                      emoji: value.emoji,
+                      label: value.title,
                     ),
                   ),
                 ),
@@ -389,5 +365,53 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
         ),
       _ => SizedBox(),
     };
+  }
+}
+
+class DSAppBar extends StatelessWidget {
+  const DSAppBar({
+    super.key,
+    required this.title,
+  });
+
+  final Widget title;
+
+  @override
+  Widget build(BuildContext context) {
+    return WindowMover(
+      child: Box(
+        style: Style(
+          $box.color.ref(ColorVariant.surface),
+          $box.shadow(
+              blurRadius: 10,
+              color: ColorVariant.onSurface.resolve(context).withOpacity(
+                  OpacityVariant.hightlight.resolve(context).value)),
+          $box.padding.all.ref(SpaceVariant.small),
+          $flex.mainAxisAlignment.center(),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Box(
+            style: Style(
+              $box.minHeight(32),
+            ),
+            child: StyledRow(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Mix(
+                      data: Style(
+                        $text.style.ref(TextStyleVariant.h6),
+                      ).of(context),
+                      child: title,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

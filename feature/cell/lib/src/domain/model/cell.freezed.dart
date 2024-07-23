@@ -104,8 +104,8 @@ class __$$CellParentIdImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$CellParentIdImpl implements _CellParentId {
-  const _$CellParentIdImpl({required this.whiteboardId});
+class _$CellParentIdImpl extends _CellParentId {
+  const _$CellParentIdImpl({required this.whiteboardId}) : super._();
 
   factory _$CellParentIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$CellParentIdImplFromJson(json);
@@ -147,9 +147,10 @@ class _$CellParentIdImpl implements _CellParentId {
   }
 }
 
-abstract class _CellParentId implements CellParentId {
+abstract class _CellParentId extends CellParentId {
   const factory _CellParentId({required final String whiteboardId}) =
       _$CellParentIdImpl;
+  const _CellParentId._() : super._();
 
   factory _CellParentId.fromJson(Map<String, dynamic> json) =
       _$CellParentIdImpl.fromJson;

@@ -38,7 +38,9 @@ class CellIdConverter implements JsonConverter<CellId, Map<String, dynamic>> {
 }
 
 @freezed
-class CellParentId with _$CellParentId {
+class CellParentId with _$CellParentId, HasIdentity {
+  const CellParentId._();
+
   const factory CellParentId({
     required String whiteboardId,
   }) = _CellParentId;
@@ -48,10 +50,13 @@ class CellParentId with _$CellParentId {
 
   static Object? readValue(Map map, String _) =>
       CellParentId.fromJson(map as Map<String, dynamic>);
+
+  @override
+  String get id => whiteboardId;
 }
 
 @freezed
-class CellId with _$CellId, HasParentId<CellParentId> {
+class CellId with _$CellId, HasIdentity, HasParentId<CellParentId> {
   const factory CellId({
     @CellParentIdConverter() required CellParentId parentId,
     required String id,

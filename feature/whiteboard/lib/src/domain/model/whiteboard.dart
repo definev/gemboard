@@ -5,23 +5,51 @@ import 'package:utils/utils.dart';
 part 'whiteboard.freezed.dart';
 part 'whiteboard.g.dart';
 
+class WhiteboardIdConverter
+    implements JsonConverter<WhiteboardId, Map<String, dynamic>> {
+  const WhiteboardIdConverter();
+
+  @override
+  WhiteboardId fromJson(Map<String, dynamic> json) =>
+      WhiteboardId.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(WhiteboardId object) => object.toJson();
+}
+
+class WhiteboardParentIdConverter
+    implements JsonConverter<WhiteboardParentId, Map<String, dynamic>> {
+  const WhiteboardParentIdConverter();
+
+  @override
+  WhiteboardParentId fromJson(Map<String, dynamic> json) =>
+      WhiteboardParentId.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(WhiteboardParentId object) => object.toJson();
+}
+
 @freezed
-class WhiteboardId with _$WhiteboardId, HasParentId<WhiteboardParentId> {
+class WhiteboardId
+    with _$WhiteboardId, HasIdentity, HasParentId<WhiteboardParentId> {
   const factory WhiteboardId({
-    @JsonKey(readValue: WhiteboardParentId.readValue)
-    required WhiteboardParentId parentId,
+    @WhiteboardParentIdConverter() required WhiteboardParentId parentId,
     required String id,
   }) = _WhiteboardId;
 
   factory WhiteboardId.fromJson(Map<String, dynamic> json) =>
       _$WhiteboardIdFromJson(json);
 
-  static Object? readValue(Map map, String _) =>
-      WhiteboardId.fromJson(map as Map<String, dynamic>);
+  static const defaultValue = const WhiteboardId(
+    parentId: WhiteboardParentId(),
+    id: 'default',
+  );
 }
 
 @freezed
-class WhiteboardParentId with _$WhiteboardParentId {
+class WhiteboardParentId with _$WhiteboardParentId, HasIdentity {
+  const WhiteboardParentId._();
+
   const factory WhiteboardParentId({
     String? folderId,
   }) = _WhiteboardParentId;
@@ -29,14 +57,14 @@ class WhiteboardParentId with _$WhiteboardParentId {
   factory WhiteboardParentId.fromJson(Map<String, dynamic> json) =>
       _$WhiteboardParentIdFromJson(json);
 
-  static Object? readValue(Map map, String _) =>
-      WhiteboardParentId.fromJson(map as Map<String, dynamic>);
+  @override
+  String get id => folderId ?? '';
 }
 
 @freezed
 sealed class Whiteboard with _$Whiteboard, HasId<WhiteboardId> {
   const factory Whiteboard({
-    @JsonKey(readValue: WhiteboardId.readValue) required WhiteboardId id,
+    @WhiteboardIdConverter() required WhiteboardId id,
     required String emoji,
     required String title,
   }) = _Whiteboard;

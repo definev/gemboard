@@ -37,7 +37,10 @@ class ResizableController extends ChangeNotifier {
   }
 
   void show() {
-    panelSize = _lastPanelSize;
+    panelSize = switch (_lastPanelSize) {
+      0 => initialSize,
+      _ => _lastPanelSize,
+    };
     shown = true;
   }
 

@@ -236,7 +236,7 @@ class MasterView extends StatelessWidget {
                             ],
                           ),
                       ],
-                    ),
+                  ),
                     const Column(
                       children: [
                         DSTextbox(
@@ -247,7 +247,7 @@ class MasterView extends StatelessWidget {
                     Column(
                       children: [
                         DSAppbar(
-                          child: EmojiLabelEditor(
+                          title: EmojiLabelEditor(
                             emoji: '🪄',
                             label: 'Magic',
                             onEmojiSelected: (value) => print(value),

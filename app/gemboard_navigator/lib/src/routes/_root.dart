@@ -4,18 +4,22 @@ part of '../router.dart';
   routes: [
     TypedShellRoute<HomeShell>(
       routes: [
-        TypedGoRoute<WhiteboardEditorRoute>(
-            path: WhiteboardEditorRoute.location),
+        TypedGoRoute<HomeGreetingRoute>(
+          path: HomeGreetingRoute.location,
+          routes: [
+            TypedGoRoute<WhiteboardEditorRoute>(
+                path: WhiteboardEditorRoute.subLocation),
+          ],
+        ),
       ],
     ),
     TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
   ],
 )
 class _RootShell extends ShellRouteData {
-  static final $navigatorKey = GlobalKey<NavigatorState>();
+  static final $navigatorKey = GlobalKey<NavigatorState>(debugLabel: '_RootShell');
 
   @override
-  Widget builder(BuildContext context, GoRouterState state, Widget navigator) {
-    return navigator;
-  }
+  Widget builder(BuildContext context, GoRouterState state, Widget navigator) =>
+      navigator;
 }

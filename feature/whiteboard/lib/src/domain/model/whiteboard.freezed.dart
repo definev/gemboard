@@ -20,16 +20,12 @@ WhiteboardId _$WhiteboardIdFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$WhiteboardId {
-  @JsonKey(readValue: WhiteboardParentId.readValue)
+  @WhiteboardParentIdConverter()
   WhiteboardParentId get parentId => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
-  /// Serializes this WhiteboardId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of WhiteboardId
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $WhiteboardIdCopyWith<WhiteboardId> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -41,9 +37,7 @@ abstract class $WhiteboardIdCopyWith<$Res> {
       _$WhiteboardIdCopyWithImpl<$Res, WhiteboardId>;
   @useResult
   $Res call(
-      {@JsonKey(readValue: WhiteboardParentId.readValue)
-      WhiteboardParentId parentId,
-      String id});
+      {@WhiteboardParentIdConverter() WhiteboardParentId parentId, String id});
 
   $WhiteboardParentIdCopyWith<$Res> get parentId;
 }
@@ -58,8 +52,6 @@ class _$WhiteboardIdCopyWithImpl<$Res, $Val extends WhiteboardId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of WhiteboardId
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -78,8 +70,6 @@ class _$WhiteboardIdCopyWithImpl<$Res, $Val extends WhiteboardId>
     ) as $Val);
   }
 
-  /// Create a copy of WhiteboardId
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $WhiteboardParentIdCopyWith<$Res> get parentId {
@@ -98,9 +88,7 @@ abstract class _$$WhiteboardIdImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: WhiteboardParentId.readValue)
-      WhiteboardParentId parentId,
-      String id});
+      {@WhiteboardParentIdConverter() WhiteboardParentId parentId, String id});
 
   @override
   $WhiteboardParentIdCopyWith<$Res> get parentId;
@@ -114,8 +102,6 @@ class __$$WhiteboardIdImplCopyWithImpl<$Res>
       _$WhiteboardIdImpl _value, $Res Function(_$WhiteboardIdImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of WhiteboardId
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -139,14 +125,14 @@ class __$$WhiteboardIdImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WhiteboardIdImpl implements _WhiteboardId {
   const _$WhiteboardIdImpl(
-      {@JsonKey(readValue: WhiteboardParentId.readValue) required this.parentId,
+      {@WhiteboardParentIdConverter() required this.parentId,
       required this.id});
 
   factory _$WhiteboardIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$WhiteboardIdImplFromJson(json);
 
   @override
-  @JsonKey(readValue: WhiteboardParentId.readValue)
+  @WhiteboardParentIdConverter()
   final WhiteboardParentId parentId;
   @override
   final String id;
@@ -166,13 +152,11 @@ class _$WhiteboardIdImpl implements _WhiteboardId {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, parentId, id);
 
-  /// Create a copy of WhiteboardId
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$WhiteboardIdImplCopyWith<_$WhiteboardIdImpl> get copyWith =>
@@ -188,7 +172,7 @@ class _$WhiteboardIdImpl implements _WhiteboardId {
 
 abstract class _WhiteboardId implements WhiteboardId {
   const factory _WhiteboardId(
-      {@JsonKey(readValue: WhiteboardParentId.readValue)
+      {@WhiteboardParentIdConverter()
       required final WhiteboardParentId parentId,
       required final String id}) = _$WhiteboardIdImpl;
 
@@ -196,15 +180,12 @@ abstract class _WhiteboardId implements WhiteboardId {
       _$WhiteboardIdImpl.fromJson;
 
   @override
-  @JsonKey(readValue: WhiteboardParentId.readValue)
+  @WhiteboardParentIdConverter()
   WhiteboardParentId get parentId;
   @override
   String get id;
-
-  /// Create a copy of WhiteboardId
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$WhiteboardIdImplCopyWith<_$WhiteboardIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -217,12 +198,8 @@ WhiteboardParentId _$WhiteboardParentIdFromJson(Map<String, dynamic> json) {
 mixin _$WhiteboardParentId {
   String? get folderId => throw _privateConstructorUsedError;
 
-  /// Serializes this WhiteboardParentId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of WhiteboardParentId
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $WhiteboardParentIdCopyWith<WhiteboardParentId> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -246,8 +223,6 @@ class _$WhiteboardParentIdCopyWithImpl<$Res, $Val extends WhiteboardParentId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of WhiteboardParentId
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -281,8 +256,6 @@ class __$$WhiteboardParentIdImplCopyWithImpl<$Res>
       $Res Function(_$WhiteboardParentIdImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of WhiteboardParentId
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -299,8 +272,8 @@ class __$$WhiteboardParentIdImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$WhiteboardParentIdImpl implements _WhiteboardParentId {
-  const _$WhiteboardParentIdImpl({this.folderId});
+class _$WhiteboardParentIdImpl extends _WhiteboardParentId {
+  const _$WhiteboardParentIdImpl({this.folderId}) : super._();
 
   factory _$WhiteboardParentIdImpl.fromJson(Map<String, dynamic> json) =>
       _$$WhiteboardParentIdImplFromJson(json);
@@ -322,13 +295,11 @@ class _$WhiteboardParentIdImpl implements _WhiteboardParentId {
                 other.folderId == folderId));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, folderId);
 
-  /// Create a copy of WhiteboardParentId
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$WhiteboardParentIdImplCopyWith<_$WhiteboardParentIdImpl> get copyWith =>
@@ -343,20 +314,18 @@ class _$WhiteboardParentIdImpl implements _WhiteboardParentId {
   }
 }
 
-abstract class _WhiteboardParentId implements WhiteboardParentId {
+abstract class _WhiteboardParentId extends WhiteboardParentId {
   const factory _WhiteboardParentId({final String? folderId}) =
       _$WhiteboardParentIdImpl;
+  const _WhiteboardParentId._() : super._();
 
   factory _WhiteboardParentId.fromJson(Map<String, dynamic> json) =
       _$WhiteboardParentIdImpl.fromJson;
 
   @override
   String? get folderId;
-
-  /// Create a copy of WhiteboardParentId
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$WhiteboardParentIdImplCopyWith<_$WhiteboardParentIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -367,17 +336,13 @@ Whiteboard _$WhiteboardFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Whiteboard {
-  @JsonKey(readValue: WhiteboardId.readValue)
+  @WhiteboardIdConverter()
   WhiteboardId get id => throw _privateConstructorUsedError;
   String get emoji => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
 
-  /// Serializes this Whiteboard to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Whiteboard
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $WhiteboardCopyWith<Whiteboard> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -389,9 +354,7 @@ abstract class $WhiteboardCopyWith<$Res> {
       _$WhiteboardCopyWithImpl<$Res, Whiteboard>;
   @useResult
   $Res call(
-      {@JsonKey(readValue: WhiteboardId.readValue) WhiteboardId id,
-      String emoji,
-      String title});
+      {@WhiteboardIdConverter() WhiteboardId id, String emoji, String title});
 
   $WhiteboardIdCopyWith<$Res> get id;
 }
@@ -406,8 +369,6 @@ class _$WhiteboardCopyWithImpl<$Res, $Val extends Whiteboard>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Whiteboard
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -431,8 +392,6 @@ class _$WhiteboardCopyWithImpl<$Res, $Val extends Whiteboard>
     ) as $Val);
   }
 
-  /// Create a copy of Whiteboard
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $WhiteboardIdCopyWith<$Res> get id {
@@ -451,9 +410,7 @@ abstract class _$$WhiteboardImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(readValue: WhiteboardId.readValue) WhiteboardId id,
-      String emoji,
-      String title});
+      {@WhiteboardIdConverter() WhiteboardId id, String emoji, String title});
 
   @override
   $WhiteboardIdCopyWith<$Res> get id;
@@ -467,8 +424,6 @@ class __$$WhiteboardImplCopyWithImpl<$Res>
       _$WhiteboardImpl _value, $Res Function(_$WhiteboardImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Whiteboard
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -497,7 +452,7 @@ class __$$WhiteboardImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WhiteboardImpl implements _Whiteboard {
   const _$WhiteboardImpl(
-      {@JsonKey(readValue: WhiteboardId.readValue) required this.id,
+      {@WhiteboardIdConverter() required this.id,
       required this.emoji,
       required this.title});
 
@@ -505,7 +460,7 @@ class _$WhiteboardImpl implements _Whiteboard {
       _$$WhiteboardImplFromJson(json);
 
   @override
-  @JsonKey(readValue: WhiteboardId.readValue)
+  @WhiteboardIdConverter()
   final WhiteboardId id;
   @override
   final String emoji;
@@ -527,13 +482,11 @@ class _$WhiteboardImpl implements _Whiteboard {
             (identical(other.title, title) || other.title == title));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, emoji, title);
 
-  /// Create a copy of Whiteboard
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$WhiteboardImplCopyWith<_$WhiteboardImpl> get copyWith =>
@@ -549,8 +502,7 @@ class _$WhiteboardImpl implements _Whiteboard {
 
 abstract class _Whiteboard implements Whiteboard {
   const factory _Whiteboard(
-      {@JsonKey(readValue: WhiteboardId.readValue)
-      required final WhiteboardId id,
+      {@WhiteboardIdConverter() required final WhiteboardId id,
       required final String emoji,
       required final String title}) = _$WhiteboardImpl;
 
@@ -558,17 +510,14 @@ abstract class _Whiteboard implements Whiteboard {
       _$WhiteboardImpl.fromJson;
 
   @override
-  @JsonKey(readValue: WhiteboardId.readValue)
+  @WhiteboardIdConverter()
   WhiteboardId get id;
   @override
   String get emoji;
   @override
   String get title;
-
-  /// Create a copy of Whiteboard
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$WhiteboardImplCopyWith<_$WhiteboardImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
