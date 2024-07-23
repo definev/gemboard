@@ -203,7 +203,7 @@ class MasterView extends StatelessWidget {
                             pinned: false,
                             header: DSSidebarSectionHeader(
                               background: background,
-                              title: StyledText('Astrology'),
+                              title: const StyledText('Astrology'),
                             ),
                             children: [
                               for (final item in [

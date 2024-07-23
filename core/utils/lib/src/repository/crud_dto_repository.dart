@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
 
 import '../mixin/mixin.dart';
@@ -28,8 +30,8 @@ mixin class CrudDTORepositoryMemory<
     return map[parentId] ?? [];
   }
 
-  Data get({required ID id}) {
-    return map[id.parentId]!.firstWhere((element) => element.id == id);
+  Data? get({required ID id}) {
+    return map[id.parentId]?.firstWhereOrNull((element) => element.id == id);
   }
 
   Future<void> add({required PID parentId, required Data data}) async {
@@ -50,7 +52,7 @@ mixin class CrudDTORepositoryMemory<
   }
 }
 
-abstract mixin class CrudDtoRepositoryHive<
+abstract mixin class CrudDTORepositoryHive<
     PID extends HasIdentity,
     ID extends HasParentId<PID>,
     Data extends HasId<ID>> implements CrudDTORepository<PID, ID, Data> {
@@ -58,59 +60,120 @@ abstract mixin class CrudDtoRepositoryHive<
 
   Data fromJson(Map<String, dynamic> json);
 
-  Box<Map<String, dynamic>> fetchBox(PID parentId) {
-    return Hive.box<Map<String, dynamic>>(name: '${boxName}_${parentId.id}');
+  Future<LazyBox<String>> fetchBox(PID parentId) async {
+    return Hive.openLazyBox<String>('${boxName}_${parentId.id}');
   }
 
   @override
   Future<void> add({required PID parentId, required Data data}) async {
-    final box = fetchBox(parentId);
-    box.write(() => box.put(data.id.id, data.toJson()));
+    final box = await fetchBox(parentId);
+    await box.put(data.id.id, jsonEncode(data.toJson()));
   }
 
   @override
   Future<void> delete({required ID id}) async {
-    final box = fetchBox(id.parentId);
-    box.write(() => box.delete(id.id));
+    final box = await fetchBox(id.parentId);
+    box.delete(id.id);
   }
 
   @override
-  FutureOr<Data?> get({required ID id}) {
-    final box = fetchBox(id.parentId);
-    return box.read(() {
-      final data = box.get(id.id);
-      if (data == null) return null;
-      return fromJson(data);
-    });
+  FutureOr<Data?> get({required ID id}) async {
+    final box = await fetchBox(id.parentId);
+    final data = await box.get(id.id);
+    if (data == null) return null;
+    return fromJson(jsonDecode(data));
   }
 
   @override
   Future<List<Data>> getList(
-      {required PID parentId, int page = 0, int size = 10}) {
-    return Hive.compute(() {
-      final box = fetchBox(parentId);
-      return box.read(() {
-        List<Data> result = [];
-        int index = 0;
+      {required PID parentId, int page = 0, int size = 10}) async {
+    final box = await fetchBox(parentId);
+    List<Data> result = [];
+    int index = 0;
 
-        while (true) {
-          try {
-            final data = box.getAt(index);
-            result.add(fromJson(data));
-            index++;
-          } catch (e) {
-            break;
-          }
-        }
+    while (true) {
+      try {
+        final data = await box.getAt(index);
+        if (data == null) break;
+        result.add(fromJson(jsonDecode(data)));
+        index++;
+      } catch (e) {
+        break;
+      }
+    }
 
-        return result;
-      });
-    });
+    return result;
   }
 
   @override
   Future<void> update({required ID id, required Data data}) async {
-    final box = fetchBox(id.parentId);
-    box.write(() => box.put(id.id, data.toJson()));
+    final box = await fetchBox(id.parentId);
+    await box.put(id.id, jsonEncode(data.toJson()));
+  }
+}
+
+abstract mixin class CrudDtoRepositoryAdaptive<
+    PID extends HasIdentity,
+    ID extends HasParentId<PID>,
+    Data extends HasId<ID>> implements CrudDTORepository<PID, ID, Data> {
+  CrudDTORepository<PID, ID, Data> get storage;
+  CrudDTORepository<PID, ID, Data> get interactive;
+
+  @override
+  Future<void> add({required PID parentId, required Data data}) async {
+    storage.add(parentId: parentId, data: data);
+    await interactive.add(parentId: parentId, data: data);
+  }
+
+  @override
+  Future<void> delete({required ID id}) async {
+    storage.delete(id: id);
+    await interactive.delete(id: id);
+  }
+
+  @override
+  FutureOr<Data?> get({required ID id}) async {
+    try {
+      var data = await interactive.get(id: id);
+      if (data == null) {
+        data = await storage.get(id: id);
+        if (data != null) {
+          await interactive.add(parentId: id.parentId, data: data);
+          return data;
+        }
+      }
+      return data;
+    } catch (e) {
+      return storage.get(id: id);
+    }
+  }
+
+  @override
+  FutureOr<List<Data>> getList({
+    required PID parentId,
+    int page = 0,
+    int size = 10,
+  }) async {
+    try {
+      final data =
+          await interactive.getList(parentId: parentId, page: page, size: size);
+      if (data.isEmpty) {
+        final hiveData =
+            await storage.getList(parentId: parentId, page: page, size: size);
+        for (var item in hiveData) {
+          await interactive.add(parentId: parentId, data: item);
+        }
+        return hiveData;
+      }
+      return data;
+    } catch (e) {
+      return storage.getList(parentId: parentId, page: page, size: size);
+    }
+  }
+
+  @override
+  Future<void> update({required ID id, required Data data}) {
+    storage.update(id: id, data: data);
+    return interactive.update(id: id, data: data);
   }
 }

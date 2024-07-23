@@ -7,12 +7,11 @@ part of 'cell_repository.dart';
 // **************************************************************************
 
 String _$cellRepositoryMemoryHash() =>
-    r'fbc359f68018d4977d7780e3e701cfcac2a0e135';
+    r'1b71f39b82fe7ff63e4a585c440e58a991f6d7bc';
 
 /// See also [cellRepositoryMemory].
 @ProviderFor(cellRepositoryMemory)
-final cellRepositoryMemoryProvider =
-    AutoDisposeProvider<CellRepository>.internal(
+final cellRepositoryMemoryProvider = Provider<CellRepository>.internal(
   cellRepositoryMemory,
   name: r'cellRepositoryMemoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,6 +21,6 @@ final cellRepositoryMemoryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef CellRepositoryMemoryRef = AutoDisposeProviderRef<CellRepository>;
+typedef CellRepositoryMemoryRef = ProviderRef<CellRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

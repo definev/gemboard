@@ -146,7 +146,7 @@ packages:
     source: hosted
     version: "4.10.0"
   collection:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: collection
       sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
@@ -177,14 +177,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.6"
-  ffi:
-    dependency: transitive
-    description:
-      name: ffi
-      sha256: "493f37e7df1804778ff3a53bd691d8692ddf69702cf4c1c1096a2e41b4779e21"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.2"
   file:
     dependency: transitive
     description:
@@ -279,10 +271,10 @@ packages:
     dependency: "direct main"
     description:
       name: hive
-      sha256: "10819524df282842ebae12870e2e0e9ebc3e5c4637bec741ad39b919c589cb20"
+      sha256: "8dcf6db979d7933da8217edcec84e9df1bdb4e4edc7fc77dbd5aa74356d6d941"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.0-dev.2"
+    version: "2.2.3"
   hooks_riverpod:
     dependency: "direct main"
     description:
@@ -323,14 +315,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
-  isar:
-    dependency: transitive
-    description:
-      name: isar
-      sha256: ebf74d87c400bd9f7da14acb31932b50c2407edbbd40930da3a6c2a8143f85a8
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.0.0-dev.14"
   js:
     dependency: transitive
     description:

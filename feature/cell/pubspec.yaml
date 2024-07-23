@@ -33,8 +33,7 @@ dependencies:
   mix: ^1.2.0
 
   # This is unsure the best db
-  hive: ^4.0.0-dev.2 
-  isar_flutter_libs: ^4.0.0-dev.13
+  hive: ^2.2.3 
   path_provider: ^2.1.0
   
   flextras:

@@ -53,7 +53,7 @@ dependencies:
       ref: main
   
   # Database
-  hive: ^4.0.0-dev.2
+  hive: ^2.2.3
   
   mix: ^1.2.0
   

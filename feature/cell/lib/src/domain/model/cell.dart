@@ -48,9 +48,6 @@ class CellParentId with _$CellParentId, HasIdentity {
   factory CellParentId.fromJson(Map<String, dynamic> json) =>
       _$CellParentIdFromJson(json);
 
-  static Object? readValue(Map map, String _) =>
-      CellParentId.fromJson(map as Map<String, dynamic>);
-
   @override
   String get id => whiteboardId;
 }
@@ -63,9 +60,6 @@ class CellId with _$CellId, HasIdentity, HasParentId<CellParentId> {
   }) = _CellId;
 
   factory CellId.fromJson(Map<String, dynamic> json) => _$CellIdFromJson(json);
-
-  static Object? readValue(Map map, String _) =>
-      CellId.fromJson(map as Map<String, dynamic>);
 }
 
 @Freezed(unionKey: 'cellType')

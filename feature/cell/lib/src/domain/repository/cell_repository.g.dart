@@ -6,7 +6,7 @@ part of 'cell_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$cellRepositoryHash() => r'af55e2ec566e0caddc6065a484c4ea0364ed95a7';
+String _$cellRepositoryHash() => r'd96fc5f506a28908685638d522e4b973580064c2';
 
 /// See also [cellRepository].
 @ProviderFor(cellRepository)

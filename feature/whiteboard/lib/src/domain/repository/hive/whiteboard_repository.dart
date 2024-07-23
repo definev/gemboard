@@ -10,7 +10,7 @@ WhiteboardRepository whiteboardRepositoryHive(WhiteboardRepositoryHiveRef ref) {
 }
 
 class WhiteboardRepositoryHive extends WhiteboardRepository
-    with CrudDtoRepositoryHive<WhiteboardParentId, WhiteboardId, Whiteboard> {
+    with CrudDTORepositoryHive<WhiteboardParentId, WhiteboardId, Whiteboard> {
   @override
   String get boxName => 'whiteboard';
 
