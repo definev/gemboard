@@ -12,6 +12,8 @@
       <module fileurl="file://$PROJECT_DIR$/app/gemboard_navigator/melos_gemboard_navigator.iml" filepath="$PROJECT_DIR$/app/gemboard_navigator/melos_gemboard_navigator.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature/graph_edge/melos_graph_edge.iml" filepath="$PROJECT_DIR$/feature/graph_edge/melos_graph_edge.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature/home/melos_home.iml" filepath="$PROJECT_DIR$/feature/home/melos_home.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feature/llm/melos_llm.iml" filepath="$PROJECT_DIR$/feature/llm/melos_llm.iml" />
+      <module fileurl="file://$PROJECT_DIR$/feature/settings/melos_settings.iml" filepath="$PROJECT_DIR$/feature/settings/melos_settings.iml" />
       <module fileurl="file://$PROJECT_DIR$/core/utils/melos_utils.iml" filepath="$PROJECT_DIR$/core/utils/melos_utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/feature/whiteboard/melos_whiteboard.iml" filepath="$PROJECT_DIR$/feature/whiteboard/melos_whiteboard.iml" />
       <module fileurl="file://$PROJECT_DIR$/melos_gemboard.iml" filepath="$PROJECT_DIR$/melos_gemboard.iml" />

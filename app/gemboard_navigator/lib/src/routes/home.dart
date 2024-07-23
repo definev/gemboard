@@ -14,6 +14,14 @@ class HomeShell extends ShellRouteData {
       navigator: navigator,
     );
   }
+
+  @override
+  Page<void> pageBuilder(
+      BuildContext context, GoRouterState state, Widget navigator) {
+    return CupertinoModalSheetPage(
+      child: builder(context, state, navigator),
+    );
+  }
 }
 
 class _HomeShellView extends StatefulWidget {

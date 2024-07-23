@@ -8,6 +8,7 @@ part of '../router.dart';
             path: WhiteboardEditorRoute.location),
       ],
     ),
+    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
   ],
 )
 class _RootShell extends ShellRouteData {

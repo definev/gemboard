@@ -4,13 +4,16 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gemboard_common/gemboard_common.dart';
 import 'package:home/src/view/gemboard_sidebar_header.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
+import 'package:settings/settings.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:whiteboard/whiteboard.dart';
 
 /// TODO: Implement way to access and control or reactive state
 /// TODO: Done specifically for the sidebar
-class GemboardLeadSidebar extends HookWidget {
+class GemboardLeadSidebar extends HookConsumerWidget {
   const GemboardLeadSidebar({
     this.minSize = _minSize,
   });
@@ -20,7 +23,10 @@ class GemboardLeadSidebar extends HookWidget {
   final double minSize;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final whiteboardNavigation = ref.read(WhiteboardNavigation.provider);
+    final settingsNavigation = ref.read(SettingsNavigation.provider);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final panelSize = constraints.biggest.width;
@@ -63,7 +69,7 @@ class GemboardLeadSidebar extends HookWidget {
                                 child: HookBuilder(
                                   builder: (context) {
                                     final showCreateForm = useState(false);
-          
+
                                     return EmojiLabelEditorPopup(
                                       background: ColorVariant.yellow,
                                       visible: showCreateForm.value,
@@ -98,30 +104,33 @@ class GemboardLeadSidebar extends HookWidget {
                       ),
                     ),
                     Button(
-                      onPressed: () {},
+                      onPressed: () => settingsNavigation.pushSettingsFlow(),
                       background: ColorVariant.green,
                       kind: ButtonKind.filled,
                       style: Style(
                         $box.padding.all.ref(SpaceVariant.large),
                       ),
-                      child: StyledRow(
-                        inherit: true,
-                        style: Style(
-                          $flex.gap.ref(SpaceVariant.medium),
-                          $flex.mainAxisAlignment.center(),
-                        ),
-                        children: [
-                          StyledIcon(IconlyLight.upload),
-                          if (panelSize > _minSize)
-                            Expanded(
-                              child: StyledText(
-                                'Input sources',
-                                style: Style(
-                                  $text.overflow.ellipsis(),
+                      child: SafeArea(
+                        top: false,
+                        child: StyledRow(
+                          inherit: true,
+                          style: Style(
+                            $flex.gap.ref(SpaceVariant.medium),
+                            $flex.mainAxisAlignment.center(),
+                          ),
+                          children: [
+                            StyledIcon(IconlyLight.setting),
+                            if (panelSize > _minSize)
+                              Expanded(
+                                child: StyledText(
+                                  'Settings',
+                                  style: Style(
+                                    $text.overflow.ellipsis(),
+                                  ),
                                 ),
                               ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],

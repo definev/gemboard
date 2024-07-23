@@ -19,6 +19,7 @@ dependencies:
   
   flutter_riverpod: ^2.5.1
   go_router: ^14.2.0
+  cupertino_modal_sheet: ^1.1.0
 
   flextras: ^1.0.0
   design_system:
@@ -28,6 +29,8 @@ dependencies:
     path: ../../core/utils
 
   # feature
+  settings:
+    path: ../../feature/settings
   home:
     path: ../../feature/home
   whiteboard:

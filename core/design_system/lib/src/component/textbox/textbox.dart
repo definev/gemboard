@@ -19,6 +19,7 @@ class DSTextbox extends StyledWidget {
     this.kind = DSTextboxKind.outline,
     this.focusNode,
     this.autofocus = false,
+    this.obscureText = false,
     this.controller,
     this.onChanged,
     this.hintText,
@@ -26,9 +27,12 @@ class DSTextbox extends StyledWidget {
     this.maxLines,
     this.textStyle,
     this.trailing,
+    this.label,
   });
 
   final DSTextboxKind kind;
+
+  final Widget? label;
 
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
@@ -37,6 +41,7 @@ class DSTextbox extends StyledWidget {
   final String? hintText;
   final int? minLines;
   final int? maxLines;
+  final bool obscureText;
   final TextStyle? textStyle;
   final Widget? trailing;
 
@@ -55,38 +60,71 @@ class DSTextbox extends StyledWidget {
 
         return withMix(
           context,
-          (context) => Box(
-            style: dsTextboxStyle(context).merge(style),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    selectionHeightStyle: BoxHeightStyle.strut,
-                    controller: controller,
-                    focusNode: defaultFocusNode,
-                    autofocus: autofocus,
-                    onChanged: onChanged,
-                    cursorColor: ColorVariant.onSurface.resolve(context),
-                    cursorWidth: 1.5,
-                    cursorHeight: textStyle.height,
-                    style: textStyle,
-                    minLines: minLines,
-                    maxLines: maxLines,
-                    decoration: InputDecoration.collapsed(
-                      hintText: hintText,
-                      hintStyle: textStyle.copyWith(
-                        color: Colors.grey.shade400,
+          (context) {
+            Widget child = Box(
+              style: dsTextboxStyle(context).merge(style),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      selectionHeightStyle: BoxHeightStyle.strut,
+                      controller: controller,
+                      focusNode: defaultFocusNode,
+                      autofocus: autofocus,
+                      obscureText: obscureText,
+                      onChanged: onChanged,
+                      cursorColor: ColorVariant.onSurface.resolve(context),
+                      cursorWidth: 1.5,
+                      cursorHeight: textStyle.height,
+                      style: textStyle,
+                      minLines: minLines,
+                      maxLines: switch (obscureText) {
+                        true => 1,
+                        _ => maxLines,
+                      },
+                      decoration: InputDecoration.collapsed(
+                        hintText: hintText,
+                        hintStyle: textStyle.copyWith(
+                          color: Colors.grey.shade400,
+                        ),
+                        focusColor: Colors.red,
+                        fillColor: Colors.red,
                       ),
-                      focusColor: Colors.red,
-                      fillColor: Colors.red,
                     ),
                   ),
-                ),
-                if (trailing case final trailing?) trailing,
-              ],
-            ),
-          ),
+                  if (trailing case final trailing?)
+                    Mix(
+                      data: Style(
+                        $box.padding.right.ref(SpaceVariant.gap),
+                        $icon.size(20),
+                        $icon.color.ref(ColorVariant.onSurface),
+                      ).of(context),
+                      child: trailing,
+                    ),
+                ],
+              ),
+            );
+
+            if (label != null) {
+              child = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Mix(
+                    data: Style(
+                      $text.style.ref(TextStyleVariant.p2),
+                      $text.style.fontWeight.bold(),
+                    ).of(context),
+                    child: label!,
+                  ),
+                  SizedBox(height: SpaceVariant.gap.resolve(context)),
+                  child,
+                ],
+              );
+            }
+
+            return child;
+          },
         );
       },
     );

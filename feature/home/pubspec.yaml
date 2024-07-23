@@ -35,6 +35,12 @@ dependencies:
   
   utils:
     path: ../../core/utils
+
+  # feature
+  whiteboard: 
+    path: ../../feature/whiteboard
+  settings:
+    path: ../../feature/settings
   
   mix: ^1.2.0
   flextras: ^1.0.0
