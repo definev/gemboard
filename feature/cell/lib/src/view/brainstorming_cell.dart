@@ -17,6 +17,14 @@ class BrainstormingCellView extends HookWidget {
   final BrainstormingCell cell;
   final ValueChanged<String> onAskForSuggestion;
 
+  static final colors = [
+    ColorVariant.blue,
+    ColorVariant.yellow,
+    ColorVariant.green,
+    ColorVariant.red,
+    ColorVariant.purple,
+  ];
+
   @override
   Widget build(BuildContext context) {
     final randomWidths = useMemoized(
@@ -57,32 +65,51 @@ class BrainstormingCellView extends HookWidget {
         ),
         if (cell.suggestions.isEmpty)
           StyledColumn(
-            inherit: true,
+            style: Style(
+              $flex.mainAxisSize.min(),
+              $flex.gap.ref(SpaceVariant.small),
+            ),
             children: [
-              for (int i = 0; i < 5; i++)
+              for (int index = 0; index < colors.length; index++)
                 Row(
                   children: [
                     DSCard(
                       kind: DSCardKind.flat,
                       style: Style(
-                        $box.color([
-                          ColorVariant.blue,
-                          ColorVariant.yellow,
-                          ColorVariant.green,
-                          ColorVariant.red,
-                          ColorVariant.purple,
-                        ][i]
+                        $box.color(colors[index]
                             .resolve(context)
-                            .withOpacity(1 - i * 0.2)),
+                            .withOpacity(1 - index * 0.2)),
                         $box.margin.horizontal(1.5),
                         $box.minHeight(32),
                         $box.padding.left.ref(SpaceVariant.small),
-                        $box.minWidth(randomWidths[i]),
+                        $box.minWidth(randomWidths[index]),
                         $box.alignment.centerLeft(),
                       ),
                       child: SizedBox(),
                     ),
                   ],
+                ),
+            ],
+          )
+        else
+          StyledColumn(
+            style: Style(
+              $flex.mainAxisSize.min(),
+              $flex.gap.ref(SpaceVariant.small),
+            ),
+            children: [
+              for (final (index, suggestion) in cell.suggestions.indexed)
+                DSCard(
+                  kind: DSCardKind.flat,
+                  style: Style(
+                    $box.color.ref(colors[index % colors.length]),
+                    $box.margin.all(0),
+                    $box.margin.horizontal(1.5),
+                    $box.minHeight(32),
+                    $box.padding.horizontal.ref(SpaceVariant.small),
+                    $box.alignment.centerLeft(),
+                  ),
+                  child: StyledText(suggestion),
                 ),
             ],
           ),

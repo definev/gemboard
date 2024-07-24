@@ -1329,6 +1329,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   @override
   @JsonKey()
   final bool selected;
+
+  ///
   @override
   final String? question;
   final List<String> _suggestions;
@@ -1711,6 +1713,8 @@ abstract class BrainstormingCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+
+  ///
   String? get question;
   List<String> get suggestions;
   @override

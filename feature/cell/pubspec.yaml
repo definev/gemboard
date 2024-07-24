@@ -29,6 +29,11 @@ dependencies:
   
   utils:
     path: ../../core/utils
+
+  # feature
+  llm:
+    path: ../../feature/llm
+  google_generative_ai:
   
   mix: ^1.2.0
   iconly: 
@@ -36,6 +41,8 @@ dependencies:
   # This is unsure the best db
   hive: ^2.2.3 
   path_provider: ^2.1.0
+
+  flutter_animate: 
   
   flextras:
 

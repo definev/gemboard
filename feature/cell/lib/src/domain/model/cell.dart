@@ -92,6 +92,8 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
+
+    /// 
     required String? question,
     required List<String> suggestions,
   }) = BrainstormingCell;

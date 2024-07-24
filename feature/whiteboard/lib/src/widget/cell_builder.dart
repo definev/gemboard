@@ -18,6 +18,7 @@ class CellBuilder extends StatefulWidget {
     required this.horizontalDetails,
     required this.verticalDetails,
     required this.scaleFactor,
+    required this.onAskForSuggestion,
   });
 
   final ScrollableDetails horizontalDetails;
@@ -26,6 +27,9 @@ class CellBuilder extends StatefulWidget {
   final Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap;
   final Cell cell;
   final double scaleFactor;
+
+  final void Function(BrainstormingCell cell, String question)
+      onAskForSuggestion;
 
   @override
   State<CellBuilder> createState() => _CellBuilderState();
@@ -237,7 +241,8 @@ class _CellBuilderState extends State<CellBuilder> {
     Widget child = widget.cell.map(
       brainstorming: (cell) => BrainstormingCellView(
         cell: cell,
-        onAskForSuggestion: (question) {},
+        onAskForSuggestion: (question) =>
+            widget.onAskForSuggestion(cell, question),
       ),
       text: (cell) => TextCellView(cell: cell),
       image: (cell) => ImageCellView(cell: cell),

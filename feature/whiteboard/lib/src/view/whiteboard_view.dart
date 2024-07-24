@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:math' as math;
 
@@ -60,6 +61,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Map<String, (GlobalKey, Cell)> cellKeys = {};
   Map<String, (GlobalKey, Edge)> edgeKeys = {};
   Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap = {};
+  Map<String, List<StreamSubscription>> _cellProcessors = {};
 
   late void Function(
     AsyncValue<List<Cell>>? previous,
@@ -121,6 +123,21 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     scaleFactor = widget.scaleFactor ?? ValueNotifier(.5);
     verticalDetails = widget.verticalDetails ?? defaultVerticalDetails;
     horizontalDetails = widget.horizontalDetails ?? defaultHorizontalDetails;
+  }
+
+  @override
+  void dispose() {
+    cellKeys.clear();
+    edgeKeys.clear();
+    stackPositionDataMap.clear();
+    for (final MapEntry(key: _, :value) in _cellProcessors.entries) {
+      for (final subscription in value) {
+        subscription.cancel();
+      }
+    }
+
+    _cellProcessors.clear();
+    super.dispose();
   }
 
   @override
@@ -408,6 +425,62 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     notifier: notifier,
                     stackPositionDataMap: stackPositionDataMap,
                     cell: cell,
+
+                    /// Brainstorming cell
+                    onAskForSuggestion: (cell, question) {
+                      if (ref.exists(getBrainstormingSuggestionsProvider(
+                        key: cell.id.id,
+                        question: question,
+                      ))) {
+                        return;
+                      }
+
+                      final newCell = cell.copyWith(
+                        question: question,
+                      );
+                      cellKeys[cell.id.id] = (key, newCell);
+
+                      final stream = Stream.fromFuture(ref.read(
+                        getBrainstormingSuggestionsProvider(
+                          key: cell.id.id,
+                          question: question,
+                        ).future,
+                      ));
+
+                      late StreamSubscription subscription;
+                      subscription = stream.listen((suggestions) {
+                        final latest = cellKeys[cell.id.id];
+                        if (latest == null) return;
+                        final (_, latestCell) = latest;
+                        if (latestCell is! BrainstormingCell) return;
+
+                        final newCell = latestCell.copyWith(
+                          suggestions: suggestions,
+                        );
+                        cellKeys[cell.id.id] = (key, newCell);
+                        setState(() {});
+                        widget.onCellUpdated(cell, newCell);
+                      }, onDone: () {
+                        subscription.cancel();
+                        _cellProcessors[cell.id.id] = [
+                          ..._cellProcessors[cell.id.id] ?? []
+                        ]..remove(subscription);
+                      }, onError: (error) {
+                        subscription.cancel();
+                        _cellProcessors[cell.id.id] = [
+                          ..._cellProcessors[cell.id.id] ?? []
+                        ]..remove(subscription);
+                        print(error);
+                      });
+
+                      _cellProcessors[cell.id.id] = [
+                        ..._cellProcessors[cell.id.id] ?? [],
+                        subscription,
+                      ];
+
+                      setState(() {});
+                      widget.onCellUpdated(cell, newCell);
+                    },
                   ),
                 ),
               );
