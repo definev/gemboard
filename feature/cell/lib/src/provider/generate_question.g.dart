@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'get_whiteboard_by_id.dart';
+part of 'generate_question.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getWhiteboardByIdHash() => r'a541b29fbf622db8cc8b324547cfb89658b442f3';
+String _$generateQuestionHash() => r'479021618088a79e309b4e3e83e6fe521a5d099c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +29,30 @@ class _SystemHash {
   }
 }
 
-/// See also [getWhiteboardById].
-@ProviderFor(getWhiteboardById)
-const getWhiteboardByIdProvider = GetWhiteboardByIdFamily();
+/// See also [generateQuestion].
+@ProviderFor(generateQuestion)
+const generateQuestionProvider = GenerateQuestionFamily();
 
-/// See also [getWhiteboardById].
-class GetWhiteboardByIdFamily extends Family<AsyncValue<Whiteboard>> {
-  /// See also [getWhiteboardById].
-  const GetWhiteboardByIdFamily();
+/// See also [generateQuestion].
+class GenerateQuestionFamily extends Family<Raw<Stream<String>>> {
+  /// See also [generateQuestion].
+  const GenerateQuestionFamily();
 
-  /// See also [getWhiteboardById].
-  GetWhiteboardByIdProvider call({
-    required WhiteboardId id,
+  /// See also [generateQuestion].
+  GenerateQuestionProvider call({
+    required String text,
   }) {
-    return GetWhiteboardByIdProvider(
-      id: id,
+    return GenerateQuestionProvider(
+      text: text,
     );
   }
 
   @override
-  GetWhiteboardByIdProvider getProviderOverride(
-    covariant GetWhiteboardByIdProvider provider,
+  GenerateQuestionProvider getProviderOverride(
+    covariant GenerateQuestionProvider provider,
   ) {
     return call(
-      id: provider.id,
+      text: provider.text,
     );
   }
 
@@ -68,92 +68,93 @@ class GetWhiteboardByIdFamily extends Family<AsyncValue<Whiteboard>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'getWhiteboardByIdProvider';
+  String? get name => r'generateQuestionProvider';
 }
 
-/// See also [getWhiteboardById].
-class GetWhiteboardByIdProvider extends AutoDisposeFutureProvider<Whiteboard> {
-  /// See also [getWhiteboardById].
-  GetWhiteboardByIdProvider({
-    required WhiteboardId id,
+/// See also [generateQuestion].
+class GenerateQuestionProvider
+    extends AutoDisposeProvider<Raw<Stream<String>>> {
+  /// See also [generateQuestion].
+  GenerateQuestionProvider({
+    required String text,
   }) : this._internal(
-          (ref) => getWhiteboardById(
-            ref as GetWhiteboardByIdRef,
-            id: id,
+          (ref) => generateQuestion(
+            ref as GenerateQuestionRef,
+            text: text,
           ),
-          from: getWhiteboardByIdProvider,
-          name: r'getWhiteboardByIdProvider',
+          from: generateQuestionProvider,
+          name: r'generateQuestionProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$getWhiteboardByIdHash,
-          dependencies: GetWhiteboardByIdFamily._dependencies,
+                  : _$generateQuestionHash,
+          dependencies: GenerateQuestionFamily._dependencies,
           allTransitiveDependencies:
-              GetWhiteboardByIdFamily._allTransitiveDependencies,
-          id: id,
+              GenerateQuestionFamily._allTransitiveDependencies,
+          text: text,
         );
 
-  GetWhiteboardByIdProvider._internal(
+  GenerateQuestionProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.id,
+    required this.text,
   }) : super.internal();
 
-  final WhiteboardId id;
+  final String text;
 
   @override
   Override overrideWith(
-    FutureOr<Whiteboard> Function(GetWhiteboardByIdRef provider) create,
+    Raw<Stream<String>> Function(GenerateQuestionRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: GetWhiteboardByIdProvider._internal(
-        (ref) => create(ref as GetWhiteboardByIdRef),
+      override: GenerateQuestionProvider._internal(
+        (ref) => create(ref as GenerateQuestionRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        id: id,
+        text: text,
       ),
     );
   }
 
   @override
-  AutoDisposeFutureProviderElement<Whiteboard> createElement() {
-    return _GetWhiteboardByIdProviderElement(this);
+  AutoDisposeProviderElement<Raw<Stream<String>>> createElement() {
+    return _GenerateQuestionProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is GetWhiteboardByIdProvider && other.id == id;
+    return other is GenerateQuestionProvider && other.text == text;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, id.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
 
     return _SystemHash.finish(hash);
   }
 }
 
-mixin GetWhiteboardByIdRef on AutoDisposeFutureProviderRef<Whiteboard> {
-  /// The parameter `id` of this provider.
-  WhiteboardId get id;
+mixin GenerateQuestionRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
+  /// The parameter `text` of this provider.
+  String get text;
 }
 
-class _GetWhiteboardByIdProviderElement
-    extends AutoDisposeFutureProviderElement<Whiteboard>
-    with GetWhiteboardByIdRef {
-  _GetWhiteboardByIdProviderElement(super.provider);
+class _GenerateQuestionProviderElement
+    extends AutoDisposeProviderElement<Raw<Stream<String>>>
+    with GenerateQuestionRef {
+  _GenerateQuestionProviderElement(super.provider);
 
   @override
-  WhiteboardId get id => (origin as GetWhiteboardByIdProvider).id;
+  String get text => (origin as GenerateQuestionProvider).text;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

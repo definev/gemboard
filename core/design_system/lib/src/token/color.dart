@@ -25,6 +25,17 @@ class ColorVariant extends ColorToken {
   static const pink = ColorVariant('pink');
   static const onPink = ColorVariant('onPink');
 
+  static ColorVariant? tryParse(String color) => switch (color) {
+        'red' => ColorVariant.red,
+        'green' => ColorVariant.green,
+        'blue' => ColorVariant.blue,
+        'yellow' => ColorVariant.yellow,
+        'purple' => ColorVariant.purple,
+        'pink' => ColorVariant.pink,
+        'cyan' => ColorVariant.cyan,
+        _ => null,
+      };
+
   static ColorVariant resolveOnBackground(
     ColorVariant background,
     ColorVariant fallback,

@@ -41,6 +41,8 @@ dependencies:
     path: ../../feature/whiteboard
   settings:
     path: ../../feature/settings
+  folder:
+    path: ../../feature/folder
   
   mix: ^1.2.0
   flextras: ^1.0.0

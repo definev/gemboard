@@ -17,12 +17,12 @@ class DSCardStyle {
 
   Style call(BuildContext context) {
     return Style(
-      $box.alignment.center(),
       $box.color.ref(ColorVariant.surface),
       $text.style.ref(TextStyleVariant.p),
       DSCardKind.flat(
         $box.color.ref(background),
         $text.style.color.ref(onBackground),
+        $icon.color.ref(onBackground),
       ),
       DSCardKind.outlined(
         $box.border.all.color.ref(background),
@@ -44,6 +44,8 @@ class DSCardStyle {
             0.1,
           )!,
         ),
+        $text.style.color.ref(ColorVariant.onSurface),
+        $icon.color.ref(ColorVariant.onSurface),
       ),
       FocusVariant.focus(
         $box.color(
@@ -53,6 +55,7 @@ class DSCardStyle {
             0.3,
           )!,
         ),
+        $text.style.color.ref(ColorVariant.onSurface),
       ),
     ).applyVariants([
       kind,
@@ -68,6 +71,8 @@ class DSCardStyle {
     return Style(
       $flex.gap.ref(SpaceVariant.medium),
       $flex.crossAxisAlignment.start(),
+      $flex.mainAxisAlignment.start(),
+      $flex.mainAxisSize.min(),
       $box.padding.all.ref(SpaceVariant.medium),
     );
   }
@@ -92,6 +97,7 @@ class DSCardStyle {
     return Style(
       $text.style.ref(TextStyleVariant.p),
       $text.style.color.ref(ColorVariant.onSurface),
+      $flex.mainAxisSize.min(),
       DSCardKind.flat(
         $box.color.ref(onBackground),
       ),

@@ -4,6 +4,6 @@ import 'package:home/home.dart';
 class HomeNavigationImpl implements HomeNavigation {
   @override
   void goToHome() {
-    router.go(MyDeskRoute.location);
+    router.go(HomeGreetingRoute.location);
   }
 }

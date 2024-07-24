@@ -20,6 +20,7 @@ class DSTextbox extends StyledWidget {
     this.focusNode,
     this.autofocus = false,
     this.obscureText = false,
+    this.readOnly = false,
     this.controller,
     this.onChanged,
     this.onSubmitted,
@@ -40,6 +41,7 @@ class DSTextbox extends StyledWidget {
   final ValueChanged<String>? onSubmitted;
   final FocusNode? focusNode;
   final bool autofocus;
+  final bool readOnly;
   final String? hintText;
   final int? minLines;
   final int? maxLines;
@@ -56,6 +58,7 @@ class DSTextbox extends StyledWidget {
         final dsTextboxStyle = DSTextboxStyle(
           kind,
           defaultFocusNode.hasFocus,
+          readOnly,
         );
 
         final textStyle = this.textStyle ?? TextStyleVariant.p.resolve(context);
@@ -71,6 +74,7 @@ class DSTextbox extends StyledWidget {
                   Expanded(
                     child: TextFormField(
                       selectionHeightStyle: BoxHeightStyle.strut,
+                      readOnly: readOnly,
                       controller: controller,
                       focusNode: defaultFocusNode,
                       autofocus: autofocus,

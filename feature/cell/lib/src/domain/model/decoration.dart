@@ -32,16 +32,7 @@ class CellDecoration with _$CellDecoration {
 }
 
 extension type CellDecorationExtension(CellDecoration decoration) {
-  ColorVariant? get colorVariant => switch (decoration.color) {
-        'red' => ColorVariant.red,
-        'green' => ColorVariant.green,
-        'blue' => ColorVariant.blue,
-        'yellow' => ColorVariant.yellow,
-        'purple' => ColorVariant.purple,
-        'pink' => ColorVariant.pink,
-        'cyan' => ColorVariant.cyan,
-        _ => null,
-      };
+  ColorVariant? get colorVariant => ColorVariant.tryParse(decoration.color);
 
   Color colorValue(BuildContext context) {
     final variant = colorVariant;

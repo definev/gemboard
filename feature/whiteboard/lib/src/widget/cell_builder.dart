@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
@@ -19,6 +21,8 @@ class CellBuilder extends StatefulWidget {
     required this.verticalDetails,
     required this.scaleFactor,
     required this.onAskForSuggestion,
+    required this.onSuggestionSelected,
+    required this.onAskForSuggestionSubscription,
   });
 
   final ScrollableDetails horizontalDetails;
@@ -28,8 +32,12 @@ class CellBuilder extends StatefulWidget {
   final Cell cell;
   final double scaleFactor;
 
+  /// Brainstorming specific
   final void Function(BrainstormingCell cell, String question)
       onAskForSuggestion;
+  final void Function(BrainstormingCell cell, int index, String suggestion)
+      onSuggestionSelected;
+  final StreamSubscription? onAskForSuggestionSubscription;
 
   @override
   State<CellBuilder> createState() => _CellBuilderState();
@@ -241,8 +249,11 @@ class _CellBuilderState extends State<CellBuilder> {
     Widget child = widget.cell.map(
       brainstorming: (cell) => BrainstormingCellView(
         cell: cell,
+        onSuggestionSelected: (index, suggestion) =>
+            widget.onSuggestionSelected(cell, index, suggestion),
         onAskForSuggestion: (question) =>
             widget.onAskForSuggestion(cell, question),
+        onAskForSuggestionSubscription: widget.onAskForSuggestionSubscription,
       ),
       text: (cell) => TextCellView(cell: cell),
       image: (cell) => ImageCellView(cell: cell),

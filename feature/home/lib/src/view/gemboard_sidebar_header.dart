@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 import 'package:utils/utils.dart';
 
-class gemboardSidebarHeader extends StatelessWidget {
-  const gemboardSidebarHeader({
+class GemboardSidebarHeader extends StatelessWidget {
+  const GemboardSidebarHeader({
     super.key,
     required this.panelSize,
     required this.minSize,
@@ -19,7 +19,6 @@ class gemboardSidebarHeader extends StatelessWidget {
       child: DSSidebarSectionHeader(
         style: Style(
           $box.padding.all.ref(SpaceVariant.small),
-          // $box.padding.all(0),
         ),
         background: ColorVariant.yellow,
         title: SafeArea(

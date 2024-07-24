@@ -19,6 +19,7 @@ Future<Whiteboard> getWhiteboardById(
           id: id,
           emoji: '🏡',
           title: 'Desktop',
+          color: 'yellow',
         ),
       );
       data = await repository.get(id: id);

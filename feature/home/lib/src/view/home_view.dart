@@ -15,10 +15,7 @@ class HomeView extends StatelessWidget {
       body: Column(
         children: [
           DSAppbar(
-            title: StyledText(
-              inherit: true,
-              'Home',
-            ),
+            title: StyledText('Home'),
           ),
           Expanded(
             child: Center(
@@ -55,7 +52,7 @@ class HomeView extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        StyledIcon(IconlyBold. message),
+                        StyledIcon(IconlyBold.message),
                         SizedBox(width: SpaceVariant.small.resolve(context)),
                         StyledText('Open sidebar'),
                       ],

@@ -7,7 +7,7 @@ part of 'generate_content_stream.dart';
 // **************************************************************************
 
 String _$generateContentStreamHash() =>
-    r'3a745aa238b53cf631b0e3828c9e39e10d24038e';
+    r'74b10bb0747cee88ba3885dc7f3bff0a46ba2659';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -36,7 +36,7 @@ const generateContentStreamProvider = GenerateContentStreamFamily();
 
 /// See also [generateContentStream].
 class GenerateContentStreamFamily
-    extends Family<AsyncValue<GenerateContentResponse>> {
+    extends Family<Raw<Stream<GenerateContentResponse>>> {
   /// See also [generateContentStream].
   const GenerateContentStreamFamily();
 
@@ -78,7 +78,7 @@ class GenerateContentStreamFamily
 
 /// See also [generateContentStream].
 class GenerateContentStreamProvider
-    extends AutoDisposeStreamProvider<GenerateContentResponse> {
+    extends AutoDisposeProvider<Raw<Stream<GenerateContentResponse>>> {
   /// See also [generateContentStream].
   GenerateContentStreamProvider({
     GeminiConfiguration configuration = GeminiConfiguration.flashModel,
@@ -118,7 +118,8 @@ class GenerateContentStreamProvider
 
   @override
   Override overrideWith(
-    Stream<GenerateContentResponse> Function(GenerateContentStreamRef provider)
+    Raw<Stream<GenerateContentResponse>> Function(
+            GenerateContentStreamRef provider)
         create,
   ) {
     return ProviderOverride(
@@ -137,7 +138,8 @@ class GenerateContentStreamProvider
   }
 
   @override
-  AutoDisposeStreamProviderElement<GenerateContentResponse> createElement() {
+  AutoDisposeProviderElement<Raw<Stream<GenerateContentResponse>>>
+      createElement() {
     return _GenerateContentStreamProviderElement(this);
   }
 
@@ -159,7 +161,7 @@ class GenerateContentStreamProvider
 }
 
 mixin GenerateContentStreamRef
-    on AutoDisposeStreamProviderRef<GenerateContentResponse> {
+    on AutoDisposeProviderRef<Raw<Stream<GenerateContentResponse>>> {
   /// The parameter `configuration` of this provider.
   GeminiConfiguration get configuration;
 
@@ -168,7 +170,7 @@ mixin GenerateContentStreamRef
 }
 
 class _GenerateContentStreamProviderElement
-    extends AutoDisposeStreamProviderElement<GenerateContentResponse>
+    extends AutoDisposeProviderElement<Raw<Stream<GenerateContentResponse>>>
     with GenerateContentStreamRef {
   _GenerateContentStreamProviderElement(super.provider);
 
@@ -181,14 +183,14 @@ class _GenerateContentStreamProviderElement
 }
 
 String _$generateTextFromCoreDataHash() =>
-    r'da4997286e3e665d7c1736cf625cea8123b74841';
+    r'cdb4f39c27925766534241b900914f84c8d2e553';
 
 /// See also [generateTextFromCoreData].
 @ProviderFor(generateTextFromCoreData)
 const generateTextFromCoreDataProvider = GenerateTextFromCoreDataFamily();
 
 /// See also [generateTextFromCoreData].
-class GenerateTextFromCoreDataFamily extends Family<AsyncValue<String>> {
+class GenerateTextFromCoreDataFamily extends Family<Raw<Stream<String>>> {
   /// See also [generateTextFromCoreData].
   const GenerateTextFromCoreDataFamily();
 
@@ -230,7 +232,7 @@ class GenerateTextFromCoreDataFamily extends Family<AsyncValue<String>> {
 
 /// See also [generateTextFromCoreData].
 class GenerateTextFromCoreDataProvider
-    extends AutoDisposeStreamProvider<String> {
+    extends AutoDisposeProvider<Raw<Stream<String>>> {
   /// See also [generateTextFromCoreData].
   GenerateTextFromCoreDataProvider({
     GeminiConfiguration configuration = GeminiConfiguration.flashModel,
@@ -270,7 +272,7 @@ class GenerateTextFromCoreDataProvider
 
   @override
   Override overrideWith(
-    Stream<String> Function(GenerateTextFromCoreDataRef provider) create,
+    Raw<Stream<String>> Function(GenerateTextFromCoreDataRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -288,7 +290,7 @@ class GenerateTextFromCoreDataProvider
   }
 
   @override
-  AutoDisposeStreamProviderElement<String> createElement() {
+  AutoDisposeProviderElement<Raw<Stream<String>>> createElement() {
     return _GenerateTextFromCoreDataProviderElement(this);
   }
 
@@ -309,7 +311,8 @@ class GenerateTextFromCoreDataProvider
   }
 }
 
-mixin GenerateTextFromCoreDataRef on AutoDisposeStreamProviderRef<String> {
+mixin GenerateTextFromCoreDataRef
+    on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `configuration` of this provider.
   GeminiConfiguration get configuration;
 
@@ -318,7 +321,7 @@ mixin GenerateTextFromCoreDataRef on AutoDisposeStreamProviderRef<String> {
 }
 
 class _GenerateTextFromCoreDataProviderElement
-    extends AutoDisposeStreamProviderElement<String>
+    extends AutoDisposeProviderElement<Raw<Stream<String>>>
     with GenerateTextFromCoreDataRef {
   _GenerateTextFromCoreDataProviderElement(super.provider);
 

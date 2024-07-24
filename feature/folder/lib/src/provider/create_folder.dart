@@ -1,7 +1,6 @@
+import 'package:folder/folder.dart';
 import 'package:folder/src/domain/repository/folder_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../domain/model/folder.dart';
 
 part 'create_folder.g.dart';
 
@@ -12,8 +11,9 @@ Future<void> createFolder(
   FolderParentId parentId = const FolderParentId(),
 }) async {
   final repository = ref.read(folderRepositoryProvider);
-  return repository.add(
+  await repository.add(
     parentId: parentId,
     data: data,
   );
+  ref.invalidate(getFolderListProvider);
 }

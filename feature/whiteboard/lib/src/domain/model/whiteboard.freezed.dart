@@ -338,6 +338,7 @@ Whiteboard _$WhiteboardFromJson(Map<String, dynamic> json) {
 mixin _$Whiteboard {
   @WhiteboardIdConverter()
   WhiteboardId get id => throw _privateConstructorUsedError;
+  String get color => throw _privateConstructorUsedError;
   String get emoji => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
 
@@ -354,7 +355,10 @@ abstract class $WhiteboardCopyWith<$Res> {
       _$WhiteboardCopyWithImpl<$Res, Whiteboard>;
   @useResult
   $Res call(
-      {@WhiteboardIdConverter() WhiteboardId id, String emoji, String title});
+      {@WhiteboardIdConverter() WhiteboardId id,
+      String color,
+      String emoji,
+      String title});
 
   $WhiteboardIdCopyWith<$Res> get id;
 }
@@ -373,6 +377,7 @@ class _$WhiteboardCopyWithImpl<$Res, $Val extends Whiteboard>
   @override
   $Res call({
     Object? id = null,
+    Object? color = null,
     Object? emoji = null,
     Object? title = null,
   }) {
@@ -381,6 +386,10 @@ class _$WhiteboardCopyWithImpl<$Res, $Val extends Whiteboard>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as WhiteboardId,
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as String,
       emoji: null == emoji
           ? _value.emoji
           : emoji // ignore: cast_nullable_to_non_nullable
@@ -410,7 +419,10 @@ abstract class _$$WhiteboardImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@WhiteboardIdConverter() WhiteboardId id, String emoji, String title});
+      {@WhiteboardIdConverter() WhiteboardId id,
+      String color,
+      String emoji,
+      String title});
 
   @override
   $WhiteboardIdCopyWith<$Res> get id;
@@ -428,6 +440,7 @@ class __$$WhiteboardImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? color = null,
     Object? emoji = null,
     Object? title = null,
   }) {
@@ -436,6 +449,10 @@ class __$$WhiteboardImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as WhiteboardId,
+      color: null == color
+          ? _value.color
+          : color // ignore: cast_nullable_to_non_nullable
+              as String,
       emoji: null == emoji
           ? _value.emoji
           : emoji // ignore: cast_nullable_to_non_nullable
@@ -453,6 +470,7 @@ class __$$WhiteboardImplCopyWithImpl<$Res>
 class _$WhiteboardImpl implements _Whiteboard {
   const _$WhiteboardImpl(
       {@WhiteboardIdConverter() required this.id,
+      this.color = 'yellow',
       required this.emoji,
       required this.title});
 
@@ -463,13 +481,16 @@ class _$WhiteboardImpl implements _Whiteboard {
   @WhiteboardIdConverter()
   final WhiteboardId id;
   @override
+  @JsonKey()
+  final String color;
+  @override
   final String emoji;
   @override
   final String title;
 
   @override
   String toString() {
-    return 'Whiteboard(id: $id, emoji: $emoji, title: $title)';
+    return 'Whiteboard(id: $id, color: $color, emoji: $emoji, title: $title)';
   }
 
   @override
@@ -478,13 +499,14 @@ class _$WhiteboardImpl implements _Whiteboard {
         (other.runtimeType == runtimeType &&
             other is _$WhiteboardImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.color, color) || other.color == color) &&
             (identical(other.emoji, emoji) || other.emoji == emoji) &&
             (identical(other.title, title) || other.title == title));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, emoji, title);
+  int get hashCode => Object.hash(runtimeType, id, color, emoji, title);
 
   @JsonKey(ignore: true)
   @override
@@ -503,6 +525,7 @@ class _$WhiteboardImpl implements _Whiteboard {
 abstract class _Whiteboard implements Whiteboard {
   const factory _Whiteboard(
       {@WhiteboardIdConverter() required final WhiteboardId id,
+      final String color,
       required final String emoji,
       required final String title}) = _$WhiteboardImpl;
 
@@ -512,6 +535,8 @@ abstract class _Whiteboard implements Whiteboard {
   @override
   @WhiteboardIdConverter()
   WhiteboardId get id;
+  @override
+  String get color;
   @override
   String get emoji;
   @override

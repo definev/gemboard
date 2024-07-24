@@ -83,9 +83,6 @@ class _$CoreDataCopyWithImpl<$Res, $Val extends CoreData>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -105,8 +102,6 @@ class __$$SystemCoreDataImplCopyWithImpl<$Res>
       _$SystemCoreDataImpl _value, $Res Function(_$SystemCoreDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,9 +141,7 @@ class _$SystemCoreDataImpl implements SystemCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, instruction);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SystemCoreDataImplCopyWith<_$SystemCoreDataImpl> get copyWith =>
@@ -234,10 +227,7 @@ abstract class SystemCoreData implements CoreData {
   const factory SystemCoreData(final String instruction) = _$SystemCoreDataImpl;
 
   String get instruction;
-
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$SystemCoreDataImplCopyWith<_$SystemCoreDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -259,8 +249,6 @@ class __$$TextCoreDataImplCopyWithImpl<$Res>
       _$TextCoreDataImpl _value, $Res Function(_$TextCoreDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -299,9 +287,7 @@ class _$TextCoreDataImpl implements TextCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, text);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$TextCoreDataImplCopyWith<_$TextCoreDataImpl> get copyWith =>
@@ -386,10 +372,7 @@ abstract class TextCoreData implements CoreData {
   const factory TextCoreData(final String text) = _$TextCoreDataImpl;
 
   String get text;
-
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$TextCoreDataImplCopyWith<_$TextCoreDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -411,8 +394,6 @@ class __$$ImageFileCoreDataImplCopyWithImpl<$Res>
       $Res Function(_$ImageFileCoreDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -451,9 +432,7 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, path);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ImageFileCoreDataImplCopyWith<_$ImageFileCoreDataImpl> get copyWith =>
@@ -539,10 +518,7 @@ abstract class ImageFileCoreData implements CoreData {
   const factory ImageFileCoreData(final String path) = _$ImageFileCoreDataImpl;
 
   String get path;
-
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ImageFileCoreDataImplCopyWith<_$ImageFileCoreDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -564,8 +540,6 @@ class __$$ImageNetworkCoreDataImplCopyWithImpl<$Res>
       $Res Function(_$ImageNetworkCoreDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -604,9 +578,7 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, url);
 
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ImageNetworkCoreDataImplCopyWith<_$ImageNetworkCoreDataImpl>
@@ -694,10 +666,7 @@ abstract class ImageNetworkCoreData implements CoreData {
       _$ImageNetworkCoreDataImpl;
 
   String get url;
-
-  /// Create a copy of CoreData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ImageNetworkCoreDataImplCopyWith<_$ImageNetworkCoreDataImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

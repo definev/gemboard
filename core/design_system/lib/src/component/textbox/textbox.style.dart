@@ -1,10 +1,15 @@
 part of 'textbox.dart';
 
 class DSTextboxStyle {
-  const DSTextboxStyle(this.kind, this.focusHighlight);
+  const DSTextboxStyle(
+    this.kind,
+    this.focusHighlight,
+    this.readOnly,
+  );
 
   final DSTextboxKind kind;
   final bool focusHighlight;
+  final bool readOnly;
 
   Style call(BuildContext context) {
     return Style(
@@ -16,26 +21,32 @@ class DSTextboxStyle {
         bottom: SpaceVariant.gap.resolve(context) + 5,
       ),
       $box.alignment.center(),
-      FocusVariant.focus(
-        DSTextboxKind.outline(
-          $box.border.all(
-            width: 1.5,
-            color: ColorVariant.onSurface.resolve(context),
-            strokeAlign: BorderSide.strokeAlignInside,
+      switch (readOnly) {
+        true => null,
+        false => FocusVariant.focus(
+            DSTextboxKind.outline(
+              $box.border.all(
+                width: 1.5,
+                color: ColorVariant.onSurface.resolve(context),
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+            ),
           ),
-        ),
-      ),
-      FocusVariant.unfocus(
-        DSTextboxKind.outline(
-          $box.border.all(
-            width: 1.5,
-            color: ColorVariant.onSurface.resolve(context).withOpacity(
-                  OpacityVariant.hightlight.resolve(context).value,
-                ),
-            strokeAlign: BorderSide.strokeAlignInside,
+      },
+      switch (readOnly) {
+        true => null,
+        false => FocusVariant.unfocus(
+            DSTextboxKind.outline(
+              $box.border.all(
+                width: 1.5,
+                color: ColorVariant.onSurface.resolve(context).withOpacity(
+                      OpacityVariant.hightlight.resolve(context).value,
+                    ),
+                strokeAlign: BorderSide.strokeAlignInside,
+              ),
+            ),
           ),
-        ),
-      ),
+      },
     ).applyVariants([
       GestureTool.convertFocusVariant(focusHighlight),
       kind,

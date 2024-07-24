@@ -2,13 +2,16 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:folder/folder.dart';
 import 'package:gemboard_common/gemboard_common.dart';
+import 'package:home/home.dart';
 import 'package:home/src/view/gemboard_sidebar_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 import 'package:settings/settings.dart';
 import 'package:sliver_tools/sliver_tools.dart';
+import 'package:utils/utils.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 /// TODO: Implement way to access and control or reactive state
@@ -28,6 +31,9 @@ class GemboardLeadSidebar extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final whiteboardNavigation = ref.read(WhiteboardNavigation.provider);
     final settingsNavigation = ref.read(SettingsNavigation.provider);
+    final homeNavigation = ref.read(HomeNavigation.provider);
+
+    final foldersAsyncValue = ref.watch(getFolderListProvider);
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -44,9 +50,15 @@ class GemboardLeadSidebar extends HookConsumerWidget {
           color: ColorVariant.surface.resolve(context),
           child: Column(
             children: [
-              gemboardSidebarHeader(
-                panelSize: panelSize,
-                minSize: _minSize,
+              GestureDetector(
+                onTap: () {
+                  resizableController.hide();
+                  homeNavigation.goToHome();
+                },
+                child: GemboardSidebarHeader(
+                  panelSize: panelSize,
+                  minSize: _minSize,
+                ),
               ),
               Expanded(
                 child: Column(
@@ -59,8 +71,8 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                             header: Button(
                               child: EmojiLabel(
                                 kind: gemboardEmojiLabelKind,
-                                emoji: StyledText('🏠'),
-                                label: StyledText('Zen\'s desk'),
+                                emoji: StyledText('🏡'),
+                                label: StyledText('Desktop'),
                               ),
                               background: ColorVariant.yellow,
                               highlight: ButtonHighlight.focus,
@@ -85,6 +97,19 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                     return EmojiLabelEditorPopup(
                                       background: ColorVariant.yellow,
                                       visible: showCreateForm.value,
+                                      onSubmitted: (emoji, label) async {
+                                        await ref.read(
+                                          createFolderProvider(
+                                            data: Folder(
+                                              emoji: emoji,
+                                              title: label,
+                                              id: FolderId(
+                                                id: Helper.createId(),
+                                              ),
+                                            ),
+                                          ).future,
+                                        );
+                                      },
                                       child: Button(
                                         background: ColorVariant.yellow,
                                         kind: ButtonKind.outline,
@@ -102,9 +127,31 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                   },
                                 ),
                               ),
+                              ...switch (foldersAsyncValue) {
+                                AsyncLoading() => [],
+                                AsyncError() => [],
+                                AsyncData(:final value) => [
+                                    MultiSliver(
+                                      children: [
+                                        for (final folder in value)
+                                          GemboardFolderBuilder(
+                                            background: ColorVariant.purple,
+                                            gemboardEmojiLabelKind:
+                                                gemboardEmojiLabelKind,
+                                            emoji: folder.emoji,
+                                            label: folder.title,
+                                            onChangeEmojiLabel:
+                                                (emoji, label) {},
+                                            children: [],
+                                          ),
+                                      ],
+                                    ),
+                                  ],
+                                _ => [],
+                              },
                             ],
                           ),
-                          gemboardFolderBuilder(
+                          GemboardFolderBuilder(
                             background: ColorVariant.purple,
                             gemboardEmojiLabelKind: gemboardEmojiLabelKind,
                             emoji: '🔭',
@@ -159,8 +206,8 @@ class GemboardLeadSidebar extends HookConsumerWidget {
   }
 }
 
-class gemboardFolderBuilder extends HookWidget {
-  const gemboardFolderBuilder({
+class GemboardFolderBuilder extends HookWidget {
+  const GemboardFolderBuilder({
     super.key,
     required this.gemboardEmojiLabelKind,
     required this.background,

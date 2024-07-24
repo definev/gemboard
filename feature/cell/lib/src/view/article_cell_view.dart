@@ -1,6 +1,7 @@
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:mix/mix.dart';
 
 class ArticleCellView extends StatelessWidget {
@@ -21,7 +22,7 @@ class ArticleCellView extends StatelessWidget {
         background: cellDecoration.colorVariant ?? ColorVariant.surface,
         kind: DSCardKind.elevated,
         header: StyledText(cell.title),
-        content: StyledText(cell.content),
+        content: MarkdownBody(data: cell.content),
       ),
     );
   }

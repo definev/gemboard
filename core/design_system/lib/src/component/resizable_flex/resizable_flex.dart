@@ -240,7 +240,8 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 ],
               ),
             ),
-          final totalSize when totalSize < widget.tabletBreakpoint =>
+          // final totalSize when totalSize < widget.tabletBreakpoint =>
+          _ =>
             TweenAnimationBuilder(
               duration: Duration(milliseconds: 500),
               tween: Tween<double>(

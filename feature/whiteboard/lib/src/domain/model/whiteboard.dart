@@ -1,4 +1,6 @@
 // ignore_for_file: invalid_annotation_target
+import 'package:design_system/design_system.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:utils/utils.dart';
 
@@ -65,10 +67,30 @@ class WhiteboardParentId with _$WhiteboardParentId, HasIdentity {
 sealed class Whiteboard with _$Whiteboard, HasId<WhiteboardId> {
   const factory Whiteboard({
     @WhiteboardIdConverter() required WhiteboardId id,
+    @Default('yellow') String color,
     required String emoji,
     required String title,
   }) = _Whiteboard;
 
   factory Whiteboard.fromJson(Map<String, dynamic> json) =>
       _$WhiteboardFromJson(json);
+}
+
+extension type WhiteboardDecoration(Whiteboard whiteboard) {
+  ColorVariant? get colorVariant => ColorVariant.tryParse(whiteboard.color);
+
+  Color colorValue(BuildContext context) {
+    final variant = colorVariant;
+    if (variant != null) {
+      return variant.resolve(context);
+    }
+    return HexColor(whiteboard.color).toColor();
+  }
+
+  Color onColorValue(BuildContext context) {
+    return ColorVariant.resolveOnBackground(
+      colorVariant ?? ColorVariant.surface,
+      ColorVariant.onSurface,
+    ).resolve(context);
+  }
 }

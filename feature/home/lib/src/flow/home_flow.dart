@@ -4,7 +4,6 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:home/src/view/home_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:whiteboard/whiteboard.dart';
 
 part 'home_flow.freezed.dart';
 
@@ -43,13 +42,6 @@ class HomeFlow extends HookConsumerWidget {
         } else {
           resizableController.hide();
         }
-      },
-      onTapDown: (_) {
-        ref.watch(WhiteboardNavigation.provider).openWhiteboardEditor(
-              context,
-              id: WhiteboardId(parentId: WhiteboardParentId(), id: 'default'),
-              resiableController: null,
-            );
       },
       child: HomeView(
         onOpenSidebar: () => resizableController.toggle(),

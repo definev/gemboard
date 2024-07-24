@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
@@ -68,8 +70,11 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                         id: Helper.createId(),
                       ),
                       offset: localPosition,
-                      width: constraints.maxWidth -
-                          SpaceVariant.mediumLarge.resolve(context),
+                      width: min(
+                        constraints.maxWidth -
+                            SpaceVariant.mediumLarge.resolve(context),
+                        500,
+                      ),
                       decoration: CellDecoration(color: 'yellow'),
                       question: null,
                       suggestions: [],
@@ -298,7 +303,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                 cellsStreamProvider: getCellListProvider(
                   parentId: CellParentId(whiteboardId: id.id),
                 ),
-                onCellCreated: (value) => ref.read(
+                onCellCreated: (value) async => await ref.read(
                   createCellProvider(
                     parentId: CellParentId(whiteboardId: id.id),
                     data: value,
@@ -324,6 +329,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
             child: Column(
               children: [
                 DSAppbar(
+                  border: WhiteboardDecoration(value).colorValue(context),
                   title: IntrinsicWidth(
                     child: EmojiLabelEditor(
                       readOnly: true,

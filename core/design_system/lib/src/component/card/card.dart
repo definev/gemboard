@@ -15,7 +15,7 @@ class DSCard extends StyledWidget {
     super.inherit,
     this.kind = DSCardKind.flat,
     this.background = ColorVariant.yellow,
-    this.onBackground = ColorVariant.onYellow,
+    this.onBackground,
     this.focusNode,
     required this.child,
   });

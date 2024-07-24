@@ -35,6 +35,7 @@ _$WhiteboardImpl _$$WhiteboardImplFromJson(Map<String, dynamic> json) =>
     _$WhiteboardImpl(
       id: const WhiteboardIdConverter()
           .fromJson(json['id'] as Map<String, dynamic>),
+      color: json['color'] as String? ?? 'yellow',
       emoji: json['emoji'] as String,
       title: json['title'] as String,
     );
@@ -42,6 +43,7 @@ _$WhiteboardImpl _$$WhiteboardImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$WhiteboardImplToJson(_$WhiteboardImpl instance) =>
     <String, dynamic>{
       'id': const WhiteboardIdConverter().toJson(instance.id),
+      'color': instance.color,
       'emoji': instance.emoji,
       'title': instance.title,
     };

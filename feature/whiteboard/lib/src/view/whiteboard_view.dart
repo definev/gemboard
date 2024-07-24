@@ -36,7 +36,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final AutoDisposeStreamProvider<List<Cell>> cellsStreamProvider;
   final void Function(Cell oldValue, Cell newValue) onCellUpdated;
   final void Function(List<Cell> cells) onCellsUpdated;
-  final void Function(Cell value) onCellCreated;
+  final Future<void> Function(Cell value) onCellCreated;
 
   /// Whiteboard infinite scrollable configuration
   final ValueNotifier<double>? scaleFactor;
@@ -61,7 +61,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Map<String, (GlobalKey, Cell)> cellKeys = {};
   Map<String, (GlobalKey, Edge)> edgeKeys = {};
   Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap = {};
-  Map<String, List<StreamSubscription>> _cellProcessors = {};
+  Map<String, Map<String, StreamSubscription>> _cellProcessors = {};
 
   late void Function(
     AsyncValue<List<Cell>>? previous,
@@ -131,7 +131,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     edgeKeys.clear();
     stackPositionDataMap.clear();
     for (final MapEntry(key: _, :value) in _cellProcessors.entries) {
-      for (final subscription in value) {
+      for (final subscription in value.values) {
         subscription.cancel();
       }
     }
@@ -427,60 +427,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     cell: cell,
 
                     /// Brainstorming cell
-                    onAskForSuggestion: (cell, question) {
-                      if (ref.exists(getBrainstormingSuggestionsProvider(
-                        key: cell.id.id,
-                        question: question,
-                      ))) {
-                        return;
-                      }
-
-                      final newCell = cell.copyWith(
-                        question: question,
-                      );
-                      cellKeys[cell.id.id] = (key, newCell);
-
-                      final stream = Stream.fromFuture(ref.read(
-                        getBrainstormingSuggestionsProvider(
-                          key: cell.id.id,
-                          question: question,
-                        ).future,
-                      ));
-
-                      late StreamSubscription subscription;
-                      subscription = stream.listen((suggestions) {
-                        final latest = cellKeys[cell.id.id];
-                        if (latest == null) return;
-                        final (_, latestCell) = latest;
-                        if (latestCell is! BrainstormingCell) return;
-
-                        final newCell = latestCell.copyWith(
-                          suggestions: suggestions,
-                        );
-                        cellKeys[cell.id.id] = (key, newCell);
-                        setState(() {});
-                        widget.onCellUpdated(cell, newCell);
-                      }, onDone: () {
-                        subscription.cancel();
-                        _cellProcessors[cell.id.id] = [
-                          ..._cellProcessors[cell.id.id] ?? []
-                        ]..remove(subscription);
-                      }, onError: (error) {
-                        subscription.cancel();
-                        _cellProcessors[cell.id.id] = [
-                          ..._cellProcessors[cell.id.id] ?? []
-                        ]..remove(subscription);
-                        print(error);
-                      });
-
-                      _cellProcessors[cell.id.id] = [
-                        ..._cellProcessors[cell.id.id] ?? [],
-                        subscription,
-                      ];
-
-                      setState(() {});
-                      widget.onCellUpdated(cell, newCell);
-                    },
+                    onAskForSuggestionSubscription: _cellProcessors[cell.id.id]
+                        ?['suggestions'],
+                    onSuggestionSelected:
+                        brainstormingCell_OnSuggestionSelected,
+                    onAskForSuggestion: brainstormingCell_OnAskForSuggestion,
                   ),
                 ),
               );
@@ -542,49 +493,188 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
+  void brainstormingCell_OnSuggestionSelected(
+    BrainstormingCell cell,
+    int index,
+    String suggestion,
+  ) async {
+    final suggestionCell = Cell.article(
+      offset: cell.offset + Offset(cell.width + 20, 0),
+      id: CellId(
+        id: Helper.createId(),
+        parentId: CellParentId(
+          whiteboardId: widget.data.id.id,
+        ),
+      ),
+      width: cell.width,
+      decoration: CellDecoration(color: 'blue'),
+      title: suggestion,
+      content: '',
+    );
+    moveViewportToCenterOfCell(suggestionCell);
+    await widget.onCellCreated(suggestionCell);
+    var (brainstormingKey, brainstormingCell) = cellKeys[cell.id.id]!;
+    brainstormingCell = brainstormingCell as BrainstormingCell;
+    cellKeys[brainstormingCell.id.id] = (
+      brainstormingKey,
+      brainstormingCell.copyWith(
+        suggestions: [...brainstormingCell.suggestions]..remove(suggestion),
+      ),
+    );
+    cellKeys[suggestionCell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${suggestionCell.id.id}'),
+      suggestionCell,
+    );
+    setState(() {});
+
+    late StreamSubscription subscription;
+    final stream = ref.read(generateQuestionProvider(text: suggestion));
+    subscription = stream.listen(
+      (data) {
+        void defer() {
+          subscription.cancel();
+          _cellProcessors[suggestionCell.id.id] = {
+            ..._cellProcessors[suggestionCell.id.id] ?? {},
+          }..remove('generate');
+        }
+
+        final latest = cellKeys[suggestionCell.id.id];
+        if (latest == null) {
+          defer();
+          return;
+        }
+
+        var (latestKey, latestCell) = latest;
+        if (latestCell is! ArticleCell) {
+          defer();
+          return;
+        }
+        latestCell = latestCell.copyWith(content: latestCell.content + data);
+
+        cellKeys[suggestionCell.id.id] = (latestKey, latestCell);
+        setState(() {});
+        widget.onCellUpdated(suggestionCell, latestCell);
+      },
+      onDone: () {
+        subscription.cancel();
+        _cellProcessors[suggestionCell.id.id] = {
+          ..._cellProcessors[suggestionCell.id.id] ?? {},
+        }..remove('generate');
+      },
+      onError: (error) {
+        subscription.cancel();
+        _cellProcessors[suggestionCell.id.id] = {
+          ..._cellProcessors[suggestionCell.id.id] ?? {},
+        }..remove('generate');
+        print(error);
+      },
+    );
+
+    _cellProcessors[suggestionCell.id.id] = {'generate': subscription};
+  }
+
+  void brainstormingCell_OnAskForSuggestion(
+    BrainstormingCell cell,
+    String question,
+  ) {
+    final (key, _) = cellKeys[cell.id.id]!;
+
+    if (ref.exists(getBrainstormingSuggestionsProvider(
+      key: cell.id.id,
+      question: question,
+    ))) {
+      return;
+    }
+
+    final newCell = cell.copyWith(question: question);
+    cellKeys[cell.id.id] = (key, newCell);
+
+    final stream = Stream.fromFuture(ref.read(
+      getBrainstormingSuggestionsProvider(
+        key: cell.id.id,
+        question: question,
+      ).future,
+    ));
+
+    late StreamSubscription subscription;
+    subscription = stream.listen(
+      (suggestions) async {
+        final latest = cellKeys[cell.id.id];
+        if (latest == null) return;
+        final (_, latestCell) = latest;
+        if (latestCell is! BrainstormingCell) return;
+
+        final newCell = latestCell.copyWith(
+          suggestions: suggestions,
+        );
+        await subscription.cancel();
+        _cellProcessors[cell.id.id] = {
+          ..._cellProcessors[cell.id.id] ?? {},
+        }..remove('suggestions');
+        cellKeys[cell.id.id] = (key, newCell);
+        setState(() {});
+        widget.onCellUpdated(cell, newCell);
+      },
+      onError: (error) {
+        subscription.cancel();
+        _cellProcessors[cell.id.id] = {
+          ..._cellProcessors[cell.id.id] ?? {},
+        }..remove('suggestions');
+        print(error);
+      },
+    );
+
+    _cellProcessors[cell.id.id] = {
+      ..._cellProcessors[cell.id.id] ?? {},
+      'suggestions': subscription,
+    };
+
+    setState(() {});
+    widget.onCellUpdated(cell, newCell);
+  }
+
   TwoDimensionalViewportBuilder buildSuggectionForSelection({
     required Offset selectionStart,
     required Offset selectionEnd,
     required List<String> selectedCells,
     required double scaleFactor,
-  }) {
-    return (context, verticalPosition, horizontalPosition) {
-      final topLeft = Offset(
-        horizontalDetails.controller!.offset,
-        verticalDetails.controller!.offset,
-      );
+  }) =>
+      (context, verticalPosition, horizontalPosition) {
+        final topLeft = Offset(
+          horizontalDetails.controller!.offset,
+          verticalDetails.controller!.offset,
+        );
 
-      final spacingOffset = Offset(
-        SpaceVariant.small.resolve(context),
-        SpaceVariant.small.resolve(context),
-      );
+        final spacingOffset = Offset(
+          SpaceVariant.small.resolve(context),
+          SpaceVariant.small.resolve(context),
+        );
 
-      final viewportSelectionStart =
-          ((selectionStart - topLeft / scaleFactor) - spacingOffset) *
-              scaleFactor;
-      final viewportSelectionEnd =
-          ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
-              scaleFactor;
+        final viewportSelectionStart =
+            ((selectionStart - topLeft / scaleFactor) - spacingOffset) *
+                scaleFactor;
+        final viewportSelectionEnd =
+            ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
+                scaleFactor;
 
-      return SelectionCellsView(
-        selectedCellIds: selectedCells,
-        cellMaps: cellKeys,
-        viewportSelectionStart: viewportSelectionStart,
-        viewportSelectionEnd: viewportSelectionEnd,
-        scaleFactor: scaleFactor,
-        onSelectionMove: (newCellOffsets) {
-          List<Cell> newCells = [];
-          for (final MapEntry(key: id, value: newOffset)
-              in newCellOffsets.entries) {
-            final (key, cell) = cellKeys[id]!;
-            final newCell = cell.copyWith(offset: newOffset);
-            newCells.add(newCell);
-            cellKeys[id] = (key, newCell);
-            setState(() {});
-          }
-          widget.onCellsUpdated(newCells);
-        },
-      );
-    };
-  }
+        return SelectionCellsView(
+          selectedCellIds: selectedCells,
+          cellMaps: cellKeys,
+          viewportSelectionStart: viewportSelectionStart,
+          viewportSelectionEnd: viewportSelectionEnd,
+          scaleFactor: scaleFactor,
+          onSelectionMove: (newCellOffsets) {
+            List<Cell> newCells = [];
+            for (final MapEntry(key: id, value: newOffset)
+                in newCellOffsets.entries) {
+              final (key, cell) = cellKeys[id]!;
+              final newCell = cell.copyWith(offset: newOffset);
+              newCells.add(newCell);
+              cellKeys[id] = (key, newCell);
+              setState(() {});
+            }
+            widget.onCellsUpdated(newCells);
+          },
+        );
+      };
 }

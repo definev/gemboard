@@ -71,6 +71,7 @@ abstract base class OpacityVariant {
   static const opaque = OpacityValueToken('opaque');
 
   static const hightlight = OpacityValueToken('hightlight');
+  static const surface =  OpacityValueToken('surface');
   static const blend = OpacityValueToken('blend');
 
   static const full = OpacityValueToken('full');
@@ -79,6 +80,7 @@ abstract base class OpacityVariant {
 final opacities = {
   OpacityVariant.opaque: OpacityValue(0.0),
   OpacityVariant.hightlight: OpacityValue(0.12),
+  OpacityVariant.surface: OpacityValue(0.5),
   OpacityVariant.blend: OpacityValue(0.72),
   OpacityVariant.full: OpacityValue(1.0),
 };

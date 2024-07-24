@@ -43,7 +43,7 @@ extension CoreDataX on CoreData {
 }
 
 @riverpod
-Stream<GenerateContentResponse> generateContentStream(
+Raw<Stream<GenerateContentResponse>> generateContentStream(
   GenerateContentStreamRef ref, {
   GeminiConfiguration configuration = GeminiConfiguration.flashModel,
   required List<CoreData> coreDataList,
@@ -66,7 +66,7 @@ Stream<GenerateContentResponse> generateContentStream(
 }
 
 @riverpod
-Stream<String> generateTextFromCoreData(
+Raw<Stream<String>> generateTextFromCoreData(
   GenerateTextFromCoreDataRef ref, {
   GeminiConfiguration configuration = GeminiConfiguration.flashModel,
   required List<CoreData> coreDataList,
@@ -78,5 +78,10 @@ Stream<String> generateTextFromCoreData(
     ),
   );
 
-  yield data.value?.text ?? '';
+  await for (final data in data) {
+    if (data.promptFeedback?.blockReasonMessage != null) {
+      throw Exception(data.promptFeedback!.blockReasonMessage!);
+    }
+    yield data.text ?? '';
+  }
 }
