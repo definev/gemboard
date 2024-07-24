@@ -161,12 +161,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     return (topLeft + offset) / scaleFactor.value;
   }
 
-  void onBrainstormingCellCreated(BrainstormingCell cell) {
+  void moveViewportToCenterOfCell(Cell cell) {
     final duration = const Duration(milliseconds: 300);
     final curve = Curves.easeInOut;
     final size = context.size ?? Size.zero;
-    final space = (size.width - cell.width) / 2 +
-        (1 - scaleFactor.value) * size.width / 2;
+    final space = (size.width - cell.width).abs() / 2 +
+        (1 - scaleFactor.value) * cell.width / 2;
 
     horizontalDetails.controller!.animateTo(
       cell.offset.dx * scaleFactor.value - space,
@@ -174,10 +174,18 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       curve: curve,
     );
     verticalDetails.controller!.animateTo(
-      cell.offset.dy * scaleFactor.value - space - 72,
+      cell.offset.dy * scaleFactor.value - 72,
       duration: duration,
       curve: curve,
     );
+  }
+
+  void onBrainstormingCellCreated(BrainstormingCell cell) {
+    moveViewportToCenterOfCell(cell);
+  }
+
+  void onTextCellCreated(TextCell cell) {
+    moveViewportToCenterOfCell(cell);
   }
 
   bool handleLocalData(Object? localData, Offset position) {
@@ -191,7 +199,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         );
 
         /// Custom action when cell created
-        cell.mapOrNull(brainstorming: onBrainstormingCellCreated);
+        cell.mapOrNull(
+          brainstorming: onBrainstormingCellCreated,
+          text: onTextCellCreated,
+        );
 
         widget.onCellCreated(cell);
       } catch (e) {
@@ -365,29 +376,29 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     widget.onCellUpdated(cell, newCell);
                   },
                   moveable: StackMove(),
-                  resizable: cell.mapOrNull(
-                    text: (_) => StackResize(
-                      width: cell.width,
-                      // Cell have fiex width so same as width
-                      preferredWidth: cell.width,
-                      height: cell.height,
-                      preferredHeight: cell.preferredHeight,
-                      thumb: DSThumb(
+                  resizable: StackResize(
+                    width: cell.width,
+                    // Cell have fiex width so same as width
+                    preferredWidth: cell.width,
+                    height: cell.height,
+                    preferredHeight: cell.preferredHeight,
+                    thumb: cell.mapOrNull(
+                      text: (value) => DSThumb(
                         color: CellDecorationExtension(cell.decoration)
                             .colorValue(context),
                       ),
-                      onSizeChanged: (newSize) {
-                        final (_, latestCell) = cellKeys[cell.id.id]!;
-                        final newCell = latestCell.copyWith(
-                          height: newSize.height,
-                          preferredHeight: newSize.height,
-                          width: newSize.width,
-                        );
-                        cellKeys[cell.id.id] = (key, newCell);
-                        setState(() {});
-                        widget.onCellUpdated(cell, newCell);
-                      },
                     ),
+                    onSizeChanged: (newSize) {
+                      final (_, latestCell) = cellKeys[cell.id.id]!;
+                      final newCell = latestCell.copyWith(
+                        height: newSize.height,
+                        preferredHeight: newSize.height,
+                        width: newSize.width,
+                      );
+                      cellKeys[cell.id.id] = (key, newCell);
+                      setState(() {});
+                      widget.onCellUpdated(cell, newCell);
+                    },
                   ),
                   builder: (context, notifier, child) => CellBuilder(
                     key: ValueKey('CellBuilder | ${cell.id.id}'),
