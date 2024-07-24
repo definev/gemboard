@@ -19,6 +19,11 @@ dependencies:
   flutter_portal:
   flutter_animate:
 
+  flutter_markdown:
+  flutter_highlighter:
+
+  url_launcher: 
+
   boundless_stack:
     git:
       url: https://github.com/definev/boundless_stack.git

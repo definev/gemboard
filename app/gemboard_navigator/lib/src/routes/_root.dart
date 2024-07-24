@@ -1,7 +1,8 @@
 part of '../router.dart';
 
-@TypedShellRoute<_RootShell>(
+@TypedShellRoute<RootShell>(
   routes: [
+    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
     TypedShellRoute<HomeShell>(
       routes: [
         TypedGoRoute<HomeGreetingRoute>(
@@ -13,11 +14,13 @@ part of '../router.dart';
         ),
       ],
     ),
-    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
   ],
 )
-class _RootShell extends ShellRouteData {
-  static final $navigatorKey = GlobalKey<NavigatorState>(debugLabel: '_RootShell');
+class RootShell extends ShellRouteData {
+  const RootShell();
+
+  static final $navigatorKey =
+      GlobalKey<NavigatorState>(debugLabel: '_RootShell');
 
   @override
   Widget builder(BuildContext context, GoRouterState state, Widget navigator) =>

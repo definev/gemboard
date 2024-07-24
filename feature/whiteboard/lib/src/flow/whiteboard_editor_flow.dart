@@ -15,12 +15,11 @@ import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/cursor_mode.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
-import 'package:whiteboard/src/domain/model/whiteboard.dart';
-import 'package:whiteboard/src/provider/get_whiteboard_by_id.dart';
 import 'package:whiteboard/src/provider/get_whiteboard_position.dart';
 import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
 import 'package:whiteboard/src/view/whiteboard_view.dart';
 import 'package:whiteboard/src/widget/whiteboard_cursor_tool.dart';
+import 'package:whiteboard/whiteboard.dart';
 
 final defaultCursorMode = switch (defaultTargetPlatform) {
   TargetPlatform.android || TargetPlatform.iOS => CursorMode.handTool,
@@ -321,6 +320,17 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     cells: cells,
                   ).future,
                 ),
+                onCellsDeleted: (cellIds) async => await ref.read(
+                  deleteCellsProvider(
+                    ids: [
+                      for (final cellId in cellIds)
+                        CellId(
+                          parentId: CellParentId(whiteboardId: id.id),
+                          id: cellId,
+                        ),
+                    ],
+                  ).future,
+                ),
               ),
             ),
           );
@@ -332,9 +342,20 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   border: WhiteboardDecoration(value).colorValue(context),
                   title: IntrinsicWidth(
                     child: EmojiLabelEditor(
-                      readOnly: true,
                       emoji: value.emoji,
                       label: value.title,
+                      onEmojiSelected: (emoji) => ref.read(
+                        updateWhiteboardProvider(
+                          id: id,
+                          data: value.copyWith(emoji: emoji),
+                        ).future,
+                      ),
+                      onLabelChanged: (label) => ref.read(
+                        updateWhiteboardProvider(
+                          id: id,
+                          data: value.copyWith(title: label),
+                        ).future,
+                      ),
                     ),
                   ),
                 ),
@@ -399,39 +420,41 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
               }, []);
               return child!;
             },
-            child: Column(
-              children: [
-                appBar,
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return Stack(
-                        children: [
-                          Positioned.fill(child: whiteboardBuilder),
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                  SpaceVariant.small.resolve(context)),
-                              child: StyledFlex(
-                                direction: Axis.horizontal,
-                                style: Style(
-                                  $flex.mainAxisSize.min(),
-                                  $flex.gap.ref(SpaceVariant.medium),
+            child: Scaffold(
+              body: Column(
+                children: [
+                  appBar,
+                  Expanded(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Stack(
+                          children: [
+                            Positioned.fill(child: whiteboardBuilder),
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    SpaceVariant.small.resolve(context)),
+                                child: StyledFlex(
+                                  direction: Axis.horizontal,
+                                  style: Style(
+                                    $flex.mainAxisSize.min(),
+                                    $flex.gap.ref(SpaceVariant.medium),
+                                  ),
+                                  children: [
+                                    actionTool(constraints),
+                                    cursorModeTool,
+                                  ],
                                 ),
-                                children: [
-                                  actionTool(constraints),
-                                  cursorModeTool,
-                                ],
                               ),
                             ),
-                          ),
-                        ],
-                      );
-                    },
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         }(),

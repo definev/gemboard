@@ -23,6 +23,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.onCellCreated,
     required this.onCellUpdated,
     required this.onCellsUpdated,
+    required this.onCellsDeleted,
     required this.enableMoveByMouse,
     required this.enableMoveByTouch,
     this.scaleFactor,
@@ -37,6 +38,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final void Function(Cell oldValue, Cell newValue) onCellUpdated;
   final void Function(List<Cell> cells) onCellsUpdated;
   final Future<void> Function(Cell value) onCellCreated;
+  final Future<void> Function(List<String> cellIds) onCellsDeleted;
 
   /// Whiteboard infinite scrollable configuration
   final ValueNotifier<double>? scaleFactor;
@@ -190,8 +192,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       duration: duration,
       curve: curve,
     );
+    final margin = switch (cell.preferredHeight) {
+      null => 200,
+      final preferredHeight => (size.height - preferredHeight).abs() / 2,
+    };
     verticalDetails.controller!.animateTo(
-      cell.offset.dy * scaleFactor.value - 72,
+      cell.offset.dy * scaleFactor.value - margin,
       duration: duration,
       curve: curve,
     );
@@ -663,6 +669,15 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           viewportSelectionStart: viewportSelectionStart,
           viewportSelectionEnd: viewportSelectionEnd,
           scaleFactor: scaleFactor,
+          onSelectionsDelete: (selectedCellIds) {
+            for (final id in selectedCellIds) {
+              cellKeys.remove(id);
+              _cellProcessors[id]
+                  ?.forEach((_, subscription) => subscription.cancel());
+              _cellProcessors.remove(id);
+            }
+            widget.onCellsDeleted(selectedCellIds);
+          },
           onSelectionMove: (newCellOffsets) {
             List<Cell> newCells = [];
             for (final MapEntry(key: id, value: newOffset)

@@ -18,7 +18,7 @@ dependencies:
   flutter_portal: ^1.1.4
   
   flutter_riverpod: ^2.5.1
-  go_router: ^14.2.0
+  go_router: ^14.2.1
   cupertino_modal_sheet: ^1.1.0
 
   flextras: ^1.0.0

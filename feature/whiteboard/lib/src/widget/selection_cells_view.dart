@@ -16,6 +16,7 @@ class SelectionCellsView extends HookWidget {
     required this.selectedCellIds,
     required this.cellMaps,
     required this.onSelectionMove,
+    required this.onSelectionsDelete,
   });
 
   final Offset viewportSelectionStart;
@@ -23,7 +24,9 @@ class SelectionCellsView extends HookWidget {
   final double scaleFactor;
   final List<String> selectedCellIds;
   final Map<String, (GlobalKey, Cell)> cellMaps;
+
   final void Function(Map<String, Offset> newOffsets) onSelectionMove;
+  final void Function(List<String> selectedCellIds) onSelectionsDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +90,7 @@ class SelectionCellsView extends HookWidget {
                         child: Icon(IconlyLight.chat),
                       ),
                       Button(
-                        onPressed: () {},
+                        onPressed: () => onSelectionsDelete(selectedCellIds),
                         child: Icon(IconlyLight.delete),
                       ),
                     ],

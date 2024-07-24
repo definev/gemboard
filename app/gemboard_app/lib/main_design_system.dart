@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:design_system/design_system.dart';

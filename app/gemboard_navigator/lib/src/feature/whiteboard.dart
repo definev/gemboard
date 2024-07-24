@@ -11,23 +11,13 @@ class WhiteboardNavigationImpl implements WhiteboardNavigation {
     Whiteboard? whiteboard,
     required ResizableController? resiableController,
   }) {
-    HomeShell.$navigatorKey.currentState!.push(
-      MaterialPageRoute(
-        builder: (context) => WhiteboardEditorFlow(
-          id: id,
-          resizableController: resiableController,
-        ),
-      ),
+    resiableController?.hide();
+    router.go(
+      WhiteboardEditorRoute(
+        id: id.id,
+        folderId: id.parentId.folderId,
+      ).location,
+      extra: resiableController,
     );
-
-    // context.push(
-    //   '/whiteboard/${id.id}',
-    //   // WhiteboardEditorRoute(
-    //   //   id: id.id,
-    //   //   folderId: id.parentId.folderId,
-    //   //   $extra: resiableController,
-    //   // ).location,
-    //   extra: resiableController,
-    // );
   }
 }

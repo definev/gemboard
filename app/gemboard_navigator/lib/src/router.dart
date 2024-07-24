@@ -11,13 +11,49 @@ part 'router.g.dart';
 part 'routes/_root.dart';
 part 'routes/home.dart';
 part 'routes/home.greeting.dart';
-part 'routes/my_desk.dart';
 part 'routes/settings.dart';
 part 'routes/whiteboard.dart';
 
-final router = GoRouter(
-  routes: $appRoutes,
-  initialLocation: HomeGreetingRoute.location,
-  // initialLocation: MyDeskRoute.location,
-  initialExtra: HomeShell.resizableController,
-);
+final router = () {
+  print('${$appRoutes}');
+
+  return GoRouter(
+    navigatorKey: RootShell.$navigatorKey,
+    routes: [
+      GoRoute(
+        parentNavigatorKey: RootShell.$navigatorKey,
+        path: SettingsRoute.location,
+        builder: (context, state) =>
+            $SettingsRouteExtension._fromState(state).build(context, state),
+      ),
+      ShellRoute(
+        parentNavigatorKey: RootShell.$navigatorKey,
+        navigatorKey: HomeShell.$navigatorKey,
+        builder: (context, state, navigator) => $HomeShellExtension
+            ._fromState(state)
+            .builder(context, state, navigator),
+        routes: [
+          GoRoute(
+            path: HomeGreetingRoute.location,
+            parentNavigatorKey: HomeShell.$navigatorKey,
+            builder: (context, state) => $HomeGreetingRouteExtension
+                ._fromState(state)
+                .build(context, state),
+            routes: [
+              GoRoute(
+                path: WhiteboardEditorRoute.subLocation,
+                parentNavigatorKey: HomeShell.$navigatorKey,
+                builder: (context, state) => $WhiteboardEditorRouteExtension
+                    ._fromState(state)
+                    .build(context, state),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+    initialLocation: HomeGreetingRoute.location,
+    // initialLocation: MyDeskRoute.location,
+    initialExtra: HomeShell.resizableController,
+  );
+}();

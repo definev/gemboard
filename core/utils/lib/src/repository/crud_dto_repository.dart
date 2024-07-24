@@ -91,15 +91,11 @@ abstract mixin class CrudDTORepositoryHive<
     List<Data> result = [];
     int index = 0;
 
-    while (true) {
-      try {
-        final data = await box.getAt(index);
-        if (data == null) break;
-        result.add(fromJson(jsonDecode(data)));
-        index++;
-      } catch (e) {
-        break;
-      }
+    while (index < box.length) {
+      final data = await box.getAt(index);
+      if (data == null) break;
+      result.add(fromJson(jsonDecode(data)));
+      index++;
     }
 
     return result;
@@ -118,6 +114,8 @@ abstract mixin class CrudDtoRepositoryAdaptive<
     Data extends HasId<ID>> implements CrudDTORepository<PID, ID, Data> {
   CrudDTORepository<PID, ID, Data> get storage;
   CrudDTORepository<PID, ID, Data> get interactive;
+
+  bool firstTime = true;
 
   @override
   Future<void> add({required PID parentId, required Data data}) async {
@@ -154,6 +152,14 @@ abstract mixin class CrudDtoRepositoryAdaptive<
     int page = 0,
     int size = 10,
   }) async {
+    if (firstTime) {
+      final hiveData = await storage.getList(parentId: parentId);
+      for (var item in hiveData) {
+        await interactive.add(parentId: parentId, data: item);
+      }
+      firstTime = false;
+      return hiveData;
+    }
     try {
       final data =
           await interactive.getList(parentId: parentId, page: page, size: size);

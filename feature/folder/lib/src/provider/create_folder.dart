@@ -11,9 +11,6 @@ Future<void> createFolder(
   FolderParentId parentId = const FolderParentId(),
 }) async {
   final repository = ref.read(folderRepositoryProvider);
-  await repository.add(
-    parentId: parentId,
-    data: data,
-  );
+  await repository.add(parentId: parentId, data: data);
   ref.invalidate(getFolderListProvider);
 }

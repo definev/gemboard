@@ -4,7 +4,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 
 class ResizableController extends ChangeNotifier {
@@ -62,8 +61,6 @@ class ResizableFlex extends StatefulWidget {
     this.secondChild,
     this.initialSize,
     this.minSize = 0,
-    this.mobileBreakpoint = 550,
-    this.tabletBreakpoint = 750,
     this.controller,
   });
 
@@ -72,8 +69,6 @@ class ResizableFlex extends StatefulWidget {
   final Widget? secondChild;
   final double? initialSize;
   final double? minSize;
-  final double mobileBreakpoint;
-  final double tabletBreakpoint;
   final ResizableController? controller;
 
   @override
@@ -151,6 +146,9 @@ class _ResizableFlexState extends State<ResizableFlex> {
       child: StyledIcon(CupertinoIcons.sidebar_left),
     );
 
+    final mobileBreakpoint = BreakpointToken.small.resolve(context).maxWidth;
+    final tabletBreakpoint = BreakpointToken.medium.resolve(context).maxWidth;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalSize = (widget.direction == Axis.horizontal
@@ -171,7 +169,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
         );
 
         return switch (totalSize) {
-          final totalSize when totalSize < widget.mobileBreakpoint =>
+          final totalSize when totalSize < mobileBreakpoint =>
             TweenAnimationBuilder(
               duration: Duration(milliseconds: 500),
               tween: Tween<double>(
@@ -240,8 +238,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 ],
               ),
             ),
-          // final totalSize when totalSize < widget.tabletBreakpoint =>
-          _ =>
+          final totalSize when totalSize < tabletBreakpoint =>
             TweenAnimationBuilder(
               duration: Duration(milliseconds: 500),
               tween: Tween<double>(
@@ -313,111 +310,173 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 ],
               ),
             ),
-          _ => Flex(
-              direction: widget.direction,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                if (totalSize - controller.panelSize < gapSize)
-                  SizedBox(
-                    height: switch (widget.direction) {
-                      Axis.vertical =>
-                        math.min(controller.panelSize, totalSize),
-                      Axis.horizontal => double.maxFinite,
-                    },
-                    width: switch (widget.direction) {
-                      Axis.horizontal =>
-                        math.min(controller.panelSize, totalSize),
-                      Axis.vertical => double.maxFinite,
-                    },
+          _ => TweenAnimationBuilder(
+              duration: Duration(milliseconds: 500),
+              tween: Tween<double>(
+                begin: switch (controller.shown) { false => 0, true => 1 },
+                end: switch (controller.shown) { false => 0, true => 1 },
+              ),
+              curve: Easing.standard,
+              builder: (context, value, child) => Stack(
+                children: [
+                  Positioned.fill(
                     child: Stack(
                       children: [
                         Positioned.fill(
-                          child: firstChild,
+                          child: widget.secondChild ?? SizedBox(),
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: SafeArea(
-                            child: Button(
-                              style: Style(
-                                $box.height(40),
-                                $box.width(40),
-                                $box.margin.all.ref(SpaceVariant.small),
+                        GestureDetector(
+                          onHorizontalDragEnd: null,
+                          child: ColoredBox(
+                            color: Colors.transparent,
+                            child: SizedBox(
+                              height: double.maxFinite,
+                              width: 25,
+                            ),
+                          ),
+                        ),
+                        Positioned.fill(
+                          child: IgnorePointer(
+                            ignoring: value == 0,
+                            child: GestureDetector(
+                              onTap: () => controller.hide(),
+                              onHorizontalDragEnd: (details) =>
+                                  controller.hide(),
+                              child: ColoredBox(
+                                color: ColorVariant.onBackground
+                                    .resolve(context)
+                                    .withOpacity(OpacityVariant.hightlight
+                                            .resolve(context)
+                                            .value *
+                                        value),
                               ),
-                              kind: ButtonKind.outline,
-                              background: ColorVariant.onSurface,
-                              onPressed: () => controller.panelSize =
-                                  widget.minSize ?? widget.initialSize ?? 100,
-                              child: StyledIcon(IconlyLight.arrow_left_circle),
                             ),
                           ),
                         ),
                       ],
                     ),
-                  )
-                else
-                  firstChild,
-                if (widget.secondChild != null) ...[
-                  MouseRegion(
-                    cursor: switch (widget.direction) {
-                      Axis.horizontal => SystemMouseCursors.resizeLeftRight,
-                      Axis.vertical => SystemMouseCursors.resizeUpDown,
-                    },
-                    child: GestureDetector(
-                      onPanUpdate: (details) {
-                        final deltaAxis = switch (widget.direction) {
-                          Axis.horizontal => details.delta.dx,
-                          Axis.vertical => details.delta.dy,
-                        };
-
-                        final newSize = controller.panelSize + deltaAxis;
-
-                        if (newSize < (widget.minSize ?? 0)) return;
-                        if (newSize > totalSize) return;
-
-                        controller.panelSize = newSize;
-                      },
-                      onDoubleTap: () {
-                        switch (controller.panelSize) {
-                          case 0:
-                            controller.show();
-                          default:
-                            controller.hide();
-                        }
-                      },
-                      child: ColoredBox(
-                        color: ColorVariant.outline
-                            .resolve(context)
-                            .withOpacity(
-                              OpacityVariant.hightlight.resolve(context).value,
-                            ),
-                        child: SizedBox.square(dimension: gapSize),
-                      ),
+                  ),
+                  Positioned(
+                    left: -250 + value * 250,
+                    height: constraints.maxHeight,
+                    width: 250,
+                    child: widget.firstChild,
+                  ),
+                  Positioned(
+                    left: value * 202,
+                    child: SafeArea(
+                      bottom: false,
+                      child: expandButton,
                     ),
                   ),
-                  if (controller.panelSize <= 0)
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          Positioned.fill(
-                            child: widget.secondChild!,
-                          ),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: SafeArea(
-                              bottom: false,
-                              child: expandButton,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    Expanded(
-                      child: widget.secondChild!,
-                    ),
                 ],
-              ],
+              ),
             ),
+          // _ => Flex(
+          //     direction: widget.direction,
+          //     crossAxisAlignment: CrossAxisAlignment.stretch,
+          //     children: [
+          //       if (totalSize - controller.panelSize < gapSize)
+          //         SizedBox(
+          //           height: switch (widget.direction) {
+          //             Axis.vertical =>
+          //               math.min(controller.panelSize, totalSize),
+          //             Axis.horizontal => double.maxFinite,
+          //           },
+          //           width: switch (widget.direction) {
+          //             Axis.horizontal =>
+          //               math.min(controller.panelSize, totalSize),
+          //             Axis.vertical => double.maxFinite,
+          //           },
+          //           child: Stack(
+          //             children: [
+          //               Positioned.fill(
+          //                 child: firstChild,
+          //               ),
+          //               Align(
+          //                 alignment: Alignment.centerRight,
+          //                 child: SafeArea(
+          //                   child: Button(
+          //                     style: Style(
+          //                       $box.height(40),
+          //                       $box.width(40),
+          //                       $box.margin.all.ref(SpaceVariant.small),
+          //                     ),
+          //                     kind: ButtonKind.outline,
+          //                     background: ColorVariant.onSurface,
+          //                     onPressed: () => controller.panelSize =
+          //                         widget.minSize ?? widget.initialSize ?? 100,
+          //                     child: StyledIcon(IconlyLight.arrow_left_circle),
+          //                   ),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         )
+          //       else
+          //         firstChild,
+          //       if (widget.secondChild != null) ...[
+          //         MouseRegion(
+          //           cursor: switch (widget.direction) {
+          //             Axis.horizontal => SystemMouseCursors.resizeLeftRight,
+          //             Axis.vertical => SystemMouseCursors.resizeUpDown,
+          //           },
+          //           child: GestureDetector(
+          //             onPanUpdate: (details) {
+          //               final deltaAxis = switch (widget.direction) {
+          //                 Axis.horizontal => details.delta.dx,
+          //                 Axis.vertical => details.delta.dy,
+          //               };
+
+          //               final newSize = controller.panelSize + deltaAxis;
+
+          //               if (newSize < (widget.minSize ?? 0)) return;
+          //               if (newSize > totalSize) return;
+
+          //               controller.panelSize = newSize;
+          //             },
+          //             onDoubleTap: () {
+          //               switch (controller.panelSize) {
+          //                 case 0:
+          //                   controller.show();
+          //                 default:
+          //                   controller.hide();
+          //               }
+          //             },
+          //             child: ColoredBox(
+          //               color: ColorVariant.outline
+          //                   .resolve(context)
+          //                   .withOpacity(
+          //                     OpacityVariant.hightlight.resolve(context).value,
+          //                   ),
+          //               child: SizedBox.square(dimension: gapSize),
+          //             ),
+          //           ),
+          //         ),
+          //         if (controller.panelSize <= 0)
+          //           Expanded(
+          //             child: Stack(
+          //               children: [
+          //                 Positioned.fill(
+          //                   child: widget.secondChild!,
+          //                 ),
+          //                 Align(
+          //                   alignment: Alignment.topLeft,
+          //                   child: SafeArea(
+          //                     bottom: false,
+          //                     child: expandButton,
+          //                   ),
+          //                 ),
+          //               ],
+          //             ),
+          //           )
+          //         else
+          //           Expanded(
+          //             child: widget.secondChild!,
+          //           ),
+          //       ],
+          //     ],
+          //   ),
         };
       },
     );

@@ -18,7 +18,7 @@ void main() async {
   runApp(
     UncontrolledProviderScope(
       container: container,
-      child: const gemboardApp(),
+      child: const GemboardApp(),
     ),
   );
 
@@ -33,8 +33,8 @@ void main() async {
   }
 }
 
-class gemboardApp extends StatelessWidget {
-  const gemboardApp({super.key});
+class GemboardApp extends StatelessWidget {
+  const GemboardApp({super.key});
 
   @override
   Widget build(BuildContext context) {

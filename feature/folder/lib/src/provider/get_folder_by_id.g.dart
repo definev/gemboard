@@ -6,7 +6,7 @@ part of 'get_folder_by_id.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getFolderByIdHash() => r'1e8de46ba57e7e34769e7c093e36e64e9f436d3c';
+String _$getFolderByIdHash() => r'd611260c6ebddf31e133dc554ce9c81014892dbd';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -6,20 +6,21 @@ part of 'folder_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$folderRepositoryHash() => r'98e4fd78fc0ad9cbf4a151363e618f4cf67dc97f';
+String _$folderRepositoryHiveHash() =>
+    r'01ad8da585df6f8bb8181f2b54f10367af1cd24e';
 
-/// See also [folderRepository].
-@ProviderFor(folderRepository)
-final folderRepositoryProvider = AutoDisposeProvider<FolderRepository>.internal(
-  folderRepository,
-  name: r'folderRepositoryProvider',
+/// See also [folderRepositoryHive].
+@ProviderFor(folderRepositoryHive)
+final folderRepositoryHiveProvider = Provider<FolderRepository>.internal(
+  folderRepositoryHive,
+  name: r'folderRepositoryHiveProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$folderRepositoryHash,
+      : _$folderRepositoryHiveHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef FolderRepositoryRef = AutoDisposeProviderRef<FolderRepository>;
+typedef FolderRepositoryHiveRef = ProviderRef<FolderRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

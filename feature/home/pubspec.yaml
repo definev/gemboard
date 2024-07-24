@@ -20,6 +20,8 @@ dependencies:
   flutter_portal: ^1.1.4
   sliver_tools:
   
+  flutter_animate:
+  
   boundless_stack:
     git:
       url: https://github.com/definev/boundless_stack.git

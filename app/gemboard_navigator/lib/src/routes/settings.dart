@@ -4,7 +4,7 @@ class SettingsRoute extends GoRouteData {
   const SettingsRoute();
 
   static const location = '/settings';
-  static final $parentNavigatorKey = _RootShell.$navigatorKey;
+  static final $parentNavigatorKey = RootShell.$navigatorKey;
 
   @override
   Widget build(BuildContext context, GoRouterState state) {

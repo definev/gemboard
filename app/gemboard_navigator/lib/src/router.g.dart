@@ -7,13 +7,18 @@ part of 'router.dart';
 // **************************************************************************
 
 List<RouteBase> get $appRoutes => [
-      $_RootShell,
+      $rootShell,
     ];
 
-RouteBase get $_RootShell => ShellRouteData.$route(
-      navigatorKey: _RootShell.$navigatorKey,
-      factory: $_RootShellExtension._fromState,
+RouteBase get $rootShell => ShellRouteData.$route(
+      navigatorKey: RootShell.$navigatorKey,
+      factory: $RootShellExtension._fromState,
       routes: [
+        GoRouteData.$route(
+          path: '/settings',
+          parentNavigatorKey: SettingsRoute.$parentNavigatorKey,
+          factory: $SettingsRouteExtension._fromState,
+        ),
         ShellRouteData.$route(
           navigatorKey: HomeShell.$navigatorKey,
           parentNavigatorKey: HomeShell.$parentNavigatorKey,
@@ -33,16 +38,28 @@ RouteBase get $_RootShell => ShellRouteData.$route(
             ),
           ],
         ),
-        GoRouteData.$route(
-          path: '/settings',
-          parentNavigatorKey: SettingsRoute.$parentNavigatorKey,
-          factory: $SettingsRouteExtension._fromState,
-        ),
       ],
     );
 
-extension $_RootShellExtension on _RootShell {
-  static _RootShell _fromState(GoRouterState state) => _RootShell();
+extension $RootShellExtension on RootShell {
+  static RootShell _fromState(GoRouterState state) => const RootShell();
+}
+
+extension $SettingsRouteExtension on SettingsRoute {
+  static SettingsRoute _fromState(GoRouterState state) => const SettingsRoute();
+
+  String get location => GoRouteData.$location(
+        '/settings',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
 }
 
 extension $HomeShellExtension on HomeShell {
@@ -72,7 +89,6 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
       WhiteboardEditorRoute(
         id: state.pathParameters['id']!,
         folderId: state.uri.queryParameters['folder-id'],
-        $extra: state.extra as ResizableController?,
       );
 
   String get location => GoRouteData.$location(
@@ -80,25 +96,6 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
         queryParams: {
           if (folderId != null) 'folder-id': folderId,
         },
-      );
-
-  void go(BuildContext context) => context.go(location, extra: $extra);
-
-  Future<T?> push<T>(BuildContext context) =>
-      context.push<T>(location, extra: $extra);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location, extra: $extra);
-
-  void replace(BuildContext context) =>
-      context.replace(location, extra: $extra);
-}
-
-extension $SettingsRouteExtension on SettingsRoute {
-  static SettingsRoute _fromState(GoRouterState state) => const SettingsRoute();
-
-  String get location => GoRouteData.$location(
-        '/settings',
       );
 
   void go(BuildContext context) => context.go(location);

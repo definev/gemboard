@@ -12,14 +12,4 @@ FolderRepositoryMemory folderRepositoryMemory(FolderRepositoryMemoryRef ref) {
 }
 
 class FolderRepositoryMemory extends FolderRepository
-    with CrudDTORepositoryMemory<FolderParentId, FolderId, Folder> {
-  Map<FolderParentId, List<Folder>> map = {
-    const FolderParentId(): [
-      Folder(
-        id: FolderId(id: '1'),
-        emoji: '👉',
-        title: 'Default',
-      ),
-    ],
-  };
-}
+    with CrudDTORepositoryMemory<FolderParentId, FolderId, Folder> {}

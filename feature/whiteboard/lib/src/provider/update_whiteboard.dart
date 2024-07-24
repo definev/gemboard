@@ -1,8 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../domain/model/whiteboard.dart';
-import '../domain/repository/whiteboard_repository.dart';
-import 'get_whiteboard_list.dart';
+import 'package:whiteboard/whiteboard.dart';
 
 part 'update_whiteboard.g.dart';
 
@@ -15,4 +12,5 @@ Future<void> updateWhiteboard(
   final repository = ref.watch(whiteboardRepositoryProvider);
   await repository.update(id: id, data: data);
   ref.invalidate(getWhiteboardListProvider(parentId: id.parentId));
+  ref.invalidate(getWhiteboardByIdProvider(id: id));
 }

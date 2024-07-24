@@ -27,11 +27,12 @@ class ButtonStyle {
     )!;
 
     return Style(
-      $box.padding.horizontal.ref(SpaceVariant.gap),
+      $box.padding.left.ref(SpaceVariant.gap),
+      $box.padding.right.ref(SpaceVariant.small),
       $box.padding.vertical.ref(SpaceVariant.gap),
       $text.style.ref(TextStyleVariant.h6),
       $text.style.color.ref(ColorVariant.onSurface),
-      $icon.size(TextStyleVariant.h6.resolve(context).fontSize! * 29 / 20),
+      $icon.size(24),
       $icon.color.ref(ColorVariant.onSurface),
       ButtonKind.flat(
         $box.color.ref(ColorVariant.surface),

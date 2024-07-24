@@ -1,11 +1,14 @@
+import 'dart:math';
+
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_portal/flutter_portal.dart';
 import 'package:folder/folder.dart';
 import 'package:gemboard_common/gemboard_common.dart';
 import 'package:home/home.dart';
 import 'package:home/src/view/gemboard_sidebar_header.dart';
+import 'package:home/src/widget/gemboard_folder_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
@@ -46,6 +49,201 @@ class GemboardLeadSidebar extends HookConsumerWidget {
 
         if (panelSize <= 0) return SizedBox();
 
+        var folderList = DSSidebar(
+          sections: [
+            DSSidebarSection(
+              pinned: true,
+              header: Consumer(
+                builder: (context, ref, child) {
+                  final defaultWhiteboardAsyncValue = ref.watch(
+                    getWhiteboardByIdProvider(id: WhiteboardId.defaultValue),
+                  );
+                  return switch (defaultWhiteboardAsyncValue) {
+                    AsyncLoading() => SizedBox(),
+                    AsyncError() => SizedBox(),
+                    AsyncData(:final value) => Button(
+                        child: EmojiLabel(
+                          kind: gemboardEmojiLabelKind,
+                          emoji: StyledText(value.emoji),
+                          label: StyledText(value.title),
+                        ),
+                        background: ColorVariant.yellow,
+                        highlight: ButtonHighlight.focus,
+                        onPressed: () =>
+                            whiteboardNavigation.openWhiteboardEditor(
+                          context,
+                          id: value.id,
+                          resiableController: resizableController,
+                        ),
+                      ),
+                    _ => SizedBox(),
+                  };
+                },
+              ),
+              children: [
+                SliverPinnedHeader(
+                  child: HookBuilder(
+                    builder: (context) {
+                      final showCreateForm = useState(false);
+
+                      return EmojiLabelEditorPopup(
+                        background: ColorVariant.yellow,
+                        visible: showCreateForm.value,
+                        onSubmitted: (emoji, label) {
+                          ref.read(
+                            createFolderProvider(
+                              data: Folder(
+                                emoji: emoji,
+                                title: label,
+                                id: FolderId(
+                                  id: Helper.createId(),
+                                ),
+                              ),
+                            ).future,
+                          );
+                          showCreateForm.value = false;
+                        },
+                        child: Button(
+                          background: ColorVariant.yellow,
+                          kind: ButtonKind.outline,
+                          onPressed: () =>
+                              showCreateForm.value = !showCreateForm.value,
+                          child: EmojiLabel(
+                            kind: gemboardEmojiLabelKind,
+                            emoji: StyledText('🗂️'),
+                            label: StyledText('Create folder'),
+                          ),
+                          // highlight: ButtonHighlight.focus,
+                        ),
+                        pickerSize: panelSize,
+                      );
+                    },
+                  ),
+                ),
+                ...switch (foldersAsyncValue) {
+                  AsyncLoading() => [],
+                  AsyncError() => [],
+                  AsyncData(:final value) when value.isEmpty => [
+                      SliverFillRemaining(
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              StyledText(
+                                '💎',
+                                style: Style(
+                                  $text.style.fontSize(48),
+                                ),
+                              )
+                                  .animate(
+                                      onPlay: (controller) =>
+                                          controller.loop(reverse: true))
+                                  .scaleXY(
+                                    begin: 1.0,
+                                    end: 1.1,
+                                  )
+                                  .shake(
+                                    delay: Duration(seconds: 1),
+                                    duration: Duration(
+                                      milliseconds: 400,
+                                    ),
+                                    hz: 2.5,
+                                    rotation: pi / 10,
+                                  ),
+                              SizedBox(
+                                height: SpaceVariant.small.resolve(context),
+                              ),
+                              StyledText(
+                                'Start your first 💎board',
+                                style: Style(
+                                  $text.style.ref(TextStyleVariant.h5),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  AsyncData(:final value) => [
+                      MultiSliver(
+                        children: [
+                          for (final folder in value)
+                            Consumer(
+                              builder: (context, ref, child) {
+                                final parentId = WhiteboardParentId(
+                                  folderId: folder.id.id,
+                                );
+                                final whiteboardLitAsyncValue = ref.watch(
+                                  getWhiteboardListProvider(parentId: parentId),
+                                );
+                                return GemboardFolderBuilder(
+                                  background: ColorVariant.purple,
+                                  gemboardEmojiLabelKind:
+                                      gemboardEmojiLabelKind,
+                                  emoji: folder.emoji,
+                                  label: folder.title,
+                                  onChangeEmojiLabel: (emoji, label) {},
+                                  onCreateGemboard: () {
+                                    ref.read(
+                                      createWhiteboardProvider(
+                                        parentId: parentId,
+                                        data: Whiteboard(
+                                          id: WhiteboardId(
+                                            parentId: parentId,
+                                            id: Helper.createId(),
+                                          ),
+                                          emoji: StringUtils.randomEmoji(),
+                                          title: 'Untitled',
+                                        ),
+                                      ).future,
+                                    );
+                                  },
+                                  children: switch (whiteboardLitAsyncValue) {
+                                    AsyncLoading() => [],
+                                    AsyncError() => [],
+                                    AsyncData(:final value) => [
+                                        for (final whiteboard in value)
+                                          Button(
+                                            background: ColorVariant.purple,
+                                            onPressed: () =>
+                                                whiteboardNavigation
+                                                    .openWhiteboardEditor(
+                                              context,
+                                              id: whiteboard.id,
+                                              resiableController:
+                                                  resizableController,
+                                            ),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  child: EmojiLabel(
+                                                    kind:
+                                                        gemboardEmojiLabelKind,
+                                                    emoji: StyledText(
+                                                        whiteboard.emoji),
+                                                    label: StyledText(
+                                                        whiteboard.title),
+                                                  ),
+                                                ),
+                                                StyledIcon(IconlyLight.edit),
+                                              ],
+                                            ),
+                                          ),
+                                      ],
+                                    _ => [],
+                                  },
+                                );
+                              },
+                            ),
+                        ],
+                      ),
+                    ],
+                  _ => [],
+                },
+              ],
+            ),
+          ],
+        );
         return ColoredBox(
           color: ColorVariant.surface.resolve(context),
           child: Column(
@@ -64,103 +262,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                 child: Column(
                   children: [
                     Expanded(
-                      child: DSSidebar(
-                        sections: [
-                          DSSidebarSection(
-                            pinned: true,
-                            header: Button(
-                              child: EmojiLabel(
-                                kind: gemboardEmojiLabelKind,
-                                emoji: StyledText('🏡'),
-                                label: StyledText('Desktop'),
-                              ),
-                              background: ColorVariant.yellow,
-                              highlight: ButtonHighlight.focus,
-                              onPressed: () {
-                                resizableController.hide();
-                                whiteboardNavigation.openWhiteboardEditor(
-                                  context,
-                                  id: const WhiteboardId(
-                                    parentId: WhiteboardParentId(),
-                                    id: 'default',
-                                  ),
-                                  resiableController: resizableController,
-                                );
-                              },
-                            ),
-                            children: [
-                              SliverPinnedHeader(
-                                child: HookBuilder(
-                                  builder: (context) {
-                                    final showCreateForm = useState(false);
-
-                                    return EmojiLabelEditorPopup(
-                                      background: ColorVariant.yellow,
-                                      visible: showCreateForm.value,
-                                      onSubmitted: (emoji, label) async {
-                                        await ref.read(
-                                          createFolderProvider(
-                                            data: Folder(
-                                              emoji: emoji,
-                                              title: label,
-                                              id: FolderId(
-                                                id: Helper.createId(),
-                                              ),
-                                            ),
-                                          ).future,
-                                        );
-                                      },
-                                      child: Button(
-                                        background: ColorVariant.yellow,
-                                        kind: ButtonKind.outline,
-                                        onPressed: () => showCreateForm.value =
-                                            !showCreateForm.value,
-                                        child: EmojiLabel(
-                                          kind: gemboardEmojiLabelKind,
-                                          emoji: StyledText('🗂️'),
-                                          label: StyledText('Create folder'),
-                                        ),
-                                        // highlight: ButtonHighlight.focus,
-                                      ),
-                                      pickerSize: panelSize,
-                                    );
-                                  },
-                                ),
-                              ),
-                              ...switch (foldersAsyncValue) {
-                                AsyncLoading() => [],
-                                AsyncError() => [],
-                                AsyncData(:final value) => [
-                                    MultiSliver(
-                                      children: [
-                                        for (final folder in value)
-                                          GemboardFolderBuilder(
-                                            background: ColorVariant.purple,
-                                            gemboardEmojiLabelKind:
-                                                gemboardEmojiLabelKind,
-                                            emoji: folder.emoji,
-                                            label: folder.title,
-                                            onChangeEmojiLabel:
-                                                (emoji, label) {},
-                                            children: [],
-                                          ),
-                                      ],
-                                    ),
-                                  ],
-                                _ => [],
-                              },
-                            ],
-                          ),
-                          GemboardFolderBuilder(
-                            background: ColorVariant.purple,
-                            gemboardEmojiLabelKind: gemboardEmojiLabelKind,
-                            emoji: '🔭',
-                            label: 'Explore',
-                            onChangeEmojiLabel: (emoji, label) {},
-                            children: [],
-                          ),
-                        ],
-                      ),
+                      child: folderList,
                     ),
                     Button(
                       onPressed: () {
@@ -202,138 +304,6 @@ class GemboardLeadSidebar extends HookConsumerWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class GemboardFolderBuilder extends HookWidget {
-  const GemboardFolderBuilder({
-    super.key,
-    required this.gemboardEmojiLabelKind,
-    required this.background,
-    required this.emoji,
-    required this.label,
-    required this.onChangeEmojiLabel,
-    required this.children,
-  });
-
-  final EmojiLabelKind gemboardEmojiLabelKind;
-  final ColorVariant background;
-
-  final String emoji;
-  final String label;
-  final void Function(String emoji, String label) onChangeEmojiLabel;
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    final pinned = useState(false);
-    final openEditor = useState(false);
-    final openMenu = useState(false);
-
-    return DSSidebarSection(
-      pinned: pinned.value,
-      header: EmojiLabelEditorPopup(
-        visible: openEditor.value,
-        background: background,
-        onSubmitted: (emoji, label) {
-          openEditor.value = false;
-          onChangeEmojiLabel(emoji, label);
-        },
-        emoji: emoji,
-        label: label,
-        child: DSSidebarSectionHeader(
-          background: background,
-          pinned: pinned.value,
-          title: PortalTarget(
-            anchor: const Aligned(
-              target: Alignment.topRight,
-              follower: Alignment.topLeft,
-            ),
-            visible: openMenu.value && !openEditor.value,
-            portalFollower: IntrinsicHeight(
-              child: VBox(
-                style: Style(
-                  $box.width(150),
-                  switch (openEditor.value) {
-                    true => $box.margin.top(40),
-                    false => $box.margin.top(0),
-                  },
-                  $box.margin.horizontal.ref(SpaceVariant.medium),
-                ),
-                children: [
-                  Button(
-                    onPressed: () => pinned.value = !pinned.value,
-                    background: ColorVariant.purple,
-                    child: EmojiLabel(
-                      emoji: StyledText('📌'),
-                      label: switch (pinned.value) {
-                        true => StyledText('Unpinned'),
-                        false => StyledText('Pinned'),
-                      },
-                    ),
-                  ),
-                  Button(
-                    onPressed: () => openEditor.value = true,
-                    background: ColorVariant.purple,
-                    child: EmojiLabel(
-                      emoji: StyledText('✏️'),
-                      label: StyledText('Edit'),
-                    ),
-                  ),
-                  Button(
-                    onPressed: () => openMenu.value = false,
-                    background: ColorVariant.red,
-                    child: EmojiLabel(
-                      emoji: StyledText('🗑️'),
-                      label: StyledText('Delete'),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            child: GestureDetector(
-              onTap: () {
-                openEditor.value = false;
-                openMenu.value = !openMenu.value;
-              },
-              child: EmojiLabel(
-                kind: gemboardEmojiLabelKind,
-                emoji: StyledText(emoji),
-                label: StyledText(label),
-                trailing: StyledIcon(IconlyLight.more_square),
-              ),
-            ),
-          ),
-        ),
-      ),
-      children: [
-        SliverPinnedHeader(
-          child: HookBuilder(
-            builder: (context) {
-              final showCreateForm = useState(false);
-
-              return EmojiLabelEditorPopup(
-                background: ColorVariant.purple,
-                visible: showCreateForm.value,
-                onSubmitted: (emoji, label) => showCreateForm.value = false,
-                child: Button(
-                  background: ColorVariant.purple,
-                  highlight: ButtonHighlight.focus,
-                  onPressed: () => showCreateForm.value = !showCreateForm.value,
-                  child: EmojiLabel(
-                    kind: gemboardEmojiLabelKind,
-                    emoji: StyledText('➕'),
-                    label: StyledText('Create folder'),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-        ...children,
-      ],
     );
   }
 }

@@ -5,20 +5,40 @@ import 'package:utils/utils.dart';
 part 'folder.freezed.dart';
 part 'folder.g.dart';
 
+class FolderIdConverter
+    implements JsonConverter<FolderId, Map<String, dynamic>> {
+  const FolderIdConverter();
+
+  @override
+  FolderId fromJson(Map<String, dynamic> json) => FolderId.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(FolderId object) => object.toJson();
+}
+
+class FolderParentIdConverter
+    implements JsonConverter<FolderParentId, Map<String, dynamic>> {
+  const FolderParentIdConverter();
+
+  @override
+  FolderParentId fromJson(Map<String, dynamic> json) =>
+      FolderParentId.fromJson(json);
+
+  @override
+  Map<String, dynamic> toJson(FolderParentId object) => object.toJson();
+}
+
 @freezed
 class FolderId with _$FolderId, HasIdentity, HasParentId<FolderParentId> {
   const factory FolderId({
-    @JsonKey(readValue: FolderParentId.readValue)
     @Default(const FolderParentId())
+    @FolderParentIdConverter()
     FolderParentId parentId,
     required String id,
   }) = _FolderId;
 
   factory FolderId.fromJson(Map<String, dynamic> json) =>
       _$FolderIdFromJson(json);
-
-  static Object? readValue(Map map, String _) =>
-      FolderId.fromJson(map as Map<String, dynamic>);
 }
 
 @freezed
@@ -32,9 +52,6 @@ class FolderParentId with _$FolderParentId, HasIdentity {
   factory FolderParentId.fromJson(Map<String, dynamic> json) =>
       _$FolderParentIdFromJson(json);
 
-  static Object? readValue(Map map, String _) =>
-      FolderParentId.fromJson(map as Map<String, dynamic>);
-
   @override
   String get id => folderId ?? '';
 }
@@ -42,7 +59,7 @@ class FolderParentId with _$FolderParentId, HasIdentity {
 @freezed
 sealed class Folder with _$Folder, HasId<FolderId> {
   const factory Folder({
-    @JsonKey(readValue: FolderId.readValue) required FolderId id,
+    @FolderIdConverter() required FolderId id,
     required String emoji,
     required String title,
   }) = _Folder;

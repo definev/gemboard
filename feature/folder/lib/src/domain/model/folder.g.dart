@@ -8,16 +8,16 @@ part of 'folder.dart';
 
 _$FolderIdImpl _$$FolderIdImplFromJson(Map<String, dynamic> json) =>
     _$FolderIdImpl(
-      parentId: FolderParentId.readValue(json, 'parentId') == null
+      parentId: json['parentId'] == null
           ? const FolderParentId()
-          : FolderParentId.fromJson(FolderParentId.readValue(json, 'parentId')
-              as Map<String, dynamic>),
+          : const FolderParentIdConverter()
+              .fromJson(json['parentId'] as Map<String, dynamic>),
       id: json['id'] as String,
     );
 
 Map<String, dynamic> _$$FolderIdImplToJson(_$FolderIdImpl instance) =>
     <String, dynamic>{
-      'parentId': instance.parentId,
+      'parentId': const FolderParentIdConverter().toJson(instance.parentId),
       'id': instance.id,
     };
 
@@ -33,15 +33,15 @@ Map<String, dynamic> _$$FolderParentIdImplToJson(
     };
 
 _$FolderImpl _$$FolderImplFromJson(Map<String, dynamic> json) => _$FolderImpl(
-      id: FolderId.fromJson(
-          FolderId.readValue(json, 'id') as Map<String, dynamic>),
+      id: const FolderIdConverter()
+          .fromJson(json['id'] as Map<String, dynamic>),
       emoji: json['emoji'] as String,
       title: json['title'] as String,
     );
 
 Map<String, dynamic> _$$FolderImplToJson(_$FolderImpl instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'id': const FolderIdConverter().toJson(instance.id),
       'emoji': instance.emoji,
       'title': instance.title,
     };

@@ -5,5 +5,5 @@ part 'initialize_database.g.dart';
 
 @riverpod
 Future<void> initializeDatabase(InitializeDatabaseRef ref) async {
-  Hive.initFlutter();
+  await Hive.initFlutter();
 }

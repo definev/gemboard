@@ -3,7 +3,7 @@ part of '../router.dart';
 class HomeShell extends ShellRouteData {
   const HomeShell();
 
-  static final $parentNavigatorKey = _RootShell.$navigatorKey;
+  static final $parentNavigatorKey = RootShell.$navigatorKey;
   static final $navigatorKey =
       GlobalKey<NavigatorState>(debugLabel: 'HomeShell');
   static final resizableController = ResizableController(shown: false);
