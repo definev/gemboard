@@ -60,6 +60,41 @@ Map<String, dynamic> _$$UnknownCellImplToJson(_$UnknownCellImpl instance) =>
       'cellType': instance.$type,
     };
 
+_$BrainstormingCellImpl _$$BrainstormingCellImplFromJson(
+        Map<String, dynamic> json) =>
+    _$BrainstormingCellImpl(
+      layer: (json['layer'] as num?)?.toInt() ?? 10,
+      offset: const OffsetConverter().fromJson(json['offset'] as List),
+      id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num?)?.toDouble(),
+      preferredHeight: (json['preferredHeight'] as num?)?.toDouble(),
+      decoration: const CellDecorationConverter()
+          .fromJson(json['decoration'] as Map<String, dynamic>),
+      selected: json['selected'] as bool? ?? false,
+      question: json['question'] as String?,
+      suggestions: (json['suggestions'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
+      $type: json['cellType'] as String?,
+    );
+
+Map<String, dynamic> _$$BrainstormingCellImplToJson(
+        _$BrainstormingCellImpl instance) =>
+    <String, dynamic>{
+      'layer': instance.layer,
+      'offset': const OffsetConverter().toJson(instance.offset),
+      'id': const CellIdConverter().toJson(instance.id),
+      'width': instance.width,
+      'height': instance.height,
+      'preferredHeight': instance.preferredHeight,
+      'decoration': const CellDecorationConverter().toJson(instance.decoration),
+      'selected': instance.selected,
+      'question': instance.question,
+      'suggestions': instance.suggestions,
+      'cellType': instance.$type,
+    };
+
 _$TextCellImpl _$$TextCellImplFromJson(Map<String, dynamic> json) =>
     _$TextCellImpl(
       layer: (json['layer'] as num?)?.toInt() ?? 10,
@@ -133,7 +168,6 @@ _$ArticleCellImpl _$$ArticleCellImplFromJson(Map<String, dynamic> json) =>
       selected: json['selected'] as bool? ?? false,
       title: json['title'] as String,
       content: json['content'] as String,
-      editable: json['editable'] as bool,
       $type: json['cellType'] as String?,
     );
 
@@ -149,7 +183,6 @@ Map<String, dynamic> _$$ArticleCellImplToJson(_$ArticleCellImpl instance) =>
       'selected': instance.selected,
       'title': instance.title,
       'content': instance.content,
-      'editable': instance.editable,
       'cellType': instance.$type,
     };
 

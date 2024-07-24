@@ -22,6 +22,7 @@ class DSTextbox extends StyledWidget {
     this.obscureText = false,
     this.controller,
     this.onChanged,
+    this.onSubmitted,
     this.hintText,
     this.minLines,
     this.maxLines,
@@ -36,6 +37,7 @@ class DSTextbox extends StyledWidget {
 
   final TextEditingController? controller;
   final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
   final FocusNode? focusNode;
   final bool autofocus;
   final String? hintText;
@@ -74,6 +76,7 @@ class DSTextbox extends StyledWidget {
                       autofocus: autofocus,
                       obscureText: obscureText,
                       onChanged: onChanged,
+                      onFieldSubmitted: onSubmitted,
                       cursorColor: ColorVariant.onSurface.resolve(context),
                       cursorWidth: 1.5,
                       cursorHeight: textStyle.height,

@@ -31,6 +31,7 @@ dependencies:
     path: ../../core/utils
   
   mix: ^1.2.0
+  iconly: 
 
   # This is unsure the best db
   hive: ^2.2.3 

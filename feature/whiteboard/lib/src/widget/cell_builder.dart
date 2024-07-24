@@ -234,6 +234,20 @@ class _CellBuilderState extends State<CellBuilder> {
       ),
     );
 
+    Widget child = widget.cell.map(
+      brainstorming: (cell) => BrainstormingCellView(
+        cell: cell,
+        onAskForSuggestion: (question) {},
+      ),
+      text: (cell) => TextCellView(cell: cell),
+      image: (cell) => ImageCellView(cell: cell),
+      article: (cell) => ArticleCellView(cell: cell),
+      url: (cell) => UrlCellView(cell: cell),
+      unknown: (_) => SizedBox(),
+    );
+
+    return child;
+
     return MouseRegion(
       onHover: (event) {
         debouncer.run(
@@ -245,20 +259,21 @@ class _CellBuilderState extends State<CellBuilder> {
         debouncer.cancel();
         setState(() => onHover = false);
       },
-      child: PortalTarget(
-        visible: onHover || perminant,
-        portalFollower: Stack(
-          key: portalFollowerKey,
-          children: [
-            buildConnectCell(centerRight, connectCell),
-            buildChatCell(topCenter, chatCell),
-            // buildChatCell(topCenter, connectCell),
-            if (leftStartOffset != null && leftEndOffset != null)
-              buildConnectCellTemporaryEdge(centerRight, connectCell),
-          ],
-        ),
-        child: CellView(cell: widget.cell),
-      ),
+      child: child,
+      // child: CellView(cell: widget.cell),
+      // child: PortalTarget(
+      //   visible: onHover || perminant,
+      //   portalFollower: Stack(
+      //     key: portalFollowerKey,
+      //     children: [
+      //       buildConnectCell(centerRight, connectCell),
+      //       buildChatCell(topCenter, chatCell),
+      //       if (leftStartOffset != null && leftEndOffset != null)
+      //         buildConnectCellTemporaryEdge(centerRight, connectCell),
+      //     ],
+      //   ),
+      //   child: CellView(cell: widget.cell),
+      // ),
     );
   }
 

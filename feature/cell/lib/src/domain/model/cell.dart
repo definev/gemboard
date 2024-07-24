@@ -81,6 +81,21 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(false) bool selected,
   }) = UnknownCell;
 
+  const factory Cell.brainstorming({
+    @Default(10) int layer,
+    @OffsetConverter() required Offset offset,
+    @CellIdConverter() required CellId id,
+    required double width,
+    double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
+    @CellDecorationConverter() required CellDecoration decoration,
+    @Default(false) bool selected,
+    required String? question,
+    required List<String> suggestions,
+  }) = BrainstormingCell;
+
   const factory Cell.text({
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
@@ -123,7 +138,6 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(false) bool selected,
     required String title,
     required String content,
-    required bool editable,
   }) = ArticleCell;
 
   const factory Cell.url({

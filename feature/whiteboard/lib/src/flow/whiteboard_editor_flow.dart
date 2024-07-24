@@ -48,138 +48,140 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
 
     final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
 
-    var actionTool = DSToolbar(
-      children: [
-        HookBuilder(
-          builder: (context) {
-            final itemKey = useMemoized(() => GlobalKey());
-            return DragItemWidget(
-              key: itemKey,
-              dragItemProvider: (request) {
-                final localPosition =
-                    (itemKey.currentContext!.findRenderObject()! as RenderBox)
-                        .globalToLocal(request.location);
+    Widget actionTool(BoxConstraints constraints) {
+      return DSToolbar(
+        children: [
+          HookBuilder(
+            builder: (context) {
+              final itemKey = useMemoized(() => GlobalKey());
+              return DragItemWidget(
+                key: itemKey,
+                dragItemProvider: (request) {
+                  final localPosition =
+                      (itemKey.currentContext!.findRenderObject()! as RenderBox)
+                          .globalToLocal(request.location);
 
-                return DragItem(
-                  localData: Cell.article(
-                    id: CellId(
-                      parentId: CellParentId(whiteboardId: id.id),
-                      id: Helper.createId(),
+                  return DragItem(
+                    localData: Cell.brainstorming(
+                      id: CellId(
+                        parentId: CellParentId(whiteboardId: id.id),
+                        id: Helper.createId(),
+                      ),
+                      offset: localPosition,
+                      width: constraints.maxWidth -
+                          SpaceVariant.mediumLarge.resolve(context),
+                      decoration: CellDecoration(color: 'yellow'),
+                      question: null,
+                      suggestions: [],
+                    ).toJson(),
+                  );
+                },
+                allowedOperations: () => allowedOperations,
+                child: DraggableWidget(
+                  child: DSTooltip(
+                    alignment: Alignment.bottomCenter,
+                    label: StyledText('Brainstorming'),
+                    child: Button(
+                      style: Style(
+                        $box.height(40),
+                        $box.width(40),
+                        $box.alignment.center(),
+                      ),
+                      onPressed: () {},
+                      child: Icon(IconlyLight.discovery),
                     ),
-                    offset: localPosition,
-                    width: 200,
-                    decoration: CellDecoration(color: 'red'),
-                    title: 'How to use Whiteboard',
-                    content: 'Whiteboard is a tool for collaboration',
-                    editable: false,
-                  ).toJson(),
-                );
-              },
-              allowedOperations: () => allowedOperations,
-              child: DraggableWidget(
-                child: DSTooltip(
-                  alignment: Alignment.bottomCenter,
-                  label: StyledText('Brainstorming'),
-                  child: Button(
-                    style: Style(
-                      $box.height(40),
-                      $box.width(40),
-                      $box.alignment.center(),
-                    ),
-                    onPressed: () {},
-                    child: Icon(IconlyLight.discovery),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-        HookBuilder(
-          builder: (context) {
-            final itemKey = useMemoized(() => GlobalKey());
-            return DragItemWidget(
-              key: itemKey,
-              dragItemProvider: (request) {
-                final localPosition =
-                    (itemKey.currentContext!.findRenderObject()! as RenderBox)
-                        .globalToLocal(request.location);
+              );
+            },
+          ),
+          HookBuilder(
+            builder: (context) {
+              final itemKey = useMemoized(() => GlobalKey());
+              return DragItemWidget(
+                key: itemKey,
+                dragItemProvider: (request) {
+                  final localPosition =
+                      (itemKey.currentContext!.findRenderObject()! as RenderBox)
+                          .globalToLocal(request.location);
 
-                return DragItem(
-                  localData: Cell.text(
-                    id: CellId(
-                      parentId: CellParentId(whiteboardId: id.id),
-                      id: Helper.createId(),
+                  return DragItem(
+                    localData: Cell.text(
+                      id: CellId(
+                        parentId: CellParentId(whiteboardId: id.id),
+                        id: Helper.createId(),
+                      ),
+                      offset: localPosition,
+                      width: 200,
+                      decoration: CellDecoration(color: 'red'),
+                      text: '',
+                    ).toJson(),
+                  );
+                },
+                allowedOperations: () => allowedOperations,
+                child: DraggableWidget(
+                  child: DSTooltip(
+                    alignment: Alignment.bottomCenter,
+                    label: StyledText('Notes'),
+                    child: Button(
+                      style: Style(
+                        $box.height(40),
+                        $box.width(40),
+                        $box.alignment.center(),
+                      ),
+                      onPressed: () {},
+                      child: Icon(IconlyLight.document),
                     ),
-                    offset: localPosition,
-                    width: 200,
-                    decoration: CellDecoration(color: 'red'),
-                    text: '',
-                  ).toJson(),
-                );
-              },
-              allowedOperations: () => allowedOperations,
-              child: DraggableWidget(
-                child: DSTooltip(
-                  alignment: Alignment.bottomCenter,
-                  label: StyledText('Notes'),
-                  child: Button(
-                    style: Style(
-                      $box.height(40),
-                      $box.width(40),
-                      $box.alignment.center(),
-                    ),
-                    onPressed: () {},
-                    child: Icon(IconlyLight.document),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-        HookBuilder(
-          builder: (context) {
-            final itemKey = useMemoized(() => GlobalKey());
-            return DragItemWidget(
-              key: itemKey,
-              dragItemProvider: (request) {
-                final localPosition =
-                    (itemKey.currentContext!.findRenderObject()! as RenderBox)
-                        .globalToLocal(request.location);
+              );
+            },
+          ),
+          HookBuilder(
+            builder: (context) {
+              final itemKey = useMemoized(() => GlobalKey());
+              return DragItemWidget(
+                key: itemKey,
+                dragItemProvider: (request) {
+                  final localPosition =
+                      (itemKey.currentContext!.findRenderObject()! as RenderBox)
+                          .globalToLocal(request.location);
 
-                return DragItem(
-                  localData: Cell.text(
-                    id: CellId(
-                      parentId: CellParentId(whiteboardId: id.id),
-                      id: Helper.createId(),
+                  return DragItem(
+                    localData: Cell.text(
+                      id: CellId(
+                        parentId: CellParentId(whiteboardId: id.id),
+                        id: Helper.createId(),
+                      ),
+                      offset: localPosition,
+                      width: 200,
+                      decoration: CellDecoration(color: 'red'),
+                      text: '',
+                    ).toJson(),
+                  );
+                },
+                allowedOperations: () => allowedOperations,
+                child: DraggableWidget(
+                  child: DSTooltip(
+                    alignment: Alignment.bottomCenter,
+                    label: StyledText('Chat'),
+                    child: Button(
+                      style: Style(
+                        $box.height(40),
+                        $box.width(40),
+                        $box.alignment.center(),
+                      ),
+                      onPressed: () {},
+                      child: Icon(IconlyLight.chat),
                     ),
-                    offset: localPosition,
-                    width: 200,
-                    decoration: CellDecoration(color: 'red'),
-                    text: '',
-                  ).toJson(),
-                );
-              },
-              allowedOperations: () => allowedOperations,
-              child: DraggableWidget(
-                child: DSTooltip(
-                  alignment: Alignment.bottomCenter,
-                  label: StyledText('Chat'),
-                  child: Button(
-                    style: Style(
-                      $box.height(40),
-                      $box.width(40),
-                      $box.alignment.center(),
-                    ),
-                    onPressed: () {},
-                    child: Icon(IconlyLight.chat),
                   ),
                 ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
+              );
+            },
+          ),
+        ],
+      );
+    }
 
     final cursorModeTool = DSToolbar(
       children: [
@@ -395,28 +397,32 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
               children: [
                 appBar,
                 Expanded(
-                  child: Stack(
-                    children: [
-                      Positioned.fill(child: whiteboardBuilder),
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              SpaceVariant.small.resolve(context)),
-                          child: StyledFlex(
-                            direction: Axis.horizontal,
-                            style: Style(
-                              $flex.mainAxisSize.min(),
-                              $flex.gap.ref(SpaceVariant.medium),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return Stack(
+                        children: [
+                          Positioned.fill(child: whiteboardBuilder),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  SpaceVariant.small.resolve(context)),
+                              child: StyledFlex(
+                                direction: Axis.horizontal,
+                                style: Style(
+                                  $flex.mainAxisSize.min(),
+                                  $flex.gap.ref(SpaceVariant.medium),
+                                ),
+                                children: [
+                                  actionTool(constraints),
+                                  cursorModeTool,
+                                ],
+                              ),
                             ),
-                            children: [
-                              actionTool,
-                              cursorModeTool,
-                            ],
                           ),
-                        ),
-                      ),
-                    ],
+                        ],
+                      );
+                    },
                   ),
                 ),
               ],

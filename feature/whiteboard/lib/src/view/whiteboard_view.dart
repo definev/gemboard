@@ -161,6 +161,25 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     return (topLeft + offset) / scaleFactor.value;
   }
 
+  void onBrainstormingCellCreated(BrainstormingCell cell) {
+    final duration = const Duration(milliseconds: 300);
+    final curve = Curves.easeInOut;
+    final size = context.size ?? Size.zero;
+    final space = (size.width - cell.width) / 2 +
+        (1 - scaleFactor.value) * size.width / 2;
+
+    horizontalDetails.controller!.animateTo(
+      cell.offset.dx * scaleFactor.value - space,
+      duration: duration,
+      curve: curve,
+    );
+    verticalDetails.controller!.animateTo(
+      cell.offset.dy * scaleFactor.value - space - 72,
+      duration: duration,
+      curve: curve,
+    );
+  }
+
   bool handleLocalData(Object? localData, Offset position) {
     if (localData case Map<String, dynamic>()) {
       try {
@@ -171,25 +190,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
         );
 
-        // Mocking the edge
-        if (cellKeys.length >= 1) {
-          final randomCell =
-              cellKeys.values.elementAt(random.nextInt(cellKeys.length)).$2;
-          final edge = Edge(
-            id: EdgeId(
-              id: Helper.createId(),
-              parentId: EdgeParentId(),
-            ),
-            source: randomCell.id.id,
-            target: cell.id.id,
-          );
-          edgeKeys[edge.id.id] = (
-            GlobalKey(
-              debugLabel: 'WhiteboardView.edge | ${edge.id.id}',
-            ),
-            edge,
-          );
-        }
+        /// Custom action when cell created
+        cell.mapOrNull(brainstorming: onBrainstormingCellCreated);
 
         widget.onCellCreated(cell);
       } catch (e) {
@@ -363,33 +365,35 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     widget.onCellUpdated(cell, newCell);
                   },
                   moveable: StackMove(),
-                  resizable: StackResize(
-                    width: cell.width,
-                    // Cell have fiex width so same as width
-                    preferredWidth: cell.width,
-                    height: cell.height,
-                    preferredHeight: cell.preferredHeight,
-                    thumb: DSThumb(
-                      color: CellDecorationExtension(cell.decoration)
-                          .colorValue(context),
+                  resizable: cell.mapOrNull(
+                    text: (_) => StackResize(
+                      width: cell.width,
+                      // Cell have fiex width so same as width
+                      preferredWidth: cell.width,
+                      height: cell.height,
+                      preferredHeight: cell.preferredHeight,
+                      thumb: DSThumb(
+                        color: CellDecorationExtension(cell.decoration)
+                            .colorValue(context),
+                      ),
+                      onSizeChanged: (newSize) {
+                        final (_, latestCell) = cellKeys[cell.id.id]!;
+                        final newCell = latestCell.copyWith(
+                          height: newSize.height,
+                          preferredHeight: newSize.height,
+                          width: newSize.width,
+                        );
+                        cellKeys[cell.id.id] = (key, newCell);
+                        setState(() {});
+                        widget.onCellUpdated(cell, newCell);
+                      },
                     ),
-                    onSizeChanged: (newSize) {
-                      final (_, latestCell) = cellKeys[cell.id.id]!;
-                      final newCell = latestCell.copyWith(
-                        height: newSize.height,
-                        preferredHeight: newSize.height,
-                        width: newSize.width,
-                      );
-                      cellKeys[cell.id.id] = (key, newCell);
-                      setState(() {});
-                      widget.onCellUpdated(cell, newCell);
-                    },
                   ),
                   builder: (context, notifier, child) => CellBuilder(
+                    key: ValueKey('CellBuilder | ${cell.id.id}'),
                     scaleFactor: scaleFactor,
                     horizontalDetails: horizontalDetails,
                     verticalDetails: verticalDetails,
-                    key: ValueKey('CellBuilder | ${cell.id.id}'),
                     notifier: notifier,
                     stackPositionDataMap: stackPositionDataMap,
                     cell: cell,
