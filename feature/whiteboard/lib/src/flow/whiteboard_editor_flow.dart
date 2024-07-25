@@ -50,6 +50,10 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
     final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
 
     Widget actionTool(BoxConstraints constraints) {
+      final cellWidth = min(
+        constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
+        480.0,
+      );
       return DSToolbar(
         children: [
           HookBuilder(
@@ -69,11 +73,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                         id: Helper.createId(),
                       ),
                       offset: localPosition,
-                      width: min(
-                        constraints.maxWidth -
-                            SpaceVariant.mediumLarge.resolve(context),
-                        500,
-                      ),
+                      width: cellWidth,
                       decoration: CellDecoration(color: 'yellow'),
                       question: null,
                       suggestions: [],
@@ -110,15 +110,16 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                           .globalToLocal(request.location);
 
                   return DragItem(
-                    localData: Cell.text(
+                    localData: Cell.editable(
                       id: CellId(
                         parentId: CellParentId(whiteboardId: id.id),
                         id: Helper.createId(),
                       ),
                       offset: localPosition,
-                      width: 200,
+                      width: cellWidth,
                       decoration: CellDecoration(color: 'red'),
-                      text: '',
+                      title: '',
+                      content: '',
                     ).toJson(),
                   );
                 },
@@ -126,7 +127,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                 child: DraggableWidget(
                   child: DSTooltip(
                     alignment: Alignment.bottomCenter,
-                    label: StyledText('Notes'),
+                    label: StyledText('Note'),
                     child: Button(
                       style: Style(
                         $box.height(40),
@@ -152,15 +153,16 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                           .globalToLocal(request.location);
 
                   return DragItem(
-                    localData: Cell.text(
+                    localData: Cell.editable(
                       id: CellId(
                         parentId: CellParentId(whiteboardId: id.id),
                         id: Helper.createId(),
                       ),
                       offset: localPosition,
-                      width: 200,
+                      width: cellWidth,
                       decoration: CellDecoration(color: 'red'),
-                      text: '',
+                      title: '',
+                      content: '',
                     ).toJson(),
                   );
                 },
@@ -302,7 +304,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                 cellsStreamProvider: getCellListProvider(
                   parentId: CellParentId(whiteboardId: id.id),
                 ),
-                onCellCreated: (value) async => await ref.read(
+                onCellCreated: (value) => ref.read(
                   createCellProvider(
                     parentId: CellParentId(whiteboardId: id.id),
                     data: value,
@@ -320,7 +322,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     cells: cells,
                   ).future,
                 ),
-                onCellsDeleted: (cellIds) async => await ref.read(
+                onCellsDeleted: (cellIds) => ref.read(
                   deleteCellsProvider(
                     ids: [
                       for (final cellId in cellIds)

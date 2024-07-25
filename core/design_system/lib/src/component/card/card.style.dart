@@ -83,7 +83,7 @@ class DSCardStyle {
           .resolve(context)
           .withOpacity(OpacityVariant.blend.resolve(context).value)),
       $box.alignment.centerLeft(),
-      $box.padding.vertical.ref(SpaceVariant.gap),
+      $box.padding.vertical.ref(SpaceVariant.small),
       $box.padding.horizontal.ref(SpaceVariant.medium),
       $text.style.ref(TextStyleVariant.h6),
       $text.style.color.ref(onBackground),

@@ -62,7 +62,7 @@ class ColorVariant extends ColorToken {
 }
 
 final colors = {
-  ColorVariant.outline: Color.fromARGB(197, 146, 146, 146),
+  ColorVariant.outline: Color.fromARGB(255, 166, 166, 166),
   ColorVariant.surface: Color(0xFFFFFFFF),
   ColorVariant.background: Color(0xFFEAE8E5),
   ColorVariant.onSurface: Color(0xFF030637),

@@ -6,8 +6,6 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
-import 'package:graph_edge/graph_edge.dart';
-import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 import 'package:utils/utils.dart';
 
@@ -117,134 +115,212 @@ class _CellBuilderState extends State<CellBuilder> {
   double get cellHeight =>
       (widget.cell.height ?? widget.cell.preferredHeight ?? 100);
 
-  Size get actionButtonSize => Size(32, 32);
+  // Widget buildConnectCellTemporaryEdge(Offset offset, Widget placeholder) {
+  //   return Positioned.fill(
+  //     child: CustomPaint(
+  //       painter: EdgeTempVisual(
+  //         context: context,
+  //         scaleFactor: widget.scaleFactor,
+  //         startLocal: leftLocalOffset!,
+  //         startGlobal: leftStartOffset!,
+  //         endGlobal: leftEndOffset!,
+  //         portalFollowerKey: portalFollowerKey,
+  //         childSize: Size(32, 32),
+  //       ),
+  //       child: Stack(
+  //         children: [
+  //           Positioned(
+  //             left: offset.dx,
+  //             top: offset.dy,
+  //             height: actionButtonSize.height,
+  //             width: actionButtonSize.width,
+  //             child: Transform.scale(
+  //               alignment: Alignment.topLeft,
+  //               scale: widget.scaleFactor,
+  //               child: placeholder,
+  //             ),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget buildConnectCellTemporaryEdge(Offset offset, Widget placeholder) {
-    return Positioned.fill(
-      child: CustomPaint(
-        painter: EdgeTempVisual(
-          context: context,
-          scaleFactor: widget.scaleFactor,
-          startLocal: leftLocalOffset!,
-          startGlobal: leftStartOffset!,
-          endGlobal: leftEndOffset!,
-          portalFollowerKey: portalFollowerKey,
-          childSize: Size(32, 32),
+  // Widget buildConnectCell(Offset offset, Widget placeholder) => Positioned(
+  //       left: offset.dx,
+  //       top: offset.dy,
+  //       height: actionButtonSize.height,
+  //       width: actionButtonSize.width,
+  //       child: Transform.scale(
+  //         alignment: Alignment.topLeft,
+  //         scale: widget.scaleFactor,
+  //         child: MouseRegion(
+  //           onHover: (_) => setState(() => onHover = true),
+  //           onExit: (_) => setState(() => onHover = false),
+  //           child: Draggable(
+  //             data: widget.cell,
+  //             feedback: Transform.scale(
+  //               alignment: Alignment.topLeft,
+  //               scale: widget.scaleFactor,
+  //               child: SizedBox(),
+  //             ),
+  //             dragAnchorStrategy: (draggable, context, position) {
+  //               leftLocalOffset =
+  //                   childDragAnchorStrategy(draggable, context, position);
+  //               return leftLocalOffset! * widget.scaleFactor;
+  //             },
+  //             onDragStarted: () => setState(() => perminant = true),
+  //             onDragUpdate: (details) {
+  //               if (leftStartOffset == null) {
+  //                 leftStartOffset = details.globalPosition;
+  //                 leftEndOffset = leftStartOffset;
+  //               } else {
+  //                 leftEndOffset = details.globalPosition;
+  //                 setState(() {});
+  //               }
+  //             },
+  //             onDragEnd: (_) => setState(() {
+  //               leftLocalOffset = null;
+  //               leftStartOffset = null;
+  //               leftEndOffset = null;
+  //               perminant = false;
+  //             }),
+  //             child: placeholder,
+  //           ),
+  //         ),
+  //       ),
+  //     );
+
+  Offset get centerLeft => Offset(
+        topLeft.dx,
+        topLeft.dy + cellHeight * widget.scaleFactor / 2,
+      );
+  Offset get centerRight => Offset(
+        topLeft.dx + widget.cell.width * widget.scaleFactor,
+        topLeft.dy + cellHeight * widget.scaleFactor / 2,
+      );
+  Offset get bottomCenter => Offset(
+        topLeft.dx + widget.cell.width * widget.scaleFactor / 2,
+        topLeft.dy + cellHeight * widget.scaleFactor,
+      );
+  Offset get topCenter => Offset(
+        topLeft.dx + widget.cell.width * widget.scaleFactor / 2,
+        topLeft.dy,
+      );
+
+  Widget buildEdgeWire({required Cell cell, required Widget child}) {
+    final knobHeightMargin =
+        SpaceVariant.medium.resolve(context) * widget.scaleFactor;
+    final knobWidthMargin =
+        SpaceVariant.large.resolve(context) * widget.scaleFactor;
+    final knobHeight = (SpaceVariant.gap.resolve(context)) * widget.scaleFactor;
+    final knobWidth =
+        SpaceVariant.large.resolve(context) * widget.scaleFactor * 2;
+    final knobColor = ColorVariant.outline.resolve(context);
+
+    Widget buildEdgeKnob({
+      required Widget child,
+    }) {
+      return MouseRegion(
+        onEnter: (event) {
+          debouncer.cancel();
+          setState(() => onHover = true);
+        },
+        onExit: (event) => debouncer.run(
+          () => setState(() => onHover = false),
+          Duration(milliseconds: 340),
         ),
-        child: Stack(
-          children: [
-            Positioned(
-              left: offset.dx,
-              top: offset.dy,
-              height: actionButtonSize.height,
-              width: actionButtonSize.width,
-              child: Transform.scale(
-                alignment: Alignment.topLeft,
-                scale: widget.scaleFactor,
-                child: placeholder,
+        child: child,
+      );
+    }
+
+    Style knobStyle = Style(
+      $box.color(knobColor),
+      $box.shape.stadium(),
+      switch (perminant) {
+        true => $box.color(knobColor),
+        false => null,
+      },
+    );
+
+    return PortalTarget(
+      visible: onHover || perminant,
+      portalFollower: Stack(
+        children: [
+          Positioned(
+            left: topCenter.dx - knobWidthMargin,
+            top: topCenter.dy - knobHeightMargin,
+            child: buildEdgeKnob(
+              child: Box(
+                style: Style(
+                  $box.width(knobWidth),
+                  $box.height(knobHeight),
+                ).merge(knobStyle),
               ),
             ),
-          ],
+          ),
+          Positioned(
+            left: centerLeft.dx - knobHeightMargin,
+            top: centerLeft.dy - knobWidthMargin,
+            child: buildEdgeKnob(
+                child: Box(
+              style: Style(
+                $box.height(knobWidth),
+                $box.width(knobHeight),
+              ).merge(knobStyle),
+            )),
+          ),
+          Positioned(
+            left: centerRight.dx + knobHeightMargin - knobHeight,
+            top: centerRight.dy - knobWidthMargin,
+            child: buildEdgeKnob(
+                child: Box(
+              style: Style(
+                $box.height(knobWidth),
+                $box.width(knobHeight),
+              ).merge(knobStyle),
+            )),
+          ),
+          Positioned(
+            left: bottomCenter.dx - knobWidthMargin,
+            top: bottomCenter.dy + knobHeightMargin - knobHeight,
+            child: buildEdgeKnob(
+              child: Box(
+                style: Style(
+                  $box.width(knobWidth),
+                  $box.height(knobHeight),
+                ).merge(knobStyle),
+              ),
+            ),
+          ),
+        ],
+      ),
+      child: MouseRegion(
+        onEnter: (event) {
+          debouncer.cancel();
+          setState(() => onHover = true);
+        },
+        onExit: (event) => debouncer.run(
+          () => setState(() => onHover = false),
+          Duration(milliseconds: 340),
+        ),
+        child: DragTarget(
+          onAcceptWithDetails: (details) {
+            final DragTargetDetails(:data, :offset) = details;
+            print('Accepted $data at $offset');
+          },
+          builder: (context, candidateData, rejectedData) => GestureDetector(
+            onLongPress: () => setState(() => perminant = !perminant),
+            child: child,
+          ),
         ),
       ),
     );
   }
 
-  Widget buildConnectCell(Offset offset, Widget placeholder) => Positioned(
-        left: offset.dx,
-        top: offset.dy,
-        height: actionButtonSize.height,
-        width: actionButtonSize.width,
-        child: Transform.scale(
-          alignment: Alignment.topLeft,
-          scale: widget.scaleFactor,
-          child: MouseRegion(
-            onHover: (_) => setState(() => onHover = true),
-            onExit: (_) => setState(() => onHover = false),
-            child: Draggable(
-              data: widget.cell,
-              feedback: Transform.scale(
-                alignment: Alignment.topLeft,
-                scale: widget.scaleFactor,
-                child: SizedBox(),
-              ),
-              dragAnchorStrategy: (draggable, context, position) {
-                leftLocalOffset =
-                    childDragAnchorStrategy(draggable, context, position);
-                return leftLocalOffset! * widget.scaleFactor;
-              },
-              onDragStarted: () => setState(() => perminant = true),
-              onDragUpdate: (details) {
-                if (leftStartOffset == null) {
-                  leftStartOffset = details.globalPosition;
-                  leftEndOffset = leftStartOffset;
-                } else {
-                  leftEndOffset = details.globalPosition;
-                  setState(() {});
-                }
-              },
-              onDragEnd: (_) => setState(() {
-                leftLocalOffset = null;
-                leftStartOffset = null;
-                leftEndOffset = null;
-                perminant = false;
-              }),
-              child: placeholder,
-            ),
-          ),
-        ),
-      );
-
-  Offset get centerLeft => Offset(
-        topLeft.dx - actionButtonSize.width * widget.scaleFactor / 2,
-        topLeft.dy -
-            (actionButtonSize.height - cellHeight) * widget.scaleFactor / 2,
-      );
-  Offset get centerRight => Offset(
-        topLeft.dx +
-            widget.cell.width * widget.scaleFactor -
-            actionButtonSize.width * widget.scaleFactor / 2,
-        topLeft.dy -
-            (actionButtonSize.height - cellHeight) * widget.scaleFactor / 2,
-      );
-  Offset get bottomCenter => Offset(
-        topLeft.dx +
-            widget.cell.width * widget.scaleFactor / 2 -
-            actionButtonSize.width * widget.scaleFactor / 2,
-        topLeft.dy -
-            (actionButtonSize.height / 2 - cellHeight) * widget.scaleFactor,
-      );
-  Offset get topCenter => Offset(
-        topLeft.dx +
-            widget.cell.width * widget.scaleFactor / 2 -
-            actionButtonSize.width * widget.scaleFactor / 2,
-        topLeft.dy - actionButtonSize.height * widget.scaleFactor / 2,
-      );
-
   @override
   Widget build(BuildContext context) {
     widget.stackPositionDataMap[widget.cell.id.id] = widget.notifier;
-
-    final connectCell = DSCard(
-      style: Style(
-        $box.width(actionButtonSize.width),
-        $box.height(actionButtonSize.height),
-      ),
-      kind: DSCardKind.outlined,
-      child: Center(
-        child: Icon(IconlyLight.arrow_right_3),
-      ),
-    );
-    final chatCell = DSCard(
-      style: Style(
-        $box.width(actionButtonSize.width),
-        $box.height(actionButtonSize.height),
-      ),
-      kind: DSCardKind.outlined,
-      child: Center(
-        child: Icon(IconlyLight.chat),
-      ),
-    );
 
     Widget child = widget.cell.map(
       brainstorming: (cell) => BrainstormingCellView(
@@ -255,11 +331,16 @@ class _CellBuilderState extends State<CellBuilder> {
             widget.onAskForSuggestion(cell, question),
         onAskForSuggestionSubscription: widget.onAskForSuggestionSubscription,
       ),
-      text: (cell) => TextCellView(cell: cell),
+      editable: (cell) => EditableCellView(cell: cell),
       image: (cell) => ImageCellView(cell: cell),
       article: (cell) => ArticleCellView(cell: cell),
       url: (cell) => UrlCellView(cell: cell),
       unknown: (_) => SizedBox(),
+    );
+
+    child = buildEdgeWire(
+      cell: widget.cell,
+      child: child,
     );
 
     return child;

@@ -28,6 +28,7 @@ class DSTextbox extends StyledWidget {
     this.minLines,
     this.maxLines,
     this.textStyle,
+    this.hintTextStyle,
     this.trailing,
     this.label,
   });
@@ -47,6 +48,7 @@ class DSTextbox extends StyledWidget {
   final int? maxLines;
   final bool obscureText;
   final TextStyle? textStyle;
+  final TextStyle? hintTextStyle;
   final Widget? trailing;
 
   @override
@@ -92,11 +94,10 @@ class DSTextbox extends StyledWidget {
                       },
                       decoration: InputDecoration.collapsed(
                         hintText: hintText,
-                        hintStyle: textStyle.copyWith(
-                          color: Colors.grey.shade400,
-                        ),
-                        focusColor: Colors.red,
-                        fillColor: Colors.red,
+                        hintStyle: hintTextStyle ??
+                            textStyle.copyWith(color: Colors.grey.shade400),
+                        focusColor: Colors.transparent,
+                        fillColor: Colors.transparent,
                       ),
                     ),
                   ),

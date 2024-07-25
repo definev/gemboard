@@ -327,7 +327,7 @@ Cell _$CellFromJson(Map<String, dynamic> json) {
       return UnknownCell.fromJson(json);
     case 'brainstorming':
       return BrainstormingCell.fromJson(json);
-    case 'text':
+    case 'editable':
       return TextCell.fromJson(json);
     case 'image':
       return ImageCell.fromJson(json);
@@ -390,8 +390,9 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -401,8 +402,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -462,8 +462,9 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -473,8 +474,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -534,8 +534,9 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -545,8 +546,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -578,7 +578,7 @@ mixin _$Cell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
@@ -588,7 +588,7 @@ mixin _$Cell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
@@ -598,7 +598,7 @@ mixin _$Cell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
@@ -902,8 +902,9 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -913,8 +914,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -978,8 +978,9 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -989,8 +990,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -1054,8 +1054,9 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -1065,8 +1066,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -1105,7 +1105,7 @@ class _$UnknownCellImpl implements UnknownCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
@@ -1118,7 +1118,7 @@ class _$UnknownCellImpl implements UnknownCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
@@ -1131,7 +1131,7 @@ class _$UnknownCellImpl implements UnknownCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
@@ -1289,7 +1289,7 @@ class __$$BrainstormingCellImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$BrainstormingCellImpl implements BrainstormingCell {
   const _$BrainstormingCellImpl(
-      {this.layer = 10,
+      {this.layer = 9,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
       required this.width,
@@ -1427,8 +1427,9 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -1438,8 +1439,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -1503,8 +1503,9 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -1514,8 +1515,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -1579,8 +1579,9 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -1590,8 +1591,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -1630,7 +1630,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
@@ -1643,7 +1643,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
@@ -1656,7 +1656,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
@@ -1739,7 +1739,8 @@ abstract class _$$TextCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
-      String text});
+      String title,
+      String content});
 
   @override
   $CellIdCopyWith<$Res> get id;
@@ -1766,7 +1767,8 @@ class __$$TextCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
-    Object? text = null,
+    Object? title = null,
+    Object? content = null,
   }) {
     return _then(_$TextCellImpl(
       layer: null == layer
@@ -1801,9 +1803,13 @@ class __$$TextCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
-      text: null == text
-          ? _value.text
-          : text // ignore: cast_nullable_to_non_nullable
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      content: null == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -1821,9 +1827,10 @@ class _$TextCellImpl implements TextCell {
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
-      required this.text,
+      required this.title,
+      required this.content,
       final String? $type})
-      : $type = $type ?? 'text';
+      : $type = $type ?? 'editable';
 
   factory _$TextCellImpl.fromJson(Map<String, dynamic> json) =>
       _$$TextCellImplFromJson(json);
@@ -1852,14 +1859,16 @@ class _$TextCellImpl implements TextCell {
   @JsonKey()
   final bool selected;
   @override
-  final String text;
+  final String title;
+  @override
+  final String content;
 
   @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.text(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, text: $text)';
+    return 'Cell.editable(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, title: $title, content: $content)';
   }
 
   @override
@@ -1878,13 +1887,14 @@ class _$TextCellImpl implements TextCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
-            (identical(other.text, text) || other.text == text));
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.content, content) || other.content == content));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, text);
+      preferredHeight, decoration, selected, title, content);
 
   @JsonKey(ignore: true)
   @override
@@ -1926,8 +1936,9 @@ class _$TextCellImpl implements TextCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -1937,8 +1948,7 @@ class _$TextCellImpl implements TextCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -1964,8 +1974,8 @@ class _$TextCellImpl implements TextCell {
             String url)
         url,
   }) {
-    return text(layer, offset, id, width, height, preferredHeight, decoration,
-        selected, this.text);
+    return editable(layer, offset, id, width, height, preferredHeight,
+        decoration, selected, title, content);
   }
 
   @override
@@ -2002,8 +2012,9 @@ class _$TextCellImpl implements TextCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -2013,8 +2024,7 @@ class _$TextCellImpl implements TextCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -2040,8 +2050,8 @@ class _$TextCellImpl implements TextCell {
             String url)?
         url,
   }) {
-    return text?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, this.text);
+    return editable?.call(layer, offset, id, width, height, preferredHeight,
+        decoration, selected, title, content);
   }
 
   @override
@@ -2078,8 +2088,9 @@ class _$TextCellImpl implements TextCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -2089,8 +2100,7 @@ class _$TextCellImpl implements TextCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -2117,9 +2127,9 @@ class _$TextCellImpl implements TextCell {
         url,
     required TResult orElse(),
   }) {
-    if (text != null) {
-      return text(layer, offset, id, width, height, preferredHeight, decoration,
-          selected, this.text);
+    if (editable != null) {
+      return editable(layer, offset, id, width, height, preferredHeight,
+          decoration, selected, title, content);
     }
     return orElse();
   }
@@ -2129,12 +2139,12 @@ class _$TextCellImpl implements TextCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
   }) {
-    return text(this);
+    return editable(this);
   }
 
   @override
@@ -2142,12 +2152,12 @@ class _$TextCellImpl implements TextCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
   }) {
-    return text?.call(this);
+    return editable?.call(this);
   }
 
   @override
@@ -2155,14 +2165,14 @@ class _$TextCellImpl implements TextCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
     required TResult orElse(),
   }) {
-    if (text != null) {
-      return text(this);
+    if (editable != null) {
+      return editable(this);
     }
     return orElse();
   }
@@ -2185,7 +2195,8 @@ abstract class TextCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
-      required final String text}) = _$TextCellImpl;
+      required final String title,
+      required final String content}) = _$TextCellImpl;
 
   factory TextCell.fromJson(Map<String, dynamic> json) =
       _$TextCellImpl.fromJson;
@@ -2211,7 +2222,8 @@ abstract class TextCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
-  String get text;
+  String get title;
+  String get content;
   @override
   @JsonKey(ignore: true)
   _$$TextCellImplCopyWith<_$TextCellImpl> get copyWith =>
@@ -2234,8 +2246,7 @@ abstract class _$$ImageCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
-      String? url,
-      String? filePath});
+      String? url});
 
   @override
   $CellIdCopyWith<$Res> get id;
@@ -2263,7 +2274,6 @@ class __$$ImageCellImplCopyWithImpl<$Res>
     Object? decoration = null,
     Object? selected = null,
     Object? url = freezed,
-    Object? filePath = freezed,
   }) {
     return _then(_$ImageCellImpl(
       layer: null == layer
@@ -2302,10 +2312,6 @@ class __$$ImageCellImplCopyWithImpl<$Res>
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
               as String?,
-      filePath: freezed == filePath
-          ? _value.filePath
-          : filePath // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -2323,7 +2329,6 @@ class _$ImageCellImpl implements ImageCell {
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
       this.url,
-      this.filePath,
       final String? $type})
       : $type = $type ?? 'image';
 
@@ -2355,15 +2360,13 @@ class _$ImageCellImpl implements ImageCell {
   final bool selected;
   @override
   final String? url;
-  @override
-  final String? filePath;
 
   @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, url: $url, filePath: $filePath)';
+    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, url: $url)';
   }
 
   @override
@@ -2382,15 +2385,13 @@ class _$ImageCellImpl implements ImageCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
-            (identical(other.url, url) || other.url == url) &&
-            (identical(other.filePath, filePath) ||
-                other.filePath == filePath));
+            (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, url, filePath);
+      preferredHeight, decoration, selected, url);
 
   @JsonKey(ignore: true)
   @override
@@ -2432,8 +2433,9 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -2443,8 +2445,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -2471,7 +2472,7 @@ class _$ImageCellImpl implements ImageCell {
         url,
   }) {
     return image(layer, offset, id, width, height, preferredHeight, decoration,
-        selected, this.url, filePath);
+        selected, this.url);
   }
 
   @override
@@ -2508,8 +2509,9 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -2519,8 +2521,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -2547,7 +2548,7 @@ class _$ImageCellImpl implements ImageCell {
         url,
   }) {
     return image?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, this.url, filePath);
+        decoration, selected, this.url);
   }
 
   @override
@@ -2584,8 +2585,9 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -2595,8 +2597,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -2625,7 +2626,7 @@ class _$ImageCellImpl implements ImageCell {
   }) {
     if (image != null) {
       return image(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, this.url, filePath);
+          decoration, selected, this.url);
     }
     return orElse();
   }
@@ -2635,7 +2636,7 @@ class _$ImageCellImpl implements ImageCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
@@ -2648,7 +2649,7 @@ class _$ImageCellImpl implements ImageCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
@@ -2661,7 +2662,7 @@ class _$ImageCellImpl implements ImageCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
@@ -2691,8 +2692,7 @@ abstract class ImageCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
-      final String? url,
-      final String? filePath}) = _$ImageCellImpl;
+      final String? url}) = _$ImageCellImpl;
 
   factory ImageCell.fromJson(Map<String, dynamic> json) =
       _$ImageCellImpl.fromJson;
@@ -2719,7 +2719,6 @@ abstract class ImageCell implements Cell {
   @override
   bool get selected;
   String? get url;
-  String? get filePath;
   @override
   @JsonKey(ignore: true)
   _$$ImageCellImplCopyWith<_$ImageCellImpl> get copyWith =>
@@ -2939,8 +2938,9 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -2950,8 +2950,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -3015,8 +3014,9 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -3026,8 +3026,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -3091,8 +3090,9 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -3102,8 +3102,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -3142,7 +3141,7 @@ class _$ArticleCellImpl implements ArticleCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
@@ -3155,7 +3154,7 @@ class _$ArticleCellImpl implements ArticleCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
@@ -3168,7 +3167,7 @@ class _$ArticleCellImpl implements ArticleCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
@@ -3436,8 +3435,9 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)
-        text,
+            String title,
+            String content)
+        editable,
     required TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -3447,8 +3447,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)
+            String? url)
         image,
     required TResult Function(
             int layer,
@@ -3512,8 +3511,9 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult? Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -3523,8 +3523,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult? Function(
             int layer,
@@ -3588,8 +3587,9 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String text)?
-        text,
+            String title,
+            String content)?
+        editable,
     TResult Function(
             int layer,
             @OffsetConverter() Offset offset,
@@ -3599,8 +3599,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
-            String? url,
-            String? filePath)?
+            String? url)?
         image,
     TResult Function(
             int layer,
@@ -3639,7 +3638,7 @@ class _$UrlCellImpl implements UrlCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) text,
+    required TResult Function(TextCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
@@ -3652,7 +3651,7 @@ class _$UrlCellImpl implements UrlCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? text,
+    TResult? Function(TextCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
@@ -3665,7 +3664,7 @@ class _$UrlCellImpl implements UrlCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? text,
+    TResult Function(TextCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,

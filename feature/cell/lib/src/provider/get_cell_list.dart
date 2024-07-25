@@ -22,8 +22,14 @@ StreamController<List<Cell>> getCellListStreamController(
   );
   final repository = ref.watch(cellRepositoryProvider);
   controller.sink.addStream(repository.watchList(parentId: parentId));
+
+  final subscription = controller.stream.listen((cells) {
+    print('Cell list stream: $cells');
+  });
+
   ref.onDispose(() {
     controller.close();
+    subscription.cancel();
     print('Disposed cell list stream');
   });
   return controller;

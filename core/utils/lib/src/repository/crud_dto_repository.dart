@@ -42,7 +42,7 @@ mixin class CrudDTORepositoryMemory<
   }
 
   Future<void> delete({required ID id}) async {
-    map[id.parentId]?.removeWhere((element) => element.id == id);
+    map[id.parentId]?.removeWhere((element) => element.id.id == id.id);
   }
 
   Future<void> update({required ID id, required Data data}) async {
@@ -163,14 +163,6 @@ abstract mixin class CrudDtoRepositoryAdaptive<
     try {
       final data =
           await interactive.getList(parentId: parentId, page: page, size: size);
-      if (data.isEmpty) {
-        final hiveData =
-            await storage.getList(parentId: parentId, page: page, size: size);
-        for (var item in hiveData) {
-          await interactive.add(parentId: parentId, data: item);
-        }
-        return hiveData;
-      }
       return data;
     } catch (e) {
       return storage.getList(parentId: parentId, page: page, size: size);

@@ -82,7 +82,7 @@ class Cell with _$Cell, HasId<CellId> {
   }) = UnknownCell;
 
   const factory Cell.brainstorming({
-    @Default(10) int layer,
+    @Default(9) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
     required double width,
@@ -93,12 +93,12 @@ class Cell with _$Cell, HasId<CellId> {
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
 
-    /// 
+    ///
     required String? question,
     required List<String> suggestions,
   }) = BrainstormingCell;
 
-  const factory Cell.text({
+  const factory Cell.editable({
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
@@ -109,7 +109,8 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
-    required String text,
+    required String title,
+    required String content,
   }) = TextCell;
 
   const factory Cell.image({
@@ -124,7 +125,6 @@ class Cell with _$Cell, HasId<CellId> {
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
     String? url,
-    String? filePath,
   }) = ImageCell;
 
   const factory Cell.article({
@@ -157,4 +157,13 @@ class Cell with _$Cell, HasId<CellId> {
   }) = UrlCell;
 
   factory Cell.fromJson(Map<String, dynamic> json) => _$CellFromJson(json);
+}
+
+extension type CellAppearance(Cell cell) {
+  Rect get rect => Rect.fromLTWH(
+        cell.offset.dx,
+        cell.offset.dy,
+        cell.width,
+        cell.height ?? cell.preferredHeight ?? 0,
+      );
 }

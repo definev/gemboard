@@ -207,7 +207,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     moveViewportToCenterOfCell(cell);
   }
 
-  void onTextCellCreated(TextCell cell) {
+  void onEditableCellCreated(TextCell cell) {
     moveViewportToCenterOfCell(cell);
   }
 
@@ -221,10 +221,26 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
         );
 
+        if (cellKeys.length >= 1) {
+          final lastCell = cellKeys.values.last.$2;
+          final edge = Edge(
+            id: EdgeId(
+              parentId: EdgeParentId(),
+              id: Helper.createId(),
+            ),
+            source: lastCell.id.id,
+            target: cell.id.id,
+          );
+          edgeKeys[edge.id.id] = (
+            GlobalKey(debugLabel: 'WhiteboardView.edge | ${edge.id.id}'),
+            edge,
+          );
+        }
+
         /// Custom action when cell created
         cell.mapOrNull(
           brainstorming: onBrainstormingCellCreated,
-          text: onTextCellCreated,
+          editable: onEditableCellCreated,
         );
 
         widget.onCellCreated(cell);
@@ -406,7 +422,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     height: cell.height,
                     preferredHeight: cell.preferredHeight,
                     thumb: cell.mapOrNull(
-                      text: (value) => DSThumb(
+                      editable: (value) => DSThumb(
                         color: CellDecorationExtension(cell.decoration)
                             .colorValue(context),
                       ),
@@ -414,7 +430,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     onSizeChanged: (newSize) {
                       final (_, latestCell) = cellKeys[cell.id.id]!;
                       final newCell = latestCell.copyWith(
-                        height: newSize.height,
+                        // height: newSize.height,
                         preferredHeight: newSize.height,
                         width: newSize.width,
                       );
@@ -669,14 +685,15 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           viewportSelectionStart: viewportSelectionStart,
           viewportSelectionEnd: viewportSelectionEnd,
           scaleFactor: scaleFactor,
-          onSelectionsDelete: (selectedCellIds) {
+          onSelectionsDelete: (selectedCellIds) async {
             for (final id in selectedCellIds) {
               cellKeys.remove(id);
               _cellProcessors[id]
                   ?.forEach((_, subscription) => subscription.cancel());
               _cellProcessors.remove(id);
             }
-            widget.onCellsDeleted(selectedCellIds);
+            setState(() {});
+            await widget.onCellsDeleted(selectedCellIds);
           },
           onSelectionMove: (newCellOffsets) {
             List<Cell> newCells = [];

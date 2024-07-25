@@ -53,21 +53,371 @@ class EdgeVisual extends CustomPainter {
     return (normalizedSource, normalizedTarget);
   }
 
+  /// if index is even, the point is either top or bottom
+  /// if index is odd, the point is either left or right
+  (Offset offset, int index) calculateShortestPoint(
+      Rect normalizedSource, Rect normalizedTarget) {
+    final pointFromSource = [
+      normalizedSource.centerLeft,
+      normalizedSource.topCenter,
+      normalizedSource.centerRight,
+      normalizedSource.bottomCenter,
+    ];
+
+    var shortestPointFromSource = Offset(double.infinity, double.infinity);
+    var distance = double.infinity;
+    int shortestIndex = 0;
+    for (final (index, point) in pointFromSource.indexed) {
+      final d = (normalizedTarget.center - point).distance;
+      if (d < distance) {
+        distance = d;
+        shortestPointFromSource = point;
+        shortestIndex = index;
+      }
+    }
+
+    return (shortestPointFromSource, shortestIndex);
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
+    final mediumSpace = SpaceVariant.medium.resolve(context);
+
     final (normalizedSource, normalizedTarget) = normalizeRects(size);
+
+    var (shortestPointFromSource, shortestPointFromSourceIndex) =
+        calculateShortestPoint(normalizedSource, normalizedTarget);
+    var (shortestPointFromTarget, shortestPointFromTargetIndex) =
+        calculateShortestPoint(normalizedTarget, normalizedSource);
+
+    switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
+      case (3, 0):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx,
+          shortestPointFromSource.dy + mediumSpace,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx - mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+      case (1, 0):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx,
+          shortestPointFromSource.dy - mediumSpace,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx - mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+      case (1, 2):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx,
+          shortestPointFromSource.dy - mediumSpace,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx + mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+      case (3, 2):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx,
+          shortestPointFromSource.dy + mediumSpace,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx + mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+      case (2, 3):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx + mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy + mediumSpace,
+        );
+      case (0, 1):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx - mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy - mediumSpace,
+        );
+      case (0, 2):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx - mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx + mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+      case (2, 0):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx + mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx - mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+
+      ///
+      case (2, 1):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx + mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy - mediumSpace,
+        );
+      case (3, 1):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx,
+          shortestPointFromSource.dy + mediumSpace,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy - mediumSpace,
+        );
+      case (3, 0):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx - mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx + mediumSpace,
+          shortestPointFromTarget.dy,
+        );
+      case (1, 3):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx,
+          shortestPointFromSource.dy - mediumSpace,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy + mediumSpace,
+        );
+      case (0, 3):
+        shortestPointFromSource = Offset(
+          shortestPointFromSource.dx - mediumSpace,
+          shortestPointFromSource.dy,
+        );
+        shortestPointFromTarget = Offset(
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy + mediumSpace,
+        );
+    }
+
+    final shortestRect =
+        Rect.fromPoints(shortestPointFromSource, shortestPointFromTarget);
+
+    double cubicControlPointDxC1(double base) =>
+        switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
+          /// left - right
+          (0, 0) => 0,
+          (2, 2) => 0,
+          (0, 2) => -base / 2,
+          (2, 0) => base / 2,
+
+          /// top - bottom
+          (1, 1) => 0,
+          (3, 3) => 0,
+          (1, 3) => 0,
+          (3, 1) => 0,
+
+          ///
+          (2, 1) => base,
+          (1, 2) => 0,
+
+          ///
+          (0, 3) => -base,
+          (3, 0) => 0,
+
+          ///
+          (0, 1) => -base,
+          (1, 0) => 0,
+
+          ///
+          (2, 3) => base,
+
+          ///
+          (3, 2) => 0,
+          _ => 0,
+        };
+    double cubicControlPointDyC1(double base) =>
+        switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
+          /// left - right
+          (0, 0) => 0,
+          (2, 2) => 0,
+          (0, 2) => 0,
+          (2, 0) => 0,
+
+          /// top - bottom
+          (1, 1) => 0,
+          (3, 3) => 0,
+          (1, 3) => -base / 2,
+          (3, 1) => base / 2,
+
+          ///
+          (2, 1) => 0,
+          (1, 2) => -base,
+
+          ///
+          (0, 3) => 0,
+          (3, 0) => base,
+
+          ///
+          (0, 1) => 0,
+          (1, 0) => -base,
+
+          ///
+          (2, 3) => 0,
+          (3, 2) => base,
+          _ => 0,
+        };
+
+    double cubicControlPointDxC2(double base) =>
+        switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
+          /// left - right
+          (0, 0) => 0,
+          (2, 2) => 0,
+          (0, 2) => base / 2,
+          (2, 0) => -base / 2,
+
+          /// top - bottom
+          (1, 1) => 0,
+          (3, 3) => 0,
+          (1, 3) => 0,
+          (3, 1) => 0,
+
+          ///
+          (2, 1) => 0,
+          (1, 2) => base,
+
+          ///
+          (0, 3) => 0,
+          (3, 0) => -base,
+
+          ///
+          (0, 1) => 0,
+          (1, 0) => -base,
+
+          ///
+          (2, 3) => 0,
+
+          ///
+          (3, 2) => base,
+          _ => 0,
+        };
+    double cubicControlPointDyC2(double base) =>
+        switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
+          /// left - right
+          (0, 0) => 0,
+          (2, 2) => 0,
+          (0, 2) => 0,
+          (2, 0) => 0,
+
+          /// top - bottom
+          (1, 1) => 0,
+          (3, 3) => 0,
+          (1, 3) => base / 2,
+          (3, 1) => -base / 2,
+
+          ///
+          (2, 1) => -base,
+          (1, 2) => 0,
+
+          ///
+          (0, 3) => base,
+          (3, 0) => 0,
+
+          ///
+          (0, 1) => -base,
+          (1, 0) => 0,
+
+          ///
+          (2, 3) => base,
+
+          ///
+          (3, 2) => 0,
+          _ => 0,
+        };
+
+    final strokeWidth = SpaceVariant.gap.resolve(context);
 
     canvas.drawPath(
       Path()
-        ..moveTo(normalizedSource.center.dx, normalizedSource.center.dy)
-        ..lineTo(normalizedTarget.center.dx, normalizedTarget.center.dy),
+        ..moveTo(shortestPointFromSource.dx, shortestPointFromSource.dy)
+        ..cubicTo(
+          shortestPointFromSource.dx +
+              cubicControlPointDxC1(shortestRect.width),
+          shortestPointFromSource.dy +
+              cubicControlPointDyC1(shortestRect.height),
+          shortestPointFromTarget.dx +
+              cubicControlPointDxC2(shortestRect.width),
+          shortestPointFromTarget.dy +
+              cubicControlPointDyC2(shortestRect.height),
+          shortestPointFromTarget.dx,
+          shortestPointFromTarget.dy,
+        ),
       Paint() //
-        ..color = ColorVariant.onSurface
-            .resolve(context)
-            .withOpacity(OpacityVariant.hightlight.resolve(context).value)
-        ..strokeWidth = 10
+        ..color = ColorVariant.outline.resolve(context)
+        ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke,
     );
+
+    /// Draw an arrow at target
+    drawArrow(
+      canvas,
+      ColorVariant.outline.resolve(context),
+      arrowSize: strokeWidth * 2,
+      target: shortestPointFromTarget +
+          switch (shortestPointFromTargetIndex) {
+            0 => Offset(strokeWidth, 0),
+            1 => Offset(0, strokeWidth),
+            2 => Offset(-strokeWidth, 0),
+            3 => Offset(0, -strokeWidth),
+            _ => Offset.zero,
+          },
+      angle: switch (shortestPointFromTargetIndex) {
+        0 => 0,
+        1 => pi / 2,
+        2 => pi,
+        3 => -pi / 2,
+        _ => 0,
+      },
+    );
+  }
+
+  void drawArrow(
+    Canvas canvas,
+    Color color, {
+    required Offset target,
+    required double angle,
+    required double arrowSize,
+  }) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1
+      ..strokeCap = StrokeCap.round;
+
+    arrowSize *= 1.5;
+
+    const arrowAngle = pi / 6;
+
+    final path = Path();
+
+    path.moveTo(target.dx - arrowSize * cos(angle - arrowAngle),
+        target.dy - arrowSize * sin(angle - arrowAngle));
+    path.lineTo(target.dx, target.dy);
+    path.lineTo(target.dx - arrowSize * cos(angle + arrowAngle),
+        target.dy - arrowSize * sin(angle + arrowAngle));
+    path.close();
+    canvas.drawPath(path, paint);
   }
 
   @override

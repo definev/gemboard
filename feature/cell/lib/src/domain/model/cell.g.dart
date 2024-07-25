@@ -63,7 +63,7 @@ Map<String, dynamic> _$$UnknownCellImplToJson(_$UnknownCellImpl instance) =>
 _$BrainstormingCellImpl _$$BrainstormingCellImplFromJson(
         Map<String, dynamic> json) =>
     _$BrainstormingCellImpl(
-      layer: (json['layer'] as num?)?.toInt() ?? 10,
+      layer: (json['layer'] as num?)?.toInt() ?? 9,
       offset: const OffsetConverter().fromJson(json['offset'] as List),
       id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
       width: (json['width'] as num).toDouble(),
@@ -106,7 +106,8 @@ _$TextCellImpl _$$TextCellImplFromJson(Map<String, dynamic> json) =>
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
-      text: json['text'] as String,
+      title: json['title'] as String,
+      content: json['content'] as String,
       $type: json['cellType'] as String?,
     );
 
@@ -120,7 +121,8 @@ Map<String, dynamic> _$$TextCellImplToJson(_$TextCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
-      'text': instance.text,
+      'title': instance.title,
+      'content': instance.content,
       'cellType': instance.$type,
     };
 
@@ -136,7 +138,6 @@ _$ImageCellImpl _$$ImageCellImplFromJson(Map<String, dynamic> json) =>
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
       url: json['url'] as String?,
-      filePath: json['filePath'] as String?,
       $type: json['cellType'] as String?,
     );
 
@@ -151,7 +152,6 @@ Map<String, dynamic> _$$ImageCellImplToJson(_$ImageCellImpl instance) =>
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
       'url': instance.url,
-      'filePath': instance.filePath,
       'cellType': instance.$type,
     };
 
