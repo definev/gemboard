@@ -6,6 +6,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:graph_edge/graph_edge.dart';
 import 'package:mix/mix.dart';
 import 'package:utils/utils.dart';
 
@@ -18,9 +19,14 @@ class CellBuilder extends StatefulWidget {
     required this.horizontalDetails,
     required this.verticalDetails,
     required this.scaleFactor,
+
+    ///
     required this.onAskForSuggestion,
     required this.onSuggestionSelected,
     required this.onAskForSuggestionSubscription,
+
+    /// Cell
+    required this.onCellLinked,
   });
 
   final ScrollableDetails horizontalDetails;
@@ -41,12 +47,18 @@ class CellBuilder extends StatefulWidget {
   ) onSuggestionSelected;
   final StreamSubscription? onAskForSuggestionSubscription;
 
+  /// Cell
+
+  final void Function(Cell source, Cell target) onCellLinked;
+
   @override
   State<CellBuilder> createState() => _CellBuilderState();
 }
 
 class _CellBuilderState extends State<CellBuilder> {
   bool onHover = false;
+  bool onKnobHover = false;
+  bool onDrag = false;
   bool perminant = false;
 
   Offset viewportTopLeft = Offset.zero;
@@ -211,91 +223,212 @@ class _CellBuilderState extends State<CellBuilder> {
         topLeft.dy,
       );
 
+  (Offset start, Offset end)? edgeWire;
+  GlobalKey edgeWirePortalKey = GlobalKey();
+
   Widget buildEdgeWire({required Cell cell, required Widget child}) {
-    final knobHeightMargin =
-        SpaceVariant.medium.resolve(context) * widget.scaleFactor;
-    final knobWidthMargin =
-        SpaceVariant.large.resolve(context) * widget.scaleFactor;
-    final knobHeight = (SpaceVariant.gap.resolve(context)) * widget.scaleFactor;
-    final knobWidth =
+    var knobHeight = SpaceVariant.gap.resolve(context) * widget.scaleFactor;
+    var knobWidth =
         SpaceVariant.large.resolve(context) * widget.scaleFactor * 2;
+
     final knobColor = ColorVariant.outline.resolve(context);
 
     Widget buildEdgeKnob({
+      required Offset startOffset,
       required Widget child,
     }) {
       return MouseRegion(
-        onEnter: (event) {
-          debouncer.cancel();
-          setState(() => onHover = true);
-        },
-        onExit: (event) => debouncer.run(
-          () => setState(() => onHover = false),
-          Duration(milliseconds: 340),
+        onEnter: (event) => setState(() => onKnobHover = true),
+        onExit: (event) => setState(() => onKnobHover = false),
+        child: Draggable(
+          feedback: SizedBox(),
+          data: cell,
+          onDragStarted: () {
+            edgeWire = (startOffset, startOffset);
+            onDrag = true;
+            setState(() {});
+          },
+          onDragUpdate: (details) {
+            final position = edgeWire!.$2 + details.delta;
+            edgeWire = (startOffset, position);
+            setState(() {});
+          },
+          onDragEnd: (details) {
+            edgeWire = null;
+            onDrag = false;
+            setState(() {});
+          },
+          child: child,
         ),
-        child: child,
       );
     }
 
     Style knobStyle = Style(
       $box.color(knobColor),
       $box.shape.stadium(),
-      switch (perminant) {
-        true => $box.color(knobColor),
-        false => null,
-      },
-    );
+    ).animate();
+
+    Widget buildTween({
+      required Function(
+        double animatedKnobWidth,
+        double animatedKnobHeight,
+        double knobWidthMargin,
+        double knobHeightMargin,
+      ) builder,
+    }) {
+      return TweenAnimationBuilder(
+        curve: Easing.standardDecelerate,
+        duration: Duration(milliseconds: 200),
+        tween: Tween<double>(
+          begin: 0.8,
+          end: switch (true) {
+            _ when perminant && onHover => 1.4,
+            _ when perminant => switch (onKnobHover) {
+                true => 1.4,
+                false => 1.0,
+              },
+            _ when onKnobHover => 1.4,
+            _ when onHover => 1.0,
+            _ => 1,
+          },
+        ),
+        builder: (context, value, child) {
+          final animatedKnobHeight = knobHeight * (value + (1.5 * (value - 1)));
+          final animatedKnobWidth = knobWidth * value;
+          var knobHeightMargin = animatedKnobHeight * 2;
+          var knobWidthMargin = animatedKnobWidth / 2;
+
+          return builder(
+            animatedKnobWidth,
+            animatedKnobHeight,
+            knobWidthMargin,
+            knobHeightMargin,
+          );
+        },
+      );
+    }
 
     return PortalTarget(
-      visible: onHover || perminant,
+      key: edgeWirePortalKey,
+      visible: onHover || onKnobHover || onDrag || perminant,
       portalFollower: Stack(
         children: [
-          Positioned(
-            left: topCenter.dx - knobWidthMargin,
-            top: topCenter.dy - knobHeightMargin,
-            child: buildEdgeKnob(
-              child: Box(
-                style: Style(
-                  $box.width(knobWidth),
-                  $box.height(knobHeight),
-                ).merge(knobStyle),
+          buildTween(
+            builder: (
+              animatedKnobWidth,
+              animatedKnobHeight,
+              knobWidthMargin,
+              knobHeightMargin,
+            ) =>
+                Positioned(
+              left: topCenter.dx - knobWidthMargin,
+              top: topCenter.dy - knobHeightMargin,
+              child: buildEdgeKnob(
+                startOffset: Offset(
+                  topCenter.dx - knobWidthMargin + animatedKnobWidth / 2,
+                  topCenter.dy - knobHeightMargin + animatedKnobHeight / 2,
+                ),
+                child: Box(
+                  style: Style(
+                    $box.width(animatedKnobWidth),
+                    $box.height(animatedKnobHeight),
+                  ).merge(knobStyle),
+                ),
               ),
             ),
           ),
-          Positioned(
-            left: centerLeft.dx - knobHeightMargin,
-            top: centerLeft.dy - knobWidthMargin,
-            child: buildEdgeKnob(
-                child: Box(
-              style: Style(
-                $box.height(knobWidth),
-                $box.width(knobHeight),
-              ).merge(knobStyle),
-            )),
+          buildTween(
+            builder: (
+              animatedKnobWidth,
+              animatedKnobHeight,
+              knobWidthMargin,
+              knobHeightMargin,
+            ) =>
+                Positioned(
+                    left: centerLeft.dx - knobHeightMargin,
+                    top: centerLeft.dy - knobWidthMargin,
+                    child: buildEdgeKnob(
+                      startOffset: Offset(
+                        centerLeft.dx -
+                            knobHeightMargin +
+                            animatedKnobHeight / 2,
+                        centerLeft.dy - knobWidthMargin + animatedKnobWidth / 2,
+                      ),
+                      child: Box(
+                        style: Style(
+                          $box.height(animatedKnobWidth),
+                          $box.width(animatedKnobHeight),
+                        ).merge(knobStyle),
+                      ),
+                    )),
           ),
-          Positioned(
-            left: centerRight.dx + knobHeightMargin - knobHeight,
-            top: centerRight.dy - knobWidthMargin,
-            child: buildEdgeKnob(
+          buildTween(
+            builder: (
+              animatedKnobWidth,
+              animatedKnobHeight,
+              knobWidthMargin,
+              knobHeightMargin,
+            ) =>
+                Positioned(
+              left: centerRight.dx + knobHeightMargin - animatedKnobHeight,
+              top: centerRight.dy - knobWidthMargin,
+              child: buildEdgeKnob(
+                startOffset: Offset(
+                  centerRight.dx +
+                      knobHeightMargin -
+                      animatedKnobHeight +
+                      animatedKnobHeight / 2,
+                  centerRight.dy - knobWidthMargin + animatedKnobWidth / 2,
+                ),
                 child: Box(
-              style: Style(
-                $box.height(knobWidth),
-                $box.width(knobHeight),
-              ).merge(knobStyle),
-            )),
-          ),
-          Positioned(
-            left: bottomCenter.dx - knobWidthMargin,
-            top: bottomCenter.dy + knobHeightMargin - knobHeight,
-            child: buildEdgeKnob(
-              child: Box(
-                style: Style(
-                  $box.width(knobWidth),
-                  $box.height(knobHeight),
-                ).merge(knobStyle),
+                  style: Style(
+                    $box.height(animatedKnobWidth),
+                    $box.width(animatedKnobHeight),
+                  ).merge(knobStyle),
+                ),
               ),
             ),
           ),
+          buildTween(
+            builder: (
+              animatedKnobWidth,
+              animatedKnobHeight,
+              knobWidthMargin,
+              knobHeightMargin,
+            ) =>
+                Positioned(
+              left: bottomCenter.dx - knobWidthMargin,
+              top: bottomCenter.dy + knobHeightMargin - animatedKnobHeight,
+              child: buildEdgeKnob(
+                startOffset: Offset(
+                  bottomCenter.dx - knobWidthMargin + animatedKnobWidth / 2,
+                  bottomCenter.dy +
+                      knobHeightMargin -
+                      animatedKnobHeight +
+                      animatedKnobHeight / 2,
+                ),
+                child: Box(
+                  style: Style(
+                    $box.width(animatedKnobWidth),
+                    $box.height(animatedKnobHeight),
+                  ).merge(knobStyle),
+                ),
+              ),
+            ),
+          ),
+          if (edgeWire case (final start, final end))
+            Positioned.fill(
+              child: IgnorePointer(
+                child: CustomPaint(
+                  painter: EdgeTempVisual(
+                    context: context,
+                    start: start,
+                    end: end,
+                    scaleFactor: widget.scaleFactor,
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
       child: MouseRegion(
@@ -309,8 +442,10 @@ class _CellBuilderState extends State<CellBuilder> {
         ),
         child: DragTarget(
           onAcceptWithDetails: (details) {
-            final DragTargetDetails(:data, :offset) = details;
-            print('Accepted $data at $offset');
+            final DragTargetDetails(:data) = details;
+            if (data is Cell) {
+              widget.onCellLinked(data, cell);
+            }
           },
           builder: (context, candidateData, rejectedData) => GestureDetector(
             onLongPress: () => setState(() => perminant = !perminant),

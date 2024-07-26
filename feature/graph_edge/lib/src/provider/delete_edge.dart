@@ -1,6 +1,5 @@
 import 'package:graph_edge/graph_edge.dart';
 import 'package:graph_edge/src/domain/repository/edge_repository.dart';
-import 'package:graph_edge/src/provider/get_edge_list.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'delete_edge.g.dart';
@@ -30,4 +29,20 @@ Future<void> deleteEdges(
   }
 
   controller.sink.add(await repository.getList(parentId: ids.first.parentId));
+}
+
+@riverpod
+Future<void> deleteCellEdge(
+  DeleteCellEdgeRef ref, {
+  required EdgeParentId parentId,
+  required String cellId,
+}) async {
+  final edges = await ref.read(getEdgeListProvider(parentId: parentId).future);
+  final relatedEdges = edges
+      .where((edge) => edge.source == cellId || edge.target == cellId)
+      .toList();
+
+  await ref.read(
+    deleteEdgesProvider(ids: relatedEdges.map((e) => e.id).toList()).future,
+  );
 }

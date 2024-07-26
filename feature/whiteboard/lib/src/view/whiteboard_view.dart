@@ -513,6 +513,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       ?['suggestions'],
                   onSuggestionSelected: brainstormingCell_OnSuggestionSelected,
                   onAskForSuggestion: brainstormingCell_OnAskForSuggestion,
+                  onCellLinked: cell_OnCellLinked,
                 ),
               ),
             );
@@ -771,6 +772,25 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
     setState(() {});
     widget.onCellUpdated(cell, newCell);
+  }
+
+  void cell_OnCellLinked(Cell source, Cell target) {
+    final edge = Edge(
+      id: EdgeId(
+        id: Helper.createId(),
+        parentId: EdgeParentId(whiteboardId: widget.data.id.id),
+      ),
+      source: source.id.id,
+      target: target.id.id,
+    );
+
+    edgeKeys[edge.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.edge | ${edge.id.id}'),
+      edge,
+    );
+    setState(() {});
+
+    widget.onEdgeCreated(edge);
   }
 
   TwoDimensionalViewportBuilder buildSuggectionForSelection({

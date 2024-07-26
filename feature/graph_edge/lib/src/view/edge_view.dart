@@ -429,56 +429,45 @@ class EdgeVisual extends CustomPainter {
 class EdgeTempVisual extends CustomPainter {
   const EdgeTempVisual({
     required this.context,
-    required this.childSize,
-    required this.portalFollowerKey,
-    required this.startLocal,
-    required this.startGlobal,
-    required this.endGlobal,
+    required this.start,
+    required this.end,
     required this.scaleFactor,
   });
 
   final BuildContext context;
 
-  final Size childSize;
-  final GlobalKey portalFollowerKey;
   final double scaleFactor;
 
-  final Offset startLocal;
-  final Offset startGlobal;
-  final Offset endGlobal;
+  final Offset start;
+  final Offset end;
 
   @override
   void paint(Canvas canvas, Size size) {
-    var start =
-        (portalFollowerKey.currentContext!.findRenderObject() as RenderBox)
-            .globalToLocal(startGlobal);
-    var end =
-        (portalFollowerKey.currentContext!.findRenderObject() as RenderBox)
-            .globalToLocal(endGlobal);
+    final strokeWidth = SpaceVariant.gap.resolve(context) * scaleFactor;
+    final rect = Rect.fromPoints(start, end);
 
-    start -= startLocal * scaleFactor;
-    end -= startLocal * scaleFactor;
-
-    final scaledSize = childSize * scaleFactor;
-    start += Offset(scaledSize.width / 2, scaledSize.height / 2);
-    end += Offset(scaledSize.width / 2, scaledSize.height / 2);
-
-    canvas.drawLine(
-      start,
-      end,
+    canvas.drawPath(
+      Path()
+        ..moveTo(start.dx, start.dy)
+        ..cubicTo(
+          start.dx + rect.width / 2,
+          start.dy,
+          end.dx - rect.width / 2,
+          end.dy,
+          end.dx,
+          end.dy,
+        ),
       Paint()
-        ..color = ColorVariant.onSurface
-            .resolve(context)
-            .withOpacity(OpacityVariant.hightlight.resolve(context).value)
-        ..strokeWidth = 10 * scaleFactor
+        ..color = ColorVariant.outline.resolve(context)
+        ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke,
     );
   }
 
   @override
   bool shouldRepaint(covariant EdgeTempVisual oldDelegate) {
-    if (oldDelegate.startGlobal != startGlobal) return true;
-    if (oldDelegate.endGlobal != endGlobal) return true;
+    if (oldDelegate.start != start) return true;
+    if (oldDelegate.end != end) return true;
     return false;
   }
 }

@@ -59,9 +59,10 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
 
     Widget actionTool(BoxConstraints constraints) {
       final cellWidth = min(
-        constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
-        480.0,
-      ) * canvasScale.value;
+            constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
+            480.0,
+          ) *
+          canvasScale.value;
       return DSToolbar(
         children: [
           HookBuilder(
@@ -377,17 +378,27 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                     cells: cells,
                   ).future,
                 ),
-                onCellsDeleted: (cellIds) => ref.read(
-                  deleteCellsProvider(
-                    ids: [
-                      for (final cellId in cellIds)
-                        CellId(
-                          parentId: CellParentId(whiteboardId: id.id),
-                          id: cellId,
-                        ),
-                    ],
-                  ).future,
-                ),
+                onCellsDeleted: (cellIds) async {
+                  await ref.read(
+                    deleteCellsProvider(
+                      ids: [
+                        for (final cellId in cellIds)
+                          CellId(
+                            parentId: CellParentId(whiteboardId: id.id),
+                            id: cellId,
+                          ),
+                      ],
+                    ).future,
+                  );
+                  for (final cellId in cellIds) {
+                    await ref.read(
+                      deleteCellEdgeProvider(
+                        parentId: EdgeParentId(whiteboardId: id.id),
+                        cellId: cellId,
+                      ).future,
+                    );
+                  }
+                },
               ),
             ),
           );

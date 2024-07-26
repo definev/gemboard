@@ -282,5 +282,150 @@ class _DeleteEdgesProviderElement extends AutoDisposeFutureProviderElement<void>
   @override
   List<EdgeId> get ids => (origin as DeleteEdgesProvider).ids;
 }
+
+String _$deleteCellEdgeHash() => r'c77b95b8f6314e728624ccbfb6ea8bc87d13e0f3';
+
+/// See also [deleteCellEdge].
+@ProviderFor(deleteCellEdge)
+const deleteCellEdgeProvider = DeleteCellEdgeFamily();
+
+/// See also [deleteCellEdge].
+class DeleteCellEdgeFamily extends Family<AsyncValue<void>> {
+  /// See also [deleteCellEdge].
+  const DeleteCellEdgeFamily();
+
+  /// See also [deleteCellEdge].
+  DeleteCellEdgeProvider call({
+    required EdgeParentId parentId,
+    required String cellId,
+  }) {
+    return DeleteCellEdgeProvider(
+      parentId: parentId,
+      cellId: cellId,
+    );
+  }
+
+  @override
+  DeleteCellEdgeProvider getProviderOverride(
+    covariant DeleteCellEdgeProvider provider,
+  ) {
+    return call(
+      parentId: provider.parentId,
+      cellId: provider.cellId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deleteCellEdgeProvider';
+}
+
+/// See also [deleteCellEdge].
+class DeleteCellEdgeProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [deleteCellEdge].
+  DeleteCellEdgeProvider({
+    required EdgeParentId parentId,
+    required String cellId,
+  }) : this._internal(
+          (ref) => deleteCellEdge(
+            ref as DeleteCellEdgeRef,
+            parentId: parentId,
+            cellId: cellId,
+          ),
+          from: deleteCellEdgeProvider,
+          name: r'deleteCellEdgeProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deleteCellEdgeHash,
+          dependencies: DeleteCellEdgeFamily._dependencies,
+          allTransitiveDependencies:
+              DeleteCellEdgeFamily._allTransitiveDependencies,
+          parentId: parentId,
+          cellId: cellId,
+        );
+
+  DeleteCellEdgeProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.parentId,
+    required this.cellId,
+  }) : super.internal();
+
+  final EdgeParentId parentId;
+  final String cellId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(DeleteCellEdgeRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteCellEdgeProvider._internal(
+        (ref) => create(ref as DeleteCellEdgeRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        parentId: parentId,
+        cellId: cellId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _DeleteCellEdgeProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteCellEdgeProvider &&
+        other.parentId == parentId &&
+        other.cellId == cellId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
+    hash = _SystemHash.combine(hash, cellId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeleteCellEdgeRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `parentId` of this provider.
+  EdgeParentId get parentId;
+
+  /// The parameter `cellId` of this provider.
+  String get cellId;
+}
+
+class _DeleteCellEdgeProviderElement
+    extends AutoDisposeFutureProviderElement<void> with DeleteCellEdgeRef {
+  _DeleteCellEdgeProviderElement(super.provider);
+
+  @override
+  EdgeParentId get parentId => (origin as DeleteCellEdgeProvider).parentId;
+  @override
+  String get cellId => (origin as DeleteCellEdgeProvider).cellId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
