@@ -351,6 +351,68 @@ final soraTextStyles = {
   },
 };
 
+final beVietnamProTextStyles = {
+  TextStyleVariant.h1: GoogleFonts.beVietnamPro(
+    fontSize: 96,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -1.5,
+  ),
+  TextStyleVariant.h2: GoogleFonts.beVietnamPro(
+    fontSize: 60,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -0.5,
+  ),
+  TextStyleVariant.h3: GoogleFonts.beVietnamPro(
+    fontSize: 48,
+    fontWeight: FontWeight.w300,
+  ),
+  TextStyleVariant.h4: GoogleFonts.beVietnamPro(
+    fontSize: 34,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.h5: GoogleFonts.beVietnamPro(
+    fontSize: 24,
+    fontWeight: FontWeight.w300,
+  ),
+  TextStyleVariant.h6: GoogleFonts.beVietnamPro(
+    fontSize: 20,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.15,
+  ),
+  TextStyleVariant.p: GoogleFonts.beVietnamPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.p2: GoogleFonts.beVietnamPro(
+    fontSize: 14,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.p3: GoogleFonts.beVietnamPro(
+    fontSize: 12,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 0.4,
+  ),
+  TextStyleVariant.p4: GoogleFonts.beVietnamPro(
+    fontSize: 10,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.p5: GoogleFonts.beVietnamPro(
+    fontSize: 8,
+    fontWeight: FontWeight.w300,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
+};
+
 final outfitTextStyles = {
   TextStyleVariant.h1: GoogleFonts.outfit(
     fontSize: 96,
@@ -489,6 +551,7 @@ extension FontFamilyX on TextStyleVariant {
       FontVariant.notoSans => notoSansTextStyles[this]!,
       FontVariant.sora => soraTextStyles[this]!,
       FontVariant.outfit => outfitTextStyles[this]!,
+      FontVariant.beVietnamPro => beVietnamProTextStyles[this]!,
       _ => garamondTextStyles[this]!,
     };
 

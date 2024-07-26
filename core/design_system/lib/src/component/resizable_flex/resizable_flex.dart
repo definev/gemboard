@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -155,18 +153,6 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 ? constraints.maxWidth
                 : constraints.maxHeight) -
             gapSize;
-
-        final firstChild = SizedBox(
-          height: switch (widget.direction) {
-            Axis.vertical => math.min(controller.panelSize, totalSize),
-            Axis.horizontal => double.maxFinite,
-          },
-          width: switch (widget.direction) {
-            Axis.horizontal => math.min(controller.panelSize, totalSize),
-            Axis.vertical => double.maxFinite,
-          },
-          child: widget.firstChild,
-        );
 
         return switch (totalSize) {
           final totalSize when totalSize < mobileBreakpoint =>

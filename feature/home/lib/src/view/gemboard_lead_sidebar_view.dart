@@ -17,8 +17,6 @@ import 'package:sliver_tools/sliver_tools.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/whiteboard.dart';
 
-/// TODO: Implement way to access and control or reactive state
-/// TODO: Done specifically for the sidebar
 class GemboardLeadSidebar extends HookConsumerWidget {
   const GemboardLeadSidebar({
     this.minSize = _minSize,
@@ -184,19 +182,26 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                   emoji: folder.emoji,
                                   label: folder.title,
                                   onChangeEmojiLabel: (emoji, label) {},
-                                  onCreateGemboard: () {
-                                    ref.read(
+                                  onCreateGemboard: () async {
+                                    final data = Whiteboard(
+                                      id: WhiteboardId(
+                                        parentId: parentId,
+                                        id: Helper.createId(),
+                                      ),
+                                      emoji: StringUtils.randomEmoji(),
+                                      title: 'Untitled',
+                                    );
+                                    await ref.read(
                                       createWhiteboardProvider(
                                         parentId: parentId,
-                                        data: Whiteboard(
-                                          id: WhiteboardId(
-                                            parentId: parentId,
-                                            id: Helper.createId(),
-                                          ),
-                                          emoji: StringUtils.randomEmoji(),
-                                          title: 'Untitled',
-                                        ),
+                                        data: data,
                                       ).future,
+                                    );
+
+                                    whiteboardNavigation.openWhiteboardEditor(
+                                      context,
+                                      id: data.id,
+                                      resiableController: resizableController,
                                     );
                                   },
                                   children: switch (whiteboardLitAsyncValue) {
@@ -206,6 +211,10 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                         for (final whiteboard in value)
                                           Button(
                                             background: ColorVariant.purple,
+                                            style: Style(
+                                              $box.padding.right
+                                                  .ref(SpaceVariant.small),
+                                            ),
                                             onPressed: () =>
                                                 whiteboardNavigation
                                                     .openWhiteboardEditor(

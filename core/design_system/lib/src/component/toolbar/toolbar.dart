@@ -30,14 +30,7 @@ class DSToolbar extends StyledWidget {
           child: StyledFlex(
             direction: direction,
             style: dsToolbarStyle.styledFlexStyle(context),
-            children: [
-              for (final child in children) ...[
-                switch (child) {
-                  DSToolbarItem() => child..direction = direction,
-                  _ => child,
-                },
-              ],
-            ],
+            children: children,
           ),
         );
       },

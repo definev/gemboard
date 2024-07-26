@@ -484,6 +484,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   horizontalScrollController.removeListener(onMove);
                   verticalScrollController.removeListener(onMove);
                   scaleFactor.removeListener(onMove);
+                  debouncer.cancel();
                 };
               }, []);
               return child!;

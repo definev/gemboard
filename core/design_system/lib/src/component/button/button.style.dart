@@ -29,9 +29,7 @@ class ButtonStyle {
     final scale = DesignSystemTheme.of(context).scale;
 
     return Style(
-      $box.padding.left.ref(SpaceVariant.gap),
-      $box.padding.right.ref(SpaceVariant.small),
-      $box.padding.vertical.ref(SpaceVariant.gap),
+      $box.padding.all.ref(SpaceVariant.gap),
       $text.style.ref(TextStyleVariant.p),
       $text.style.color.ref(ColorVariant.onSurface),
       $icon.size(24 * scale),

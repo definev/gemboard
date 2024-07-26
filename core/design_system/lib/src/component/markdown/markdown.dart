@@ -19,8 +19,6 @@ class DSMarkdownBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scale = DesignSystemTheme.of(context).scale;
-
     return SelectionArea(
       child: MarkdownBody(
         data: data,

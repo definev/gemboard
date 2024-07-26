@@ -195,9 +195,6 @@ class BrainstormingCellView extends HookWidget {
           readOnly: cell.question != null,
           onSubmitted: onAskForSuggestion,
           trailing: Button(
-            style: Style(
-              $box.margin.right(4 * scale),
-            ),
             highlight: ButtonHighlight.pressed,
             background: ColorVariant.onSurface,
             onPressed: () =>

@@ -87,7 +87,7 @@ class DSTextbox extends StyledWidget {
                       onFieldSubmitted: onSubmitted,
                       cursorColor: ColorVariant.onSurface.resolve(context),
                       cursorWidth: 1.5 * scale,
-                      cursorHeight: textStyle.height,
+                      cursorHeight: textStyle.fontSize!,
                       style: textStyle,
                       minLines: minLines,
                       maxLines: switch (obscureText) {
@@ -106,7 +106,6 @@ class DSTextbox extends StyledWidget {
                   if (trailing case final trailing?)
                     Mix(
                       data: Style(
-                        $box.padding.right.ref(SpaceVariant.gap),
                         $icon.size(20 * scale),
                         $icon.color.ref(ColorVariant.onSurface),
                       ).of(context),

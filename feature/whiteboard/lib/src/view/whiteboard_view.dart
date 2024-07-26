@@ -416,11 +416,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           Queue<StackPosition> stackPositions = Queue.from([]);
           Offset? selectionStart;
           Offset? selectionEnd;
-          List<String> selectedCells = [];
+          List<Cell> selectedCells = [];
 
           for (final (key, cell) in cellKeys.values) {
             if (cell.selected) {
-              selectedCells.add(cell.id.id);
+              selectedCells.add(cell);
 
               if (selectionStart == null) {
                 selectionStart = cell.offset;
@@ -796,7 +796,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   TwoDimensionalViewportBuilder buildSuggectionForSelection({
     required Offset selectionStart,
     required Offset selectionEnd,
-    required List<String> selectedCells,
+    required List<Cell> selectedCells,
     required double scaleFactor,
   }) =>
       (context, verticalPosition, horizontalPosition) {
@@ -818,11 +818,19 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                 scaleFactor;
 
         return SelectionCellsView(
-          selectedCellIds: selectedCells,
+          selectedCells: selectedCells,
           cellMaps: cellKeys,
-          viewportSelectionStart: viewportSelectionStart,
-          viewportSelectionEnd: viewportSelectionEnd,
+          horizontalPosition: horizontalPosition,
+          verticalPosition: verticalPosition,
+          horizontalDetails: horizontalDetails,
+          verticalDetails: verticalDetails,
+          viewportSelection: Rect.fromPoints(
+            viewportSelectionStart,
+            viewportSelectionEnd,
+          ),
           scaleFactor: scaleFactor,
+
+          /// Cell
           onSelectionsDelete: (selectedCellIds) async {
             for (final id in selectedCellIds) {
               cellKeys.remove(id);
@@ -845,6 +853,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
             }
             widget.onCellsUpdated(newCells);
           },
+          onCellSummarize: (cell) {},
         );
       };
 }

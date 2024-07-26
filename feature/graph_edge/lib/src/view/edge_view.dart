@@ -183,15 +183,6 @@ class EdgeVisual extends CustomPainter {
           shortestPointFromTarget.dx,
           shortestPointFromTarget.dy - mediumSpace,
         );
-      case (3, 0):
-        shortestPointFromSource = Offset(
-          shortestPointFromSource.dx - mediumSpace,
-          shortestPointFromSource.dy,
-        );
-        shortestPointFromTarget = Offset(
-          shortestPointFromTarget.dx + mediumSpace,
-          shortestPointFromTarget.dy,
-        );
       case (1, 3):
         shortestPointFromSource = Offset(
           shortestPointFromSource.dx,

@@ -20,7 +20,7 @@ MixThemeData mixTheme = MixThemeData(
 DesignSystemThemeData designSystemThemeData = DesignSystemThemeData(
   opacities: opacities,
   textStyles: notoSansTextStyles,
-  font: FontVariant.sora,
+  font: FontVariant.beVietnamPro,
 );
 
 ThemeData dsTheme = ThemeData(

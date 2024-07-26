@@ -9,19 +9,19 @@ class DSToolbarItem extends StyledWidget {
   DSToolbarItem({
     super.key,
     required this.child,
-    this.direction = Axis.horizontal,
     this.onPressed,
     super.orderOfModifiers = const [],
     super.inherit,
     super.style,
   });
 
-  Axis direction = Axis.horizontal;
   final Widget child;
   final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
+
     return GestureTool(
       onPressed: onPressed,
       builder: (bool hoverHighlight, bool focusHighlight, bool? pressed) {
@@ -30,28 +30,8 @@ class DSToolbarItem extends StyledWidget {
           (context) => Box(
             style: Style(
               $box.color.ref(ColorVariant.surface),
-              switch (direction) {
-                Axis.vertical => $box.border.left(
-                    color: ColorVariant.onSurface.resolve(context),
-                    width: 1.5,
-                  ),
-                Axis.horizontal => $box.border.top(
-                    color: ColorVariant.onSurface.resolve(context),
-                    width: 1.5,
-                  ),
-              },
-              switch (direction) {
-                Axis.vertical => $box.border.right(
-                    color: ColorVariant.onSurface.resolve(context),
-                    width: 1.5,
-                  ),
-                Axis.horizontal => $box.border.bottom(
-                    color: ColorVariant.onSurface.resolve(context),
-                    width: 1.5,
-                  )
-              },
-              $box.height(42),
-              $box.width(42),
+              $box.height(SpaceVariant.large.resolve(context) * 2 * scale),
+              $box.width(SpaceVariant.large.resolve(context) * 2 * scale),
               HoverVariant.hover(
                 $box.color(
                   Color.lerp(

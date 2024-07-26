@@ -70,7 +70,7 @@ class _CellBuilderState extends State<CellBuilder> {
   late ScrollableDetails horizontalDetails;
   late ScrollableDetails verticalDetails;
 
-  final Debouncer debouncer = Debouncer();
+  final Debouncer onHoverDebouncer = Debouncer();
 
   final GlobalKey portalFollowerKey = GlobalKey();
 
@@ -99,7 +99,7 @@ class _CellBuilderState extends State<CellBuilder> {
     widget.horizontalDetails.controller?.removeListener(updateViewportTopLeft);
     widget.verticalDetails.controller?.removeListener(updateViewportTopLeft);
 
-    debouncer.cancel();
+    onHoverDebouncer.cancel();
 
     super.dispose();
   }
@@ -239,14 +239,21 @@ class _CellBuilderState extends State<CellBuilder> {
     }) {
       return HookBuilder(
         builder: (context) {
-          final debouncer = useDebouncer();
+          final onKnobHoverDebouncer = useDebouncer();
           return MouseRegion(
             onEnter: (event) {
-              debouncer.cancel();
-              setState(() => onKnobHover = true);
+              onHoverDebouncer.cancel();
+              onKnobHoverDebouncer.cancel();
+              onHover = true;
+              onKnobHover = true;
+              setState(() {});
             },
             onExit: (event) {
-              debouncer.run(
+              onHoverDebouncer.run(
+                () => setState(() => onHover = false),
+                Duration(milliseconds: 350),
+              );
+              onKnobHoverDebouncer.run(
                 () => setState(() => onKnobHover = false),
                 Duration(milliseconds: 150),
               );
@@ -256,17 +263,24 @@ class _CellBuilderState extends State<CellBuilder> {
               data: cell,
               onDragStarted: () {
                 edgeWire = (startOffset, startOffset);
+                onHoverDebouncer.cancel();
+                onHover = true;
                 onDrag = true;
                 setState(() {});
               },
               onDragUpdate: (details) {
                 final position = edgeWire!.$2 + details.delta;
                 edgeWire = (startOffset, position);
+                onHover = true;
                 setState(() {});
               },
               onDragEnd: (details) {
                 edgeWire = null;
                 onDrag = false;
+                onKnobHoverDebouncer.run(
+                  () => setState(() => onHover = false),
+                  Duration(milliseconds: 350),
+                );
                 setState(() {});
               },
               child: child,
@@ -445,10 +459,10 @@ class _CellBuilderState extends State<CellBuilder> {
       ),
       child: MouseRegion(
         onEnter: (event) {
-          debouncer.cancel();
+          onHoverDebouncer.cancel();
           setState(() => onHover = true);
         },
-        onExit: (event) => debouncer.run(
+        onExit: (event) => onHoverDebouncer.run(
           () => setState(() => onHover = false),
           Duration(milliseconds: 340),
         ),
@@ -494,34 +508,6 @@ class _CellBuilderState extends State<CellBuilder> {
     );
 
     return child;
-
-    return MouseRegion(
-      onHover: (event) {
-        debouncer.run(
-          () => setState(() => onHover = true),
-          Duration(milliseconds: 400),
-        );
-      },
-      onExit: (event) {
-        debouncer.cancel();
-        setState(() => onHover = false);
-      },
-      child: child,
-      // child: CellView(cell: widget.cell),
-      // child: PortalTarget(
-      //   visible: onHover || perminant,
-      //   portalFollower: Stack(
-      //     key: portalFollowerKey,
-      //     children: [
-      //       buildConnectCell(centerRight, connectCell),
-      //       buildChatCell(topCenter, chatCell),
-      //       if (leftStartOffset != null && leftEndOffset != null)
-      //         buildConnectCellTemporaryEdge(centerRight, connectCell),
-      //     ],
-      //   ),
-      //   child: CellView(cell: widget.cell),
-      // ),
-    );
   }
 
   Widget buildChatCell(Offset topCenter, DSCard placeholder) {

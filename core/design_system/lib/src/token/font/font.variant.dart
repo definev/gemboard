@@ -10,4 +10,5 @@ class FontVariant extends Variant {
   static const notoSans = FontVariant('notoSans');
   static const sora = FontVariant('sora');
   static const outfit = FontVariant('outfit');
+  static const beVietnamPro = FontVariant('beVietnamPro');
 }

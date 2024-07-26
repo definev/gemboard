@@ -24,7 +24,6 @@ class EditableCellView extends HookWidget {
       kind: DSCardKind.outlined,
       style: Style(
         $box.padding.all.ref(SpaceVariant.medium),
-        cell.selected ? $box.color.ref(ColorVariant.yellow) : null,
       ),
       child: Column(
         children: [
