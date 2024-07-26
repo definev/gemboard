@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gemboard_common/gemboard_common.dart';
+import 'package:graph_edge/graph_edge.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
@@ -46,6 +47,10 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final cursorMode = useState(defaultCursorMode);
+
+    ButtonKind kindBasedOn(CursorMode cursorMode, CursorMode target) {
+      return cursorMode == target ? ButtonKind.filled : ButtonKind.flat;
+    }
 
     final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
 
@@ -200,10 +205,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
               $box.width(40),
               $box.alignment.center(),
             ),
-            kind: switch (cursorMode.value) {
-              CursorMode.move => ButtonKind.filled,
-              CursorMode.handTool => ButtonKind.flat,
-            },
+            kind: kindBasedOn(cursorMode.value, CursorMode.move),
             onPressed: () => cursorMode.value = CursorMode.move,
             child: Icon(LineIcons.mousePointer),
           ),
@@ -217,12 +219,23 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
               $box.width(40),
               $box.alignment.center(),
             ),
-            kind: switch (cursorMode.value) {
-              CursorMode.move => ButtonKind.flat,
-              CursorMode.handTool => ButtonKind.filled,
-            },
+            kind: kindBasedOn(cursorMode.value, CursorMode.handTool),
             onPressed: () => cursorMode.value = CursorMode.handTool,
             child: Icon(LineIcons.paperHandAlt),
+          ),
+        ),
+        DSTooltip(
+          alignment: Alignment.bottomCenter,
+          label: StyledText('Free move'),
+          child: Button(
+            style: Style(
+              $box.height(40),
+              $box.width(40),
+              $box.alignment.center(),
+            ),
+            kind: kindBasedOn(cursorMode.value, CursorMode.freeMove),
+            onPressed: () => cursorMode.value = CursorMode.freeMove,
+            child: Icon(LineIcons.alternateExpandArrows),
           ),
         ),
       ],
@@ -235,11 +248,12 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
         controller: verticalScrollController,
         physics: switch (defaultTargetPlatform) {
           TargetPlatform.android ||
-          TargetPlatform.iOS =>
+          TargetPlatform.iOS when cursorMode.value != CursorMode.freeMove =>
             NeverScrollableScrollPhysics(),
           _ => AlwaysScrollableScrollPhysics(),
         },
       ),
+      [cursorMode.value],
     );
     final horizontalScrollController = useScrollController();
     final horizontalDetails = useMemoized(
@@ -247,11 +261,12 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
         controller: horizontalScrollController,
         physics: switch (defaultTargetPlatform) {
           TargetPlatform.android ||
-          TargetPlatform.iOS =>
+          TargetPlatform.iOS when cursorMode.value != CursorMode.freeMove =>
             NeverScrollableScrollPhysics(),
           _ => AlwaysScrollableScrollPhysics(),
         },
       ),
+      [cursorMode.value],
     );
 
     final whiteboardKey = useMemoized(() =>
@@ -301,6 +316,42 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                 onScaleStart: () => onGrab.value = true,
                 onScaleEnd: () => onGrab.value = false,
                 data: value,
+
+                /// Edge related
+                edgesStreamProvider: getEdgeListProvider(
+                  parentId: EdgeParentId(whiteboardId: id.id),
+                ),
+                onEdgeCreated: (value) => ref.read(
+                  createEdgeProvider(
+                    parentId: EdgeParentId(whiteboardId: id.id),
+                    data: value,
+                  ).future,
+                ),
+                onEdgeUpdated: (oldValue, newValue) => ref.read(
+                  updateEdgeProvider(
+                    id: newValue.id,
+                    data: newValue,
+                  ).future,
+                ),
+                onEdgesDeleted: (edgeIds) => ref.read(
+                  deleteEdgesProvider(
+                    ids: [
+                      for (final edgeId in edgeIds)
+                        EdgeId(
+                          parentId: EdgeParentId(whiteboardId: id.id),
+                          id: edgeId,
+                        ),
+                    ],
+                  ).future,
+                ),
+                onEdgesUpdated: (edges) => ref.read(
+                  updateEdgesProvider(
+                    parentId: EdgeParentId(whiteboardId: id.id),
+                    edges: edges,
+                  ).future,
+                ),
+
+                /// Cell related
                 cellsStreamProvider: getCellListProvider(
                   parentId: CellParentId(whiteboardId: id.id),
                 ),
@@ -428,31 +479,29 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   appBar,
                   Expanded(
                     child: LayoutBuilder(
-                      builder: (context, constraints) {
-                        return Stack(
-                          children: [
-                            Positioned.fill(child: whiteboardBuilder),
-                            Align(
-                              alignment: Alignment.topCenter,
-                              child: Padding(
-                                padding: EdgeInsets.all(
-                                    SpaceVariant.small.resolve(context)),
-                                child: StyledFlex(
-                                  direction: Axis.horizontal,
-                                  style: Style(
-                                    $flex.mainAxisSize.min(),
-                                    $flex.gap.ref(SpaceVariant.medium),
-                                  ),
-                                  children: [
-                                    actionTool(constraints),
-                                    cursorModeTool,
-                                  ],
+                      builder: (context, constraints) => Stack(
+                        children: [
+                          Positioned.fill(child: whiteboardBuilder),
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  SpaceVariant.small.resolve(context)),
+                              child: StyledFlex(
+                                direction: Axis.horizontal,
+                                style: Style(
+                                  $flex.mainAxisSize.min(),
+                                  $flex.gap.ref(SpaceVariant.medium),
                                 ),
+                                children: [
+                                  actionTool(constraints),
+                                  cursorModeTool,
+                                ],
                               ),
                             ),
-                          ],
-                        );
-                      },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -30,7 +30,7 @@ class ButtonStyle {
       $box.padding.left.ref(SpaceVariant.gap),
       $box.padding.right.ref(SpaceVariant.small),
       $box.padding.vertical.ref(SpaceVariant.gap),
-      $text.style.ref(TextStyleVariant.h6),
+      $text.style.ref(TextStyleVariant.p),
       $text.style.color.ref(ColorVariant.onSurface),
       $icon.size(24),
       $icon.color.ref(ColorVariant.onSurface),

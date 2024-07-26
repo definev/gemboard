@@ -121,7 +121,7 @@ class DSTextbox extends StyledWidget {
                   Mix(
                     data: Style(
                       $text.style.ref(TextStyleVariant.p2),
-                      $text.style.fontWeight.bold(),
+                      $text.style.fontWeight.w600(),
                     ).of(context),
                     child: label!,
                   ),

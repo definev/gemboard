@@ -7,7 +7,7 @@ part of 'get_cell_list.dart';
 // **************************************************************************
 
 String _$getCellListStreamControllerHash() =>
-    r'dc2cc5db9d214b803afc84aa033b3202d2082884';
+    r'5081a9286c3c0d4221078a8ccd7f24f058af642f';
 
 /// Copied from Dart SDK
 class _SystemHash {

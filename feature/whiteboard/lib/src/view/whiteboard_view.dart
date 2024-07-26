@@ -19,11 +19,22 @@ class WhiteboardView extends ConsumerStatefulWidget {
   const WhiteboardView({
     super.key,
     required this.data,
+
+    ///
+    required this.edgesStreamProvider,
+    required this.onEdgeUpdated,
+    required this.onEdgesUpdated,
+    required this.onEdgeCreated,
+    required this.onEdgesDeleted,
+
+    ///
     required this.cellsStreamProvider,
     required this.onCellCreated,
     required this.onCellUpdated,
     required this.onCellsUpdated,
     required this.onCellsDeleted,
+
+    ///
     required this.enableMoveByMouse,
     required this.enableMoveByTouch,
     this.scaleFactor,
@@ -34,11 +45,20 @@ class WhiteboardView extends ConsumerStatefulWidget {
   });
 
   final Whiteboard data;
+
+  /// Whiteboard cells configuration
   final AutoDisposeStreamProvider<List<Cell>> cellsStreamProvider;
   final void Function(Cell oldValue, Cell newValue) onCellUpdated;
   final void Function(List<Cell> cells) onCellsUpdated;
   final Future<void> Function(Cell value) onCellCreated;
   final Future<void> Function(List<String> cellIds) onCellsDeleted;
+
+  /// Whiteboard edges configuration
+  final AutoDisposeStreamProvider<List<Edge>> edgesStreamProvider;
+  final void Function(Edge oldValue, Edge newValue) onEdgeUpdated;
+  final void Function(List<Edge> edges) onEdgesUpdated;
+  final Future<void> Function(Edge value) onEdgeCreated;
+  final Future<void> Function(List<String> edgeIds) onEdgesDeleted;
 
   /// Whiteboard infinite scrollable configuration
   final ValueNotifier<double>? scaleFactor;
@@ -64,6 +84,39 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Map<String, (GlobalKey, Edge)> edgeKeys = {};
   Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap = {};
   Map<String, Map<String, StreamSubscription>> _cellProcessors = {};
+
+  late void Function(
+    AsyncValue<List<Edge>>? previous,
+    AsyncValue<List<Edge>> next,
+  ) updateEdgeKeys =
+      (AsyncValue<List<Edge>>? previous, AsyncValue<List<Edge>> next) {
+    final previousEdges = {...edgeKeys};
+    final nextEdges = next.valueOrNull ?? <Edge>[];
+
+    for (final edge in nextEdges) {
+      if (previousEdges[edge.id.id] != null) {
+        previousEdges.remove(edge.id.id);
+        final oldEdgeKey = edgeKeys[edge.id.id]!;
+        edgeKeys[edge.id.id] = (oldEdgeKey.$1, edge);
+      }
+
+      if (edgeKeys[edge.id.id] == null) {
+        edgeKeys[edge.id.id] = (
+          GlobalKey(
+            debugLabel: 'WhiteboardView.edge | ${edge.id.id}',
+          ),
+          edge,
+        );
+      }
+    }
+
+    // Cleanup
+    for (final (_, edge) in previousEdges.values) {
+      edgeKeys.remove(edge.id.id);
+      stackPositionDataMap[edge.id.id]?.dispose();
+      stackPositionDataMap.remove(edge.id.id);
+    }
+  };
 
   late void Function(
     AsyncValue<List<Cell>>? previous,
@@ -150,24 +203,36 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     }
     if (widget.verticalDetails != null &&
         widget.verticalDetails != oldWidget.verticalDetails) {
-      verticalDetails.controller?.dispose();
+      if (widget.verticalDetails?.controller !=
+          oldWidget.verticalDetails?.controller) {
+        verticalDetails.controller?.dispose();
+      }
       verticalDetails = widget.verticalDetails!;
     }
 
     if (widget.verticalDetails == null && oldWidget.verticalDetails != null) {
-      verticalDetails.controller?.dispose();
+      if (widget.verticalDetails?.controller !=
+          oldWidget.verticalDetails?.controller) {
+        verticalDetails.controller?.dispose();
+      }
       verticalDetails = defaultVerticalDetails;
     }
 
     if (widget.horizontalDetails != null &&
         widget.horizontalDetails != oldWidget.horizontalDetails) {
-      horizontalDetails.controller?.dispose();
+      if (widget.horizontalDetails?.controller !=
+          oldWidget.horizontalDetails?.controller) {
+        horizontalDetails.controller?.dispose();
+      }
       horizontalDetails = widget.horizontalDetails!;
     }
 
     if (widget.horizontalDetails == null &&
         oldWidget.horizontalDetails != null) {
-      horizontalDetails.controller?.dispose();
+      if (widget.horizontalDetails?.controller !=
+          oldWidget.horizontalDetails?.controller) {
+        horizontalDetails.controller?.dispose();
+      }
       horizontalDetails = defaultHorizontalDetails;
     }
   }
@@ -221,22 +286,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
         );
 
-        if (cellKeys.length >= 1) {
-          final lastCell = cellKeys.values.last.$2;
-          final edge = Edge(
-            id: EdgeId(
-              parentId: EdgeParentId(),
-              id: Helper.createId(),
-            ),
-            source: lastCell.id.id,
-            target: cell.id.id,
-          );
-          edgeKeys[edge.id.id] = (
-            GlobalKey(debugLabel: 'WhiteboardView.edge | ${edge.id.id}'),
-            edge,
-          );
-        }
-
         /// Custom action when cell created
         cell.mapOrNull(
           brainstorming: onBrainstormingCellCreated,
@@ -259,7 +308,9 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   @override
   Widget build(BuildContext context) {
     ref.listen(widget.cellsStreamProvider, updateCellKeys);
+    ref.listen(widget.edgesStreamProvider, updateEdgeKeys);
     ref.watch(widget.cellsStreamProvider);
+    ref.watch(widget.edgesStreamProvider);
 
     return DropRegion(
       // Formats this region can accept.
@@ -380,8 +431,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   ),
                   math.max(
                     selectionEnd.dy,
-                    cell.offset.dy +
-                        (cell.height ?? cell.preferredHeight ?? 100),
+                    cell.offset.dy + CellAppearance(cell).rect.height,
                   ),
                 );
               }
@@ -429,9 +479,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     ),
                     onSizeChanged: (newSize) {
                       final (_, latestCell) = cellKeys[cell.id.id]!;
+
                       final newCell = latestCell.copyWith(
                         // height: newSize.height,
-                        preferredHeight: newSize.height,
+                        // preferredHeight: newSize.height,
                         width: newSize.width,
                       );
                       cellKeys[cell.id.id] = (key, newCell);
@@ -515,27 +566,34 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  void brainstormingCell_OnSuggestionSelected(
-    BrainstormingCell cell,
-    int index,
-    String suggestion,
-  ) async {
-    final suggestionCell = Cell.article(
-      offset: cell.offset + Offset(cell.width + 20, 0),
-      id: CellId(
-        id: Helper.createId(),
-        parentId: CellParentId(
-          whiteboardId: widget.data.id.id,
-        ),
-      ),
-      width: cell.width,
-      decoration: CellDecoration(color: 'blue'),
-      title: suggestion,
-      content: '',
+  Offset randomOffsetAround(Cell cell, [double radius = 100]) {
+    final offset = cell.offset;
+    final random = math.Random();
+    final rect = CellAppearance(cell).rect;
+
+    radius *= scaleFactor.value;
+
+    final x = random.nextDouble() * radius + offset.dx;
+    final y = random.nextDouble() * radius + offset.dy;
+
+    return Offset(
+      switch (random.nextBool()) {
+        true => x + rect.width,
+        false => x - rect.width,
+      },
+      switch (random.nextBool()) {
+        true => y + rect.height,
+        false => y - rect.height,
+      },
     );
-    moveViewportToCenterOfCell(suggestionCell);
-    await widget.onCellCreated(suggestionCell);
-    var (brainstormingKey, brainstormingCell) = cellKeys[cell.id.id]!;
+  }
+
+  void brainstormingCell_GenerateSuggestionTask({
+    required BrainstormingCell parentCell,
+    required ArticleCell suggestionCell,
+    required String suggestion,
+  }) {
+    var (brainstormingKey, brainstormingCell) = cellKeys[parentCell.id.id]!;
     brainstormingCell = brainstormingCell as BrainstormingCell;
     cellKeys[brainstormingCell.id.id] = (
       brainstormingKey,
@@ -593,6 +651,44 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
 
     _cellProcessors[suggestionCell.id.id] = {'generate': subscription};
+  }
+
+  void brainstormingCell_OnSuggestionSelected(
+    BrainstormingCell cell,
+    int index,
+    String suggestion,
+  ) async {
+    final suggestionCell = Cell.article(
+      offset: randomOffsetAround(cell),
+      id: CellId(
+        id: Helper.createId(),
+        parentId: CellParentId(
+          whiteboardId: widget.data.id.id,
+        ),
+      ),
+      width: cell.width,
+      decoration: CellDecoration(color: 'blue'),
+      title: suggestion,
+      content: '',
+    ) as ArticleCell;
+    moveViewportToCenterOfCell(suggestionCell);
+    await widget.onCellCreated(suggestionCell);
+
+    final edge = Edge(
+      id: EdgeId(
+        id: Helper.createId(),
+        parentId: EdgeParentId(whiteboardId: widget.data.id.id),
+      ),
+      source: cell.id.id,
+      target: suggestionCell.id.id,
+    );
+    await widget.onEdgeCreated(edge);
+
+    brainstormingCell_GenerateSuggestionTask(
+      parentCell: cell,
+      suggestionCell: suggestionCell,
+      suggestion: suggestion,
+    );
   }
 
   void brainstormingCell_OnAskForSuggestion(

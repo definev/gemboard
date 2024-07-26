@@ -27,7 +27,7 @@ class HomeView extends StatelessWidget {
                     'Welcome to the home page!',
                     style: Style(
                       $text.style.ref(TextStyleVariant.h4),
-                      $text.style.fontWeight.bold(),
+                      $text.style.fontWeight.w500(),
                       $text.textAlign.center(),
                     ),
                   ),
@@ -36,7 +36,7 @@ class HomeView extends StatelessWidget {
                     'You can navigate to the whiteboard editor from the menu.',
                     style: Style(
                       $text.style.ref(TextStyleVariant.p),
-                      $text.style.fontWeight.bold(),
+                      $text.style.fontWeight.w500(),
                       $text.textAlign.center(),
                     ),
                   ),

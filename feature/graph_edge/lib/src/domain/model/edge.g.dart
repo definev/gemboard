@@ -7,10 +7,14 @@ part of 'edge.dart';
 // **************************************************************************
 
 _$EdgeParentIdImpl _$$EdgeParentIdImplFromJson(Map<String, dynamic> json) =>
-    _$EdgeParentIdImpl();
+    _$EdgeParentIdImpl(
+      whiteboardId: json['whiteboardId'] as String,
+    );
 
 Map<String, dynamic> _$$EdgeParentIdImplToJson(_$EdgeParentIdImpl instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'whiteboardId': instance.whiteboardId,
+    };
 
 _$EdgeIdImpl _$$EdgeIdImplFromJson(Map<String, dynamic> json) => _$EdgeIdImpl(
       parentId: EdgeParentId.fromJson(json['parentId'] as Map<String, dynamic>),

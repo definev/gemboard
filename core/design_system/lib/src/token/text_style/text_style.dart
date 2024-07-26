@@ -288,6 +288,192 @@ final interTextStyles = {
   },
 };
 
+final soraTextStyles = {
+  TextStyleVariant.h1: GoogleFonts.sora(
+    fontSize: 96,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -1.5,
+  ),
+  TextStyleVariant.h2: GoogleFonts.sora(
+    fontSize: 60,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -0.5,
+  ),
+  TextStyleVariant.h3: GoogleFonts.sora(
+    fontSize: 48,
+    fontWeight: FontWeight.w400,
+  ),
+  TextStyleVariant.h4: GoogleFonts.sora(
+    fontSize: 34,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.h5: GoogleFonts.sora(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+  ),
+  TextStyleVariant.h6: GoogleFonts.sora(
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.15,
+  ),
+  TextStyleVariant.p: GoogleFonts.sora(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.p2: GoogleFonts.sora(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.p3: GoogleFonts.sora(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.4,
+  ),
+  TextStyleVariant.p4: GoogleFonts.sora(
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.p5: GoogleFonts.sora(
+    fontSize: 8,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
+};
+
+final outfitTextStyles = {
+  TextStyleVariant.h1: GoogleFonts.outfit(
+    fontSize: 96,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -1.5,
+  ),
+  TextStyleVariant.h2: GoogleFonts.outfit(
+    fontSize: 60,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -0.5,
+  ),
+  TextStyleVariant.h3: GoogleFonts.outfit(
+    fontSize: 48,
+    fontWeight: FontWeight.w400,
+  ),
+  TextStyleVariant.h4: GoogleFonts.outfit(
+    fontSize: 34,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.h5: GoogleFonts.outfit(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+  ),
+  TextStyleVariant.h6: GoogleFonts.outfit(
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.15,
+  ),
+  TextStyleVariant.p: GoogleFonts.outfit(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.p2: GoogleFonts.outfit(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.p3: GoogleFonts.outfit(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.4,
+  ),
+  TextStyleVariant.p4: GoogleFonts.outfit(
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.p5: GoogleFonts.outfit(
+    fontSize: 8,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
+};
+
+final notoSansTextStyles = {
+  TextStyleVariant.h1: GoogleFonts.notoSans(
+    fontSize: 96,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -1.5,
+  ),
+  TextStyleVariant.h2: GoogleFonts.notoSans(
+    fontSize: 60,
+    fontWeight: FontWeight.w300,
+    letterSpacing: -0.5,
+  ),
+  TextStyleVariant.h3: GoogleFonts.notoSans(
+    fontSize: 48,
+    fontWeight: FontWeight.w400,
+  ),
+  TextStyleVariant.h4: GoogleFonts.notoSans(
+    fontSize: 34,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.h5: GoogleFonts.notoSans(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+  ),
+  TextStyleVariant.h6: GoogleFonts.notoSans(
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.15,
+  ),
+  TextStyleVariant.p: GoogleFonts.notoSans(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.p2: GoogleFonts.notoSans(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.25,
+  ),
+  TextStyleVariant.p3: GoogleFonts.notoSans(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 0.4,
+  ),
+  TextStyleVariant.p4: GoogleFonts.notoSans(
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.p5: GoogleFonts.notoSans(
+    fontSize: 8,
+    fontWeight: FontWeight.w400,
+    letterSpacing: 1.5,
+  ),
+  TextStyleVariant.emoji: switch (defaultTargetPlatform) {
+    TargetPlatform.macOS ||
+    TargetPlatform.iOS =>
+      TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
+    _ => TextStyle(fontSize: 20),
+  },
+};
+
 extension FontFamilyX on TextStyleVariant {
   TextStyle resolveFontFamily(BuildContext context, FontVariant variant) {
     switch (variant) {
@@ -299,6 +485,12 @@ extension FontFamilyX on TextStyleVariant {
         return garamondTextStyles[this]!;
       case FontVariant.inter:
         return interTextStyles[this]!;
+      case FontVariant.notoSans:
+        return notoSansTextStyles[this]!;
+      case FontVariant.sora:
+        return soraTextStyles[this]!;
+      case FontVariant.outfit:
+        return outfitTextStyles[this]!;
       default:
         return garamondTextStyles[this]!;
     }

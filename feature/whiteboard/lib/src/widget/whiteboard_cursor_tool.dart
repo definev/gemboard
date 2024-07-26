@@ -203,6 +203,7 @@ class WhiteboardCursorTool extends HookWidget {
                 child: MouseRegion(
                   cursor: switch (cursorMode.value) {
                     CursorMode.move => SystemMouseCursors.basic,
+                    CursorMode.freeMove => SystemMouseCursors.click,
                     CursorMode.handTool => switch (onGrab.value) {
                         true => SystemMouseCursors.grabbing,
                         false => SystemMouseCursors.grab,

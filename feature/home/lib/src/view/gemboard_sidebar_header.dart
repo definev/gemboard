@@ -55,7 +55,7 @@ class GemboardSidebarHeader extends StatelessWidget {
                             'Hi, Zen!',
                             style: Style(
                               $text.style.ref(TextStyleVariant.h6),
-                              $text.style.fontWeight.bold(),
+                              $text.style.fontWeight.w500(),
                               $text.overflow.ellipsis(),
                             ),
                           ),

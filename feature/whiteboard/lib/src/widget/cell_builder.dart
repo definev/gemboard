@@ -112,9 +112,6 @@ class _CellBuilderState extends State<CellBuilder> {
         widget.cell.offset.dy * widget.scaleFactor - viewportTopLeft.dy,
       );
 
-  double get cellHeight =>
-      (widget.cell.height ?? widget.cell.preferredHeight ?? 100);
-
   // Widget buildConnectCellTemporaryEdge(Offset offset, Widget placeholder) {
   //   return Positioned.fill(
   //     child: CustomPaint(
@@ -191,17 +188,19 @@ class _CellBuilderState extends State<CellBuilder> {
   //       ),
   //     );
 
+  CellAppearance get cellAppearance => CellAppearance(widget.cell);
+
   Offset get centerLeft => Offset(
         topLeft.dx,
-        topLeft.dy + cellHeight * widget.scaleFactor / 2,
+        topLeft.dy + cellAppearance.rect.height * widget.scaleFactor / 2,
       );
   Offset get centerRight => Offset(
         topLeft.dx + widget.cell.width * widget.scaleFactor,
-        topLeft.dy + cellHeight * widget.scaleFactor / 2,
+        topLeft.dy + cellAppearance.rect.height * widget.scaleFactor / 2,
       );
   Offset get bottomCenter => Offset(
         topLeft.dx + widget.cell.width * widget.scaleFactor / 2,
-        topLeft.dy + cellHeight * widget.scaleFactor,
+        topLeft.dy + cellAppearance.rect.height * widget.scaleFactor,
       );
   Offset get topCenter => Offset(
         topLeft.dx + widget.cell.width * widget.scaleFactor / 2,

@@ -24,7 +24,7 @@ sealed class CoreData with _$CoreData {
 extension CoreDataX on CoreData {
   Future<Content> convertToGeminiContent() async {
     return when(
-      system: (instruction) => Content.system(instruction),
+      system: (instruction) => Content.model([TextPart(instruction)]),
       text: (text) => Content.text(text),
       imageFile: (path) => () async {
         final file = io.File(path);

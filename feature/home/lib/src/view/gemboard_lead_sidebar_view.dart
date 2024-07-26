@@ -156,7 +156,8 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                               StyledText(
                                 'Start your first 💎board',
                                 style: Style(
-                                  $text.style.ref(TextStyleVariant.h5),
+                                  $text.style.ref(TextStyleVariant.p),
+                                  $text.textAlign.center(),
                                 ),
                               )
                             ],
