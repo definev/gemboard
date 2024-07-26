@@ -85,7 +85,7 @@ class DSCardStyle {
       $box.alignment.centerLeft(),
       $box.padding.vertical.ref(SpaceVariant.small),
       $box.padding.horizontal.ref(SpaceVariant.medium),
-      $text.style.ref(TextStyleVariant.h6),
+      $text.style.ref(TextStyleVariant.p),
       $text.style.color.ref(onBackground),
       DSCardKind.flat(
         $box.color.ref(ColorVariant.surface),

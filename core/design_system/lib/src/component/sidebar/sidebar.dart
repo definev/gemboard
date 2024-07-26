@@ -34,7 +34,7 @@ class DSSidebarSectionHeader extends StatelessWidget {
         $box.padding.vertical.ref(SpaceVariant.gap),
         $box.padding.left.ref(SpaceVariant.gap),
         $box.padding.right.ref(SpaceVariant.small),
-        $text.style.ref(TextStyleVariant.h6),
+        $text.style.ref(TextStyleVariant.p),
         $text.style.color.ref(onBackground),
         $icon.color.ref(onBackground),
       ).merge(style),

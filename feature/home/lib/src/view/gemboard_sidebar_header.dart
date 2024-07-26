@@ -49,20 +49,21 @@ class GemboardSidebarHeader extends StatelessWidget {
                         style: Style(
                           $flex.crossAxisAlignment.start(),
                           $box.margin.left.ref(SpaceVariant.medium),
+                          $flex.gap.ref(SpaceVariant.gap),
                         ),
                         children: [
                           StyledText(
                             'Hi, Zen!',
                             style: Style(
                               $text.style.ref(TextStyleVariant.h6),
-                              $text.style.fontWeight.w500(),
+                              $text.style.fontWeight.w700(),
                               $text.overflow.ellipsis(),
                             ),
                           ),
                           StyledText(
                             DateTimeUtils.weekdayYear(DateTime.now()),
                             style: Style(
-                              $text.style.ref(TextStyleVariant.p),
+                              $text.style.ref(TextStyleVariant.p2),
                               $text.overflow.ellipsis(),
                             ),
                           ),

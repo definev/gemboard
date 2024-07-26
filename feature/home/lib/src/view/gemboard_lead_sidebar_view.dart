@@ -273,14 +273,15 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                       background: ColorVariant.green,
                       kind: ButtonKind.filled,
                       style: Style(
-                        $box.padding.all.ref(SpaceVariant.large),
+                        $box.padding.horizontal.ref(SpaceVariant.small),
+                        $box.padding.vertical.ref(SpaceVariant.medium),
                       ),
                       child: SafeArea(
                         top: false,
                         child: StyledRow(
                           inherit: true,
                           style: Style(
-                            $flex.gap.ref(SpaceVariant.medium),
+                            $flex.gap.ref(SpaceVariant.small),
                             $flex.mainAxisAlignment.center(),
                           ),
                           children: [

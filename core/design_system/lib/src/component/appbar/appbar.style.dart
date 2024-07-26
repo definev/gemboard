@@ -11,7 +11,7 @@ class DSAppbarStyle {
       $box.padding.horizontal(SpaceVariant.gap.resolve(context)),
       $box.padding.vertical.ref(SpaceVariant.gap),
       $box.border.color.ref(ColorVariant.onSurface),
-      $text.style.ref(TextStyleVariant.h6),
+      $text.style.ref(TextStyleVariant.p),
     );
   }
 }

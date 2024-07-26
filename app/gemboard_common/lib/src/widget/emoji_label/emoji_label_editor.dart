@@ -44,7 +44,7 @@ class EmojiLabelEditor extends HookWidget {
     useListenable(controller);
 
     final labelStyle = this.labelStyle ??
-        TextStyleVariant.h6
+        TextStyleVariant.p
             .resolve(context)
             .copyWith(color: ColorVariant.onSurface.resolve(context));
 

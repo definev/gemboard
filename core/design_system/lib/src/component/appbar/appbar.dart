@@ -28,7 +28,7 @@ class DSAppbar extends StyledWidget {
           child: Box(
             style: Style(
               $flex.mainAxisAlignment.center(),
-              $text.style.ref(TextStyleVariant.h6),
+              $text.style.ref(TextStyleVariant.p),
               $box.color.ref(ColorVariant.surface),
               $box.border.bottom.color(border),
             ).merge(style),
