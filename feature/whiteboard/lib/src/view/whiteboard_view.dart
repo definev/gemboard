@@ -350,8 +350,16 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           bool handled = handleLocalData(item.localData, event.position.local);
           if (handled) continue;
 
+          final imageFormats = [
+            Formats.jpeg,
+            Formats.png,
+            Formats.gif,
+            Formats.tiff,
+            Formats.webp,
+          ];
+
           final reader = item.dataReader!;
-          if (reader.canProvide(Formats.jpeg)) {
+          if (imageFormats.any((format) => reader.canProvide(format))) {
             print('Dropped image: ${item}');
             if (reader.canProvide(Formats.uri)) {
               reader.getValue<NamedUri>(Formats.uri, (value) {
@@ -368,7 +376,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     offset: _offsetToViewport(event.position.local),
                     width: 200,
                     decoration: CellDecoration(color: 'blue'),
-                    url: value.uri.toString(),
+                    url: value.uri,
                   );
 
                   widget.onCellCreated(cell);
@@ -485,6 +493,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       color: CellDecorationExtension(cell.decoration)
                           .colorValue(context),
                     ),
+                    image: (value) => DSThumb(
+                      color: CellDecorationExtension(cell.decoration)
+                          .colorValue(context),
+                    )
                   ),
                   onSizeChanged: (newSize) {
                     final (_, latestCell) = cellKeys[cell.id.id]!;

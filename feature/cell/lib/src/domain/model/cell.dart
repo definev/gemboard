@@ -124,7 +124,7 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
-    String? url,
+    @UriConverter() required Uri url,
   }) = ImageCell;
 
   const factory Cell.article({
@@ -141,20 +141,6 @@ class Cell with _$Cell, HasId<CellId> {
     required String title,
     required String content,
   }) = ArticleCell;
-
-  const factory Cell.url({
-    @Default(10) int layer,
-    @OffsetConverter() required Offset offset,
-    @CellIdConverter() required CellId id,
-    required double width,
-    double? height,
-
-    /// A lazy height that will be calculated when the cell is rendered.
-    double? preferredHeight,
-    @CellDecorationConverter() required CellDecoration decoration,
-    @Default(false) bool selected,
-    required String url,
-  }) = UrlCell;
 
   factory Cell.fromJson(Map<String, dynamic> json) => _$CellFromJson(json);
 }

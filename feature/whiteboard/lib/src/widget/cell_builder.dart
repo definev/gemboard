@@ -498,7 +498,6 @@ class _CellBuilderState extends State<CellBuilder> {
       editable: (cell) => EditableCellView(cell: cell),
       image: (cell) => ImageCellView(cell: cell),
       article: (cell) => ArticleCellView(cell: cell),
-      url: (cell) => UrlCellView(cell: cell),
       unknown: (_) => SizedBox(),
     );
 

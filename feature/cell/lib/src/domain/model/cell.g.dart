@@ -137,7 +137,7 @@ _$ImageCellImpl _$$ImageCellImplFromJson(Map<String, dynamic> json) =>
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
-      url: json['url'] as String?,
+      url: const UriConverter().fromJson(json['url'] as String),
       $type: json['cellType'] as String?,
     );
 
@@ -151,7 +151,7 @@ Map<String, dynamic> _$$ImageCellImplToJson(_$ImageCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
-      'url': instance.url,
+      'url': const UriConverter().toJson(instance.url),
       'cellType': instance.$type,
     };
 
@@ -183,34 +183,5 @@ Map<String, dynamic> _$$ArticleCellImplToJson(_$ArticleCellImpl instance) =>
       'selected': instance.selected,
       'title': instance.title,
       'content': instance.content,
-      'cellType': instance.$type,
-    };
-
-_$UrlCellImpl _$$UrlCellImplFromJson(Map<String, dynamic> json) =>
-    _$UrlCellImpl(
-      layer: (json['layer'] as num?)?.toInt() ?? 10,
-      offset: const OffsetConverter().fromJson(json['offset'] as List),
-      id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
-      width: (json['width'] as num).toDouble(),
-      height: (json['height'] as num?)?.toDouble(),
-      preferredHeight: (json['preferredHeight'] as num?)?.toDouble(),
-      decoration: const CellDecorationConverter()
-          .fromJson(json['decoration'] as Map<String, dynamic>),
-      selected: json['selected'] as bool? ?? false,
-      url: json['url'] as String,
-      $type: json['cellType'] as String?,
-    );
-
-Map<String, dynamic> _$$UrlCellImplToJson(_$UrlCellImpl instance) =>
-    <String, dynamic>{
-      'layer': instance.layer,
-      'offset': const OffsetConverter().toJson(instance.offset),
-      'id': const CellIdConverter().toJson(instance.id),
-      'width': instance.width,
-      'height': instance.height,
-      'preferredHeight': instance.preferredHeight,
-      'decoration': const CellDecorationConverter().toJson(instance.decoration),
-      'selected': instance.selected,
-      'url': instance.url,
       'cellType': instance.$type,
     };

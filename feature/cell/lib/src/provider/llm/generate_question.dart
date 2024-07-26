@@ -14,12 +14,12 @@ Raw<Stream<String>> generateQuestion(
   yield* ref.watch(
     generateTextFromCoreDataProvider(
       coreDataList: [
-        CoreData.system('''
+        CoreData.model('''
 You will answer the following question by providing a rationale.
 Make it clear and concise. But also make sure to provide enough information to answer the question.
 And if you have any links or references, put them at the bottom of your answer.
 '''),
-        CoreData.text(text),
+        CoreData.user(text),
       ],
     ),
   );

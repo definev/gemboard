@@ -12,9 +12,9 @@ part 'generate_content_stream.g.dart';
 
 @freezed
 sealed class CoreData with _$CoreData {
-  const factory CoreData.system(String instruction) = SystemCoreData;
+  const factory CoreData.model(String instruction) = SystemCoreData;
 
-  const factory CoreData.text(String text) = TextCoreData;
+  const factory CoreData.user(String text) = TextCoreData;
 
   const factory CoreData.imageFile(String path) = ImageFileCoreData;
 

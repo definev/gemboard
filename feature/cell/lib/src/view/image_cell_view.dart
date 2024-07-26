@@ -12,12 +12,9 @@ class ImageCellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: ColoredBox(
-        color: ColorVariant.surface.resolve(context),
-        child: Image.network(cell.url!),
-      ),
+    return ColoredBox(
+      color: ColorVariant.surface.resolve(context),
+      child: Image.network(cell.url.toString()),
     );
   }
 }
