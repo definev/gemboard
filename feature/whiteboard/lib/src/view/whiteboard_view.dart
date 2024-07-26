@@ -8,6 +8,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:graph_edge/graph_edge.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
@@ -19,6 +20,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   const WhiteboardView({
     super.key,
     required this.data,
+    required this.canvasScale,
 
     ///
     required this.edgesStreamProvider,
@@ -45,6 +47,8 @@ class WhiteboardView extends ConsumerStatefulWidget {
   });
 
   final Whiteboard data;
+
+  final double canvasScale;
 
   /// Whiteboard cells configuration
   final AutoDisposeStreamProvider<List<Cell>> cellsStreamProvider;
@@ -305,13 +309,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    ref.listen(widget.cellsStreamProvider, updateCellKeys);
-    ref.listen(widget.edgesStreamProvider, updateEdgeKeys);
-    ref.watch(widget.cellsStreamProvider);
-    ref.watch(widget.edgesStreamProvider);
-
+  Widget buildDropRegion({required Widget child}) {
     return DropRegion(
       // Formats this region can accept.
       formats: Formats.standardFormats,
@@ -394,174 +392,197 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           }
         }
       },
-      child: ListenableBuilder(
-        listenable: scaleFactor,
-        builder: (context, child) => ZoomStackGestureDetector(
-          enableMoveByMouse: widget.enableMoveByMouse,
-          enableMoveByTouch: widget.enableMoveByTouch,
-          scaleFactor: scaleFactor.value,
-          onScaleStart: widget.onScaleStart,
-          onScaleEnd: widget.onScaleEnd,
-          onScaleFactorChanged: (value) => scaleFactor.value = value,
-          stack: (key, scaleFactor) {
-            Queue<StackPosition> stackPositions = Queue.from([]);
-            Offset? selectionStart;
-            Offset? selectionEnd;
-            List<String> selectedCells = [];
+      child: child,
+    );
+  }
 
-            for (final (key, cell) in cellKeys.values) {
-              if (cell.selected) {
-                selectedCells.add(cell.id.id);
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(widget.cellsStreamProvider, updateCellKeys);
+    ref.listen(widget.edgesStreamProvider, updateEdgeKeys);
+    ref.watch(widget.cellsStreamProvider);
+    ref.watch(widget.edgesStreamProvider);
 
-                if (selectionStart == null) {
-                  selectionStart = cell.offset;
-                }
-                if (selectionEnd == null) {
-                  selectionEnd = cell.offset;
-                }
+    Widget child = ListenableBuilder(
+      listenable: scaleFactor,
+      builder: (context, child) => ZoomStackGestureDetector(
+        enableMoveByMouse: widget.enableMoveByMouse,
+        enableMoveByTouch: widget.enableMoveByTouch,
+        scaleFactor: scaleFactor.value,
+        onScaleStart: widget.onScaleStart,
+        onScaleEnd: widget.onScaleEnd,
+        onScaleFactorChanged: (value) => scaleFactor.value = value,
+        stack: (key, scaleFactor) {
+          Queue<StackPosition> stackPositions = Queue.from([]);
+          Offset? selectionStart;
+          Offset? selectionEnd;
+          List<String> selectedCells = [];
 
-                selectionStart = Offset(
-                  math.min(selectionStart.dx, cell.offset.dx),
-                  math.min(selectionStart.dy, cell.offset.dy),
-                );
-                selectionEnd = Offset(
-                  math.max(
-                    selectionEnd.dx,
-                    cell.offset.dx + cell.width,
-                  ),
-                  math.max(
-                    selectionEnd.dy,
-                    cell.offset.dy + CellAppearance(cell).rect.height,
-                  ),
-                );
+          for (final (key, cell) in cellKeys.values) {
+            if (cell.selected) {
+              selectedCells.add(cell.id.id);
+
+              if (selectionStart == null) {
+                selectionStart = cell.offset;
               }
-              stackPositions.addLast(
-                StackPosition(
-                  key: key,
-                  scaleFactor: scaleFactor,
-                  data: StackPositionData(
-                    id: cell.id.id,
-                    layer: cell.layer,
-                    height: cell.height,
-                    preferredHeight: cell.preferredHeight,
-                    width: cell.width,
-                    offset: cell.offset,
-                    keepAlive: cell.selected,
+              if (selectionEnd == null) {
+                selectionEnd = cell.offset;
+              }
+
+              selectionStart = Offset(
+                math.min(selectionStart.dx, cell.offset.dx),
+                math.min(selectionStart.dy, cell.offset.dy),
+              );
+              selectionEnd = Offset(
+                math.max(
+                  selectionEnd.dx,
+                  cell.offset.dx + cell.width,
+                ),
+                math.max(
+                  selectionEnd.dy,
+                  cell.offset.dy + CellAppearance(cell).rect.height,
+                ),
+              );
+            }
+            stackPositions.addLast(
+              StackPosition(
+                key: key,
+                scaleFactor: scaleFactor,
+                data: StackPositionData(
+                  id: cell.id.id,
+                  layer: cell.layer,
+                  height: cell.height,
+                  preferredHeight: cell.preferredHeight,
+                  width: cell.width,
+                  offset: cell.offset,
+                  keepAlive: cell.selected,
+                ),
+                onDataUpdated: (newValue) {
+                  final newCell = cell.copyWith(
+                    offset: newValue.offset,
+                    height: switch (cell.height) {
+                      null => null,
+                      _ => newValue.height,
+                    },
+                    preferredHeight: newValue.height ??
+                        newValue.preferredHeight ??
+                        cell.preferredHeight,
+                    width: newValue.width ?? cell.width,
+                  );
+                  cellKeys[newValue.id] = (key, newCell);
+                  setState(() {});
+                  widget.onCellUpdated(cell, newCell);
+                },
+                moveable: StackMove(),
+                resizable: StackResize(
+                  width: cell.width,
+                  // Cell have fiex width so same as width
+                  preferredWidth: cell.width,
+                  height: cell.height,
+                  preferredHeight: cell.preferredHeight,
+                  thumb: cell.mapOrNull(
+                    editable: (value) => DSThumb(
+                      color: CellDecorationExtension(cell.decoration)
+                          .colorValue(context),
+                    ),
                   ),
-                  onDataUpdated: (newValue) {
-                    final newCell = cell.copyWith(
-                      offset: newValue.offset,
-                      height: switch (cell.height) {
-                        null => null,
-                        _ => newValue.height,
-                      },
-                      preferredHeight: newValue.height ??
-                          newValue.preferredHeight ??
-                          cell.preferredHeight,
-                      width: newValue.width ?? cell.width,
+                  onSizeChanged: (newSize) {
+                    final (_, latestCell) = cellKeys[cell.id.id]!;
+
+                    final newCell = latestCell.copyWith(
+                      // height: newSize.height,
+                      // preferredHeight: newSize.height,
+                      width: newSize.width,
                     );
-                    cellKeys[newValue.id] = (key, newCell);
+                    cellKeys[cell.id.id] = (key, newCell);
                     setState(() {});
                     widget.onCellUpdated(cell, newCell);
                   },
-                  moveable: StackMove(),
-                  resizable: StackResize(
-                    width: cell.width,
-                    // Cell have fiex width so same as width
-                    preferredWidth: cell.width,
-                    height: cell.height,
-                    preferredHeight: cell.preferredHeight,
-                    thumb: cell.mapOrNull(
-                      editable: (value) => DSThumb(
-                        color: CellDecorationExtension(cell.decoration)
-                            .colorValue(context),
-                      ),
-                    ),
-                    onSizeChanged: (newSize) {
-                      final (_, latestCell) = cellKeys[cell.id.id]!;
-
-                      final newCell = latestCell.copyWith(
-                        // height: newSize.height,
-                        // preferredHeight: newSize.height,
-                        width: newSize.width,
-                      );
-                      cellKeys[cell.id.id] = (key, newCell);
-                      setState(() {});
-                      widget.onCellUpdated(cell, newCell);
-                    },
-                  ),
-                  builder: (context, notifier, child) => CellBuilder(
-                    key: ValueKey('CellBuilder | ${cell.id.id}'),
-                    scaleFactor: scaleFactor,
-                    horizontalDetails: horizontalDetails,
-                    verticalDetails: verticalDetails,
-                    notifier: notifier,
-                    stackPositionDataMap: stackPositionDataMap,
-                    cell: cell,
-
-                    /// Brainstorming cell
-                    onAskForSuggestionSubscription: _cellProcessors[cell.id.id]
-                        ?['suggestions'],
-                    onSuggestionSelected:
-                        brainstormingCell_OnSuggestionSelected,
-                    onAskForSuggestion: brainstormingCell_OnAskForSuggestion,
-                  ),
                 ),
-              );
-            }
-
-            for (final (key, edge) in edgeKeys.values) {
-              final source = cellKeys[edge.source];
-              final target = cellKeys[edge.target];
-              if (source == null || target == null) continue;
-              final (_, _, edgeRect) =
-                  EdgeBuilder.computeEdgeBounds(source, target);
-
-              stackPositions.addFirst(
-                StackPosition(
-                  key: key,
+                builder: (context, notifier, child) => CellBuilder(
+                  key: ValueKey('CellBuilder | ${cell.id.id}'),
                   scaleFactor: scaleFactor,
-                  data: StackPositionData(
-                    id: edge.id.id,
-                    layer: edge.layer,
+                  horizontalDetails: horizontalDetails,
+                  verticalDetails: verticalDetails,
+                  notifier: notifier,
+                  stackPositionDataMap: stackPositionDataMap,
+                  cell: cell,
 
-                    /// Compute offset and size for edge based on source and target cell
-                    offset: edgeRect.topLeft,
-                    height: edgeRect.height,
-                    width: edgeRect.width,
-                  ),
-                  builder: (context, notifier, child) => EdgeBuilder(
-                    notifier: notifier,
-                    cellKeys: cellKeys,
-                    stackPositionDataMap: stackPositionDataMap,
-                    edge: edge,
-                  ),
+                  /// Brainstorming cell
+                  onAskForSuggestionSubscription: _cellProcessors[cell.id.id]
+                      ?['suggestions'],
+                  onSuggestionSelected: brainstormingCell_OnSuggestionSelected,
+                  onAskForSuggestion: brainstormingCell_OnAskForSuggestion,
                 ),
-              );
-            }
-
-            return BoundlessStack(
-              horizontalDetails: horizontalDetails,
-              verticalDetails: verticalDetails,
-              backgroundBuilder: GridBackground.backgroundBuilder(
-                scale: scaleFactor,
               ),
-              foregroundBuilder: switch (selectedCells.isEmpty) {
-                true => null,
-                false => buildSuggectionForSelection(
-                    selectionStart: selectionStart!,
-                    selectionEnd: selectionEnd!,
-                    selectedCells: selectedCells,
-                    scaleFactor: scaleFactor,
-                  ),
-              },
-              delegate: BoundlessStackListDelegate(
-                children: stackPositions.toList(),
-              ),
-              scaleFactor: scaleFactor,
             );
-          },
-        ),
+          }
+
+          for (final (key, edge) in edgeKeys.values) {
+            final source = cellKeys[edge.source];
+            final target = cellKeys[edge.target];
+            if (source == null || target == null) continue;
+            final (_, _, edgeRect) =
+                EdgeBuilder.computeEdgeBounds(source, target);
+
+            stackPositions.addFirst(
+              StackPosition(
+                key: key,
+                scaleFactor: scaleFactor,
+                data: StackPositionData(
+                  id: edge.id.id,
+                  layer: edge.layer,
+
+                  /// Compute offset and size for edge based on source and target cell
+                  offset: edgeRect.topLeft,
+                  height: edgeRect.height,
+                  width: edgeRect.width,
+                ),
+                builder: (context, notifier, child) => EdgeBuilder(
+                  notifier: notifier,
+                  cellKeys: cellKeys,
+                  stackPositionDataMap: stackPositionDataMap,
+                  edge: edge,
+                ),
+              ),
+            );
+          }
+
+          return BoundlessStack(
+            horizontalDetails: horizontalDetails,
+            verticalDetails: verticalDetails,
+            backgroundBuilder: GridBackground.backgroundBuilder(
+              scale: scaleFactor,
+            ),
+            foregroundBuilder: switch (selectedCells.isEmpty) {
+              true => null,
+              false => buildSuggectionForSelection(
+                  selectionStart: selectionStart!,
+                  selectionEnd: selectionEnd!,
+                  selectedCells: selectedCells,
+                  scaleFactor: scaleFactor,
+                ),
+            },
+            delegate: BoundlessStackListDelegate(
+              children: stackPositions.toList(),
+            ),
+            scaleFactor: scaleFactor,
+          );
+        },
+      ),
+    );
+
+    child = buildDropRegion(
+      child: child,
+    );
+
+    return MixTheme(
+      data: mixTheme.copyWith(
+        spaces: scaleSpaces(widget.canvasScale),
+      ),
+      child: DesignSystemTheme(
+        data: designSystemThemeData.copyWith(scale: widget.canvasScale),
+        child: child,
       ),
     );
   }
@@ -656,6 +677,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   void brainstormingCell_OnSuggestionSelected(
     BrainstormingCell cell,
     int index,
+    ColorVariant color,
     String suggestion,
   ) async {
     final suggestionCell = Cell.article(
@@ -667,7 +689,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         ),
       ),
       width: cell.width,
-      decoration: CellDecoration(color: 'blue'),
+      decoration: CellDecoration(color: color.name),
       title: suggestion,
       content: '',
     ) as ArticleCell;

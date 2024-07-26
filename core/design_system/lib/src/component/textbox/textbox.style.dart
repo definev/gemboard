@@ -12,13 +12,15 @@ class DSTextboxStyle {
   final bool readOnly;
 
   Style call(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
+
     return Style(
       $box.color.ref(ColorVariant.surface),
       $box.padding.only(
         left: SpaceVariant.medium.resolve(context),
         right: SpaceVariant.gap.resolve(context),
-        top: SpaceVariant.gap.resolve(context) + 5,
-        bottom: SpaceVariant.gap.resolve(context) + 5,
+        top: SpaceVariant.gap.resolve(context) + 5 * scale,
+        bottom: SpaceVariant.gap.resolve(context) + 5 * scale,
       ),
       $box.alignment.center(),
       switch (readOnly) {
@@ -26,7 +28,7 @@ class DSTextboxStyle {
         false => FocusVariant.focus(
             DSTextboxKind.outline(
               $box.border.all(
-                width: 1.5,
+                width: 1.5 * scale,
                 color: ColorVariant.onSurface.resolve(context),
                 strokeAlign: BorderSide.strokeAlignInside,
               ),
@@ -38,7 +40,7 @@ class DSTextboxStyle {
         false => FocusVariant.unfocus(
             DSTextboxKind.outline(
               $box.border.all(
-                width: 1.5,
+                width: 1.5 * scale,
                 color: ColorVariant.onSurface.resolve(context).withOpacity(
                       OpacityVariant.hightlight.resolve(context).value,
                     ),

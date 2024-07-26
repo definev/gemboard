@@ -26,6 +26,7 @@ class TextStyleVariant extends TextStyleToken {
   TextStyle resolve(BuildContext context) {
     final designSystemTheme = DesignSystemTheme.of(context);
     final font = designSystemTheme.font;
+    final scale = designSystemTheme.scale;
     final themeValue = designSystemTheme.textStyles[this];
     assert(
       themeValue != null,
@@ -34,7 +35,7 @@ class TextStyleVariant extends TextStyleToken {
 
     final resolvedValue = themeValue is TextStyleResolver
         ? themeValue.resolve(context)
-        : resolveFontFamily(context, font);
+        : resolveFontFamily(context, font, scale);
 
     return resolvedValue;
   }
@@ -301,45 +302,45 @@ final soraTextStyles = {
   ),
   TextStyleVariant.h3: GoogleFonts.sora(
     fontSize: 48,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
   ),
   TextStyleVariant.h4: GoogleFonts.sora(
     fontSize: 34,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
     letterSpacing: 0.25,
   ),
   TextStyleVariant.h5: GoogleFonts.sora(
     fontSize: 24,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
   ),
   TextStyleVariant.h6: GoogleFonts.sora(
     fontSize: 20,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w300,
     letterSpacing: 0.15,
   ),
   TextStyleVariant.p: GoogleFonts.sora(
     fontSize: 16,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
     letterSpacing: 0.5,
   ),
   TextStyleVariant.p2: GoogleFonts.sora(
     fontSize: 14,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
     letterSpacing: 0.25,
   ),
   TextStyleVariant.p3: GoogleFonts.sora(
     fontSize: 12,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
     letterSpacing: 0.4,
   ),
   TextStyleVariant.p4: GoogleFonts.sora(
     fontSize: 10,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
     letterSpacing: 1.5,
   ),
   TextStyleVariant.p5: GoogleFonts.sora(
     fontSize: 8,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w300,
     letterSpacing: 1.5,
   ),
   TextStyleVariant.emoji: switch (defaultTargetPlatform) {
@@ -475,24 +476,27 @@ final notoSansTextStyles = {
 };
 
 extension FontFamilyX on TextStyleVariant {
-  TextStyle resolveFontFamily(BuildContext context, FontVariant variant) {
-    switch (variant) {
-      case FontVariant.baskervville:
-        return baskervvilleTextStyles[this]!;
-      case FontVariant.bodoni:
-        return bodoniTextStyles[this]!;
-      case FontVariant.garamond:
-        return garamondTextStyles[this]!;
-      case FontVariant.inter:
-        return interTextStyles[this]!;
-      case FontVariant.notoSans:
-        return notoSansTextStyles[this]!;
-      case FontVariant.sora:
-        return soraTextStyles[this]!;
-      case FontVariant.outfit:
-        return outfitTextStyles[this]!;
-      default:
-        return garamondTextStyles[this]!;
-    }
+  TextStyle resolveFontFamily(
+    BuildContext context,
+    FontVariant variant,
+    double scale,
+  ) {
+    final textStyles = switch (variant) {
+      FontVariant.baskervville => baskervvilleTextStyles[this]!,
+      FontVariant.bodoni => bodoniTextStyles[this]!,
+      FontVariant.garamond => garamondTextStyles[this]!,
+      FontVariant.inter => interTextStyles[this]!,
+      FontVariant.notoSans => notoSansTextStyles[this]!,
+      FontVariant.sora => soraTextStyles[this]!,
+      FontVariant.outfit => outfitTextStyles[this]!,
+      _ => garamondTextStyles[this]!,
+    };
+
+    return textStyles.apply(
+      fontSizeFactor: scale,
+      heightFactor: scale,
+      // wordSpacingFactor: scale,
+      // letterSpacingFactor: scale,
+    );
   }
 }

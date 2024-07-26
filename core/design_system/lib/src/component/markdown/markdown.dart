@@ -19,6 +19,8 @@ class DSMarkdownBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
+
     return SelectionArea(
       child: MarkdownBody(
         data: data,
@@ -38,12 +40,20 @@ class DSMarkdownBody extends StatelessWidget {
           h6: TextStyleVariant.h6.resolve(context),
           a: TextStyleVariant.p.resolve(context).copyWith(
                 color: CupertinoColors.activeBlue,
+                decorationStyle: TextDecorationStyle.dashed,
+                decoration: TextDecoration.underline,
+                decorationThickness: 1,
+                decorationColor: CupertinoColors.activeBlue,
               ),
           code: TextStyleVariant.p.resolve(context).copyWith(
                 backgroundColor: CupertinoColors.systemGrey5,
               ),
           p: TextStyleVariant.p.resolve(context),
           listBullet: TextStyleVariant.p.resolve(context),
+          blockSpacing: SpaceVariant.gap.resolve(context),
+          listBulletPadding: EdgeInsets.symmetric(
+            horizontal: SpaceVariant.small.resolve(context),
+          ),
         ),
       ),
     );

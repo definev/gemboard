@@ -38,8 +38,10 @@ class DesignSystemThemeData with EquatableMixin {
   final StyledTokens<OpacityValueToken, OpacityValue> opacities;
   final StyledTokens<TextStyleVariant, TextStyle> textStyles;
   final FontVariant font;
+  final double scale;
 
   const DesignSystemThemeData.raw({
+    required this.scale,
     required this.opacities,
     required this.textStyles,
     required this.font,
@@ -49,14 +51,30 @@ class DesignSystemThemeData with EquatableMixin {
     Map<OpacityValueToken, OpacityValue>? opacities,
     Map<TextStyleVariant, TextStyle>? textStyles,
     FontVariant? font,
+    double? scale,
   }) {
     return DesignSystemThemeData.raw(
       opacities: StyledTokens(opacities ?? {}),
       textStyles: StyledTokens(textStyles ?? {}),
       font: font ?? FontVariant.garamond,
+      scale: scale ?? 1.0,
     );
   }
 
   @override
   get props => [opacities];
+
+  DesignSystemThemeData copyWith({
+    StyledTokens<OpacityValueToken, OpacityValue>? opacities,
+    StyledTokens<TextStyleVariant, TextStyle>? textStyles,
+    FontVariant? font,
+    double? scale,
+  }) {
+    return DesignSystemThemeData.raw(
+      opacities: opacities ?? this.opacities,
+      textStyles: textStyles ?? this.textStyles,
+      font: font ?? this.font,
+      scale: scale ?? this.scale,
+    );
+  }
 }

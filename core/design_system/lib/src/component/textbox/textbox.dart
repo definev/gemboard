@@ -53,6 +53,8 @@ class DSTextbox extends StyledWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
+
     return HookBuilder(
       builder: (context) {
         final defaultFocusNode = focusNode ?? useFocusNode();
@@ -63,7 +65,7 @@ class DSTextbox extends StyledWidget {
           readOnly,
         );
 
-        final textStyle = this.textStyle ?? TextStyleVariant.p.resolve(context);
+        final textStyle = this.textStyle ?? TextStyleVariant.p2.resolve(context);
 
         return withMix(
           context,
@@ -84,7 +86,7 @@ class DSTextbox extends StyledWidget {
                       onChanged: onChanged,
                       onFieldSubmitted: onSubmitted,
                       cursorColor: ColorVariant.onSurface.resolve(context),
-                      cursorWidth: 1.5,
+                      cursorWidth: 1.5 * scale,
                       cursorHeight: textStyle.height,
                       style: textStyle,
                       minLines: minLines,
@@ -105,7 +107,7 @@ class DSTextbox extends StyledWidget {
                     Mix(
                       data: Style(
                         $box.padding.right.ref(SpaceVariant.gap),
-                        $icon.size(20),
+                        $icon.size(20 * scale),
                         $icon.color.ref(ColorVariant.onSurface),
                       ).of(context),
                       child: trailing,

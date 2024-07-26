@@ -17,3 +17,9 @@ final spaces = {
   SpaceVariant.mediumLarge: 16.0,
   SpaceVariant.large: 20.0,
 };
+
+Map<SpaceVariant, double> scaleSpaces(double scale) {
+  return {
+    for (final entry in spaces.entries) entry.key: entry.value * scale,
+  };
+}

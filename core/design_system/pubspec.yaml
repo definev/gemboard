@@ -10,6 +10,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+
+  copy_with_extension: 
   
   flutter_hooks: ^0.20.5
   equatable: 
@@ -40,6 +42,10 @@ dependencies:
     git:
       url: https://github.com/definev/flutter-emoji-selector.git
       ref: main
+
+dev_dependencies:
+  copy_with_extension_gen: 
+  build_runner: 
 
 flutter:
   uses-material-design: true

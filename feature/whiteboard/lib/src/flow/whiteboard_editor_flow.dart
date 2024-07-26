@@ -48,6 +48,9 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cursorMode = useState(defaultCursorMode);
 
+    /// This is base scale for all element in canvas
+    final canvasScale = useState(1.0);
+
     ButtonKind kindBasedOn(CursorMode cursorMode, CursorMode target) {
       return cursorMode == target ? ButtonKind.filled : ButtonKind.flat;
     }
@@ -58,7 +61,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
       final cellWidth = min(
         constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
         480.0,
-      );
+      ) * canvasScale.value;
       return DSToolbar(
         children: [
           HookBuilder(
@@ -308,6 +311,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
                   (enableMoveByMouse, enableMoveByTouch, onGrab) =>
                       WhiteboardView(
                 key: whiteboardKey,
+                canvasScale: canvasScale.value,
                 scaleFactor: scaleFactor,
                 enableMoveByMouse: cursorMode.value == CursorMode.handTool,
                 enableMoveByTouch: cursorMode.value == CursorMode.handTool,

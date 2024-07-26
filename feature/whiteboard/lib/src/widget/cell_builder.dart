@@ -33,8 +33,12 @@ class CellBuilder extends StatefulWidget {
   /// Brainstorming specific
   final void Function(BrainstormingCell cell, String question)
       onAskForSuggestion;
-  final void Function(BrainstormingCell cell, int index, String suggestion)
-      onSuggestionSelected;
+  final void Function(
+    BrainstormingCell cell,
+    int index,
+    ColorVariant color,
+    String suggestion,
+  ) onSuggestionSelected;
   final StreamSubscription? onAskForSuggestionSubscription;
 
   @override
@@ -324,8 +328,8 @@ class _CellBuilderState extends State<CellBuilder> {
     Widget child = widget.cell.map(
       brainstorming: (cell) => BrainstormingCellView(
         cell: cell,
-        onSuggestionSelected: (index, suggestion) =>
-            widget.onSuggestionSelected(cell, index, suggestion),
+        onSuggestionSelected: (index, color, suggestion) =>
+            widget.onSuggestionSelected(cell, index, color, suggestion),
         onAskForSuggestion: (question) =>
             widget.onAskForSuggestion(cell, question),
         onAskForSuggestionSubscription: widget.onAskForSuggestionSubscription,

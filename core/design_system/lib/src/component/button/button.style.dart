@@ -26,13 +26,15 @@ class ButtonStyle {
       OpacityVariant.hightlight.resolve(context).value,
     )!;
 
+    final scale = DesignSystemTheme.of(context).scale;
+
     return Style(
       $box.padding.left.ref(SpaceVariant.gap),
       $box.padding.right.ref(SpaceVariant.small),
       $box.padding.vertical.ref(SpaceVariant.gap),
       $text.style.ref(TextStyleVariant.p),
       $text.style.color.ref(ColorVariant.onSurface),
-      $icon.size(24),
+      $icon.size(24 * scale),
       $icon.color.ref(ColorVariant.onSurface),
       ButtonKind.flat(
         $box.color.ref(ColorVariant.surface),
@@ -60,7 +62,7 @@ class ButtonStyle {
         $box.foregroundDecoration.border.all.color(background
             .resolve(context)
             .withOpacity(OpacityVariant.blend.resolve(context).value)),
-        $box.foregroundDecoration.border.all.width(2),
+        $box.foregroundDecoration.border.all.width(2 * scale),
         HoverVariant.hover(
           $box.color(boxBackground),
         ),
