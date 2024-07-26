@@ -81,7 +81,7 @@ class EdgeVisual extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final mediumSpace = SpaceVariant.medium.resolve(context);
+    final mediumSpace = SpaceVariant.small.resolve(context);
 
     final (normalizedSource, normalizedTarget) = normalizeRects(size);
 

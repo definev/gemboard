@@ -237,29 +237,42 @@ class _CellBuilderState extends State<CellBuilder> {
       required Offset startOffset,
       required Widget child,
     }) {
-      return MouseRegion(
-        onEnter: (event) => setState(() => onKnobHover = true),
-        onExit: (event) => setState(() => onKnobHover = false),
-        child: Draggable(
-          feedback: SizedBox(),
-          data: cell,
-          onDragStarted: () {
-            edgeWire = (startOffset, startOffset);
-            onDrag = true;
-            setState(() {});
-          },
-          onDragUpdate: (details) {
-            final position = edgeWire!.$2 + details.delta;
-            edgeWire = (startOffset, position);
-            setState(() {});
-          },
-          onDragEnd: (details) {
-            edgeWire = null;
-            onDrag = false;
-            setState(() {});
-          },
-          child: child,
-        ),
+      return HookBuilder(
+        builder: (context) {
+          final debouncer = useDebouncer();
+          return MouseRegion(
+            onEnter: (event) {
+              debouncer.cancel();
+              setState(() => onKnobHover = true);
+            },
+            onExit: (event) {
+              debouncer.run(
+                () => setState(() => onKnobHover = false),
+                Duration(milliseconds: 150),
+              );
+            },
+            child: Draggable(
+              feedback: SizedBox(),
+              data: cell,
+              onDragStarted: () {
+                edgeWire = (startOffset, startOffset);
+                onDrag = true;
+                setState(() {});
+              },
+              onDragUpdate: (details) {
+                final position = edgeWire!.$2 + details.delta;
+                edgeWire = (startOffset, position);
+                setState(() {});
+              },
+              onDragEnd: (details) {
+                edgeWire = null;
+                onDrag = false;
+                setState(() {});
+              },
+              child: child,
+            ),
+          );
+        },
       );
     }
 
@@ -345,22 +358,21 @@ class _CellBuilderState extends State<CellBuilder> {
               knobHeightMargin,
             ) =>
                 Positioned(
-                    left: centerLeft.dx - knobHeightMargin,
-                    top: centerLeft.dy - knobWidthMargin,
-                    child: buildEdgeKnob(
-                      startOffset: Offset(
-                        centerLeft.dx -
-                            knobHeightMargin +
-                            animatedKnobHeight / 2,
-                        centerLeft.dy - knobWidthMargin + animatedKnobWidth / 2,
-                      ),
-                      child: Box(
-                        style: Style(
-                          $box.height(animatedKnobWidth),
-                          $box.width(animatedKnobHeight),
-                        ).merge(knobStyle),
-                      ),
-                    )),
+              left: centerLeft.dx - knobHeightMargin,
+              top: centerLeft.dy - knobWidthMargin,
+              child: buildEdgeKnob(
+                startOffset: Offset(
+                  centerLeft.dx - knobHeightMargin + animatedKnobHeight / 2,
+                  centerLeft.dy - knobWidthMargin + animatedKnobWidth / 2,
+                ),
+                child: Box(
+                  style: Style(
+                    $box.height(animatedKnobWidth),
+                    $box.width(animatedKnobHeight),
+                  ).merge(knobStyle),
+                ),
+              ),
+            ),
           ),
           buildTween(
             builder: (
