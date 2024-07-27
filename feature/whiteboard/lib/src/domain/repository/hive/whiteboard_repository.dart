@@ -32,11 +32,12 @@ class WhiteboardRepositoryHive extends WhiteboardRepository
   }) async {
     final store = await prefs;
     final raw = store.getString('whiteboard_offset_${id.id}');
-    if (raw == null)
+    if (raw == null) {
       return WhiteboardPosition(
         scale: 0.5,
         offset: Offset.zero,
       );
+    }
 
     return WhiteboardPosition.fromJson(jsonDecode(raw));
   }

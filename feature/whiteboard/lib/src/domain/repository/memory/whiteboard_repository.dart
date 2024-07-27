@@ -13,7 +13,7 @@ WhiteboardRepositoryMemory whiteboardRepositoryMemory(
 
 class WhiteboardRepositoryMemory extends WhiteboardRepository
     with CrudDTORepositoryMemory<WhiteboardParentId, WhiteboardId, Whiteboard> {
-  WhiteboardPosition? _position;
+  Map<String, WhiteboardPosition> _positions = {};
 
   static const undefined = 'position undefined';
 
@@ -21,8 +21,8 @@ class WhiteboardRepositoryMemory extends WhiteboardRepository
   Future<WhiteboardPosition?> getWhiteboardPosition({
     required WhiteboardId id,
   }) async {
-    if (_position == null) throw undefined;
-    return _position!;
+    if (_positions[id.id] == null) throw undefined;
+    return _positions[id.id]!;
   }
 
   @override
@@ -30,6 +30,6 @@ class WhiteboardRepositoryMemory extends WhiteboardRepository
     required WhiteboardId id,
     required WhiteboardPosition position,
   }) async {
-    _position = position;
+    _positions[id.id] = position;
   }
 }

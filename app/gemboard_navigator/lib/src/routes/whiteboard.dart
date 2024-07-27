@@ -17,6 +17,7 @@ class WhiteboardEditorRoute extends GoRouteData {
   @override
   Widget build(BuildContext context, GoRouterState state) {
     return WhiteboardEditorFlow(
+      key: ValueKey('WhiteboardEditorFlow-$id'),
       id: WhiteboardId(
         parentId: WhiteboardParentId(folderId: folderId),
         id: id,
