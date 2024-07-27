@@ -46,6 +46,7 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final showChat = useState(false);
     final cursorMode = useState(defaultCursorMode);
 
     /// This is base scale for all element in canvas
@@ -56,194 +57,6 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
     }
 
     final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
-
-    Widget actionTool(BoxConstraints constraints) {
-      final cellWidth = min(
-            constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
-            480.0,
-          ) *
-          canvasScale.value;
-      return DSToolbar(
-        children: [
-          HookBuilder(
-            builder: (context) {
-              final itemKey = useMemoized(() => GlobalKey());
-              return DragItemWidget(
-                key: itemKey,
-                dragItemProvider: (request) {
-                  final localPosition =
-                      (itemKey.currentContext!.findRenderObject()! as RenderBox)
-                          .globalToLocal(request.location);
-
-                  return DragItem(
-                    localData: Cell.brainstorming(
-                      id: CellId(
-                        parentId: CellParentId(whiteboardId: id.id),
-                        id: Helper.createId(),
-                      ),
-                      offset: localPosition,
-                      width: cellWidth,
-                      decoration: CellDecoration(color: 'yellow'),
-                      question: null,
-                      suggestions: [],
-                    ).toJson(),
-                  );
-                },
-                allowedOperations: () => allowedOperations,
-                child: DraggableWidget(
-                  child: DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Brainstorming'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      onPressed: () {},
-                      child: Icon(IconlyLight.discovery),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          HookBuilder(
-            builder: (context) {
-              final itemKey = useMemoized(() => GlobalKey());
-              return DragItemWidget(
-                key: itemKey,
-                dragItemProvider: (request) {
-                  final localPosition =
-                      (itemKey.currentContext!.findRenderObject()! as RenderBox)
-                          .globalToLocal(request.location);
-
-                  return DragItem(
-                    localData: Cell.editable(
-                      id: CellId(
-                        parentId: CellParentId(whiteboardId: id.id),
-                        id: Helper.createId(),
-                      ),
-                      offset: localPosition,
-                      width: cellWidth,
-                      decoration: CellDecoration(color: 'red'),
-                      title: '',
-                      content: '',
-                    ).toJson(),
-                  );
-                },
-                allowedOperations: () => allowedOperations,
-                child: DraggableWidget(
-                  child: DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Note'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      onPressed: () {},
-                      child: Icon(IconlyLight.document),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-          HookBuilder(
-            builder: (context) {
-              final itemKey = useMemoized(() => GlobalKey());
-              return DragItemWidget(
-                key: itemKey,
-                dragItemProvider: (request) {
-                  final localPosition =
-                      (itemKey.currentContext!.findRenderObject()! as RenderBox)
-                          .globalToLocal(request.location);
-
-                  return DragItem(
-                    localData: Cell.editable(
-                      id: CellId(
-                        parentId: CellParentId(whiteboardId: id.id),
-                        id: Helper.createId(),
-                      ),
-                      offset: localPosition,
-                      width: cellWidth,
-                      decoration: CellDecoration(color: 'red'),
-                      title: '',
-                      content: '',
-                    ).toJson(),
-                  );
-                },
-                allowedOperations: () => allowedOperations,
-                child: DraggableWidget(
-                  child: DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Chat'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      onPressed: () {},
-                      child: Icon(IconlyLight.chat),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      );
-    }
-
-    final cursorModeTool = DSToolbar(
-      children: [
-        DSTooltip(
-          alignment: Alignment.bottomCenter,
-          label: StyledText('Move'),
-          child: Button(
-            style: Style(
-              $box.height(40),
-              $box.width(40),
-              $box.alignment.center(),
-            ),
-            kind: kindBasedOn(cursorMode.value, CursorMode.move),
-            onPressed: () => cursorMode.value = CursorMode.move,
-            child: Icon(LineIcons.mousePointer),
-          ),
-        ),
-        DSTooltip(
-          alignment: Alignment.bottomCenter,
-          label: StyledText('Hand tool'),
-          child: Button(
-            style: Style(
-              $box.height(40),
-              $box.width(40),
-              $box.alignment.center(),
-            ),
-            kind: kindBasedOn(cursorMode.value, CursorMode.handTool),
-            onPressed: () => cursorMode.value = CursorMode.handTool,
-            child: Icon(LineIcons.paperHandAlt),
-          ),
-        ),
-        DSTooltip(
-          alignment: Alignment.bottomCenter,
-          label: StyledText('Free move'),
-          child: Button(
-            style: Style(
-              $box.height(40),
-              $box.width(40),
-              $box.alignment.center(),
-            ),
-            kind: kindBasedOn(cursorMode.value, CursorMode.freeMove),
-            onPressed: () => cursorMode.value = CursorMode.freeMove,
-            child: Icon(LineIcons.alternateExpandArrows),
-          ),
-        ),
-      ],
-    );
 
     final scaleFactor = useState(0.5);
     final verticalScrollController = useScrollController();
@@ -490,35 +303,250 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
               return child!;
             },
             child: Scaffold(
-              body: Column(
+              body: Stack(
                 children: [
-                  appBar,
-                  Expanded(
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => Stack(
-                        children: [
-                          Positioned.fill(child: whiteboardBuilder),
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                  SpaceVariant.small.resolve(context)),
-                              child: StyledFlex(
-                                direction: Axis.horizontal,
-                                style: Style(
-                                  $flex.mainAxisSize.min(),
-                                  $flex.gap.ref(SpaceVariant.medium),
+                  Column(
+                    children: [
+                      appBar,
+                      Expanded(
+                        child: LayoutBuilder(
+                          builder: (context, constraints) {
+                            final cellWidth = min(
+                                  constraints.maxWidth -
+                                      SpaceVariant.mediumLarge.resolve(context),
+                                  480.0,
+                                ) *
+                                canvasScale.value;
+                            final actionTool = DSToolbar(
+                              children: [
+                                HookBuilder(
+                                  builder: (context) {
+                                    final itemKey =
+                                        useMemoized(() => GlobalKey());
+                                    return DragItemWidget(
+                                      key: itemKey,
+                                      dragItemProvider: (request) {
+                                        final localPosition = (itemKey
+                                                    .currentContext!
+                                                    .findRenderObject()!
+                                                as RenderBox)
+                                            .globalToLocal(request.location);
+
+                                        return DragItem(
+                                          localData: Cell.brainstorming(
+                                            id: CellId(
+                                              parentId: CellParentId(
+                                                  whiteboardId: id.id),
+                                              id: Helper.createId(),
+                                            ),
+                                            offset: localPosition,
+                                            width: cellWidth,
+                                            decoration:
+                                                CellDecoration(color: 'yellow'),
+                                            question: null,
+                                            suggestions: [],
+                                          ).toJson(),
+                                        );
+                                      },
+                                      allowedOperations: () =>
+                                          allowedOperations,
+                                      child: DraggableWidget(
+                                        child: DSTooltip(
+                                          alignment: Alignment.bottomCenter,
+                                          label: StyledText('Brainstorming'),
+                                          child: Button(
+                                            style: Style(
+                                              $box.height(40),
+                                              $box.width(40),
+                                              $box.alignment.center(),
+                                            ),
+                                            onPressed: () {},
+                                            child: Icon(IconlyLight.discovery),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                children: [
-                                  actionTool(constraints),
-                                  cursorModeTool,
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                                HookBuilder(
+                                  builder: (context) {
+                                    final itemKey =
+                                        useMemoized(() => GlobalKey());
+                                    return DragItemWidget(
+                                      key: itemKey,
+                                      dragItemProvider: (request) {
+                                        final localPosition = (itemKey
+                                                    .currentContext!
+                                                    .findRenderObject()!
+                                                as RenderBox)
+                                            .globalToLocal(request.location);
+
+                                        return DragItem(
+                                          localData: Cell.editable(
+                                            id: CellId(
+                                              parentId: CellParentId(
+                                                  whiteboardId: id.id),
+                                              id: Helper.createId(),
+                                            ),
+                                            offset: localPosition,
+                                            width: cellWidth,
+                                            decoration:
+                                                CellDecoration(color: 'red'),
+                                            title: '',
+                                            content: '',
+                                          ).toJson(),
+                                        );
+                                      },
+                                      allowedOperations: () =>
+                                          allowedOperations,
+                                      child: DraggableWidget(
+                                        child: DSTooltip(
+                                          alignment: Alignment.bottomCenter,
+                                          label: StyledText('Note'),
+                                          child: Button(
+                                            style: Style(
+                                              $box.height(40),
+                                              $box.width(40),
+                                              $box.alignment.center(),
+                                            ),
+                                            onPressed: () {},
+                                            child: Icon(IconlyLight.document),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                DSTooltip(
+                                  alignment: Alignment.bottomCenter,
+                                  label: StyledText('Chat'),
+                                  child: Button(
+                                    style: Style(
+                                      $box.height(40),
+                                      $box.width(40),
+                                      $box.alignment.center(),
+                                    ),
+                                    onPressed: () =>
+                                        showChat.value = !showChat.value,
+                                    child: Icon(IconlyLight.chat),
+                                  ),
+                                ),
+                              ],
+                            );
+
+                            final cursorModeTool = DSToolbar(
+                              children: [
+                                DSTooltip(
+                                  alignment: Alignment.bottomCenter,
+                                  label: StyledText('Move'),
+                                  child: Button(
+                                    style: Style(
+                                      $box.height(40),
+                                      $box.width(40),
+                                      $box.alignment.center(),
+                                    ),
+                                    kind: kindBasedOn(
+                                        cursorMode.value, CursorMode.move),
+                                    onPressed: () =>
+                                        cursorMode.value = CursorMode.move,
+                                    child: Icon(LineIcons.mousePointer),
+                                  ),
+                                ),
+                                DSTooltip(
+                                  alignment: Alignment.bottomCenter,
+                                  label: StyledText('Hand tool'),
+                                  child: Button(
+                                    style: Style(
+                                      $box.height(40),
+                                      $box.width(40),
+                                      $box.alignment.center(),
+                                    ),
+                                    kind: kindBasedOn(
+                                        cursorMode.value, CursorMode.handTool),
+                                    onPressed: () =>
+                                        cursorMode.value = CursorMode.handTool,
+                                    child: Icon(LineIcons.paperHandAlt),
+                                  ),
+                                ),
+                                DSTooltip(
+                                  alignment: Alignment.bottomCenter,
+                                  label: StyledText('Free move'),
+                                  child: Button(
+                                    style: Style(
+                                      $box.height(40),
+                                      $box.width(40),
+                                      $box.alignment.center(),
+                                    ),
+                                    kind: kindBasedOn(
+                                        cursorMode.value, CursorMode.freeMove),
+                                    onPressed: () =>
+                                        cursorMode.value = CursorMode.freeMove,
+                                    child:
+                                        Icon(LineIcons.alternateExpandArrows),
+                                  ),
+                                ),
+                              ],
+                            );
+
+                            final actionToolWidth =
+                                SpaceVariant.small.resolve(context) * 4 +
+                                    (SpaceVariant.large.resolve(context) * 2) *
+                                        3;
+                            final cursorModeToolWidth =
+                                SpaceVariant.small.resolve(context) * 4 +
+                                    (SpaceVariant.large.resolve(context) * 2) *
+                                        3;
+
+                            return Stack(
+                              children: [
+                                Positioned.fill(child: whiteboardBuilder),
+                                Align(
+                                  alignment: Alignment.topCenter,
+                                  child: SizedBox(
+                                    width: actionToolWidth +
+                                        cursorModeToolWidth +
+                                        SpaceVariant.small.resolve(context) *
+                                            2 +
+                                        SpaceVariant.medium.resolve(context),
+                                    child: VBox(
+                                      style: Style(
+                                        $box.padding.all
+                                            .ref(SpaceVariant.small),
+                                        $flex.gap.ref(SpaceVariant.small),
+                                      ),
+                                      children: [
+                                        StyledFlex(
+                                          direction: Axis.horizontal,
+                                          style: Style(
+                                            $flex.mainAxisSize.min(),
+                                            $flex.gap.ref(SpaceVariant.medium),
+                                          ),
+                                          children: [
+                                            actionTool,
+                                            cursorModeTool,
+                                          ],
+                                        ),
+                                        if (showChat.value)
+                                          DSTextbox(
+                                            autofocus: true,
+                                            hintText: 'Type a message...',
+                                            minLines: 1,
+                                            maxLines: 8,
+                                            trailing: Button(
+                                              onPressed: () {},
+                                              child: Icon(IconlyLight.send),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

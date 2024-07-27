@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'generate_content_with_multiple_cell.g.dart';
 
 @riverpod
-Stream<String> generateContentWithMultipleCell(
+Raw<Stream<String>> generateContentWithMultipleCell(
   GenerateContentWithMultipleCellRef ref, {
   required List<Cell> cells,
   required String text,
@@ -18,9 +18,8 @@ Stream<String> generateContentWithMultipleCell(
   final model = GenerativeModel(
     model: 'gemini-1.5-flash-latest',
     apiKey: apiKey,
-    generationConfig: GenerationConfig(responseMimeType: 'application/json'),
   );
-  final response = await model.generateContent(
+  final stream = model.generateContentStream(
     [
       ...[
         for (final cell in cells)
@@ -39,11 +38,6 @@ CONTENT: ${value.content}
 '''),
               };
             },
-            image: (value) async {
-              final bundle = NetworkAssetBundle(value.url);
-              final image = await bundle.load('image');
-              return Content.data('image/*', image.buffer.asUint8List());
-            },
             article: (value) async {
               return switch (true) {
                 _ when value.title.isEmpty => null,
@@ -54,23 +48,21 @@ CONTENT: ${value.content}
 '''),
               };
             },
+            image: (value) async {
+              final bundle = NetworkAssetBundle(value.url);
+              final image = await bundle.load('image');
+              return Content.data('image/*', image.buffer.asUint8List());
+            },
           ),
       ].whereType<Content>(),
       Content.text(text),
     ],
-    generationConfig: GenerationConfig(
-      responseSchema: Schema.array(
-        description:
-            'An array of following question and topic related ideas to explore, rank by relevance',
-        items: Schema.string(
-          description: 'A single idea or exploration topic or open question',
-          nullable: false,
-        ),
-      ),
-    ),
   );
 
-  if (response.promptFeedback?.blockReasonMessage != null) {
-    throw Exception(response.promptFeedback!.blockReasonMessage);
+  await for (final content in stream) {
+    if (content.promptFeedback?.blockReasonMessage case final message?) {
+      throw Exception(message);
+    }
+    yield content.text ?? '';
   }
 }

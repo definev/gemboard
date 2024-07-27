@@ -7,7 +7,7 @@ part of 'generate_content_with_multiple_cell.dart';
 // **************************************************************************
 
 String _$generateContentWithMultipleCellHash() =>
-    r'f71ead15f24614e80b6c34f597929e0e896893a9';
+    r'24af5242c9c1c7bc07318edc7fbe9ade09692bc7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -36,7 +36,8 @@ const generateContentWithMultipleCellProvider =
     GenerateContentWithMultipleCellFamily();
 
 /// See also [generateContentWithMultipleCell].
-class GenerateContentWithMultipleCellFamily extends Family<AsyncValue<String>> {
+class GenerateContentWithMultipleCellFamily
+    extends Family<Raw<Stream<String>>> {
   /// See also [generateContentWithMultipleCell].
   const GenerateContentWithMultipleCellFamily();
 
@@ -78,7 +79,7 @@ class GenerateContentWithMultipleCellFamily extends Family<AsyncValue<String>> {
 
 /// See also [generateContentWithMultipleCell].
 class GenerateContentWithMultipleCellProvider
-    extends AutoDisposeStreamProvider<String> {
+    extends AutoDisposeProvider<Raw<Stream<String>>> {
   /// See also [generateContentWithMultipleCell].
   GenerateContentWithMultipleCellProvider({
     required List<Cell> cells,
@@ -118,7 +119,8 @@ class GenerateContentWithMultipleCellProvider
 
   @override
   Override overrideWith(
-    Stream<String> Function(GenerateContentWithMultipleCellRef provider) create,
+    Raw<Stream<String>> Function(GenerateContentWithMultipleCellRef provider)
+        create,
   ) {
     return ProviderOverride(
       origin: this,
@@ -136,7 +138,7 @@ class GenerateContentWithMultipleCellProvider
   }
 
   @override
-  AutoDisposeStreamProviderElement<String> createElement() {
+  AutoDisposeProviderElement<Raw<Stream<String>>> createElement() {
     return _GenerateContentWithMultipleCellProviderElement(this);
   }
 
@@ -158,7 +160,7 @@ class GenerateContentWithMultipleCellProvider
 }
 
 mixin GenerateContentWithMultipleCellRef
-    on AutoDisposeStreamProviderRef<String> {
+    on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `cells` of this provider.
   List<Cell> get cells;
 
@@ -167,7 +169,7 @@ mixin GenerateContentWithMultipleCellRef
 }
 
 class _GenerateContentWithMultipleCellProviderElement
-    extends AutoDisposeStreamProviderElement<String>
+    extends AutoDisposeProviderElement<Raw<Stream<String>>>
     with GenerateContentWithMultipleCellRef {
   _GenerateContentWithMultipleCellProviderElement(super.provider);
 

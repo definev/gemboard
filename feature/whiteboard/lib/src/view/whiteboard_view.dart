@@ -83,6 +83,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
   late ScrollableDetails verticalDetails;
   late ScrollableDetails horizontalDetails;
+  Offset get viewportTopLeft => Offset(
+        horizontalDetails.controller!.offset,
+        verticalDetails.controller!.offset,
+      );
+
+  late BoxConstraints constraints;
 
   Map<String, (GlobalKey, Cell)> cellKeys = {};
   Map<String, (GlobalKey, Edge)> edgeKeys = {};
@@ -175,6 +181,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           debugLabel: 'WhiteboardView.horizontal | ${widget.data.id.id}',
         ),
       );
+
+  double get cellWidth =>
+      math.min(
+        constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
+        480.0,
+      ) *
+      widget.canvasScale;
 
   @override
   void initState() {
@@ -584,23 +597,25 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       child: child,
     );
 
-    return MixTheme(
-      data: mixTheme.copyWith(
-        spaces: scaleSpaces(widget.canvasScale),
-      ),
-      child: DesignSystemTheme(
-        data: designSystemThemeData.copyWith(scale: widget.canvasScale),
-        child: child,
-      ),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      this.constraints = constraints;
+      return MixTheme(
+        data: mixTheme.copyWith(
+          spaces: scaleSpaces(widget.canvasScale),
+        ),
+        child: DesignSystemTheme(
+          data: designSystemThemeData.copyWith(scale: widget.canvasScale),
+          child: child,
+        ),
+      );
+    });
   }
 
-  Offset randomOffsetAround(Cell cell, [double? radius]) {
-    final offset = cell.offset;
+  Offset randomOffsetAroundRect(Rect rect, [double? radius]) {
+    final offset = rect.topLeft;
     final random = math.Random();
-    final rect = CellAppearance(cell).rect;
 
-    radius ??= cell.width;
+    radius ??= rect.width;
     radius *= scaleFactor.value;
 
     final x = random.nextDouble() * radius + offset.dx;
@@ -703,7 +718,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     String suggestion,
   ) async {
     final suggestionCell = Cell.article(
-      offset: randomOffsetAround(cell),
+      offset: randomOffsetAroundRect(CellAppearance(cell).rect),
       id: CellId(
         id: Helper.createId(),
         parentId: CellParentId(
@@ -861,6 +876,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           /// Cell
           onSelectionsDelete: selection_cell_onSelectionsDelete,
           onSelectionMove: selection_cell_onSelectionMove,
+          onChatWithSelectedCells: (selectedCellIds, text) =>
+              selection_cell_onChatWithSelectedCells(
+            selectedCellIds,
+            text,
+            selectionStart: selectionStart,
+            selectionEnd: selectionEnd,
+          ),
         );
       };
 
@@ -875,7 +897,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ),
       title: articleCell.title,
       content: articleCell.content,
-      offset: randomOffsetAround(articleCell),
+      offset: randomOffsetAroundRect(CellAppearance(articleCell).rect),
       width: articleCell.width,
       decoration: articleCell.decoration,
     );
@@ -930,7 +952,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAround(cell),
+      offset: randomOffsetAroundRect(CellAppearance(cell).rect),
       width: cell.width,
       decoration: cell.decoration.copyWith(cardKind: CellCardKind.flat),
       title: '___| TLDR |___ $title ___|___',
@@ -986,6 +1008,93 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     _cellProcessors[tldrCell.id.id] = {
       ..._cellProcessors[tldrCell.id.id] ?? {},
       'summarize': subscription,
+    };
+  }
+
+  void selection_cell_onChatWithSelectedCells(
+    List<String> selectedCellIds,
+    String text, {
+    required Offset selectionStart,
+    required Offset selectionEnd,
+  }) async {
+    final rect = Rect.fromPoints(selectionStart, selectionEnd);
+    final responseCell = Cell.article(
+      id: CellId(
+        parentId: CellParentId(whiteboardId: widget.data.id.id),
+        id: Helper.createId(),
+      ),
+      offset: randomOffsetAroundRect(rect, 200),
+      width: cellWidth,
+      decoration: CellDecoration(
+        color: ColorVariant.randonColor(),
+        cardKind: CellCardKind.outlined,
+      ),
+      title: text,
+      content: '',
+    );
+
+    cellKeys[responseCell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${responseCell.id.id}'),
+      responseCell,
+    );
+    setState(() {});
+    await widget.onCellCreated(responseCell);
+
+    List<Edge> edges = [];
+    for (final selectedCellId in selectedCellIds) {
+      final edge = Edge(
+        id: EdgeId(
+          id: Helper.createId(),
+          parentId: EdgeParentId(whiteboardId: widget.data.id.id),
+        ),
+        source: selectedCellId,
+        target: responseCell.id.id,
+      );
+      edges.add(edge);
+      await widget.onEdgeCreated(edge);
+    }
+
+    cell_moveViewportToCenterOfCell(responseCell);
+
+    late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[responseCell.id.id] = {
+        ..._cellProcessors[responseCell.id.id] ?? {},
+      }..remove('chat');
+    }
+
+    final stream = ref.read(
+      generateContentWithMultipleCellProvider(
+        cells: selectedCellIds.map((id) => cellKeys[id]!.$2).toList(),
+        text: text,
+      ),
+    );
+    subscription = stream.listen(
+      (event) {
+        final (latestKey, latestCell) = cellKeys[responseCell.id.id]!;
+        if (latestCell is! ArticleCell) return;
+        final newCell = latestCell.copyWith(
+          content: latestCell.content + event,
+        );
+
+        cellKeys[responseCell.id.id] = (latestKey, newCell);
+        setState(() {});
+        widget.onCellUpdated(latestCell, newCell);
+      },
+      onDone: () {
+        print('Done chat with selected cells');
+        cancelSubscription();
+      },
+      onError: (error) {
+        print(error);
+        cancelSubscription();
+      },
+    );
+
+    _cellProcessors[responseCell.id.id] = {
+      ..._cellProcessors[responseCell.id.id] ?? {},
+      'chat': subscription,
     };
   }
 }

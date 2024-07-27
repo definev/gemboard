@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/widgets.dart';
 import 'package:mix/mix.dart';
 
@@ -35,6 +37,19 @@ class ColorVariant extends ColorToken {
         'cyan' => ColorVariant.cyan,
         _ => null,
       };
+  
+  static final rand = Random();
+  
+  static String randonColor() => switch (rand.nextInt(7)) {
+    0 => 'red',
+    1 => 'green',
+    2 => 'blue',
+    3 => 'yellow',
+    4 => 'purple',
+    5 => 'pink',
+    6 => 'cyan',
+    _ => 'red',
+  };
 
   static ColorVariant resolveOnBackground(
     ColorVariant background,

@@ -22,10 +22,11 @@ class SelectionCellsView extends HookWidget {
     //
     required this.onSelectionMove,
     required this.onSelectionsDelete,
-    required this.onCellSummarize,
+    required this.onChatWithSelectedCells,
 
     /// ArticleCell
     required this.onTurnArticleIntoEditable,
+    required this.onCellSummarize,
   });
 
   final ViewportOffset horizontalPosition;
@@ -41,6 +42,8 @@ class SelectionCellsView extends HookWidget {
 
   final void Function(Map<String, Offset> newOffsets) onSelectionMove;
   final void Function(List<String> selectedCellIds) onSelectionsDelete;
+  final void Function(List<String> selectedCellIds, String text)
+      onChatWithSelectedCells;
 
   /// ArticleCell
   final void Function(ArticleCell cell) onTurnArticleIntoEditable;
@@ -157,6 +160,7 @@ class SelectionCellsView extends HookWidget {
               child: HookBuilder(
                 builder: (context) {
                   final showChat = useState(false);
+                  final chatController = useTextEditingController();
 
                   return PortalTarget(
                     visible: showChat.value,
@@ -171,11 +175,21 @@ class SelectionCellsView extends HookWidget {
                                   SpaceVariant.small.resolve(context)),
                           width: 400,
                           child: DSTextbox(
+                            controller: chatController,
                             autofocus: true,
                             minLines: 1,
                             maxLines: 4,
+                            hintText: 'Type a message...',
                             trailing: Button(
-                              onPressed: () => showChat.value = false,
+                              onPressed: () {
+                                showChat.value = false;
+                                if (chatController.text.trim().isEmpty) return;
+                                onChatWithSelectedCells(
+                                  selectedCellIds,
+                                  chatController.text,
+                                );
+                                chatController.clear();
+                              },
                               child: StyledIcon(IconlyLight.send),
                             ),
                           ),
@@ -189,9 +203,7 @@ class SelectionCellsView extends HookWidget {
                           label: StyledText('Chat'),
                           alignment: Alignment.bottomCenter,
                           child: DSToolbarItem(
-                            onPressed: () {
-                              showChat.value = !showChat.value;
-                            },
+                            onPressed: () => showChat.value = !showChat.value,
                             child: StyledIcon(IconlyLight.chat),
                           ),
                         ),
