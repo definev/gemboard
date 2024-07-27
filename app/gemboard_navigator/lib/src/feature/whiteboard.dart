@@ -12,7 +12,7 @@ class WhiteboardNavigationImpl implements WhiteboardNavigation {
     required ResizableController? resiableController,
   }) {
     resiableController?.hide();
-    router.go(
+    router.pushReplacement(
       WhiteboardEditorRoute(
         id: id.id,
         folderId: id.parentId.folderId,

@@ -147,6 +147,23 @@ class _ResizableFlexState extends State<ResizableFlex> {
     final mobileBreakpoint = BreakpointToken.small.resolve(context).maxWidth;
     final tabletBreakpoint = BreakpointToken.medium.resolve(context).maxWidth;
 
+    final sidebarActionGesture = GestureDetector(
+      onHorizontalDragEnd: (details) {
+        if (details.primaryVelocity! > 30) {
+          controller.show();
+        } else if (details.primaryVelocity! < -30) {
+          controller.hide();
+        }
+      },
+      child: ColoredBox(
+        color: Colors.transparent,
+        child: SizedBox(
+          height: double.maxFinite,
+          width: 25,
+        ),
+      ),
+    );
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalSize = (widget.direction == Axis.horizontal
@@ -171,22 +188,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                         Positioned.fill(
                           child: widget.secondChild ?? SizedBox(),
                         ),
-                        GestureDetector(
-                          onHorizontalDragEnd: (details) {
-                            if (details.primaryVelocity! > 0) {
-                              controller.show();
-                            } else {
-                              controller.hide();
-                            }
-                          },
-                          child: ColoredBox(
-                            color: Colors.transparent,
-                            child: SizedBox(
-                              height: double.maxFinite,
-                              width: 25,
-                            ),
-                          ),
-                        ),
+                        sidebarActionGesture,
                         Positioned.fill(
                           child: IgnorePointer(
                             ignoring: value == 0,
@@ -243,22 +245,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                             child: widget.secondChild ?? SizedBox(),
                           ),
                         ),
-                        GestureDetector(
-                          onHorizontalDragEnd: (details) {
-                            if (details.primaryVelocity! > 0) {
-                              controller.show();
-                            } else {
-                              controller.hide();
-                            }
-                          },
-                          child: ColoredBox(
-                            color: Colors.transparent,
-                            child: SizedBox(
-                              height: double.maxFinite,
-                              width: 25,
-                            ),
-                          ),
-                        ),
+                        sidebarActionGesture,
                         Positioned.fill(
                           child: IgnorePointer(
                             ignoring: value == 0,
@@ -303,60 +290,53 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 end: switch (controller.shown) { false => 0, true => 1 },
               ),
               curve: Easing.standard,
-              builder: (context, value, child) => Stack(
-                children: [
-                  Positioned.fill(
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: widget.secondChild ?? SizedBox(),
-                        ),
-                        GestureDetector(
-                          onHorizontalDragEnd: null,
-                          child: ColoredBox(
-                            color: Colors.transparent,
-                            child: SizedBox(
-                              height: double.maxFinite,
-                              width: 25,
-                            ),
+              builder: (context, value, child) {
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: widget.secondChild ?? SizedBox(),
                           ),
-                        ),
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            ignoring: value == 0,
-                            child: GestureDetector(
-                              onTap: () => controller.hide(),
-                              onHorizontalDragEnd: (details) =>
-                                  controller.hide(),
-                              child: ColoredBox(
-                                color: ColorVariant.onBackground
-                                    .resolve(context)
-                                    .withOpacity(OpacityVariant.hightlight
-                                            .resolve(context)
-                                            .value *
-                                        value),
+                          sidebarActionGesture,
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              ignoring: value == 0,
+                              child: GestureDetector(
+                                onTap: () => controller.hide(),
+                                onHorizontalDragEnd: (details) =>
+                                    controller.hide(),
+                                child: ColoredBox(
+                                  color: ColorVariant.onBackground
+                                      .resolve(context)
+                                      .withOpacity(OpacityVariant.hightlight
+                                              .resolve(context)
+                                              .value *
+                                          value),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    left: -250 + value * 250,
-                    height: constraints.maxHeight,
-                    width: 250,
-                    child: widget.firstChild,
-                  ),
-                  Positioned(
-                    left: value * 202,
-                    child: SafeArea(
-                      bottom: false,
-                      child: expandButton,
+                    Positioned(
+                      left: -250 + value * 250,
+                      height: constraints.maxHeight,
+                      width: 250,
+                      child: widget.firstChild,
                     ),
-                  ),
-                ],
-              ),
+                    Positioned(
+                      left: value * 202,
+                      child: SafeArea(
+                        bottom: false,
+                        child: expandButton,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           // _ => Flex(
           //     direction: widget.direction,
