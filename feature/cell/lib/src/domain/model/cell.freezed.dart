@@ -328,7 +328,7 @@ Cell _$CellFromJson(Map<String, dynamic> json) {
     case 'brainstorming':
       return BrainstormingCell.fromJson(json);
     case 'editable':
-      return TextCell.fromJson(json);
+      return EditableCell.fromJson(json);
     case 'image':
       return ImageCell.fromJson(json);
     case 'article':
@@ -543,7 +543,7 @@ mixin _$Cell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) editable,
+    required TResult Function(EditableCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
   }) =>
@@ -552,7 +552,7 @@ mixin _$Cell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? editable,
+    TResult? Function(EditableCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
   }) =>
@@ -561,7 +561,7 @@ mixin _$Cell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? editable,
+    TResult Function(EditableCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     required TResult orElse(),
@@ -1034,7 +1034,7 @@ class _$UnknownCellImpl implements UnknownCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) editable,
+    required TResult Function(EditableCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
   }) {
@@ -1046,7 +1046,7 @@ class _$UnknownCellImpl implements UnknownCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? editable,
+    TResult? Function(EditableCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
   }) {
@@ -1058,7 +1058,7 @@ class _$UnknownCellImpl implements UnknownCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? editable,
+    TResult Function(EditableCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     required TResult orElse(),
@@ -1523,7 +1523,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) editable,
+    required TResult Function(EditableCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
   }) {
@@ -1535,7 +1535,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? editable,
+    TResult? Function(EditableCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
   }) {
@@ -1547,7 +1547,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? editable,
+    TResult Function(EditableCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     required TResult orElse(),
@@ -1614,10 +1614,11 @@ abstract class BrainstormingCell implements Cell {
 }
 
 /// @nodoc
-abstract class _$$TextCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
-  factory _$$TextCellImplCopyWith(
-          _$TextCellImpl value, $Res Function(_$TextCellImpl) then) =
-      __$$TextCellImplCopyWithImpl<$Res>;
+abstract class _$$EditableCellImplCopyWith<$Res>
+    implements $CellCopyWith<$Res> {
+  factory _$$EditableCellImplCopyWith(
+          _$EditableCellImpl value, $Res Function(_$EditableCellImpl) then) =
+      __$$EditableCellImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -1639,11 +1640,11 @@ abstract class _$$TextCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$TextCellImplCopyWithImpl<$Res>
-    extends _$CellCopyWithImpl<$Res, _$TextCellImpl>
-    implements _$$TextCellImplCopyWith<$Res> {
-  __$$TextCellImplCopyWithImpl(
-      _$TextCellImpl _value, $Res Function(_$TextCellImpl) _then)
+class __$$EditableCellImplCopyWithImpl<$Res>
+    extends _$CellCopyWithImpl<$Res, _$EditableCellImpl>
+    implements _$$EditableCellImplCopyWith<$Res> {
+  __$$EditableCellImplCopyWithImpl(
+      _$EditableCellImpl _value, $Res Function(_$EditableCellImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1660,7 +1661,7 @@ class __$$TextCellImplCopyWithImpl<$Res>
     Object? title = null,
     Object? content = null,
   }) {
-    return _then(_$TextCellImpl(
+    return _then(_$EditableCellImpl(
       layer: null == layer
           ? _value.layer
           : layer // ignore: cast_nullable_to_non_nullable
@@ -1707,8 +1708,8 @@ class __$$TextCellImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TextCellImpl implements TextCell {
-  const _$TextCellImpl(
+class _$EditableCellImpl implements EditableCell {
+  const _$EditableCellImpl(
       {this.layer = 10,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
@@ -1722,8 +1723,8 @@ class _$TextCellImpl implements TextCell {
       final String? $type})
       : $type = $type ?? 'editable';
 
-  factory _$TextCellImpl.fromJson(Map<String, dynamic> json) =>
-      _$$TextCellImplFromJson(json);
+  factory _$EditableCellImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EditableCellImplFromJson(json);
 
   @override
   @JsonKey()
@@ -1765,7 +1766,7 @@ class _$TextCellImpl implements TextCell {
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TextCellImpl &&
+            other is _$EditableCellImpl &&
             (identical(other.layer, layer) || other.layer == layer) &&
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
@@ -1789,8 +1790,8 @@ class _$TextCellImpl implements TextCell {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$TextCellImplCopyWith<_$TextCellImpl> get copyWith =>
-      __$$TextCellImplCopyWithImpl<_$TextCellImpl>(this, _$identity);
+  _$$EditableCellImplCopyWith<_$EditableCellImpl> get copyWith =>
+      __$$EditableCellImplCopyWithImpl<_$EditableCellImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1996,7 +1997,7 @@ class _$TextCellImpl implements TextCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) editable,
+    required TResult Function(EditableCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
   }) {
@@ -2008,7 +2009,7 @@ class _$TextCellImpl implements TextCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? editable,
+    TResult? Function(EditableCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
   }) {
@@ -2020,7 +2021,7 @@ class _$TextCellImpl implements TextCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? editable,
+    TResult Function(EditableCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     required TResult orElse(),
@@ -2033,14 +2034,14 @@ class _$TextCellImpl implements TextCell {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TextCellImplToJson(
+    return _$$EditableCellImplToJson(
       this,
     );
   }
 }
 
-abstract class TextCell implements Cell {
-  const factory TextCell(
+abstract class EditableCell implements Cell {
+  const factory EditableCell(
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
@@ -2050,10 +2051,10 @@ abstract class TextCell implements Cell {
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
       required final String title,
-      required final String content}) = _$TextCellImpl;
+      required final String content}) = _$EditableCellImpl;
 
-  factory TextCell.fromJson(Map<String, dynamic> json) =
-      _$TextCellImpl.fromJson;
+  factory EditableCell.fromJson(Map<String, dynamic> json) =
+      _$EditableCellImpl.fromJson;
 
   @override
   int get layer;
@@ -2080,7 +2081,7 @@ abstract class TextCell implements Cell {
   String get content;
   @override
   @JsonKey(ignore: true)
-  _$$TextCellImplCopyWith<_$TextCellImpl> get copyWith =>
+  _$$EditableCellImplCopyWith<_$EditableCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -2458,7 +2459,7 @@ class _$ImageCellImpl implements ImageCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) editable,
+    required TResult Function(EditableCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
   }) {
@@ -2470,7 +2471,7 @@ class _$ImageCellImpl implements ImageCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? editable,
+    TResult? Function(EditableCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
   }) {
@@ -2482,7 +2483,7 @@ class _$ImageCellImpl implements ImageCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? editable,
+    TResult Function(EditableCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     required TResult orElse(),
@@ -2928,7 +2929,7 @@ class _$ArticleCellImpl implements ArticleCell {
   TResult map<TResult extends Object?>({
     required TResult Function(UnknownCell value) unknown,
     required TResult Function(BrainstormingCell value) brainstorming,
-    required TResult Function(TextCell value) editable,
+    required TResult Function(EditableCell value) editable,
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
   }) {
@@ -2940,7 +2941,7 @@ class _$ArticleCellImpl implements ArticleCell {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(UnknownCell value)? unknown,
     TResult? Function(BrainstormingCell value)? brainstorming,
-    TResult? Function(TextCell value)? editable,
+    TResult? Function(EditableCell value)? editable,
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
   }) {
@@ -2952,7 +2953,7 @@ class _$ArticleCellImpl implements ArticleCell {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(UnknownCell value)? unknown,
     TResult Function(BrainstormingCell value)? brainstorming,
-    TResult Function(TextCell value)? editable,
+    TResult Function(EditableCell value)? editable,
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     required TResult orElse(),

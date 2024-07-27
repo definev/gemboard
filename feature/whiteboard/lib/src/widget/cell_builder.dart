@@ -25,6 +25,9 @@ class CellBuilder extends StatefulWidget {
     required this.onSuggestionSelected,
     required this.onAskForSuggestionSubscription,
 
+    ///
+    required this.onContentChanged,
+
     /// Cell
     required this.onCellLinked,
   });
@@ -46,6 +49,10 @@ class CellBuilder extends StatefulWidget {
     String suggestion,
   ) onSuggestionSelected;
   final StreamSubscription? onAskForSuggestionSubscription;
+
+  /// Editable specific
+  final void Function(EditableCell cell, String title, String content)
+      onContentChanged;
 
   /// Cell
 
@@ -495,7 +502,11 @@ class _CellBuilderState extends State<CellBuilder> {
             widget.onAskForSuggestion(cell, question),
         onAskForSuggestionSubscription: widget.onAskForSuggestionSubscription,
       ),
-      editable: (cell) => EditableCellView(cell: cell),
+      editable: (cell) => EditableCellView(
+        cell: cell,
+        onContentChanged: (title, content) =>
+            widget.onContentChanged(cell, title, content),
+      ),
       image: (cell) => ImageCellView(cell: cell),
       article: (cell) => ArticleCellView(cell: cell),
       unknown: (_) => SizedBox(),

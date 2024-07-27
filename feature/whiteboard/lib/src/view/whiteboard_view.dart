@@ -276,7 +276,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     moveViewportToCenterOfCell(cell);
   }
 
-  void onEditableCellCreated(TextCell cell) {
+  void onEditableCellCreated(EditableCell cell) {
     moveViewportToCenterOfCell(cell);
   }
 
@@ -466,20 +466,16 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   keepAlive: cell.selected,
                 ),
                 onDataUpdated: (newValue) {
-                  final newCell = cell.copyWith(
+                  final (latestKey, latestCell) = cellKeys[newValue.id]!;
+                  final newCell = latestCell.copyWith(
                     offset: newValue.offset,
-                    height: switch (cell.height) {
-                      null => null,
-                      _ => newValue.height,
-                    },
-                    preferredHeight: newValue.height ??
-                        newValue.preferredHeight ??
-                        cell.preferredHeight,
-                    width: newValue.width ?? cell.width,
+                    height: newValue.height,
+                    preferredHeight: newValue.preferredHeight,
+                    width: newValue.preferredWidth ?? cell.width,
                   );
-                  cellKeys[newValue.id] = (key, newCell);
+                  cellKeys[cell.id.id] = (latestKey, newCell);
                   setState(() {});
-                  widget.onCellUpdated(cell, newCell);
+                  widget.onCellUpdated(latestCell, newCell);
                 },
                 moveable: StackMove(),
                 resizable: StackResize(
@@ -496,14 +492,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                     image: (value) => DSThumb(
                       color: CellDecorationExtension(cell.decoration)
                           .colorValue(context),
-                    )
+                    ),
                   ),
                   onSizeChanged: (newSize) {
                     final (_, latestCell) = cellKeys[cell.id.id]!;
 
                     final newCell = latestCell.copyWith(
-                      // height: newSize.height,
-                      // preferredHeight: newSize.height,
                       width: newSize.width,
                     );
                     cellKeys[cell.id.id] = (key, newCell);
@@ -525,6 +519,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       ?['suggestions'],
                   onSuggestionSelected: brainstormingCell_OnSuggestionSelected,
                   onAskForSuggestion: brainstormingCell_OnAskForSuggestion,
+                  onContentChanged: editableCell_OnContentChanged,
                   onCellLinked: cell_OnCellLinked,
                 ),
               ),
@@ -600,11 +595,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  Offset randomOffsetAround(Cell cell, [double radius = 100]) {
+  Offset randomOffsetAround(Cell cell, [double? radius]) {
     final offset = cell.offset;
     final random = math.Random();
     final rect = CellAppearance(cell).rect;
 
+    radius ??= cell.width;
     radius *= scaleFactor.value;
 
     final x = random.nextDouble() * radius + offset.dx;
@@ -620,6 +616,18 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         false => y - rect.height,
       },
     );
+  }
+
+  void editableCell_OnContentChanged(EditableCell cell, String title, String content) {
+    final (latestKey, latestCell) = cellKeys[cell.id.id]!;
+    if (latestCell is! EditableCell) return;
+    final newCell = latestCell.copyWith(
+      title: title,
+      content: content,
+    );
+    cellKeys[cell.id.id] = (latestKey, newCell);
+    setState(() {});
+    widget.onCellUpdated(cell, newCell);
   }
 
   void brainstormingCell_GenerateSuggestionTask({

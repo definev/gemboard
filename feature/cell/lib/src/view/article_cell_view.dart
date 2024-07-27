@@ -21,7 +21,12 @@ class ArticleCellView extends StatelessWidget {
         background: cellDecoration.colorVariant ?? ColorVariant.surface,
         kind: DSCardKind.elevated,
         header: StyledText(cell.title),
-        content: DSMarkdownBody(data: cell.content),
+        content: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: 500),
+          child: SingleChildScrollView(
+            child: DSMarkdownBody(data: cell.content),
+          ),
+        ),
       ),
     );
   }

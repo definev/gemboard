@@ -5,9 +5,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mix/mix.dart';
 
 class EditableCellView extends HookWidget {
-  const EditableCellView({super.key, required this.cell});
+  const EditableCellView({
+    super.key,
+    required this.cell,
+    required this.onContentChanged,
+  });
 
-  final TextCell cell;
+  final EditableCell cell;
+
+  final void Function(String title, String content) onContentChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,8 @@ class EditableCellView extends HookWidget {
             focusNode: titleFocusNode,
             hintText: 'Untitled',
             kind: DSTextboxKind.boundless,
+            onChanged: (title) =>
+                onContentChanged(title, contentController.text),
             hintTextStyle: TextStyleVariant.h6.resolve(context).copyWith(
                 color: cellDecoration.onColorValue(context).withOpacity(
                     OpacityVariant.surface.resolve(context).value)),
@@ -43,21 +51,31 @@ class EditableCellView extends HookWidget {
                   CellDecorationExtension(cell.decoration).colorValue(context)),
             ),
           ),
-          DSTextbox(
-            controller: contentController,
-            focusNode: contentFocusNode,
-            hintText: 'Type something',
-            kind: DSTextboxKind.boundless,
-            hintTextStyle: TextStyleVariant.p.resolve(context).copyWith(
-                color: cellDecoration.onColorValue(context).withOpacity(
-                    OpacityVariant.surface.resolve(context).value)),
-            textStyle: TextStyleVariant.p2
-                .resolve(context)
-                .copyWith(color: cellDecoration.onColorValue(context)),
-            style: Style(
-              $box.margin.top.ref(SpaceVariant.medium),
-              $box.padding.all(0),
-              $box.color(Colors.transparent),
+          Expanded(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: DSTextbox(
+                controller: contentController,
+                focusNode: contentFocusNode,
+                hintText: 'Type something',
+                kind: DSTextboxKind.boundless,
+                minLines: 1,
+                maxLines: 20,
+                onChanged: (content) =>
+                    onContentChanged(titleController.text, content),
+                hintTextStyle: TextStyleVariant.p.resolve(context).copyWith(
+                    color: cellDecoration.onColorValue(context).withOpacity(
+                        OpacityVariant.surface.resolve(context).value)),
+                textStyle: TextStyleVariant.p2
+                    .resolve(context)
+                    .copyWith(color: cellDecoration.onColorValue(context)),
+                style: Style(
+                  $box.margin.top.ref(SpaceVariant.medium),
+                  $box.margin.bottom(0),
+                  $box.padding.all(0),
+                  $box.color(Colors.transparent),
+                ),
+              ),
             ),
           ),
         ],

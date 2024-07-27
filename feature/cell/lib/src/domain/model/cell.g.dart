@@ -95,8 +95,8 @@ Map<String, dynamic> _$$BrainstormingCellImplToJson(
       'cellType': instance.$type,
     };
 
-_$TextCellImpl _$$TextCellImplFromJson(Map<String, dynamic> json) =>
-    _$TextCellImpl(
+_$EditableCellImpl _$$EditableCellImplFromJson(Map<String, dynamic> json) =>
+    _$EditableCellImpl(
       layer: (json['layer'] as num?)?.toInt() ?? 10,
       offset: const OffsetConverter().fromJson(json['offset'] as List),
       id: const CellIdConverter().fromJson(json['id'] as Map<String, dynamic>),
@@ -111,7 +111,7 @@ _$TextCellImpl _$$TextCellImplFromJson(Map<String, dynamic> json) =>
       $type: json['cellType'] as String?,
     );
 
-Map<String, dynamic> _$$TextCellImplToJson(_$TextCellImpl instance) =>
+Map<String, dynamic> _$$EditableCellImplToJson(_$EditableCellImpl instance) =>
     <String, dynamic>{
       'layer': instance.layer,
       'offset': const OffsetConverter().toJson(instance.offset),

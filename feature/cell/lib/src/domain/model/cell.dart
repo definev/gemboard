@@ -111,7 +111,7 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(false) bool selected,
     required String title,
     required String content,
-  }) = TextCell;
+  }) = EditableCell;
 
   const factory Cell.image({
     @Default(10) int layer,
