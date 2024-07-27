@@ -1,7 +1,6 @@
+import 'package:folder/folder.dart';
 import 'package:folder/src/domain/repository/folder_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../domain/model/folder.dart';
 
 part 'update_folder.g.dart';
 
@@ -12,5 +11,6 @@ Future<void> updateFolder(
   required Folder data,
 }) async {
   final repository = ref.read(folderRepositoryProvider);
-  return repository.update(id: id, data: data);
+  await repository.update(id: id, data: data);
+  ref.invalidate(getFolderListProvider);
 }

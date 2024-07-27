@@ -130,6 +130,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                               StyledText(
                                 '💎',
                                 style: Style(
+                                  $text.style.ref(TextStyleVariant.emoji),
                                   $text.style.fontSize(48),
                                 ),
                               )
@@ -152,7 +153,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                 height: SpaceVariant.small.resolve(context),
                               ),
                               StyledText(
-                                'Start your first 💎board',
+                                'Start your first gemboard',
                                 style: Style(
                                   $text.style.ref(TextStyleVariant.p),
                                   $text.textAlign.center(),
@@ -181,7 +182,19 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                       gemboardEmojiLabelKind,
                                   emoji: folder.emoji,
                                   label: folder.title,
-                                  onChangeEmojiLabel: (emoji, label) {},
+                                  onChangeEmojiLabel: (emoji, label) =>
+                                      ref.read(
+                                    updateFolderProvider(
+                                      id: folder.id,
+                                      data: folder.copyWith(
+                                        emoji: emoji,
+                                        title: label,
+                                      ),
+                                    ).future,
+                                  ),
+                                  onDeleteFolder: () => ref.read(
+                                    deleteFolderProvider(id: folder.id).future,
+                                  ),
                                   onCreateGemboard: () async {
                                     final data = Whiteboard(
                                       id: WhiteboardId(

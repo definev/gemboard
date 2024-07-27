@@ -22,8 +22,12 @@ CellParentId _$CellParentIdFromJson(Map<String, dynamic> json) {
 mixin _$CellParentId {
   String get whiteboardId => throw _privateConstructorUsedError;
 
+  /// Serializes this CellParentId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CellParentId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CellParentIdCopyWith<CellParentId> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +51,8 @@ class _$CellParentIdCopyWithImpl<$Res, $Val extends CellParentId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CellParentId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +86,8 @@ class __$$CellParentIdImplCopyWithImpl<$Res>
       _$CellParentIdImpl _value, $Res Function(_$CellParentIdImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CellParentId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,11 +127,13 @@ class _$CellParentIdImpl extends _CellParentId {
                 other.whiteboardId == whiteboardId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, whiteboardId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CellParentId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CellParentIdImplCopyWith<_$CellParentIdImpl> get copyWith =>
@@ -147,8 +157,11 @@ abstract class _CellParentId extends CellParentId {
 
   @override
   String get whiteboardId;
+
+  /// Create a copy of CellParentId
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CellParentIdImplCopyWith<_$CellParentIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -163,8 +176,12 @@ mixin _$CellId {
   CellParentId get parentId => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
+  /// Serializes this CellId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CellId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CellIdCopyWith<CellId> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -188,6 +205,8 @@ class _$CellIdCopyWithImpl<$Res, $Val extends CellId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of CellId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -206,6 +225,8 @@ class _$CellIdCopyWithImpl<$Res, $Val extends CellId>
     ) as $Val);
   }
 
+  /// Create a copy of CellId
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CellParentIdCopyWith<$Res> get parentId {
@@ -236,6 +257,8 @@ class __$$CellIdImplCopyWithImpl<$Res>
       _$CellIdImpl _value, $Res Function(_$CellIdImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CellId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -285,11 +308,13 @@ class _$CellIdImpl implements _CellId {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, parentId, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CellId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CellIdImplCopyWith<_$CellIdImpl> get copyWith =>
@@ -315,8 +340,11 @@ abstract class _CellId implements CellId {
   CellParentId get parentId;
   @override
   String get id;
+
+  /// Create a copy of CellId
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CellIdImplCopyWith<_$CellIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -567,8 +595,13 @@ mixin _$Cell {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  /// Serializes this Cell to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $CellCopyWith<Cell> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -601,6 +634,8 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -649,6 +684,8 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
     ) as $Val);
   }
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CellIdCopyWith<$Res> get id {
@@ -657,6 +694,8 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
     });
   }
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $CellDecorationCopyWith<$Res> get decoration {
@@ -697,6 +736,8 @@ class __$$UnknownCellImplCopyWithImpl<$Res>
       _$UnknownCellImpl _value, $Res Function(_$UnknownCellImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -819,12 +860,14 @@ class _$UnknownCellImpl implements UnknownCell {
                 other.selected == selected));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
       preferredHeight, decoration, selected);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UnknownCellImplCopyWith<_$UnknownCellImpl> get copyWith =>
@@ -1103,17 +1146,20 @@ abstract class UnknownCell implements Cell {
   double get width;
   @override
   double? get height;
-  @override
 
   /// A lazy height that will be calculated when the cell is rendered.
+  @override
   double? get preferredHeight;
   @override
   @CellDecorationConverter()
   CellDecoration get decoration;
   @override
   bool get selected;
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UnknownCellImplCopyWith<_$UnknownCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1152,6 +1198,8 @@ class __$$BrainstormingCellImplCopyWithImpl<$Res>
       $Res Function(_$BrainstormingCellImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1297,7 +1345,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
                 .equals(other._suggestions, _suggestions));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -1312,7 +1360,9 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
       question,
       const DeepCollectionEquality().hash(_suggestions));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$BrainstormingCellImplCopyWith<_$BrainstormingCellImpl> get copyWith =>
@@ -1594,9 +1644,9 @@ abstract class BrainstormingCell implements Cell {
   double get width;
   @override
   double? get height;
-  @override
 
   /// A lazy height that will be calculated when the cell is rendered.
+  @override
   double? get preferredHeight;
   @override
   @CellDecorationConverter()
@@ -1607,8 +1657,11 @@ abstract class BrainstormingCell implements Cell {
   ///
   String? get question;
   List<String> get suggestions;
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$BrainstormingCellImplCopyWith<_$BrainstormingCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1647,6 +1700,8 @@ class __$$EditableCellImplCopyWithImpl<$Res>
       _$EditableCellImpl _value, $Res Function(_$EditableCellImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1782,12 +1837,14 @@ class _$EditableCellImpl implements EditableCell {
             (identical(other.content, content) || other.content == content));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
       preferredHeight, decoration, selected, title, content);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EditableCellImplCopyWith<_$EditableCellImpl> get copyWith =>
@@ -2068,9 +2125,9 @@ abstract class EditableCell implements Cell {
   double get width;
   @override
   double? get height;
-  @override
 
   /// A lazy height that will be calculated when the cell is rendered.
+  @override
   double? get preferredHeight;
   @override
   @CellDecorationConverter()
@@ -2079,8 +2136,11 @@ abstract class EditableCell implements Cell {
   bool get selected;
   String get title;
   String get content;
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EditableCellImplCopyWith<_$EditableCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2117,6 +2177,8 @@ class __$$ImageCellImplCopyWithImpl<$Res>
       _$ImageCellImpl _value, $Res Function(_$ImageCellImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2244,12 +2306,14 @@ class _$ImageCellImpl implements ImageCell {
             (identical(other.url, url) || other.url == url));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
       preferredHeight, decoration, selected, url);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ImageCellImplCopyWith<_$ImageCellImpl> get copyWith =>
@@ -2529,9 +2593,9 @@ abstract class ImageCell implements Cell {
   double get width;
   @override
   double? get height;
-  @override
 
   /// A lazy height that will be calculated when the cell is rendered.
+  @override
   double? get preferredHeight;
   @override
   @CellDecorationConverter()
@@ -2540,8 +2604,11 @@ abstract class ImageCell implements Cell {
   bool get selected;
   @UriConverter()
   Uri get url;
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ImageCellImplCopyWith<_$ImageCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2579,6 +2646,8 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
       _$ArticleCellImpl _value, $Res Function(_$ArticleCellImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2714,12 +2783,14 @@ class _$ArticleCellImpl implements ArticleCell {
             (identical(other.content, content) || other.content == content));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
       preferredHeight, decoration, selected, title, content);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ArticleCellImplCopyWith<_$ArticleCellImpl> get copyWith =>
@@ -3000,9 +3071,9 @@ abstract class ArticleCell implements Cell {
   double get width;
   @override
   double? get height;
-  @override
 
   /// A lazy height that will be calculated when the cell is rendered.
+  @override
   double? get preferredHeight;
   @override
   @CellDecorationConverter()
@@ -3011,8 +3082,11 @@ abstract class ArticleCell implements Cell {
   bool get selected;
   String get title;
   String get content;
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ArticleCellImplCopyWith<_$ArticleCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

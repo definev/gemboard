@@ -3,34 +3,35 @@ import 'package:utils/utils.dart';
 
 import '../../model/cell.dart';
 import '../cell_repository.dart';
-import '../hive/cell_repository.dart';
+import '../drift/cell_repository.dart';
 import '../memory/cell_repository.dart';
 
 part 'cell_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 CellRepository cellRepositoryAdaptive(CellRepositoryAdaptiveRef ref) {
-  final hive = ref.watch(cellRepositoryHiveProvider);
+  final drift = ref.watch(cellRepositoryDriftProvider);
+  // final hive = ref.watch(cellRepositoryHiveProvider);
   final memory = ref.watch(cellRepositoryMemoryProvider);
 
   return CellRepositoryAdaptive(
-    hive: hive,
+    local: drift,
     memory: memory,
   );
 }
 
 class CellRepositoryAdaptive extends CellRepository
     with CrudDtoRepositoryAdaptive<CellParentId, CellId, Cell> {
-  CellRepositoryAdaptive({required this.hive, required this.memory});
+  CellRepositoryAdaptive({required this.local, required this.memory});
 
-  final CellRepository hive;
+  final CellRepository local;
   final CellRepository memory;
 
   @override
   CrudDTORepository<CellParentId, CellId, Cell> get interactive => memory;
 
   @override
-  CrudDTORepository<CellParentId, CellId, Cell> get storage => hive;
+  CrudDTORepository<CellParentId, CellId, Cell> get storage => local;
 
   @override
   Stream<List<Cell>> watchList({required CellParentId parentId}) async* {

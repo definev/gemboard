@@ -32,7 +32,7 @@ dependencies:
       ref: main
 
   google_fonts: 
-  mix: ^1.2.0
+  mix: ^1.4.0
   iconly: ^1.0.1
 
   bitsdojo_window: ^0.1.6
@@ -45,7 +45,7 @@ dependencies:
 
 dev_dependencies:
   copy_with_extension_gen: 
-  build_runner: 
+  build_runner: ^2.3.3 
 
 flutter:
   uses-material-design: true

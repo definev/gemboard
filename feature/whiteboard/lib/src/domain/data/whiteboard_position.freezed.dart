@@ -20,12 +20,17 @@ WhiteboardPosition _$WhiteboardPositionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$WhiteboardPosition {
+  String get whiteboardId => throw _privateConstructorUsedError;
   double get scale => throw _privateConstructorUsedError;
   @OffsetConverter()
   Offset get offset => throw _privateConstructorUsedError;
 
+  /// Serializes this WhiteboardPosition to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of WhiteboardPosition
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $WhiteboardPositionCopyWith<WhiteboardPosition> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -36,7 +41,8 @@ abstract class $WhiteboardPositionCopyWith<$Res> {
           WhiteboardPosition value, $Res Function(WhiteboardPosition) then) =
       _$WhiteboardPositionCopyWithImpl<$Res, WhiteboardPosition>;
   @useResult
-  $Res call({double scale, @OffsetConverter() Offset offset});
+  $Res call(
+      {String whiteboardId, double scale, @OffsetConverter() Offset offset});
 }
 
 /// @nodoc
@@ -49,13 +55,20 @@ class _$WhiteboardPositionCopyWithImpl<$Res, $Val extends WhiteboardPosition>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of WhiteboardPosition
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? whiteboardId = null,
     Object? scale = null,
     Object? offset = null,
   }) {
     return _then(_value.copyWith(
+      whiteboardId: null == whiteboardId
+          ? _value.whiteboardId
+          : whiteboardId // ignore: cast_nullable_to_non_nullable
+              as String,
       scale: null == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
@@ -76,7 +89,8 @@ abstract class _$$WhiteboardPositionImplCopyWith<$Res>
       __$$WhiteboardPositionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({double scale, @OffsetConverter() Offset offset});
+  $Res call(
+      {String whiteboardId, double scale, @OffsetConverter() Offset offset});
 }
 
 /// @nodoc
@@ -87,13 +101,20 @@ class __$$WhiteboardPositionImplCopyWithImpl<$Res>
       $Res Function(_$WhiteboardPositionImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WhiteboardPosition
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? whiteboardId = null,
     Object? scale = null,
     Object? offset = null,
   }) {
     return _then(_$WhiteboardPositionImpl(
+      whiteboardId: null == whiteboardId
+          ? _value.whiteboardId
+          : whiteboardId // ignore: cast_nullable_to_non_nullable
+              as String,
       scale: null == scale
           ? _value.scale
           : scale // ignore: cast_nullable_to_non_nullable
@@ -110,11 +131,15 @@ class __$$WhiteboardPositionImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$WhiteboardPositionImpl implements _WhiteboardPosition {
   const _$WhiteboardPositionImpl(
-      {required this.scale, @OffsetConverter() required this.offset});
+      {required this.whiteboardId,
+      required this.scale,
+      @OffsetConverter() required this.offset});
 
   factory _$WhiteboardPositionImpl.fromJson(Map<String, dynamic> json) =>
       _$$WhiteboardPositionImplFromJson(json);
 
+  @override
+  final String whiteboardId;
   @override
   final double scale;
   @override
@@ -123,7 +148,7 @@ class _$WhiteboardPositionImpl implements _WhiteboardPosition {
 
   @override
   String toString() {
-    return 'WhiteboardPosition(scale: $scale, offset: $offset)';
+    return 'WhiteboardPosition(whiteboardId: $whiteboardId, scale: $scale, offset: $offset)';
   }
 
   @override
@@ -131,15 +156,19 @@ class _$WhiteboardPositionImpl implements _WhiteboardPosition {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$WhiteboardPositionImpl &&
+            (identical(other.whiteboardId, whiteboardId) ||
+                other.whiteboardId == whiteboardId) &&
             (identical(other.scale, scale) || other.scale == scale) &&
             (identical(other.offset, offset) || other.offset == offset));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, scale, offset);
+  int get hashCode => Object.hash(runtimeType, whiteboardId, scale, offset);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WhiteboardPosition
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WhiteboardPositionImplCopyWith<_$WhiteboardPositionImpl> get copyWith =>
@@ -156,7 +185,8 @@ class _$WhiteboardPositionImpl implements _WhiteboardPosition {
 
 abstract class _WhiteboardPosition implements WhiteboardPosition {
   const factory _WhiteboardPosition(
-          {required final double scale,
+          {required final String whiteboardId,
+          required final double scale,
           @OffsetConverter() required final Offset offset}) =
       _$WhiteboardPositionImpl;
 
@@ -164,12 +194,17 @@ abstract class _WhiteboardPosition implements WhiteboardPosition {
       _$WhiteboardPositionImpl.fromJson;
 
   @override
+  String get whiteboardId;
+  @override
   double get scale;
   @override
   @OffsetConverter()
   Offset get offset;
+
+  /// Create a copy of WhiteboardPosition
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WhiteboardPositionImplCopyWith<_$WhiteboardPositionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

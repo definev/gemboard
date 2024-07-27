@@ -16,6 +16,7 @@ class GemboardFolderBuilder extends HookWidget {
     required this.label,
     required this.onChangeEmojiLabel,
     required this.onCreateGemboard,
+    required this.onDeleteFolder,
     required this.children,
   });
 
@@ -26,6 +27,7 @@ class GemboardFolderBuilder extends HookWidget {
   final String label;
   final void Function(String emoji, String label) onChangeEmojiLabel;
   final VoidCallback onCreateGemboard;
+  final VoidCallback onDeleteFolder;
 
   final List<Widget> children;
 
@@ -103,7 +105,10 @@ class GemboardFolderBuilder extends HookWidget {
                       ),
                     ),
                     Button(
-                      onPressed: () => openMenu.value = false,
+                      onPressed: () {
+                        openMenu.value = false;
+                        onDeleteFolder();
+                      },
                       background: ColorVariant.red,
                       child: EmojiLabel(
                         emoji: StyledText('🗑️'),
@@ -150,4 +155,5 @@ class GemboardFolderBuilder extends HookWidget {
       ],
     );
   }
+  
 }

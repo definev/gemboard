@@ -34,7 +34,8 @@ class WhiteboardRepositoryHive extends WhiteboardRepository
     final raw = store.getString('whiteboard_offset_${id.id}');
     if (raw == null) {
       return WhiteboardPosition(
-        scale: 0.5,
+        whiteboardId: id.id,
+        scale: 0.2,
         offset: Offset.zero,
       );
     }

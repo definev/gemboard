@@ -1,5 +1,5 @@
 import 'package:design_system/design_system.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mix/mix.dart';
 
 part 'appbar.style.dart';
@@ -30,6 +30,7 @@ class DSAppbar extends StyledWidget {
               $flex.mainAxisAlignment.center(),
               $text.style.ref(TextStyleVariant.p),
               $box.color.ref(ColorVariant.surface),
+              $box.border.all.color(Colors.transparent),
               $box.border.bottom.color(border),
             ).merge(style),
             child: SafeArea(

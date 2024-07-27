@@ -48,8 +48,7 @@ class OpacityValueResolver extends OpacityValue
 ///
 /// This is used to reference a color token in a theme, and is used to resolve the color value.
 /// Allows pass a [ColorToken] as a [Color] value.
-class OpacityValueRef extends OpacityValue
-    with TokenRef<OpacityValueToken, OpacityValue> {
+class OpacityValueRef extends OpacityValue with TokenRef<OpacityValueToken> {
   const OpacityValueRef(this.token) : super(0.0);
 
   /// The token associated with the color reference.
@@ -71,7 +70,7 @@ abstract base class OpacityVariant {
   static const opaque = OpacityValueToken('opaque');
 
   static const hightlight = OpacityValueToken('hightlight');
-  static const surface =  OpacityValueToken('surface');
+  static const surface = OpacityValueToken('surface');
   static const blend = OpacityValueToken('blend');
 
   static const full = OpacityValueToken('full');

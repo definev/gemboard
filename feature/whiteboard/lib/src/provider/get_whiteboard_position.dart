@@ -13,5 +13,9 @@ Future<WhiteboardPosition> getWhiteboardPosition(
 }) async {
   final repository = ref.watch(whiteboardRepositoryProvider);
   return await repository.getWhiteboardPosition(id: id) ??
-      WhiteboardPosition(offset: Offset.zero, scale: 0.5);
+      WhiteboardPosition(
+        whiteboardId: id.id,
+        offset: Offset.zero,
+        scale: 0.2,
+      );
 }

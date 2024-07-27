@@ -46,7 +46,7 @@ dependencies:
   folder:
     path: ../../feature/folder
   
-  mix: ^1.2.0
+  mix: ^1.4.0
   flextras: ^1.0.0
   iconly: ^1.0.1
 

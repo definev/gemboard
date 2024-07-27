@@ -3,7 +3,7 @@ import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/whiteboard.dart';
 
-import '../hive/whiteboard_repository.dart';
+import '../drift/whiteboard_repository.dart';
 import '../memory/whiteboard_repository.dart';
 
 part 'whiteboard_repository.g.dart';
@@ -11,9 +11,13 @@ part 'whiteboard_repository.g.dart';
 @Riverpod(keepAlive: true)
 WhiteboardRepository whiteboardRepositoryAdaptive(
     WhiteboardRepositoryAdaptiveRef ref) {
+  final drift = ref.watch(whiteboardRepositoryDriftProvider);
+  // final hive = ref.watch(whiteboardRepositoryHiveProvider);
+  final memory = ref.watch(whiteboardRepositoryMemoryProvider);
+
   return WhiteboardRepositoryAdaptive(
-    hive: ref.watch(whiteboardRepositoryHiveProvider),
-    memory: ref.watch(whiteboardRepositoryMemoryProvider),
+    local: drift,
+    memory: memory,
   );
 }
 
@@ -21,9 +25,9 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
     with
         CrudDtoRepositoryAdaptive<WhiteboardParentId, WhiteboardId,
             Whiteboard> {
-  WhiteboardRepositoryAdaptive({required this.hive, required this.memory});
+  WhiteboardRepositoryAdaptive({required this.local, required this.memory});
 
-  final WhiteboardRepository hive;
+  final WhiteboardRepository local;
   final WhiteboardRepository memory;
 
   @override
@@ -32,7 +36,7 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
 
   @override
   CrudDTORepository<WhiteboardParentId, WhiteboardId, Whiteboard> get storage =>
-      hive;
+      local;
 
   @override
   Future<WhiteboardPosition?> getWhiteboardPosition({
@@ -42,7 +46,7 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
       return await memory.getWhiteboardPosition(id: id);
     } on String catch (error) {
       if (error == WhiteboardRepositoryMemory.undefined) {
-        final position = await hive.getWhiteboardPosition(id: id);
+        final position = await local.getWhiteboardPosition(id: id);
         if (position != null) {
           await memory.setWhiteboardPosition(id: id, position: position);
         }
@@ -58,7 +62,7 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
     required WhiteboardId id,
     required WhiteboardPosition position,
   }) async {
-    hive.setWhiteboardPosition(id: id, position: position);
+    local.setWhiteboardPosition(id: id, position: position);
     return await memory.setWhiteboardPosition(id: id, position: position);
   }
 }

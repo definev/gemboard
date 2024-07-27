@@ -13,7 +13,16 @@
             "name": "gemboard_app",
             "cwd": "app/gemboard_app",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+        },
+        {
+            "name": "gemboard_app_web",
+            "cwd": "app/gemboard_app",
+            "request": "launch",
+            "type": "dart",
+            "toolArgs": [
+                "--wasm"
+            ],
         },
         {
             "name": "gemboard_app (profile mode)",

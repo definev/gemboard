@@ -1,7 +1,7 @@
 name: cell
 description: cell feature
 
-environment: 
+environment:
   sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
@@ -18,15 +18,15 @@ dependencies:
   json_annotation: ^4.9.0
   riverpod_annotation: ^2.3.5
 
-  flutter_portal: 
+  flutter_portal:
   atreeon_get_child_size: ^0.1.1+1
 
-  collection: ^1.18.0 
-  
+  collection: ^1.18.0
+
   # design system
   design_system:
     path: ../../core/design_system
-  
+
   utils:
     path: ../../core/utils
 
@@ -34,23 +34,28 @@ dependencies:
   llm:
     path: ../../feature/llm
   google_generative_ai:
-  
-  mix: ^1.2.0
-  iconly: 
-  line_icons: 
 
-  # This is unsure the best db
-  hive: ^2.2.3 
-  path_provider: ^2.1.0
+  mix: ^1.4.0
+  iconly:
+  line_icons:
 
-  flutter_animate: 
+  flutter_animate:
 
   flutter_markdown:
-  
+
   flextras:
+
+  # This is unsure the best db
+  hive: ^2.2.3
+  drift: ^2.19.1+1
+  drift_flutter: ^0.1.0
+
+  rxdart: ^0.28.0
 
 dev_dependencies:
   build_runner: ^2.3.3
   freezed:
   json_serializable: ^6.8.0
   riverpod_generator: ^2.4.0
+  drift_dev: ^2.19.1
+

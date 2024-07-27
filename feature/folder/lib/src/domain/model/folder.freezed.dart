@@ -24,8 +24,12 @@ mixin _$FolderId {
   FolderParentId get parentId => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
+  /// Serializes this FolderId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FolderId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FolderIdCopyWith<FolderId> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -50,6 +54,8 @@ class _$FolderIdCopyWithImpl<$Res, $Val extends FolderId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FolderId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -68,6 +74,8 @@ class _$FolderIdCopyWithImpl<$Res, $Val extends FolderId>
     ) as $Val);
   }
 
+  /// Create a copy of FolderId
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FolderParentIdCopyWith<$Res> get parentId {
@@ -99,6 +107,8 @@ class __$$FolderIdImplCopyWithImpl<$Res>
       _$FolderIdImpl _value, $Res Function(_$FolderIdImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FolderId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -150,11 +160,13 @@ class _$FolderIdImpl implements _FolderId {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, parentId, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FolderId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FolderIdImplCopyWith<_$FolderIdImpl> get copyWith =>
@@ -181,8 +193,11 @@ abstract class _FolderId implements FolderId {
   FolderParentId get parentId;
   @override
   String get id;
+
+  /// Create a copy of FolderId
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FolderIdImplCopyWith<_$FolderIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -195,8 +210,12 @@ FolderParentId _$FolderParentIdFromJson(Map<String, dynamic> json) {
 mixin _$FolderParentId {
   String? get folderId => throw _privateConstructorUsedError;
 
+  /// Serializes this FolderParentId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FolderParentId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FolderParentIdCopyWith<FolderParentId> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -220,6 +239,8 @@ class _$FolderParentIdCopyWithImpl<$Res, $Val extends FolderParentId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FolderParentId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -253,6 +274,8 @@ class __$$FolderParentIdImplCopyWithImpl<$Res>
       _$FolderParentIdImpl _value, $Res Function(_$FolderParentIdImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FolderParentId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -292,11 +315,13 @@ class _$FolderParentIdImpl extends _FolderParentId {
                 other.folderId == folderId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, folderId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FolderParentId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FolderParentIdImplCopyWith<_$FolderParentIdImpl> get copyWith =>
@@ -321,8 +346,11 @@ abstract class _FolderParentId extends FolderParentId {
 
   @override
   String? get folderId;
+
+  /// Create a copy of FolderParentId
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FolderParentIdImplCopyWith<_$FolderParentIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -338,8 +366,12 @@ mixin _$Folder {
   String get emoji => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
 
+  /// Serializes this Folder to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Folder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FolderCopyWith<Folder> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -363,6 +395,8 @@ class _$FolderCopyWithImpl<$Res, $Val extends Folder>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Folder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -386,6 +420,8 @@ class _$FolderCopyWithImpl<$Res, $Val extends Folder>
     ) as $Val);
   }
 
+  /// Create a copy of Folder
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $FolderIdCopyWith<$Res> get id {
@@ -416,6 +452,8 @@ class __$$FolderImplCopyWithImpl<$Res>
       _$FolderImpl _value, $Res Function(_$FolderImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Folder
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -474,11 +512,13 @@ class _$FolderImpl implements _Folder {
             (identical(other.title, title) || other.title == title));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, id, emoji, title);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Folder
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FolderImplCopyWith<_$FolderImpl> get copyWith =>
@@ -507,8 +547,11 @@ abstract class _Folder implements Folder {
   String get emoji;
   @override
   String get title;
+
+  /// Create a copy of Folder
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FolderImplCopyWith<_$FolderImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

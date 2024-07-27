@@ -25,7 +25,7 @@ dependencies:
     path: ../../core/design_system
   
   
-  mix: ^1.2.0
+  mix: ^1.4.0
   
   shared_preferences: ^2.2.3
   

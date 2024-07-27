@@ -512,6 +512,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                   setWhiteboardPositionProvider(
                     id: id,
                     position: WhiteboardPosition(
+                      whiteboardId: id.id,
                       scale: scaleFactor.value,
                       offset: Offset(
                         horizontalScrollController.offset,

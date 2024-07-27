@@ -32,7 +32,7 @@ dependencies:
 
   iconly: 
   
-  mix: ^1.2.0
+  mix: ^1.4.0
   
   
   sliver_tools: 

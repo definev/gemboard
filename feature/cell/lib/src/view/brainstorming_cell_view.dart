@@ -226,6 +226,10 @@ class BrainstormingCellView extends HookWidget {
                 height: SpaceVariant.large.resolve(context) * 4,
                 child: Center(
                   child: Button(
+                    style: Style(
+                      $box.padding.vertical.ref(SpaceVariant.medium),
+                      $box.padding.horizontal.ref(SpaceVariant.mediumLarge),
+                    ),
                     background: ColorVariant.green,
                     kind: ButtonKind.filled,
                     onPressed: () {

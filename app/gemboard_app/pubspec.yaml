@@ -32,7 +32,7 @@ dependencies:
       ref: main
 
   # Theme
-  mix: ^1.2.0
+  mix: ^1.4.0
   design_system:
     path: ../../core/design_system
   
@@ -56,3 +56,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  
+  fonts:
+    - family: Apple Color Emoji
+      fonts:
+        - asset: fonts/AppleColorEmoji.ttf

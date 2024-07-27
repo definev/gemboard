@@ -8,6 +8,7 @@ part 'whiteboard_position.g.dart';
 @freezed
 sealed class WhiteboardPosition with _$WhiteboardPosition {
   const factory WhiteboardPosition({
+    required String whiteboardId,
     required double scale,
     @OffsetConverter() required Offset offset,
   }) = _WhiteboardPosition;

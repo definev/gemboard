@@ -7,7 +7,7 @@ part of 'get_whiteboard_position.dart';
 // **************************************************************************
 
 String _$getWhiteboardPositionHash() =>
-    r'fdf3e08246e328a1e8df2a6ca9dfc02b0f476d9f';
+    r'4b43e14c3c885b7e44fdff2de48d63d6141fa43e';
 
 /// Copied from Dart SDK
 class _SystemHash {

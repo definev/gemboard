@@ -7,7 +7,7 @@ part of 'cell_repository.dart';
 // **************************************************************************
 
 String _$cellRepositoryAdaptiveHash() =>
-    r'23efe3204f9df1e944d0a5753f2b5ec6d45061ef';
+    r'0d54b04562f4eea95c39c90c42bc792e1aa9b55a';
 
 /// See also [cellRepositoryAdaptive].
 @ProviderFor(cellRepositoryAdaptive)

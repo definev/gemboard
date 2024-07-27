@@ -7,7 +7,7 @@ part of 'whiteboard_repository.dart';
 // **************************************************************************
 
 String _$whiteboardRepositoryAdaptiveHash() =>
-    r'c3d880ec4f532d084ee6030e358e087a35901c88';
+    r'5cbdf310534e0bceed1b58b0c7c060e17e98a3cb';
 
 /// See also [whiteboardRepositoryAdaptive].
 @ProviderFor(whiteboardRepositoryAdaptive)

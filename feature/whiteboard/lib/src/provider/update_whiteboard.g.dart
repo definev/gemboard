@@ -6,7 +6,7 @@ part of 'update_whiteboard.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updateWhiteboardHash() => r'7acae30d15a13acf4ddf87fde13c7f0328374949';
+String _$updateWhiteboardHash() => r'a7620ae8711a2e7fb590cf824678669f094adf78';
 
 /// Copied from Dart SDK
 class _SystemHash {

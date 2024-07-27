@@ -24,7 +24,7 @@ dependencies:
     path: ../../core/design_system
   
   
-  mix: ^1.2.0
+  mix: ^1.4.0
   
   hive: ^2.2.3
   hive_flutter: ^1.1.0
