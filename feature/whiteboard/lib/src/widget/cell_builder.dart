@@ -30,6 +30,7 @@ class CellBuilder extends StatefulWidget {
 
     /// Cell
     required this.onCellLinked,
+    required this.onConstraintChanged,
   });
 
   final ScrollableDetails horizontalDetails;
@@ -55,8 +56,8 @@ class CellBuilder extends StatefulWidget {
       onContentChanged;
 
   /// Cell
-
   final void Function(Cell source, Cell target) onCellLinked;
+  final void Function(Cell cell) onConstraintChanged;
 
   @override
   State<CellBuilder> createState() => _CellBuilderState();
@@ -432,7 +433,10 @@ class _CellBuilderState extends State<CellBuilder> {
             widget.onContentChanged(cell, title, content),
       ),
       image: (cell) => ImageCellView(cell: cell),
-      article: (cell) => ArticleCellView(cell: cell),
+      article: (cell) => ArticleCellView(
+        cell: cell,
+        onConstraintChanged: () => widget.onConstraintChanged(cell),
+      ),
       unknown: (_) => SizedBox(),
     );
 

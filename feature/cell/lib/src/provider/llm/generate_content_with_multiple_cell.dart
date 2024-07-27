@@ -50,7 +50,7 @@ CONTENT: ${value.content}
             },
             image: (value) async {
               final bundle = NetworkAssetBundle(value.url);
-              final image = await bundle.load('image');
+              final image = await bundle.load('');
               return Content.data('image/*', image.buffer.asUint8List());
             },
           ),

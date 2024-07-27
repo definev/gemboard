@@ -63,7 +63,7 @@ class EditableCellView extends HookWidget {
                 maxLines: 20,
                 onChanged: (content) =>
                     onContentChanged(titleController.text, content),
-                hintTextStyle: TextStyleVariant.p.resolve(context).copyWith(
+                hintTextStyle: TextStyleVariant.p2.resolve(context).copyWith(
                     color: cellDecoration.onColorValue(context).withOpacity(
                         OpacityVariant.surface.resolve(context).value)),
                 textStyle: TextStyleVariant.p2

@@ -46,17 +46,47 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
+
+    return switch (whiteboardAsyncValue) {
+      AsyncLoading() => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      AsyncData(:final value) => WhiteboardEditorFlowData(
+          data: value,
+          resizableController: resizableController,
+        ),
+      AsyncError(:final error, stackTrace: final _) => Center(
+          child: Text('Error: $error'),
+        ),
+      _ => SizedBox(),
+    };
+  }
+}
+
+class WhiteboardEditorFlowData extends HookConsumerWidget {
+  const WhiteboardEditorFlowData({
+    super.key,
+    required this.data,
+    required this.resizableController,
+  });
+
+  final Whiteboard data;
+  final ResizableController? resizableController;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final id = data.id;
+
     final showChat = useState(false);
     final cursorMode = useState(defaultCursorMode);
 
     /// This is base scale for all element in canvas
-    final canvasScale = useState(1.0);
+    final canvasScale = useState(5.0);
 
     ButtonKind kindBasedOn(CursorMode cursorMode, CursorMode target) {
       return cursorMode == target ? ButtonKind.filled : ButtonKind.flat;
     }
-
-    final whiteboardAsyncValue = ref.watch(getWhiteboardByIdProvider(id: id));
 
     final scaleFactor = useState(0.5);
     final verticalScrollController = useScrollController();
@@ -89,450 +119,438 @@ class WhiteboardEditorFlow extends HookConsumerWidget {
     final whiteboardKey = useMemoized(() =>
         GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
 
-    return switch (whiteboardAsyncValue) {
-      AsyncLoading() => const Center(
-          child: CircularProgressIndicator(),
+    var whiteboardBuilder = Portal(
+      child: WhiteboardCursorTool(
+        cursorMode: cursorMode,
+        horizontalDetails: horizontalDetails,
+        verticalDetails: verticalDetails,
+        onSelectionStart: () => ref.read(
+          deselectCellProvider(
+            parentId: CellParentId(whiteboardId: id.id),
+          ).future,
         ),
-      AsyncData(:final value) => () {
-          var whiteboardBuilder = Portal(
-            child: WhiteboardCursorTool(
-              cursorMode: cursorMode,
-              horizontalDetails: horizontalDetails,
-              verticalDetails: verticalDetails,
-              onSelectionStart: () => ref.read(
-                deselectCellProvider(
-                  parentId: CellParentId(whiteboardId: id.id),
-                ).future,
-              ),
-              onSelection: (rect) async {
-                final viewportTopLeft = Offset(
-                  horizontalDetails.controller!.offset,
-                  verticalDetails.controller!.offset,
-                );
-                final viewportRect = Rect.fromPoints(
-                  (rect.topLeft + viewportTopLeft) / scaleFactor.value,
-                  (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
-                );
+        onSelection: (rect) async {
+          final viewportTopLeft = Offset(
+            horizontalDetails.controller!.offset,
+            verticalDetails.controller!.offset,
+          );
+          final viewportRect = Rect.fromPoints(
+            (rect.topLeft + viewportTopLeft) / scaleFactor.value,
+            (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
+          );
 
-                await ref.read(
-                  selectCellProvider(
-                    parentId: CellParentId(whiteboardId: id.id),
-                    selection: viewportRect,
+          await ref.read(
+            selectCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+              selection: viewportRect,
+            ).future,
+          );
+        },
+        whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
+            WhiteboardView(
+          key: whiteboardKey,
+          canvasScale: canvasScale.value,
+          scaleFactor: scaleFactor,
+          enableMoveByMouse: cursorMode.value == CursorMode.handTool,
+          enableMoveByTouch: cursorMode.value == CursorMode.handTool,
+          verticalDetails: verticalDetails,
+          horizontalDetails: horizontalDetails,
+          onScaleStart: () => onGrab.value = true,
+          onScaleEnd: () => onGrab.value = false,
+          data: data,
+
+          /// Edge related
+          edgesStreamProvider: getEdgeListProvider(
+            parentId: EdgeParentId(whiteboardId: id.id),
+          ),
+          onEdgeCreated: (value) => ref.read(
+            createEdgeProvider(
+              parentId: EdgeParentId(whiteboardId: id.id),
+              data: value,
+            ).future,
+          ),
+          onEdgeUpdated: (oldValue, newValue) => ref.read(
+            updateEdgeProvider(
+              id: newValue.id,
+              data: newValue,
+            ).future,
+          ),
+          onEdgesDeleted: (edgeIds) => ref.read(
+            deleteEdgesProvider(
+              ids: [
+                for (final edgeId in edgeIds)
+                  EdgeId(
+                    parentId: EdgeParentId(whiteboardId: id.id),
+                    id: edgeId,
+                  ),
+              ],
+            ).future,
+          ),
+          onEdgesUpdated: (edges) => ref.read(
+            updateEdgesProvider(
+              parentId: EdgeParentId(whiteboardId: id.id),
+              edges: edges,
+            ).future,
+          ),
+
+          /// Cell related
+          cellsStreamProvider: getCellListProvider(
+            parentId: CellParentId(whiteboardId: id.id),
+          ),
+          onCellCreated: (value) => ref.read(
+            createCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+              data: value,
+            ).future,
+          ),
+          onCellUpdated: (oldValue, newValue) => ref.read(
+            updateCellProvider(
+              id: newValue.id,
+              data: newValue,
+            ).future,
+          ),
+          onCellsUpdated: (cells) => ref.read(
+            updateCellsProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+              cells: cells,
+            ).future,
+          ),
+          onCellsDeleted: (cellIds) async {
+            await ref.read(
+              deleteCellsProvider(
+                ids: [
+                  for (final cellId in cellIds)
+                    CellId(
+                      parentId: CellParentId(whiteboardId: id.id),
+                      id: cellId,
+                    ),
+                ],
+              ).future,
+            );
+            for (final cellId in cellIds) {
+              await ref.read(
+                deleteCellEdgeProvider(
+                  parentId: EdgeParentId(whiteboardId: id.id),
+                  cellId: cellId,
+                ).future,
+              );
+            }
+          },
+        ),
+      ),
+    );
+    final appBar = Align(
+      alignment: Alignment.topCenter,
+      child: Column(
+        children: [
+          DSAppbar(
+            border: WhiteboardDecoration(data).colorValue(context),
+            title: IntrinsicWidth(
+              child: EmojiLabelEditor(
+                emoji: data.emoji,
+                label: data.title,
+                onEmojiSelected: (emoji) => ref.read(
+                  updateWhiteboardProvider(
+                    id: id,
+                    data: data.copyWith(emoji: emoji),
+                  ).future,
+                ),
+                onLabelChanged: (label) => ref.read(
+                  updateWhiteboardProvider(
+                    id: id,
+                    data: data.copyWith(title: label),
+                  ).future,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final whiteboard = LayoutBuilder(
+      builder: (context, constraints) {
+        final cellWidth = min(
+              constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
+              480.0,
+            ) *
+            canvasScale.value;
+        final actionTool = DSToolbar(
+          children: [
+            HookBuilder(
+              builder: (context) {
+                final itemKey = useMemoized(() => GlobalKey());
+                return DragItemWidget(
+                  key: itemKey,
+                  dragItemProvider: (request) {
+                    final localPosition = (itemKey.currentContext!
+                            .findRenderObject()! as RenderBox)
+                        .globalToLocal(request.location);
+
+                    return DragItem(
+                      localData: Cell.brainstorming(
+                        id: CellId(
+                          parentId: CellParentId(whiteboardId: id.id),
+                          id: Helper.createId(),
+                        ),
+                        offset: localPosition,
+                        width: cellWidth,
+                        decoration: CellDecoration(color: 'yellow'),
+                        question: null,
+                        suggestions: [],
+                      ).toJson(),
+                    );
+                  },
+                  allowedOperations: () =>
+                      WhiteboardEditorFlow.allowedOperations,
+                  child: DraggableWidget(
+                    child: DSTooltip(
+                      alignment: Alignment.bottomCenter,
+                      label: StyledText('Brainstorming'),
+                      child: Button(
+                        style: Style(
+                          $box.height(40),
+                          $box.width(40),
+                          $box.alignment.center(),
+                        ),
+                        onPressed: () {},
+                        child: Icon(IconlyLight.discovery),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            HookBuilder(
+              builder: (context) {
+                final itemKey = useMemoized(() => GlobalKey());
+                return DragItemWidget(
+                  key: itemKey,
+                  dragItemProvider: (request) {
+                    final localPosition = (itemKey.currentContext!
+                            .findRenderObject()! as RenderBox)
+                        .globalToLocal(request.location);
+
+                    return DragItem(
+                      localData: Cell.editable(
+                        id: CellId(
+                          parentId: CellParentId(whiteboardId: id.id),
+                          id: Helper.createId(),
+                        ),
+                        offset: localPosition,
+                        width: cellWidth,
+                        decoration: CellDecoration(color: 'red'),
+                        title: '',
+                        content: '',
+                      ).toJson(),
+                    );
+                  },
+                  allowedOperations: () =>
+                      WhiteboardEditorFlow.allowedOperations,
+                  child: DraggableWidget(
+                    child: DSTooltip(
+                      alignment: Alignment.bottomCenter,
+                      label: StyledText('Note'),
+                      child: Button(
+                        style: Style(
+                          $box.height(40),
+                          $box.width(40),
+                          $box.alignment.center(),
+                        ),
+                        onPressed: () {},
+                        child: Icon(IconlyLight.document),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            DSTooltip(
+              alignment: Alignment.bottomCenter,
+              label: StyledText('Chat'),
+              child: Button(
+                style: Style(
+                  $box.height(40),
+                  $box.width(40),
+                  $box.alignment.center(),
+                ),
+                onPressed: () => showChat.value = !showChat.value,
+                child: Icon(IconlyLight.chat),
+              ),
+            ),
+          ],
+        );
+
+        final cursorModeTool = DSToolbar(
+          children: [
+            DSTooltip(
+              alignment: Alignment.bottomCenter,
+              label: StyledText('Move'),
+              child: Button(
+                style: Style(
+                  $box.height(40),
+                  $box.width(40),
+                  $box.alignment.center(),
+                ),
+                kind: kindBasedOn(cursorMode.value, CursorMode.move),
+                onPressed: () => cursorMode.value = CursorMode.move,
+                child: Icon(LineIcons.mousePointer),
+              ),
+            ),
+            DSTooltip(
+              alignment: Alignment.bottomCenter,
+              label: StyledText('Hand tool'),
+              child: Button(
+                style: Style(
+                  $box.height(40),
+                  $box.width(40),
+                  $box.alignment.center(),
+                ),
+                kind: kindBasedOn(cursorMode.value, CursorMode.handTool),
+                onPressed: () => cursorMode.value = CursorMode.handTool,
+                child: Icon(LineIcons.paperHandAlt),
+              ),
+            ),
+            DSTooltip(
+              alignment: Alignment.bottomCenter,
+              label: StyledText('Free move'),
+              child: Button(
+                style: Style(
+                  $box.height(40),
+                  $box.width(40),
+                  $box.alignment.center(),
+                ),
+                kind: kindBasedOn(cursorMode.value, CursorMode.freeMove),
+                onPressed: () => cursorMode.value = CursorMode.freeMove,
+                child: Icon(LineIcons.alternateExpandArrows),
+              ),
+            ),
+          ],
+        );
+
+        final actionToolWidth = SpaceVariant.small.resolve(context) * 4 +
+            (SpaceVariant.large.resolve(context) * 2) * 3;
+        final cursorModeToolWidth = SpaceVariant.small.resolve(context) * 4 +
+            (SpaceVariant.large.resolve(context) * 2) * 3;
+
+        return Stack(
+          children: [
+            Positioned.fill(child: whiteboardBuilder),
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: actionToolWidth +
+                    cursorModeToolWidth +
+                    SpaceVariant.small.resolve(context) * 2 +
+                    SpaceVariant.medium.resolve(context),
+                child: VBox(
+                  style: Style(
+                    $box.padding.all.ref(SpaceVariant.small),
+                    $flex.gap.ref(SpaceVariant.small),
+                  ),
+                  children: [
+                    StyledFlex(
+                      direction: Axis.horizontal,
+                      style: Style(
+                        $flex.mainAxisSize.min(),
+                        $flex.gap.ref(SpaceVariant.medium),
+                      ),
+                      children: [
+                        actionTool,
+                        cursorModeTool,
+                      ],
+                    ),
+                    if (showChat.value)
+                      DSTextbox(
+                        autofocus: true,
+                        hintText: 'Type a message...',
+                        minLines: 1,
+                        maxLines: 8,
+                        trailing: Button(
+                          onPressed: () {},
+                          child: Icon(IconlyLight.send),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    return HookConsumer(
+      builder: (context, ref, child) {
+        useEffect(() {
+          Debouncer debouncer = Debouncer();
+          () async {
+            final position =
+                await ref.read(getWhiteboardPositionProvider(id: id).future);
+
+            final WhiteboardPosition(:offset, :scale) = position;
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              scaleFactor.value = scale;
+              while (!(verticalScrollController.hasClients &&
+                  horizontalScrollController.hasClients)) {
+                await Future.delayed(Duration(milliseconds: 10));
+              }
+              if (verticalScrollController.offset != offset.dy) {
+                verticalScrollController.jumpTo(offset.dy);
+              }
+
+              if (horizontalScrollController.offset != offset.dx) {
+                horizontalScrollController.jumpTo(offset.dx);
+              }
+            });
+          }();
+
+          void onMove() {
+            debouncer.run(
+              () {
+                ref.read(
+                  setWhiteboardPositionProvider(
+                    id: id,
+                    position: WhiteboardPosition(
+                      scale: scaleFactor.value,
+                      offset: Offset(
+                        horizontalScrollController.offset,
+                        verticalScrollController.offset,
+                      ),
+                    ),
                   ).future,
                 );
               },
-              whiteboardBuilder:
-                  (enableMoveByMouse, enableMoveByTouch, onGrab) =>
-                      WhiteboardView(
-                key: whiteboardKey,
-                canvasScale: canvasScale.value,
-                scaleFactor: scaleFactor,
-                enableMoveByMouse: cursorMode.value == CursorMode.handTool,
-                enableMoveByTouch: cursorMode.value == CursorMode.handTool,
-                verticalDetails: verticalDetails,
-                horizontalDetails: horizontalDetails,
-                onScaleStart: () => onGrab.value = true,
-                onScaleEnd: () => onGrab.value = false,
-                data: value,
+              Duration(milliseconds: 200),
+            );
+          }
 
-                /// Edge related
-                edgesStreamProvider: getEdgeListProvider(
-                  parentId: EdgeParentId(whiteboardId: id.id),
-                ),
-                onEdgeCreated: (value) => ref.read(
-                  createEdgeProvider(
-                    parentId: EdgeParentId(whiteboardId: id.id),
-                    data: value,
-                  ).future,
-                ),
-                onEdgeUpdated: (oldValue, newValue) => ref.read(
-                  updateEdgeProvider(
-                    id: newValue.id,
-                    data: newValue,
-                  ).future,
-                ),
-                onEdgesDeleted: (edgeIds) => ref.read(
-                  deleteEdgesProvider(
-                    ids: [
-                      for (final edgeId in edgeIds)
-                        EdgeId(
-                          parentId: EdgeParentId(whiteboardId: id.id),
-                          id: edgeId,
-                        ),
-                    ],
-                  ).future,
-                ),
-                onEdgesUpdated: (edges) => ref.read(
-                  updateEdgesProvider(
-                    parentId: EdgeParentId(whiteboardId: id.id),
-                    edges: edges,
-                  ).future,
-                ),
-
-                /// Cell related
-                cellsStreamProvider: getCellListProvider(
-                  parentId: CellParentId(whiteboardId: id.id),
-                ),
-                onCellCreated: (value) => ref.read(
-                  createCellProvider(
-                    parentId: CellParentId(whiteboardId: id.id),
-                    data: value,
-                  ).future,
-                ),
-                onCellUpdated: (oldValue, newValue) => ref.read(
-                  updateCellProvider(
-                    id: newValue.id,
-                    data: newValue,
-                  ).future,
-                ),
-                onCellsUpdated: (cells) => ref.read(
-                  updateCellsProvider(
-                    parentId: CellParentId(whiteboardId: id.id),
-                    cells: cells,
-                  ).future,
-                ),
-                onCellsDeleted: (cellIds) async {
-                  await ref.read(
-                    deleteCellsProvider(
-                      ids: [
-                        for (final cellId in cellIds)
-                          CellId(
-                            parentId: CellParentId(whiteboardId: id.id),
-                            id: cellId,
-                          ),
-                      ],
-                    ).future,
-                  );
-                  for (final cellId in cellIds) {
-                    await ref.read(
-                      deleteCellEdgeProvider(
-                        parentId: EdgeParentId(whiteboardId: id.id),
-                        cellId: cellId,
-                      ).future,
-                    );
-                  }
-                },
-              ),
-            ),
-          );
-          final appBar = Align(
-            alignment: Alignment.topCenter,
-            child: Column(
+          horizontalScrollController.addListener(onMove);
+          verticalScrollController.addListener(onMove);
+          scaleFactor.addListener(onMove);
+          return () {
+            horizontalScrollController.removeListener(onMove);
+            verticalScrollController.removeListener(onMove);
+            scaleFactor.removeListener(onMove);
+            debouncer.cancel();
+          };
+        }, []);
+        return child!;
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Column(
               children: [
-                DSAppbar(
-                  border: WhiteboardDecoration(value).colorValue(context),
-                  title: IntrinsicWidth(
-                    child: EmojiLabelEditor(
-                      emoji: value.emoji,
-                      label: value.title,
-                      onEmojiSelected: (emoji) => ref.read(
-                        updateWhiteboardProvider(
-                          id: id,
-                          data: value.copyWith(emoji: emoji),
-                        ).future,
-                      ),
-                      onLabelChanged: (label) => ref.read(
-                        updateWhiteboardProvider(
-                          id: id,
-                          data: value.copyWith(title: label),
-                        ).future,
-                      ),
-                    ),
-                  ),
+                appBar,
+                Expanded(
+                  child: whiteboard,
                 ),
               ],
             ),
-          );
-
-          final whiteboard = LayoutBuilder(
-            builder: (context, constraints) {
-              final cellWidth = min(
-                    constraints.maxWidth -
-                        SpaceVariant.mediumLarge.resolve(context),
-                    480.0,
-                  ) *
-                  canvasScale.value;
-              final actionTool = DSToolbar(
-                children: [
-                  HookBuilder(
-                    builder: (context) {
-                      final itemKey = useMemoized(() => GlobalKey());
-                      return DragItemWidget(
-                        key: itemKey,
-                        dragItemProvider: (request) {
-                          final localPosition = (itemKey.currentContext!
-                                  .findRenderObject()! as RenderBox)
-                              .globalToLocal(request.location);
-
-                          return DragItem(
-                            localData: Cell.brainstorming(
-                              id: CellId(
-                                parentId: CellParentId(whiteboardId: id.id),
-                                id: Helper.createId(),
-                              ),
-                              offset: localPosition,
-                              width: cellWidth,
-                              decoration: CellDecoration(color: 'yellow'),
-                              question: null,
-                              suggestions: [],
-                            ).toJson(),
-                          );
-                        },
-                        allowedOperations: () => allowedOperations,
-                        child: DraggableWidget(
-                          child: DSTooltip(
-                            alignment: Alignment.bottomCenter,
-                            label: StyledText('Brainstorming'),
-                            child: Button(
-                              style: Style(
-                                $box.height(40),
-                                $box.width(40),
-                                $box.alignment.center(),
-                              ),
-                              onPressed: () {},
-                              child: Icon(IconlyLight.discovery),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  HookBuilder(
-                    builder: (context) {
-                      final itemKey = useMemoized(() => GlobalKey());
-                      return DragItemWidget(
-                        key: itemKey,
-                        dragItemProvider: (request) {
-                          final localPosition = (itemKey.currentContext!
-                                  .findRenderObject()! as RenderBox)
-                              .globalToLocal(request.location);
-
-                          return DragItem(
-                            localData: Cell.editable(
-                              id: CellId(
-                                parentId: CellParentId(whiteboardId: id.id),
-                                id: Helper.createId(),
-                              ),
-                              offset: localPosition,
-                              width: cellWidth,
-                              decoration: CellDecoration(color: 'red'),
-                              title: '',
-                              content: '',
-                            ).toJson(),
-                          );
-                        },
-                        allowedOperations: () => allowedOperations,
-                        child: DraggableWidget(
-                          child: DSTooltip(
-                            alignment: Alignment.bottomCenter,
-                            label: StyledText('Note'),
-                            child: Button(
-                              style: Style(
-                                $box.height(40),
-                                $box.width(40),
-                                $box.alignment.center(),
-                              ),
-                              onPressed: () {},
-                              child: Icon(IconlyLight.document),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                  DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Chat'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      onPressed: () => showChat.value = !showChat.value,
-                      child: Icon(IconlyLight.chat),
-                    ),
-                  ),
-                ],
-              );
-
-              final cursorModeTool = DSToolbar(
-                children: [
-                  DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Move'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      kind: kindBasedOn(cursorMode.value, CursorMode.move),
-                      onPressed: () => cursorMode.value = CursorMode.move,
-                      child: Icon(LineIcons.mousePointer),
-                    ),
-                  ),
-                  DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Hand tool'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      kind: kindBasedOn(cursorMode.value, CursorMode.handTool),
-                      onPressed: () => cursorMode.value = CursorMode.handTool,
-                      child: Icon(LineIcons.paperHandAlt),
-                    ),
-                  ),
-                  DSTooltip(
-                    alignment: Alignment.bottomCenter,
-                    label: StyledText('Free move'),
-                    child: Button(
-                      style: Style(
-                        $box.height(40),
-                        $box.width(40),
-                        $box.alignment.center(),
-                      ),
-                      kind: kindBasedOn(cursorMode.value, CursorMode.freeMove),
-                      onPressed: () => cursorMode.value = CursorMode.freeMove,
-                      child: Icon(LineIcons.alternateExpandArrows),
-                    ),
-                  ),
-                ],
-              );
-
-              final actionToolWidth = SpaceVariant.small.resolve(context) * 4 +
-                  (SpaceVariant.large.resolve(context) * 2) * 3;
-              final cursorModeToolWidth =
-                  SpaceVariant.small.resolve(context) * 4 +
-                      (SpaceVariant.large.resolve(context) * 2) * 3;
-
-              return Stack(
-                children: [
-                  Positioned.fill(child: whiteboardBuilder),
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: SizedBox(
-                      width: actionToolWidth +
-                          cursorModeToolWidth +
-                          SpaceVariant.small.resolve(context) * 2 +
-                          SpaceVariant.medium.resolve(context),
-                      child: VBox(
-                        style: Style(
-                          $box.padding.all.ref(SpaceVariant.small),
-                          $flex.gap.ref(SpaceVariant.small),
-                        ),
-                        children: [
-                          StyledFlex(
-                            direction: Axis.horizontal,
-                            style: Style(
-                              $flex.mainAxisSize.min(),
-                              $flex.gap.ref(SpaceVariant.medium),
-                            ),
-                            children: [
-                              actionTool,
-                              cursorModeTool,
-                            ],
-                          ),
-                          if (showChat.value)
-                            DSTextbox(
-                              autofocus: true,
-                              hintText: 'Type a message...',
-                              minLines: 1,
-                              maxLines: 8,
-                              trailing: Button(
-                                onPressed: () {},
-                                child: Icon(IconlyLight.send),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              );
-            },
-          );
-
-          return HookConsumer(
-            builder: (context, ref, child) {
-              useEffect(() {
-                Debouncer debouncer = Debouncer();
-                () async {
-                  final position = await ref
-                      .read(getWhiteboardPositionProvider(id: id).future);
-
-                  final WhiteboardPosition(:offset, :scale) = position;
-                  WidgetsBinding.instance.addPostFrameCallback((_) async {
-                    scaleFactor.value = scale;
-                    while (!(verticalScrollController.hasClients &&
-                        horizontalScrollController.hasClients)) {
-                      await Future.delayed(Duration(milliseconds: 10));
-                    }
-                    if (verticalScrollController.offset != offset.dy) {
-                      verticalScrollController.jumpTo(offset.dy);
-                    }
-
-                    if (horizontalScrollController.offset != offset.dx) {
-                      horizontalScrollController.jumpTo(offset.dx);
-                    }
-                  });
-                }();
-
-                void onMove() {
-                  debouncer.run(
-                    () {
-                      ref.read(
-                        setWhiteboardPositionProvider(
-                          id: id,
-                          position: WhiteboardPosition(
-                            scale: scaleFactor.value,
-                            offset: Offset(
-                              horizontalScrollController.offset,
-                              verticalScrollController.offset,
-                            ),
-                          ),
-                        ).future,
-                      );
-                    },
-                    Duration(milliseconds: 200),
-                  );
-                }
-
-                horizontalScrollController.addListener(onMove);
-                verticalScrollController.addListener(onMove);
-                scaleFactor.addListener(onMove);
-                return () {
-                  horizontalScrollController.removeListener(onMove);
-                  verticalScrollController.removeListener(onMove);
-                  scaleFactor.removeListener(onMove);
-                  debouncer.cancel();
-                };
-              }, []);
-              return child!;
-            },
-            child: Scaffold(
-              body: Stack(
-                children: [
-                  Column(
-                    children: [
-                      appBar,
-                      Expanded(
-                        child: whiteboard,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        }(),
-      AsyncError(:final error, stackTrace: final _) => Center(
-          child: Text('Error: $error'),
+          ],
         ),
-      _ => SizedBox(),
-    };
+      ),
+    );
   }
 }

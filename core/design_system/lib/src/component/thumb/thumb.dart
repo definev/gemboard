@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
@@ -20,6 +21,7 @@ class DSThumb extends StatelessWidget {
         IconlyLight.arrow_left_2,
         style: Style(
           $icon.color(color),
+          $icon.size(SpaceVariant.mediumLarge.resolve(context)),
         ),
       ),
     );

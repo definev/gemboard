@@ -28,6 +28,7 @@ class CellDecoration with _$CellDecoration {
   const factory CellDecoration({
     required String color,
     @Default(CellCardKind.elevated) CellCardKind cardKind,
+    @Default(false) bool constraints,
   }) = _CellDecoration;
 
   factory CellDecoration.fromJson(Map<String, dynamic> json) =>

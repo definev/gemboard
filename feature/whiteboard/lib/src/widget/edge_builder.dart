@@ -81,14 +81,6 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
     StackPositionData? sourcePosition,
     StackPositionData? targetPosition,
   }) {
-//     print('''
-// computeEdgeBounds
-// - source: ${source.$2}
-// - target: ${target.$2}
-// - sourcePosition: $sourcePosition
-// - targetPosition: $targetPosition
-// ''');
-
     Rect newSourceCellRect = switch (sourcePosition) {
       null => _computeCellBound(source),
       final position => Rect.fromLTWH(

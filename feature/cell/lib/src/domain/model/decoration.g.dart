@@ -11,6 +11,7 @@ _$CellDecorationImpl _$$CellDecorationImplFromJson(Map<String, dynamic> json) =>
       color: json['color'] as String,
       cardKind: $enumDecodeNullable(_$CellCardKindEnumMap, json['cardKind']) ??
           CellCardKind.elevated,
+      constraints: json['constraints'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$CellDecorationImplToJson(
@@ -18,6 +19,7 @@ Map<String, dynamic> _$$CellDecorationImplToJson(
     <String, dynamic>{
       'color': instance.color,
       'cardKind': _$CellCardKindEnumMap[instance.cardKind]!,
+      'constraints': instance.constraints,
     };
 
 const _$CellCardKindEnumMap = {

@@ -22,6 +22,7 @@ CellDecoration _$CellDecorationFromJson(Map<String, dynamic> json) {
 mixin _$CellDecoration {
   String get color => throw _privateConstructorUsedError;
   CellCardKind get cardKind => throw _privateConstructorUsedError;
+  bool get constraints => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $CellDecorationCopyWith<$Res> {
           CellDecoration value, $Res Function(CellDecoration) then) =
       _$CellDecorationCopyWithImpl<$Res, CellDecoration>;
   @useResult
-  $Res call({String color, CellCardKind cardKind});
+  $Res call({String color, CellCardKind cardKind, bool constraints});
 }
 
 /// @nodoc
@@ -53,6 +54,7 @@ class _$CellDecorationCopyWithImpl<$Res, $Val extends CellDecoration>
   $Res call({
     Object? color = null,
     Object? cardKind = null,
+    Object? constraints = null,
   }) {
     return _then(_value.copyWith(
       color: null == color
@@ -63,6 +65,10 @@ class _$CellDecorationCopyWithImpl<$Res, $Val extends CellDecoration>
           ? _value.cardKind
           : cardKind // ignore: cast_nullable_to_non_nullable
               as CellCardKind,
+      constraints: null == constraints
+          ? _value.constraints
+          : constraints // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -75,7 +81,7 @@ abstract class _$$CellDecorationImplCopyWith<$Res>
       __$$CellDecorationImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String color, CellCardKind cardKind});
+  $Res call({String color, CellCardKind cardKind, bool constraints});
 }
 
 /// @nodoc
@@ -91,6 +97,7 @@ class __$$CellDecorationImplCopyWithImpl<$Res>
   $Res call({
     Object? color = null,
     Object? cardKind = null,
+    Object? constraints = null,
   }) {
     return _then(_$CellDecorationImpl(
       color: null == color
@@ -101,6 +108,10 @@ class __$$CellDecorationImplCopyWithImpl<$Res>
           ? _value.cardKind
           : cardKind // ignore: cast_nullable_to_non_nullable
               as CellCardKind,
+      constraints: null == constraints
+          ? _value.constraints
+          : constraints // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -109,7 +120,9 @@ class __$$CellDecorationImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CellDecorationImpl implements _CellDecoration {
   const _$CellDecorationImpl(
-      {required this.color, this.cardKind = CellCardKind.elevated});
+      {required this.color,
+      this.cardKind = CellCardKind.elevated,
+      this.constraints = false});
 
   factory _$CellDecorationImpl.fromJson(Map<String, dynamic> json) =>
       _$$CellDecorationImplFromJson(json);
@@ -119,10 +132,13 @@ class _$CellDecorationImpl implements _CellDecoration {
   @override
   @JsonKey()
   final CellCardKind cardKind;
+  @override
+  @JsonKey()
+  final bool constraints;
 
   @override
   String toString() {
-    return 'CellDecoration(color: $color, cardKind: $cardKind)';
+    return 'CellDecoration(color: $color, cardKind: $cardKind, constraints: $constraints)';
   }
 
   @override
@@ -132,12 +148,14 @@ class _$CellDecorationImpl implements _CellDecoration {
             other is _$CellDecorationImpl &&
             (identical(other.color, color) || other.color == color) &&
             (identical(other.cardKind, cardKind) ||
-                other.cardKind == cardKind));
+                other.cardKind == cardKind) &&
+            (identical(other.constraints, constraints) ||
+                other.constraints == constraints));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, color, cardKind);
+  int get hashCode => Object.hash(runtimeType, color, cardKind, constraints);
 
   @JsonKey(ignore: true)
   @override
@@ -157,7 +175,8 @@ class _$CellDecorationImpl implements _CellDecoration {
 abstract class _CellDecoration implements CellDecoration {
   const factory _CellDecoration(
       {required final String color,
-      final CellCardKind cardKind}) = _$CellDecorationImpl;
+      final CellCardKind cardKind,
+      final bool constraints}) = _$CellDecorationImpl;
 
   factory _CellDecoration.fromJson(Map<String, dynamic> json) =
       _$CellDecorationImpl.fromJson;
@@ -166,6 +185,8 @@ abstract class _CellDecoration implements CellDecoration {
   String get color;
   @override
   CellCardKind get cardKind;
+  @override
+  bool get constraints;
   @override
   @JsonKey(ignore: true)
   _$$CellDecorationImplCopyWith<_$CellDecorationImpl> get copyWith =>

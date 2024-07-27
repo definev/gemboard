@@ -84,13 +84,20 @@ class SelectionCellsView extends HookWidget {
     );
   }
 
+  double toolbarWidthCalculator(BuildContext context, int actionCount) {
+    return SpaceVariant.small.resolve(context) * (actionCount + 1) +
+        (SpaceVariant.large.resolve(context) * 2) * actionCount;
+  }
+
   double calculateToolbarWidth(BuildContext context) {
     if (selectedCellIds.length == 1) {
-      return SpaceVariant.small.resolve(context) * 4 +
-          (SpaceVariant.large.resolve(context) * 2) * 3;
+      if (selectedCells.first is ArticleCell) {
+        return toolbarWidthCalculator(context, 4);
+      }
+
+      return toolbarWidthCalculator(context, 3);
     }
-    return SpaceVariant.small.resolve(context) * 3 +
-        (SpaceVariant.large.resolve(context) * 2) * 2;
+    return toolbarWidthCalculator(context, 2);
   }
 
   @override
@@ -207,18 +214,33 @@ class SelectionCellsView extends HookWidget {
                             child: StyledIcon(IconlyLight.chat),
                           ),
                         ),
-                        if (selectedCellIds.length == 1)
-                          DSTooltip(
-                            label: StyledText('Summarize'),
-                            alignment: Alignment.bottomCenter,
-                            child: DSToolbarItem(
-                              onPressed: () => onCellSummarize(
-                                cellMaps[selectedCellIds.first]!.$2,
+                        ...switch (selectedCells.length == 1) {
+                          false => [],
+                          true => [
+                              DSTooltip(
+                                label: StyledText('Summarize'),
+                                alignment: Alignment.bottomCenter,
+                                child: DSToolbarItem(
+                                  onPressed: () => onCellSummarize(
+                                    cellMaps[selectedCellIds.first]!.$2,
+                                  ),
+                                  child: StyledIcon(
+                                      CupertinoIcons.doc_text_viewfinder),
+                                ),
                               ),
-                              child: StyledIcon(
-                                  CupertinoIcons.doc_text_viewfinder),
-                            ),
-                          ),
+                              if (selectedCells.first is ArticleCell)
+                                DSTooltip(
+                                  label: StyledText('Turn into editable'),
+                                  alignment: Alignment.bottomCenter,
+                                  child: DSToolbarItem(
+                                    onPressed: () => onTurnArticleIntoEditable(
+                                      selectedCells.first as ArticleCell,
+                                    ),
+                                    child: StyledIcon(IconlyLight.document),
+                                  ),
+                                ),
+                            ],
+                        },
                         DSTooltip(
                           label: StyledText('Delete'),
                           alignment: Alignment.bottomCenter,

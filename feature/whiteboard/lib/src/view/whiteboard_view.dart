@@ -266,8 +266,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     final duration = const Duration(milliseconds: 300);
     final curve = Curves.easeInOut;
     final size = context.size ?? Size.zero;
-    final space = (size.width - cell.width).abs() / 2 +
-        (1 - scaleFactor.value) * cell.width / 2;
+    final sizeWidth = size.width;
+    final cellWidth = cell.width;
+    final space = (sizeWidth - cellWidth) / 2 //
+        +
+        (1 - scaleFactor.value) * cellWidth / 2;
 
     horizontalDetails.controller!.animateTo(
       cell.offset.dx * scaleFactor.value - space,
@@ -387,8 +390,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       ),
                     ),
                     offset: _offsetToViewport(event.position.local),
-                    width: 200,
-                    decoration: CellDecoration(color: 'blue'),
+                    width: 200 * widget.canvasScale,
+                    decoration: CellDecoration(color: ColorVariant.purple.name),
                     url: value.uri,
                   );
 
@@ -506,6 +509,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       color: CellDecorationExtension(cell.decoration)
                           .colorValue(context),
                     ),
+                    article: (value) => DSThumb(
+                      color: CellDecorationExtension(cell.decoration)
+                          .colorValue(context),
+                    ),
                   ),
                   onSizeChanged: (newSize) {
                     final (_, latestCell) = cellKeys[cell.id.id]!;
@@ -534,6 +541,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   onAskForSuggestion: brainstormingCell_OnAskForSuggestion,
                   onContentChanged: editableCell_OnContentChanged,
                   onCellLinked: cell_OnCellLinked,
+                  onConstraintChanged: cell_OnConstraintChanged,
                 ),
               ),
             );
@@ -573,7 +581,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
             horizontalDetails: horizontalDetails,
             verticalDetails: verticalDetails,
             backgroundBuilder: GridBackground.backgroundBuilder(
-              scale: scaleFactor,
+              scale: scaleFactor * widget.canvasScale,
             ),
             foregroundBuilder: switch (selectedCells.isEmpty) {
               true => null,
@@ -597,18 +605,20 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       child: child,
     );
 
-    return LayoutBuilder(builder: (context, constraints) {
-      this.constraints = constraints;
-      return MixTheme(
-        data: mixTheme.copyWith(
-          spaces: scaleSpaces(widget.canvasScale),
-        ),
-        child: DesignSystemTheme(
-          data: designSystemThemeData.copyWith(scale: widget.canvasScale),
-          child: child,
-        ),
-      );
-    });
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        this.constraints = constraints;
+        return MixTheme(
+          data: mixTheme.copyWith(
+            spaces: scaleSpaces(widget.canvasScale),
+          ),
+          child: DesignSystemTheme(
+            data: designSystemThemeData.copyWith(scale: widget.canvasScale),
+            child: child,
+          ),
+        );
+      },
+    );
   }
 
   Offset randomOffsetAroundRect(Rect rect, [double? radius]) {
@@ -735,7 +745,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
     final edge = Edge(
       id: EdgeId(
-        id: Helper.createId(),
+        id: 'edge-${cell.id.id}-${suggestionCell.id.id}',
         parentId: EdgeParentId(whiteboardId: widget.data.id.id),
       ),
       source: cell.id.id,
@@ -813,7 +823,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Future<void> cell_OnCellLinked(Cell source, Cell target) {
     final edge = Edge(
       id: EdgeId(
-        id: Helper.createId(),
+        id: 'edge-${source.id.id}-${target.id.id}',
         parentId: EdgeParentId(whiteboardId: widget.data.id.id),
       ),
       source: source.id.id,
@@ -853,35 +863,43 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
             ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
                 scaleFactor;
 
-        return SelectionCellsView(
-          selectedCells: selectedCells,
-          cellMaps: cellKeys,
-          horizontalPosition: horizontalPosition,
-          verticalPosition: verticalPosition,
-          horizontalDetails: horizontalDetails,
-          verticalDetails: verticalDetails,
-          viewportSelection: Rect.fromPoints(
-            viewportSelectionStart,
-            viewportSelectionEnd,
+        return MixTheme(
+          data: mixTheme.copyWith(
+            spaces: scaleSpaces(1.0),
           ),
-          scaleFactor: scaleFactor,
+          child: DesignSystemTheme(
+            data: designSystemThemeData.copyWith(scale: 1.0),
+            child: SelectionCellsView(
+              selectedCells: selectedCells,
+              cellMaps: cellKeys,
+              horizontalPosition: horizontalPosition,
+              verticalPosition: verticalPosition,
+              horizontalDetails: horizontalDetails,
+              verticalDetails: verticalDetails,
+              viewportSelection: Rect.fromPoints(
+                viewportSelectionStart,
+                viewportSelectionEnd,
+              ),
+              scaleFactor: scaleFactor,
 
-          /// ArticleCell
-          onTurnArticleIntoEditable:
-              selection_articleCell_onTurnArticleIntoEditable,
+              /// ArticleCell
+              onTurnArticleIntoEditable:
+                  selection_articleCell_onTurnArticleIntoEditable,
 
-          /// ArticleCell | EditableCell
-          onCellSummarize: selection_cell_onCellSummarize,
+              /// ArticleCell | EditableCell
+              onCellSummarize: selection_cell_onCellSummarize,
 
-          /// Cell
-          onSelectionsDelete: selection_cell_onSelectionsDelete,
-          onSelectionMove: selection_cell_onSelectionMove,
-          onChatWithSelectedCells: (selectedCellIds, text) =>
-              selection_cell_onChatWithSelectedCells(
-            selectedCellIds,
-            text,
-            selectionStart: selectionStart,
-            selectionEnd: selectionEnd,
+              /// Cell
+              onSelectionsDelete: selection_cell_onSelectionsDelete,
+              onSelectionMove: selection_cell_onSelectionMove,
+              onChatWithSelectedCells: (selectedCellIds, text) =>
+                  selection_cell_onChatWithSelectedCells(
+                selectedCellIds,
+                text,
+                selectionStart: selectionStart,
+                selectionEnd: selectionEnd,
+              ),
+            ),
           ),
         );
       };
@@ -954,7 +972,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ),
       offset: randomOffsetAroundRect(CellAppearance(cell).rect),
       width: cell.width,
-      decoration: cell.decoration.copyWith(cardKind: CellCardKind.flat),
+      decoration: cell.decoration.copyWith(
+        cardKind: CellCardKind.flat,
+        constraints: false,
+      ),
       title: '___| TLDR |___ $title ___|___',
       content: '',
     );
@@ -1044,7 +1065,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     for (final selectedCellId in selectedCellIds) {
       final edge = Edge(
         id: EdgeId(
-          id: Helper.createId(),
+          id: 'edge-$selectedCellId-${responseCell.id.id}',
           parentId: EdgeParentId(whiteboardId: widget.data.id.id),
         ),
         source: selectedCellId,
@@ -1096,5 +1117,18 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ..._cellProcessors[responseCell.id.id] ?? {},
       'chat': subscription,
     };
+  }
+
+  void cell_OnConstraintChanged(Cell cell) {
+    final (key, latestCell) = cellKeys[cell.id.id]!;
+    final newCell = latestCell.copyWith(
+      decoration: latestCell.decoration.copyWith(
+        constraints: !latestCell.decoration.constraints,
+      ),
+    );
+
+    cellKeys[cell.id.id] = (key, newCell);
+    setState(() {});
+    widget.onCellUpdated(latestCell, newCell);
   }
 }

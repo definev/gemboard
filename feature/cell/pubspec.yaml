@@ -37,6 +37,7 @@ dependencies:
   
   mix: ^1.2.0
   iconly: 
+  line_icons: 
 
   # This is unsure the best db
   hive: ^2.2.3 
