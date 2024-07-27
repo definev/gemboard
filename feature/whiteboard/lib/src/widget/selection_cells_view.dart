@@ -23,6 +23,9 @@ class SelectionCellsView extends HookWidget {
     required this.onSelectionMove,
     required this.onSelectionsDelete,
     required this.onCellSummarize,
+
+    /// ArticleCell
+    required this.onTurnArticleIntoEditable,
   });
 
   final ViewportOffset horizontalPosition;
@@ -38,6 +41,11 @@ class SelectionCellsView extends HookWidget {
 
   final void Function(Map<String, Offset> newOffsets) onSelectionMove;
   final void Function(List<String> selectedCellIds) onSelectionsDelete;
+
+  /// ArticleCell
+  final void Function(ArticleCell cell) onTurnArticleIntoEditable;
+
+  /// ArticleCell | EditableCell
   final void Function(Cell cell) onCellSummarize;
 
   Widget buildSingleCellToolbar({
@@ -192,6 +200,9 @@ class SelectionCellsView extends HookWidget {
                             label: StyledText('Summarize'),
                             alignment: Alignment.bottomCenter,
                             child: DSToolbarItem(
+                              onPressed: () => onCellSummarize(
+                                cellMaps[selectedCellIds.first]!.$2,
+                              ),
                               child: StyledIcon(
                                   CupertinoIcons.doc_text_viewfinder),
                             ),

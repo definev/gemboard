@@ -7,6 +7,7 @@ import 'package:flutter_highlighter/themes/atom-one-light.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as md;
+import 'package:mix/mix.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DSMarkdownBody extends StatelessWidget {
@@ -19,6 +20,8 @@ class DSMarkdownBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textSpec = TextSpec.of(context);
+
     return SelectionArea(
       child: MarkdownBody(
         data: data,
@@ -30,12 +33,24 @@ class DSMarkdownBody extends StatelessWidget {
           _ => null,
         },
         styleSheet: MarkdownStyleSheet(
-          h1: TextStyleVariant.h4.resolve(context),
-          h2: TextStyleVariant.h4.resolve(context),
-          h3: TextStyleVariant.h4.resolve(context),
-          h4: TextStyleVariant.h4.resolve(context),
-          h5: TextStyleVariant.h5.resolve(context),
-          h6: TextStyleVariant.h6.resolve(context),
+          h1: TextStyleVariant.h4
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
+          h2: TextStyleVariant.h4
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
+          h3: TextStyleVariant.h4
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
+          h4: TextStyleVariant.h4
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
+          h5: TextStyleVariant.h5
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
+          h6: TextStyleVariant.h6
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
           a: TextStyleVariant.p.resolve(context).copyWith(
                 color: CupertinoColors.activeBlue,
                 decorationStyle: TextDecorationStyle.dashed,
@@ -46,8 +61,12 @@ class DSMarkdownBody extends StatelessWidget {
           code: TextStyleVariant.p.resolve(context).copyWith(
                 backgroundColor: CupertinoColors.systemGrey5,
               ),
-          p: TextStyleVariant.p.resolve(context),
-          listBullet: TextStyleVariant.p.resolve(context),
+          p: TextStyleVariant.p
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
+          listBullet: TextStyleVariant.p
+              .resolve(context)
+              .copyWith(color: textSpec.style?.color),
           blockSpacing: SpaceVariant.gap.resolve(context),
           listBulletPadding: EdgeInsets.symmetric(
             horizontal: SpaceVariant.small.resolve(context),

@@ -13,19 +13,32 @@ class ArticleCellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final kind = switch (cell.decoration.cardKind) {
+      CellCardKind.flat => DSCardKind.flat,
+      CellCardKind.elevated => DSCardKind.elevated,
+      CellCardKind.outlined => DSCardKind.outlined,
+    };
     final cellDecoration = CellDecorationExtension(cell.decoration);
     return DSCard(
-      kind: DSCardKind.elevated,
+      kind: kind,
       background: cellDecoration.colorVariant ?? ColorVariant.surface,
       child: DSCardSection(
+        kind: kind,
         background: cellDecoration.colorVariant ?? ColorVariant.surface,
-        kind: DSCardKind.elevated,
-        header: StyledText(cell.title),
-        content: ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: 500),
-          child: SingleChildScrollView(
-            child: DSMarkdownBody(data: cell.content),
-          ),
+        header: DSMarkdownBody(data: cell.title),
+        content: Mix(
+          data: Style(
+            DSCardKind.elevated(
+              $text.style.color.ref(ColorVariant.onSurface),
+            ),
+            DSCardKind.flat(
+              $text.style.color(cellDecoration.onColorValue(context)),
+            ),
+            DSCardKind.outlined(
+              $text.style.color(cellDecoration.onColorValue(context)),
+            ),
+          ).applyVariant(kind).of(context),
+          child: DSMarkdownBody(data: cell.content),
         ),
       ),
     );

@@ -35,28 +35,6 @@ class DSCardStyle {
           offset: const Offset(0, 4),
         ),
       ),
-      $with.scale(1.0),
-      // HoverVariant.hover(
-      //   $box.color(
-      //     Color.lerp(
-      //       ColorVariant.surface.resolve(context),
-      //       background.resolve(context),
-      //       0.1,
-      //     )!,
-      //   ),
-      //   $text.style.color.ref(ColorVariant.onSurface),
-      //   $icon.color.ref(ColorVariant.onSurface),
-      // ),
-      FocusVariant.focus(
-        $box.color(
-          Color.lerp(
-            ColorVariant.surface.resolve(context),
-            background.resolve(context),
-            0.05,
-          )!,
-        ),
-        $text.style.color.ref(ColorVariant.onSurface),
-      ),
     ).applyVariants([
       kind,
       hoverHighlight ? HoverVariant.hover : HoverVariant.unhover,

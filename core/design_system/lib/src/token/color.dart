@@ -72,7 +72,7 @@ final colors = {
   ColorVariant.red: Color(0xFFEF9A9A),
   ColorVariant.onRed: Color(0xFF000000),
   ColorVariant.green: Color(0xFF81C784),
-  ColorVariant.onGreen: Color.fromARGB(255, 236, 255, 239),
+  ColorVariant.onGreen: Color.fromARGB(255, 255, 255, 255),
   ColorVariant.blue: Color(0xFF4FC3F7),
   ColorVariant.onBlue: Color.fromARGB(255, 255, 255, 255),
   ColorVariant.cyan: Color(0xFF4FC3F7),

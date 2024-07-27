@@ -249,7 +249,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     return (topLeft + offset) / scaleFactor.value;
   }
 
-  void moveViewportToCenterOfCell(Cell cell) {
+  void cell_moveViewportToCenterOfCell(Cell cell) {
     final duration = const Duration(milliseconds: 300);
     final curve = Curves.easeInOut;
     final size = context.size ?? Size.zero;
@@ -273,11 +273,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   }
 
   void onBrainstormingCellCreated(BrainstormingCell cell) {
-    moveViewportToCenterOfCell(cell);
+    cell_moveViewportToCenterOfCell(cell);
   }
 
   void onEditableCellCreated(EditableCell cell) {
-    moveViewportToCenterOfCell(cell);
+    cell_moveViewportToCenterOfCell(cell);
   }
 
   bool handleLocalData(Object? localData, Offset position) {
@@ -618,7 +618,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  void editableCell_OnContentChanged(EditableCell cell, String title, String content) {
+  void editableCell_OnContentChanged(
+      EditableCell cell, String title, String content) {
     final (latestKey, latestCell) = cellKeys[cell.id.id]!;
     if (latestCell is! EditableCell) return;
     final newCell = latestCell.copyWith(
@@ -714,7 +715,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       title: suggestion,
       content: '',
     ) as ArticleCell;
-    moveViewportToCenterOfCell(suggestionCell);
+    cell_moveViewportToCenterOfCell(suggestionCell);
     await widget.onCellCreated(suggestionCell);
 
     final edge = Edge(
@@ -794,7 +795,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellUpdated(cell, newCell);
   }
 
-  void cell_OnCellLinked(Cell source, Cell target) {
+  Future<void> cell_OnCellLinked(Cell source, Cell target) {
     final edge = Edge(
       id: EdgeId(
         id: Helper.createId(),
@@ -810,7 +811,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
     setState(() {});
 
-    widget.onEdgeCreated(edge);
+    return widget.onEdgeCreated(edge);
   }
 
   TwoDimensionalViewportBuilder buildSuggectionForSelection({
@@ -850,30 +851,141 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
           scaleFactor: scaleFactor,
 
+          /// ArticleCell
+          onTurnArticleIntoEditable:
+              selection_articleCell_onTurnArticleIntoEditable,
+
+          /// ArticleCell | EditableCell
+          onCellSummarize: selection_cell_onCellSummarize,
+
           /// Cell
-          onSelectionsDelete: (selectedCellIds) async {
-            for (final id in selectedCellIds) {
-              cellKeys.remove(id);
-              _cellProcessors[id]
-                  ?.forEach((_, subscription) => subscription.cancel());
-              _cellProcessors.remove(id);
-            }
-            setState(() {});
-            await widget.onCellsDeleted(selectedCellIds);
-          },
-          onSelectionMove: (newCellOffsets) {
-            List<Cell> newCells = [];
-            for (final MapEntry(key: id, value: newOffset)
-                in newCellOffsets.entries) {
-              final (key, cell) = cellKeys[id]!;
-              final newCell = cell.copyWith(offset: newOffset);
-              newCells.add(newCell);
-              cellKeys[id] = (key, newCell);
-              setState(() {});
-            }
-            widget.onCellsUpdated(newCells);
-          },
-          onCellSummarize: (cell) {},
+          onSelectionsDelete: selection_cell_onSelectionsDelete,
+          onSelectionMove: selection_cell_onSelectionMove,
         );
       };
+
+  void selection_articleCell_onTurnArticleIntoEditable(ArticleCell cell) {
+    final (_, articleCell) = cellKeys[cell.id.id]!;
+    if (articleCell is! ArticleCell) return;
+
+    final editableCell = Cell.editable(
+      id: CellId(
+        parentId: CellParentId(whiteboardId: widget.data.id.id),
+        id: Helper.createId(),
+      ),
+      title: articleCell.title,
+      content: articleCell.content,
+      offset: randomOffsetAround(articleCell),
+      width: articleCell.width,
+      decoration: articleCell.decoration,
+    );
+
+    cellKeys[editableCell.id.id] = (
+      GlobalKey(
+        debugLabel: 'WhiteboardView.cell | ${editableCell.id.id}',
+      ),
+      editableCell,
+    );
+    setState(() {});
+
+    widget.onCellCreated(editableCell);
+  }
+
+  void selection_cell_onSelectionsDelete(List<String> selectedCellIds) async {
+    for (final id in selectedCellIds) {
+      cellKeys.remove(id);
+      _cellProcessors[id]?.forEach((_, subscription) => subscription.cancel());
+      _cellProcessors.remove(id);
+    }
+    setState(() {});
+    await widget.onCellsDeleted(selectedCellIds);
+  }
+
+  void selection_cell_onSelectionMove(Map<String, Offset> newOffsets) {
+    List<Cell> newCells = [];
+    for (final MapEntry(key: id, value: newOffset) in newOffsets.entries) {
+      final (key, cell) = cellKeys[id]!;
+      final newCell = cell.copyWith(offset: newOffset);
+      newCells.add(newCell);
+      cellKeys[id] = (key, newCell);
+      setState(() {});
+    }
+    widget.onCellsUpdated(newCells);
+  }
+
+  void selection_cell_onCellSummarize(Cell cell) async {
+    if (cell is! ArticleCell && cell is! EditableCell) return;
+
+    final title = cell.mapOrNull(
+      article: (value) => value.title,
+      editable: (value) => value.title,
+    )!;
+    final content = cell.mapOrNull(
+      article: (value) => value.content,
+      editable: (value) => value.content,
+    )!;
+
+    final tldrCell = Cell.article(
+      id: CellId(
+        parentId: CellParentId(whiteboardId: widget.data.id.id),
+        id: Helper.createId(),
+      ),
+      offset: randomOffsetAround(cell),
+      width: cell.width,
+      decoration: cell.decoration.copyWith(cardKind: CellCardKind.flat),
+      title: '___| TLDR |___ $title ___|___',
+      content: '',
+    );
+
+    cellKeys[tldrCell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${tldrCell.id.id}'),
+      tldrCell,
+    );
+
+    setState(() {});
+    await widget.onCellCreated(tldrCell);
+    cell_moveViewportToCenterOfCell(tldrCell);
+    cell_OnCellLinked(cell, tldrCell);
+
+    final stream = ref.read(
+      summarizeCellProvider(
+        title: title,
+        content: content,
+      ),
+    );
+
+    late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[tldrCell.id.id] = {
+        ..._cellProcessors[tldrCell.id.id] ?? {},
+      }..remove('summarize');
+    }
+
+    subscription = stream.listen(
+      (event) {
+        final (latestKey, latestCell) = cellKeys[tldrCell.id.id]!;
+        if (latestCell is! ArticleCell) return;
+        final newCell = latestCell.copyWith(
+          content: latestCell.content + event,
+        );
+        cellKeys[tldrCell.id.id] = (latestKey, newCell);
+        setState(() {});
+        widget.onCellUpdated(latestCell, newCell);
+      },
+      onDone: () {
+        print('Done tldr for cell: $title');
+        cancelSubscription();
+      },
+      onError: (error) {
+        print(error);
+        cancelSubscription();
+      },
+      cancelOnError: true,
+    );
+    _cellProcessors[tldrCell.id.id] = {
+      ..._cellProcessors[tldrCell.id.id] ?? {},
+      'summarize': subscription,
+    };
+  }
 }

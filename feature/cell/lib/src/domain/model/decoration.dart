@@ -21,10 +21,13 @@ class CellDecorationConverter
   }
 }
 
+enum CellCardKind { flat, elevated, outlined }
+
 @freezed
 class CellDecoration with _$CellDecoration {
   const factory CellDecoration({
     required String color,
+    @Default(CellCardKind.elevated) CellCardKind cardKind,
   }) = _CellDecoration;
 
   factory CellDecoration.fromJson(Map<String, dynamic> json) =>

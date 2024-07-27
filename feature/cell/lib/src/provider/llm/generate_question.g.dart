@@ -156,5 +156,151 @@ class _GenerateQuestionProviderElement
   @override
   String get text => (origin as GenerateQuestionProvider).text;
 }
+
+String _$summarizeCellHash() => r'9a5d3393b7d7a48a909d774b097a37eb1a036960';
+
+/// See also [summarizeCell].
+@ProviderFor(summarizeCell)
+const summarizeCellProvider = SummarizeCellFamily();
+
+/// See also [summarizeCell].
+class SummarizeCellFamily extends Family<Raw<Stream<String>>> {
+  /// See also [summarizeCell].
+  const SummarizeCellFamily();
+
+  /// See also [summarizeCell].
+  SummarizeCellProvider call({
+    required String title,
+    required String content,
+  }) {
+    return SummarizeCellProvider(
+      title: title,
+      content: content,
+    );
+  }
+
+  @override
+  SummarizeCellProvider getProviderOverride(
+    covariant SummarizeCellProvider provider,
+  ) {
+    return call(
+      title: provider.title,
+      content: provider.content,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'summarizeCellProvider';
+}
+
+/// See also [summarizeCell].
+class SummarizeCellProvider extends AutoDisposeProvider<Raw<Stream<String>>> {
+  /// See also [summarizeCell].
+  SummarizeCellProvider({
+    required String title,
+    required String content,
+  }) : this._internal(
+          (ref) => summarizeCell(
+            ref as SummarizeCellRef,
+            title: title,
+            content: content,
+          ),
+          from: summarizeCellProvider,
+          name: r'summarizeCellProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$summarizeCellHash,
+          dependencies: SummarizeCellFamily._dependencies,
+          allTransitiveDependencies:
+              SummarizeCellFamily._allTransitiveDependencies,
+          title: title,
+          content: content,
+        );
+
+  SummarizeCellProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.title,
+    required this.content,
+  }) : super.internal();
+
+  final String title;
+  final String content;
+
+  @override
+  Override overrideWith(
+    Raw<Stream<String>> Function(SummarizeCellRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SummarizeCellProvider._internal(
+        (ref) => create(ref as SummarizeCellRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        title: title,
+        content: content,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<Raw<Stream<String>>> createElement() {
+    return _SummarizeCellProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SummarizeCellProvider &&
+        other.title == title &&
+        other.content == content;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, title.hashCode);
+    hash = _SystemHash.combine(hash, content.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SummarizeCellRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
+  /// The parameter `title` of this provider.
+  String get title;
+
+  /// The parameter `content` of this provider.
+  String get content;
+}
+
+class _SummarizeCellProviderElement
+    extends AutoDisposeProviderElement<Raw<Stream<String>>>
+    with SummarizeCellRef {
+  _SummarizeCellProviderElement(super.provider);
+
+  @override
+  String get title => (origin as SummarizeCellProvider).title;
+  @override
+  String get content => (origin as SummarizeCellProvider).content;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

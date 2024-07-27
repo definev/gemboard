@@ -25,6 +25,22 @@ And if you have any links or references, put them at the bottom of your answer.
   );
 }
 
+@riverpod
+Raw<Stream<String>> summarizeCell(
+  SummarizeCellRef ref, {
+  required String title,
+  required String content,
+}) async* {
+  yield* ref.watch(
+    generateTextFromCoreDataProvider(
+      coreDataList: [
+        CoreData.model('Sumarize the following content.'),
+        CoreData.user(content),
+      ],
+    ),
+  );
+}
+
 Future<List<String>> getRelatedQuestionsOrTopics(
   GenerateQuestionRef ref, {
   required String topicOrQuestion,
