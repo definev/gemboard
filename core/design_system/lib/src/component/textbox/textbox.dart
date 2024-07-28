@@ -65,7 +65,8 @@ class DSTextbox extends StyledWidget {
           readOnly,
         );
 
-        final textStyle = this.textStyle ?? TextStyleVariant.p2.resolve(context);
+        final textStyle =
+            this.textStyle ?? TextStyleVariant.p2.resolve(context);
 
         return withMix(
           context,
@@ -85,9 +86,10 @@ class DSTextbox extends StyledWidget {
                       obscureText: obscureText,
                       onChanged: onChanged,
                       onFieldSubmitted: onSubmitted,
-                      cursorColor: ColorVariant.onSurface.resolve(context),
+                      cursorColor: textStyle.color ??
+                          ColorVariant.onSurface.resolve(context),
                       cursorWidth: 1.5 * scale,
-                      cursorHeight: textStyle.fontSize!,
+                      // cursorHeight: textStyle.height!,
                       style: textStyle,
                       minLines: minLines,
                       maxLines: switch (obscureText) {

@@ -21,7 +21,17 @@ class CellDecorationConverter
   }
 }
 
-enum CellCardKind { flat, elevated, outlined }
+enum CellCardKind {
+  flat,
+  elevated,
+  outlined;
+
+  DSCardKind get kindVarant => switch (this) {
+        CellCardKind.flat => DSCardKind.flat,
+        CellCardKind.elevated => DSCardKind.elevated,
+        CellCardKind.outlined => DSCardKind.outlined,
+      };
+}
 
 @freezed
 class CellDecoration with _$CellDecoration {

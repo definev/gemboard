@@ -2,6 +2,7 @@ import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:mix/mix.dart';
 
 class EditableCellView extends HookWidget {
@@ -19,66 +20,82 @@ class EditableCellView extends HookWidget {
   Widget build(BuildContext context) {
     final cellDecoration = CellDecorationExtension(cell.decoration);
 
-    final titleController = useTextEditingController();
+    final titleController = useTextEditingController(text: cell.title);
     final titleFocusNode = useFocusNode();
 
-    final contentController = useTextEditingController();
+    final contentController = useTextEditingController(text: cell.content);
     final contentFocusNode = useFocusNode();
 
+    final kind = cell.decoration.cardKind.kindVarant;
+
+    final background = cellDecoration.colorVariant ?? ColorVariant.surface;
+    final onBackground = cellDecoration.onColorValue(context);
+
     Widget child = DSCard(
-      background: cellDecoration.colorVariant ?? ColorVariant.surface,
-      kind: DSCardKind.outlined,
-      style: Style(
-        $box.padding.all.ref(SpaceVariant.medium),
-      ),
-      child: Column(
-        children: [
-          DSTextbox(
-            controller: titleController,
-            focusNode: titleFocusNode,
-            hintText: 'Untitled',
-            kind: DSTextboxKind.boundless,
-            onChanged: (title) =>
-                onContentChanged(title, contentController.text),
-            hintTextStyle: TextStyleVariant.h6.resolve(context).copyWith(
-                color: cellDecoration.onColorValue(context).withOpacity(
-                    OpacityVariant.surface.resolve(context).value)),
-            textStyle: TextStyleVariant.h6
-                .resolve(context)
-                .copyWith(color: cellDecoration.onColorValue(context)),
-            style: Style(
-              $box.color(
-                  CellDecorationExtension(cell.decoration).colorValue(context)),
+      kind: kind,
+      background: background,
+      child: DSCardSection(
+        kind: kind,
+        background: background,
+        header: HBox(
+          children: [
+            DSTextbox(
+              style: Style(
+                $box.color.transparent(),
+                $with.expanded(),
+                $box.padding.all(0),
+              ),
+              controller: titleController,
+              focusNode: titleFocusNode,
+              hintText: 'Untitled',
+              kind: DSTextboxKind.boundless,
+              onChanged: (title) =>
+                  onContentChanged(title, contentController.text),
+              hintTextStyle: TextStyleVariant.p //
+                  .resolve(context)
+                  .copyWith(
+                      color: cellDecoration.onColorValue(context).withOpacity(
+                          OpacityVariant.surface.resolve(context).value)),
+              textStyle: TextStyleVariant.p
+                  .resolve(context)
+                  .copyWith(color: cellDecoration.onColorValue(context)),
             ),
-          ),
-          Expanded(
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: DSTextbox(
-                controller: contentController,
-                focusNode: contentFocusNode,
-                hintText: 'Type something',
-                kind: DSTextboxKind.boundless,
-                minLines: 1,
-                maxLines: 20,
-                onChanged: (content) =>
-                    onContentChanged(titleController.text, content),
-                hintTextStyle: TextStyleVariant.p2.resolve(context).copyWith(
-                    color: cellDecoration.onColorValue(context).withOpacity(
-                        OpacityVariant.surface.resolve(context).value)),
-                textStyle: TextStyleVariant.p2
-                    .resolve(context)
-                    .copyWith(color: cellDecoration.onColorValue(context)),
-                style: Style(
-                  $box.margin.top.ref(SpaceVariant.medium),
-                  $box.margin.bottom(0),
-                  $box.padding.all(0),
-                  $box.color(Colors.transparent),
-                ),
+            Button(
+              background: background,
+              onPressed: () {},
+              child: StyledIcon(
+                switch (cell.decoration.constraints) {
+                  false => LineIcons.caretUp,
+                  true => LineIcons.caretDown,
+                },
               ),
             ),
-          ),
-        ],
+          ],
+        ),
+        content: Builder(
+          builder: (context) {
+            final textSpec = TextSpec.of(context);
+            return DSTextbox(
+              controller: contentController,
+              focusNode: contentFocusNode,
+              hintText: 'Type something',
+              kind: DSTextboxKind.boundless,
+              minLines: 1,
+              onChanged: (content) =>
+                  onContentChanged(titleController.text, content),
+              hintTextStyle: TextStyleVariant.p2.resolve(context).copyWith(
+                  color: (textSpec.style?.color ?? onBackground).withOpacity(
+                      OpacityVariant.surface.resolve(context).value)),
+              textStyle: TextStyleVariant.p2
+                  .resolve(context)
+                  .copyWith(color: textSpec.style?.color ?? onBackground),
+              style: Style(
+                $box.color(Colors.transparent),
+                $box.padding.all(0),
+              ),
+            );
+          },
+        ),
       ),
     );
 

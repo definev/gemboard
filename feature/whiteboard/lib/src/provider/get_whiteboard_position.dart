@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/whiteboard.dart';
@@ -13,9 +11,5 @@ Future<WhiteboardPosition> getWhiteboardPosition(
 }) async {
   final repository = ref.watch(whiteboardRepositoryProvider);
   return await repository.getWhiteboardPosition(id: id) ??
-      WhiteboardPosition(
-        whiteboardId: id.id,
-        offset: Offset.zero,
-        scale: 0.2,
-      );
+      WhiteboardPosition.defaultWhiteboardPosition(id.id);
 }

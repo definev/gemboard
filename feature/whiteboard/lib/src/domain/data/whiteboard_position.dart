@@ -15,4 +15,17 @@ sealed class WhiteboardPosition with _$WhiteboardPosition {
 
   factory WhiteboardPosition.fromJson(Map<String, dynamic> json) =>
       _$WhiteboardPositionFromJson(json);
+
+  static WhiteboardPosition defaultWhiteboardPosition(String whiteboardId) =>
+      WhiteboardPosition(
+        whiteboardId: whiteboardId,
+        scale: WhiteboardPosition.defaultScaleFactor,
+        offset: Offset.zero,
+      );
+
+  /// A canvas scale is used to scale the base size to the "logical" size of the canvas.
+  static const canvasScale = 2.3;
+
+  /// The initial scale factor for the whiteboard.
+  static const defaultScaleFactor = 1 / canvasScale;
 }

@@ -16,12 +16,7 @@ class DSTextboxStyle {
 
     return Style(
       $box.color.ref(ColorVariant.surface),
-      $box.padding.only(
-        left: SpaceVariant.small.resolve(context),
-        right: SpaceVariant.small.resolve(context),
-        top: SpaceVariant.small.resolve(context),
-        bottom: SpaceVariant.small.resolve(context),
-      ),
+      $box.padding.all.ref(SpaceVariant.small),
       switch (readOnly) {
         true => null,
         false => FocusVariant.focus(

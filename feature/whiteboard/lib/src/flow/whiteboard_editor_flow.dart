@@ -82,7 +82,6 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
     final cursorMode = useState(defaultCursorMode);
 
     /// This is base scale for all element in canvas
-    final canvasScale = useState(5.0);
 
     ButtonKind kindBasedOn(CursorMode cursorMode, CursorMode target) {
       return cursorMode == target ? ButtonKind.filled : ButtonKind.flat;
@@ -149,7 +148,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
             WhiteboardView(
           key: whiteboardKey,
-          canvasScale: canvasScale.value,
+          canvasScale: WhiteboardPosition.canvasScale,
           scaleFactor: scaleFactor,
           enableMoveByMouse: cursorMode.value == CursorMode.handTool,
           enableMoveByTouch: cursorMode.value == CursorMode.handTool,
@@ -274,7 +273,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
               constraints.maxWidth - SpaceVariant.mediumLarge.resolve(context),
               480.0,
             ) *
-            canvasScale.value;
+            WhiteboardPosition.canvasScale;
         final actionTool = DSToolbar(
           children: [
             HookBuilder(

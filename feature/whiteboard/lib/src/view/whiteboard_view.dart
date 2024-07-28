@@ -14,6 +14,7 @@ import 'package:mix/mix.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
+import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
 import 'package:whiteboard/src/widget/cell_builder.dart';
 import 'package:whiteboard/src/widget/edge_builder.dart';
@@ -23,7 +24,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   const WhiteboardView({
     super.key,
     required this.data,
-    required this.canvasScale,
+    this.canvasScale = WhiteboardPosition.canvasScale,
 
     ///
     required this.edgesStreamProvider,
@@ -321,7 +322,21 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         widget.onCellCreated(cell);
       },
       onTextReceived: (event, value) {
-        print('Dropped text: $value');
+        final cell = Cell.editable(
+          id: CellId(
+            id: Helper.createId(),
+            parentId: CellParentId(
+              whiteboardId: widget.data.id.id,
+            ),
+          ),
+          offset: _offsetToViewport(event.position.local),
+          width: cellWidth,
+          decoration: CellDecoration(color: ColorVariant.green.name),
+          title: 'Text',
+          content: value,
+        );
+        cell_moveViewportToCenterOfCell(cell);
+        widget.onCellCreated(cell);
       },
       child: child,
     );

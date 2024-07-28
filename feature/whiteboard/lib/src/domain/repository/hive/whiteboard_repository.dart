@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,11 +32,7 @@ class WhiteboardRepositoryHive extends WhiteboardRepository
     final store = await prefs;
     final raw = store.getString('whiteboard_offset_${id.id}');
     if (raw == null) {
-      return WhiteboardPosition(
-        whiteboardId: id.id,
-        scale: 0.2,
-        offset: Offset.zero,
-      );
+      return WhiteboardPosition.defaultWhiteboardPosition(id.id);
     }
 
     return WhiteboardPosition.fromJson(jsonDecode(raw));

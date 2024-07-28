@@ -71,6 +71,9 @@ class DSMarkdownBody extends StatelessWidget {
       listBulletPadding: EdgeInsets.symmetric(
         horizontal: SpaceVariant.small.resolve(context),
       ),
+      tableBody: TextStyleVariant.p2
+          .resolve(context)
+          .copyWith(color: textSpec.style?.color),
     );
     return switch (scrollable) {
       false => MarkdownBody(

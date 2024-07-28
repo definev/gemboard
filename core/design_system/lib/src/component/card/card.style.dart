@@ -27,6 +27,7 @@ class DSCardStyle {
       DSCardKind.outlined(
         $box.border.all.color.ref(background),
         $box.border.all.width(1.5),
+        $text.style.color.ref(ColorVariant.onSurface),
       ),
       DSCardKind.elevated(
         $box.shadow(
@@ -34,6 +35,7 @@ class DSCardStyle {
           color: background.resolve(context).withOpacity(0.1),
           offset: const Offset(0, 4),
         ),
+        $text.style.color.ref(ColorVariant.onSurface),
       ),
     ).applyVariants([
       kind,
