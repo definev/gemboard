@@ -16,6 +16,7 @@ class DSCardStyle {
   final bool focusHighlight;
 
   Style call(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
     return Style(
       $box.color.ref(ColorVariant.surface),
       $text.style.ref(TextStyleVariant.p),
@@ -26,14 +27,14 @@ class DSCardStyle {
       ),
       DSCardKind.outlined(
         $box.border.all.color.ref(background),
-        $box.border.all.width(1.5),
+        $box.border.all.width(1.5 * scale),
         $text.style.color.ref(ColorVariant.onSurface),
       ),
       DSCardKind.elevated(
         $box.shadow(
-          blurRadius: 8,
+          blurRadius: 8 * scale,
           color: background.resolve(context).withOpacity(0.1),
-          offset: const Offset(0, 4),
+          offset:  Offset(0, 4 * scale),
         ),
         $text.style.color.ref(ColorVariant.onSurface),
       ),

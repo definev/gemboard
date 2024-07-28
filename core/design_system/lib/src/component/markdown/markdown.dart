@@ -22,6 +22,7 @@ class DSMarkdownBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
     final textSpec = TextSpec.of(context);
 
     var builders = {
@@ -32,48 +33,77 @@ class DSMarkdownBody extends StatelessWidget {
           _ => null,
         };
 
+    final h4 = TextStyleVariant.h4
+        .resolve(context)
+        .copyWith(color: textSpec.style?.color);
+    final h5 = TextStyleVariant.h5
+        .resolve(context)
+        .copyWith(color: textSpec.style?.color);
+    final h6 = TextStyleVariant.h6
+        .resolve(context)
+        .copyWith(color: textSpec.style?.color);
+    final p = TextStyleVariant.p
+        .resolve(context)
+        .copyWith(color: textSpec.style?.color);
+    final p2 = TextStyleVariant.p2
+        .resolve(context)
+        .copyWith(color: textSpec.style?.color);
+    final medium = TextStyleVariant.medium.resolve(context);
+
     var markdownStyleSheet = MarkdownStyleSheet(
-      h1: TextStyleVariant.h4
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      h2: TextStyleVariant.h4
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      h3: TextStyleVariant.h4
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      h4: TextStyleVariant.h4
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      h5: TextStyleVariant.h5
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      h6: TextStyleVariant.h6
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      a: TextStyleVariant.p.resolve(context).copyWith(
-            color: CupertinoColors.activeBlue,
-            decorationStyle: TextDecorationStyle.dashed,
-            decoration: TextDecoration.underline,
-            decorationThickness: 1,
-            decorationColor: CupertinoColors.activeBlue,
-          ),
-      code: TextStyleVariant.p.resolve(context).copyWith(
-            backgroundColor: CupertinoColors.systemGrey5,
-          ),
-      p: TextStyleVariant.p
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
-      listBullet: TextStyleVariant.p
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
+      h1: h4,
+      h2: h4,
+      h3: h4,
+      h4: h4,
+      h5: h5,
+      h6: h6,
+      a: p.copyWith(
+        color: CupertinoColors.activeBlue,
+        decorationStyle: TextDecorationStyle.dashed,
+        decoration: TextDecoration.underline,
+        decorationThickness: 1,
+        decorationColor: CupertinoColors.activeBlue,
+      ),
+      code: p.copyWith(
+        backgroundColor: CupertinoColors.systemGrey5,
+      ),
+      p: p,
+      listBullet: p.copyWith(color: textSpec.style?.color),
       blockSpacing: SpaceVariant.gap.resolve(context),
       listBulletPadding: EdgeInsets.symmetric(
         horizontal: SpaceVariant.small.resolve(context),
       ),
-      tableBody: TextStyleVariant.p2
-          .resolve(context)
-          .copyWith(color: textSpec.style?.color),
+      tableHead: medium.copyWith(
+        fontSize: p2.fontSize,
+        height: p2.height,
+      ),
+      tableBorder: TableBorder.all(
+        color: ColorVariant.outline.resolve(context),
+        width: 0.5 * scale,
+      ),
+      tableCellsPadding: EdgeInsets.symmetric(
+        horizontal: SpaceVariant.small.resolve(context),
+        vertical: SpaceVariant.gap.resolve(context),
+      ),
+      tableBody: p2.copyWith(color: textSpec.style?.color),
+      blockquotePadding: EdgeInsets.only(
+        left: SpaceVariant.medium.resolve(context),
+        top: SpaceVariant.gap.resolve(context),
+        bottom: SpaceVariant.gap.resolve(context),
+      ),
+      blockquoteDecoration: BoxDecoration(
+        color: ColorVariant.surface.resolve(context),
+        border: Border(
+          left: BorderSide(
+            color: ColorVariant.outline.resolve(context),
+            width: 2 * scale,
+          ),
+        ),
+      ),
+      strong: medium.copyWith(
+        fontSize: p.fontSize,
+        height: p.height,
+      ),
     );
     return switch (scrollable) {
       false => MarkdownBody(

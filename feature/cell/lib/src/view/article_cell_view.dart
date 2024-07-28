@@ -32,7 +32,7 @@ class ArticleCellView extends StatelessWidget {
       false => DSMarkdownBody(data: cell.content),
       true => ConstrainedBox(
           constraints: BoxConstraints(
-            maxHeight: 500 * scale,
+            maxHeight: 300 * scale,
           ),
           child: DSMarkdownBody(
             data: cell.content,

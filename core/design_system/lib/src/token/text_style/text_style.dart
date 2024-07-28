@@ -20,6 +20,10 @@ class TextStyleVariant extends TextStyleToken {
   static const p4 = TextStyleVariant('p4');
   static const p5 = TextStyleVariant('p5');
 
+  static const bold = TextStyleVariant('bold');
+  static const semiBold = TextStyleVariant('semiBold');
+  static const medium = TextStyleVariant('medium');
+
   static const emoji = TextStyleVariant('emoji');
 
   @override
@@ -101,6 +105,21 @@ final baskervvilleTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.baskervville(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.baskervville(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.baskervville(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final bodoniTextStyles = {
@@ -163,6 +182,21 @@ final bodoniTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.bodoniModa(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.bodoniModa(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.bodoniModa(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final garamondTextStyles = {
@@ -225,6 +259,21 @@ final garamondTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.cormorantGaramond(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.cormorantGaramond(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.cormorantGaramond(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final interTextStyles = {
@@ -287,6 +336,21 @@ final interTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.inter(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final soraTextStyles = {
@@ -349,6 +413,21 @@ final soraTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.sora(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.sora(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.sora(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final beVietnamProTextStyles = {
@@ -411,6 +490,21 @@ final beVietnamProTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.beVietnamPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.beVietnamPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.beVietnamPro(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final outfitTextStyles = {
@@ -473,6 +567,21 @@ final outfitTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.outfit(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.outfit(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.outfit(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 final notoSansTextStyles = {
@@ -535,6 +644,21 @@ final notoSansTextStyles = {
       TextStyle(fontSize: 20, fontFamily: 'Apple Color Emoji'),
     _ => TextStyle(fontSize: 20),
   },
+  TextStyleVariant.bold: GoogleFonts.notoSans(
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.semiBold: GoogleFonts.notoSans(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 0.5,
+  ),
+  TextStyleVariant.medium: GoogleFonts.notoSans(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  ),
 };
 
 extension FontFamilyX on TextStyleVariant {
