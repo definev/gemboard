@@ -12,6 +12,9 @@ class EdgeBuilder extends StatefulWidget {
     required this.edge,
     required this.cellKeys,
     required this.stackPositionDataMap,
+
+    ///
+    required this.onEdgeDeleted,
   });
 
   static (
@@ -33,6 +36,9 @@ class EdgeBuilder extends StatefulWidget {
   final ValueNotifier<StackPositionData> notifier;
   final Map<String, (GlobalKey, Cell)> cellKeys;
   final Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap;
+
+  ///
+  final void Function(Edge edge) onEdgeDeleted;
 
   @override
   State<StatefulWidget> createState() => _EdgeBuilderState();
@@ -183,6 +189,7 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
       data: widget.edge,
       source: sourceCellRect,
       target: targetCellRect,
+      onEdgeDeleted: widget.onEdgeDeleted,
     );
   }
 }

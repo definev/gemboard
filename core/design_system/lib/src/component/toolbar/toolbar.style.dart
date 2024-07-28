@@ -2,6 +2,7 @@ part of 'toolbar.dart';
 
 class DSToolbarStyle {
   Style call(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
     return Style(
       $box.color(
         ColorVariant.surface.resolve(context).withOpacity(
@@ -9,8 +10,8 @@ class DSToolbarStyle {
             ),
       ),
       $box.shadow(
-        blurRadius: 6,
-        offset: Offset(0, 4),
+        blurRadius: 6 * scale,
+        offset: Offset(0, 4 * scale),
         color: ColorVariant.onSurface
             .resolve(context)
             .withOpacity(OpacityVariant.hightlight.resolve(context).value),

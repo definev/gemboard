@@ -22,8 +22,12 @@ EdgeParentId _$EdgeParentIdFromJson(Map<String, dynamic> json) {
 mixin _$EdgeParentId {
   String get whiteboardId => throw _privateConstructorUsedError;
 
+  /// Serializes this EdgeParentId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EdgeParentId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EdgeParentIdCopyWith<EdgeParentId> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -47,6 +51,8 @@ class _$EdgeParentIdCopyWithImpl<$Res, $Val extends EdgeParentId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EdgeParentId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -80,6 +86,8 @@ class __$$EdgeParentIdImplCopyWithImpl<$Res>
       _$EdgeParentIdImpl _value, $Res Function(_$EdgeParentIdImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EdgeParentId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -119,11 +127,13 @@ class _$EdgeParentIdImpl extends _EdgeParentId {
                 other.whiteboardId == whiteboardId));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, whiteboardId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EdgeParentId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EdgeParentIdImplCopyWith<_$EdgeParentIdImpl> get copyWith =>
@@ -147,8 +157,11 @@ abstract class _EdgeParentId extends EdgeParentId {
 
   @override
   String get whiteboardId;
+
+  /// Create a copy of EdgeParentId
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EdgeParentIdImplCopyWith<_$EdgeParentIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -162,8 +175,12 @@ mixin _$EdgeId {
   EdgeParentId get parentId => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
 
+  /// Serializes this EdgeId to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of EdgeId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EdgeIdCopyWith<EdgeId> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -187,6 +204,8 @@ class _$EdgeIdCopyWithImpl<$Res, $Val extends EdgeId>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of EdgeId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -205,6 +224,8 @@ class _$EdgeIdCopyWithImpl<$Res, $Val extends EdgeId>
     ) as $Val);
   }
 
+  /// Create a copy of EdgeId
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $EdgeParentIdCopyWith<$Res> get parentId {
@@ -235,6 +256,8 @@ class __$$EdgeIdImplCopyWithImpl<$Res>
       _$EdgeIdImpl _value, $Res Function(_$EdgeIdImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of EdgeId
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -282,11 +305,13 @@ class _$EdgeIdImpl implements _EdgeId {
             (identical(other.id, id) || other.id == id));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, parentId, id);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of EdgeId
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EdgeIdImplCopyWith<_$EdgeIdImpl> get copyWith =>
@@ -311,8 +336,11 @@ abstract class _EdgeId implements EdgeId {
   EdgeParentId get parentId;
   @override
   String get id;
+
+  /// Create a copy of EdgeId
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EdgeIdImplCopyWith<_$EdgeIdImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -326,11 +354,15 @@ mixin _$Edge {
   EdgeId get id => throw _privateConstructorUsedError;
   String get source => throw _privateConstructorUsedError;
   String get target => throw _privateConstructorUsedError;
+  EdgeDecoration get decoration => throw _privateConstructorUsedError;
   int get layer => throw _privateConstructorUsedError;
-  String? get label => throw _privateConstructorUsedError;
 
+  /// Serializes this Edge to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $EdgeCopyWith<Edge> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -340,9 +372,14 @@ abstract class $EdgeCopyWith<$Res> {
       _$EdgeCopyWithImpl<$Res, Edge>;
   @useResult
   $Res call(
-      {EdgeId id, String source, String target, int layer, String? label});
+      {EdgeId id,
+      String source,
+      String target,
+      EdgeDecoration decoration,
+      int layer});
 
   $EdgeIdCopyWith<$Res> get id;
+  $EdgeDecorationCopyWith<$Res> get decoration;
 }
 
 /// @nodoc
@@ -355,14 +392,16 @@ class _$EdgeCopyWithImpl<$Res, $Val extends Edge>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? source = null,
     Object? target = null,
+    Object? decoration = null,
     Object? layer = null,
-    Object? label = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -377,22 +416,34 @@ class _$EdgeCopyWithImpl<$Res, $Val extends Edge>
           ? _value.target
           : target // ignore: cast_nullable_to_non_nullable
               as String,
+      decoration: null == decoration
+          ? _value.decoration
+          : decoration // ignore: cast_nullable_to_non_nullable
+              as EdgeDecoration,
       layer: null == layer
           ? _value.layer
           : layer // ignore: cast_nullable_to_non_nullable
               as int,
-      label: freezed == label
-          ? _value.label
-          : label // ignore: cast_nullable_to_non_nullable
-              as String?,
     ) as $Val);
   }
 
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $EdgeIdCopyWith<$Res> get id {
     return $EdgeIdCopyWith<$Res>(_value.id, (value) {
       return _then(_value.copyWith(id: value) as $Val);
+    });
+  }
+
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $EdgeDecorationCopyWith<$Res> get decoration {
+    return $EdgeDecorationCopyWith<$Res>(_value.decoration, (value) {
+      return _then(_value.copyWith(decoration: value) as $Val);
     });
   }
 }
@@ -405,10 +456,16 @@ abstract class _$$EdgeImplCopyWith<$Res> implements $EdgeCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {EdgeId id, String source, String target, int layer, String? label});
+      {EdgeId id,
+      String source,
+      String target,
+      EdgeDecoration decoration,
+      int layer});
 
   @override
   $EdgeIdCopyWith<$Res> get id;
+  @override
+  $EdgeDecorationCopyWith<$Res> get decoration;
 }
 
 /// @nodoc
@@ -418,14 +475,16 @@ class __$$EdgeImplCopyWithImpl<$Res>
   __$$EdgeImplCopyWithImpl(_$EdgeImpl _value, $Res Function(_$EdgeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = null,
     Object? source = null,
     Object? target = null,
+    Object? decoration = null,
     Object? layer = null,
-    Object? label = freezed,
   }) {
     return _then(_$EdgeImpl(
       id: null == id
@@ -440,14 +499,14 @@ class __$$EdgeImplCopyWithImpl<$Res>
           ? _value.target
           : target // ignore: cast_nullable_to_non_nullable
               as String,
+      decoration: null == decoration
+          ? _value.decoration
+          : decoration // ignore: cast_nullable_to_non_nullable
+              as EdgeDecoration,
       layer: null == layer
           ? _value.layer
           : layer // ignore: cast_nullable_to_non_nullable
               as int,
-      label: freezed == label
-          ? _value.label
-          : label // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 }
@@ -459,8 +518,8 @@ class _$EdgeImpl implements _Edge {
       {required this.id,
       required this.source,
       required this.target,
-      this.layer = 9,
-      this.label});
+      this.decoration = const EdgeDecoration(),
+      this.layer = 9});
 
   factory _$EdgeImpl.fromJson(Map<String, dynamic> json) =>
       _$$EdgeImplFromJson(json);
@@ -473,13 +532,14 @@ class _$EdgeImpl implements _Edge {
   final String target;
   @override
   @JsonKey()
-  final int layer;
+  final EdgeDecoration decoration;
   @override
-  final String? label;
+  @JsonKey()
+  final int layer;
 
   @override
   String toString() {
-    return 'Edge(id: $id, source: $source, target: $target, layer: $layer, label: $label)';
+    return 'Edge(id: $id, source: $source, target: $target, decoration: $decoration, layer: $layer)';
   }
 
   @override
@@ -490,16 +550,19 @@ class _$EdgeImpl implements _Edge {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.source, source) || other.source == source) &&
             (identical(other.target, target) || other.target == target) &&
-            (identical(other.layer, layer) || other.layer == layer) &&
-            (identical(other.label, label) || other.label == label));
+            (identical(other.decoration, decoration) ||
+                other.decoration == decoration) &&
+            (identical(other.layer, layer) || other.layer == layer));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, id, source, target, layer, label);
+      Object.hash(runtimeType, id, source, target, decoration, layer);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$EdgeImplCopyWith<_$EdgeImpl> get copyWith =>
@@ -518,8 +581,8 @@ abstract class _Edge implements Edge {
       {required final EdgeId id,
       required final String source,
       required final String target,
-      final int layer,
-      final String? label}) = _$EdgeImpl;
+      final EdgeDecoration decoration,
+      final int layer}) = _$EdgeImpl;
 
   factory _Edge.fromJson(Map<String, dynamic> json) = _$EdgeImpl.fromJson;
 
@@ -530,11 +593,14 @@ abstract class _Edge implements Edge {
   @override
   String get target;
   @override
+  EdgeDecoration get decoration;
+  @override
   int get layer;
+
+  /// Create a copy of Edge
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  String? get label;
-  @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$EdgeImplCopyWith<_$EdgeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

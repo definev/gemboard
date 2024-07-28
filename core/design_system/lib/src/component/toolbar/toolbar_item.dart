@@ -41,6 +41,7 @@ class DSToolbarItem extends StyledWidget {
                   )!,
                 ),
               ),
+              $icon.size(24 * scale),
             ).applyVariants([
               GestureTool.convertHoverVariant(hoverHighlight),
               GestureTool.convertFocusVariant(focusHighlight),

@@ -28,9 +28,7 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
   @override
   late final GeneratedColumn<String> cellId = GeneratedColumn<String>(
       'cell_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _offsetDxMeta =
       const VerificationMeta('offsetDx');
   @override
@@ -760,9 +758,7 @@ class $EditableCellItemTable extends EditableCellItem
   @override
   late final GeneratedColumn<String> cellId = GeneratedColumn<String>(
       'cell_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _offsetDxMeta =
       const VerificationMeta('offsetDx');
   @override
@@ -1483,9 +1479,7 @@ class $ImageCellItemTable extends ImageCellItem
   @override
   late final GeneratedColumn<String> cellId = GeneratedColumn<String>(
       'cell_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _offsetDxMeta =
       const VerificationMeta('offsetDx');
   @override
@@ -2166,9 +2160,7 @@ class $ArticleCellItemTable extends ArticleCellItem
   @override
   late final GeneratedColumn<String> cellId = GeneratedColumn<String>(
       'cell_id', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+      type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _offsetDxMeta =
       const VerificationMeta('offsetDx');
   @override

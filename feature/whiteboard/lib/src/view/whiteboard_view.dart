@@ -494,6 +494,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   cellKeys: cellKeys,
                   stackPositionDataMap: stackPositionDataMap,
                   edge: edge,
+                  onEdgeDeleted: (edge) => widget.onEdgesDeleted([edge.id.id]),
                 ),
               ),
             );

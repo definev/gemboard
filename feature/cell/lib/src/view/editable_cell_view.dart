@@ -39,26 +39,27 @@ class EditableCellView extends HookWidget {
         background: background,
         header: HBox(
           children: [
-            DSTextbox(
-              style: Style(
-                $box.color.transparent(),
-                $with.expanded(),
-                $box.padding.all(0),
+            Expanded(
+              child: DSTextbox(
+                style: Style(
+                  $box.color.transparent(),
+                  $box.padding.all(0),
+                ),
+                controller: titleController,
+                focusNode: titleFocusNode,
+                hintText: 'Untitled',
+                kind: DSTextboxKind.boundless,
+                onChanged: (title) =>
+                    onContentChanged(title, contentController.text),
+                hintTextStyle: TextStyleVariant.p //
+                    .resolve(context)
+                    .copyWith(
+                        color: cellDecoration.onColorValue(context).withOpacity(
+                            OpacityVariant.surface.resolve(context).value)),
+                textStyle: TextStyleVariant.p
+                    .resolve(context)
+                    .copyWith(color: cellDecoration.onColorValue(context)),
               ),
-              controller: titleController,
-              focusNode: titleFocusNode,
-              hintText: 'Untitled',
-              kind: DSTextboxKind.boundless,
-              onChanged: (title) =>
-                  onContentChanged(title, contentController.text),
-              hintTextStyle: TextStyleVariant.p //
-                  .resolve(context)
-                  .copyWith(
-                      color: cellDecoration.onColorValue(context).withOpacity(
-                          OpacityVariant.surface.resolve(context).value)),
-              textStyle: TextStyleVariant.p
-                  .resolve(context)
-                  .copyWith(color: cellDecoration.onColorValue(context)),
             ),
             Button(
               background: background,

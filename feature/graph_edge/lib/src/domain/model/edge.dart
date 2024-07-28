@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:graph_edge/src/domain/model/edge_decoration.dart';
 import 'package:utils/utils.dart';
 
 part 'edge.freezed.dart';
@@ -35,8 +36,8 @@ class Edge with _$Edge implements HasId<EdgeId> {
     required EdgeId id,
     required String source,
     required String target,
+    @Default(EdgeDecoration()) EdgeDecoration decoration,
     @Default(9) int layer,
-    String? label,
   }) = _Edge;
 
   factory Edge.fromJson(Map<String, dynamic> json) => _$EdgeFromJson(json);

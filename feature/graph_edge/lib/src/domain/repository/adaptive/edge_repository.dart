@@ -3,34 +3,35 @@ import 'package:graph_edge/src/domain/repository/edge_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
 
-import '../hive/edge_repository.dart';
+import '../drift/edge_repository.dart';
 import '../memory/edge_repository.dart';
 
 part 'edge_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 EdgeRepository edgeRepositoryAdaptive(EdgeRepositoryAdaptiveRef ref) {
-  final hive = ref.watch(edgeRepositoryHiveProvider);
+  final drift = ref.read(edgeRepositoryDriftProvider);
+  // final hive = ref.watch(edgeRepositoryHiveProvider);
   final memory = ref.watch(edgeRepositoryMemoryProvider);
 
   return EdgeRepositoryAdaptive(
-    hive: hive,
+    local: drift,
     memory: memory,
   );
 }
 
 class EdgeRepositoryAdaptive extends EdgeRepository
     with CrudDtoRepositoryAdaptive<EdgeParentId, EdgeId, Edge> {
-  EdgeRepositoryAdaptive({required this.hive, required this.memory});
+  EdgeRepositoryAdaptive({required this.local, required this.memory});
 
-  final EdgeRepository hive;
+  final EdgeRepository local;
   final EdgeRepository memory;
 
   @override
   CrudDTORepository<EdgeParentId, EdgeId, Edge> get interactive => memory;
 
   @override
-  CrudDTORepository<EdgeParentId, EdgeId, Edge> get storage => hive;
+  CrudDTORepository<EdgeParentId, EdgeId, Edge> get storage => local;
 
   @override
   Stream<List<Edge>> watchList({required EdgeParentId parentId}) async* {

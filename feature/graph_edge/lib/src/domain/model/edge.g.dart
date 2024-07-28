@@ -31,8 +31,10 @@ _$EdgeImpl _$$EdgeImplFromJson(Map<String, dynamic> json) => _$EdgeImpl(
       id: EdgeId.fromJson(json['id'] as Map<String, dynamic>),
       source: json['source'] as String,
       target: json['target'] as String,
+      decoration: json['decoration'] == null
+          ? const EdgeDecoration()
+          : EdgeDecoration.fromJson(json['decoration'] as Map<String, dynamic>),
       layer: (json['layer'] as num?)?.toInt() ?? 9,
-      label: json['label'] as String?,
     );
 
 Map<String, dynamic> _$$EdgeImplToJson(_$EdgeImpl instance) =>
@@ -40,6 +42,6 @@ Map<String, dynamic> _$$EdgeImplToJson(_$EdgeImpl instance) =>
       'id': instance.id,
       'source': instance.source,
       'target': instance.target,
+      'decoration': instance.decoration,
       'layer': instance.layer,
-      'label': instance.label,
     };

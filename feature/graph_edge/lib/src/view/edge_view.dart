@@ -3,45 +3,72 @@ import 'dart:math';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 import 'package:graph_edge/src/domain/model/edge.dart';
+import 'package:iconly/iconly.dart';
+import 'package:mix/mix.dart';
+
+Offset getCubicPointAt(Offset p0, Offset p1, Offset p2, Offset p3, double t) {
+  // Calculate the x and y coordinates of the point on the curve at t
+  double x = (1 - t) * (1 - t) * (1 - t) * p0.dx +
+      3 * (1 - t) * (1 - t) * t * p1.dx +
+      3 * (1 - t) * t * t * p2.dx +
+      t * t * t * p3.dx;
+
+  double y = (1 - t) * (1 - t) * (1 - t) * p0.dy +
+      3 * (1 - t) * (1 - t) * t * p1.dy +
+      3 * (1 - t) * t * t * p2.dy +
+      t * t * t * p3.dy;
+
+  return Offset(x, y);
+}
+
+/// Computes the angle in radians between three points A, B, and C.
+/// The angle is measured at point B.
+///
+/// - [a] is point A as an [Offset].
+/// - [b] is point B as an [Offset].
+/// - [c] is point C as an [Offset].
+///
+/// Returns the angle in radians.
+double getAngleBetweenPoints(Offset a, Offset b, Offset c) {
+  // Vectors from B to A and B to C
+  Offset ab = Offset(a.dx - b.dx, a.dy - b.dy);
+  Offset bc = Offset(c.dx - b.dx, c.dy - b.dy);
+
+  // Dot product of vectors AB and BC
+  double dotProduct = ab.dx * bc.dx + ab.dy * bc.dy;
+
+  // Magnitudes of vectors AB and BC
+  double magnitudeAB = sqrt(ab.dx * ab.dx + ab.dy * ab.dy);
+  double magnitudeBC = sqrt(bc.dx * bc.dx + bc.dy * bc.dy);
+
+  // Cosine of the angle
+  double cosTheta = dotProduct / (magnitudeAB * magnitudeBC);
+
+  // Angle in radians
+  double angle = acos(cosTheta);
+
+  return angle;
+}
 
 class EdgeView extends HookWidget {
-  const EdgeView({
+  EdgeView({
     super.key,
     required this.data,
     required this.source,
     required this.target,
+
+    ///
+    required this.onEdgeDeleted,
   });
 
   final Edge data;
   final Rect source;
   final Rect target;
 
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: EdgeVisual(
-        context: context,
-        source: source,
-        target: target,
-      ),
-    );
-  }
-}
-
-class EdgeVisual extends CustomPainter {
-  EdgeVisual({
-    super.repaint,
-    required this.context,
-    required this.source,
-    required this.target,
-  });
-
-  final BuildContext context;
-  final Rect source;
-  final Rect target;
-
-  (Rect normalizedSource, Rect normalizedTarget) normalizeRects(Size size) {
+  late final (Rect normalizedSource, Rect normalizedTarget) normalizeRects =
+      () {
     final topLeft = -Offset(
       min(source.left, target.left),
       min(source.top, target.top),
@@ -51,44 +78,61 @@ class EdgeVisual extends CustomPainter {
     var normalizedTarget = target.translate(topLeft.dx, topLeft.dy);
 
     return (normalizedSource, normalizedTarget);
-  }
+  }();
 
-  /// if index is even, the point is either top or bottom
-  /// if index is odd, the point is either left or right
-  (Offset offset, int index) calculateShortestPoint(
-      Rect normalizedSource, Rect normalizedTarget) {
-    final pointFromSource = [
-      normalizedSource.centerLeft,
-      normalizedSource.topCenter,
-      normalizedSource.centerRight,
-      normalizedSource.bottomCenter,
-    ];
+  final void Function(Edge data) onEdgeDeleted;
 
-    var shortestPointFromSource = Offset(double.infinity, double.infinity);
-    var distance = double.infinity;
-    int shortestIndex = 0;
-    for (final (index, point) in pointFromSource.indexed) {
-      final d = (normalizedTarget.center - point).distance;
-      if (d < distance) {
-        distance = d;
-        shortestPointFromSource = point;
-        shortestIndex = index;
-      }
-    }
-
-    return (shortestPointFromSource, shortestIndex);
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
+  (
+    Offset shortestPointFromSource,
+    Offset shortestPointFromTarget,
+    Offset curvePointFirst,
+    Offset curvePointSecond,
+    Offset middlePoint,
+    double angle,
+  ) _computeEdgeVisual(BuildContext context) {
     final mediumSpace = SpaceVariant.small.resolve(context);
 
-    final (normalizedSource, normalizedTarget) = normalizeRects(size);
+    /// if index is even, the point is either top or bottom
+    /// if index is odd, the point is either left or right
+    (Offset offset, int index) calculateShortestPoint(
+      Rect normalizedSource,
+      Rect normalizedTarget,
+    ) {
+      final pointFromSource = [
+        normalizedSource.centerLeft,
+        normalizedSource.topCenter,
+        normalizedSource.centerRight,
+        normalizedSource.bottomCenter,
+      ];
+
+      var shortestPointFromSource = Offset(
+        double.infinity,
+        double.infinity,
+      );
+      var distance = double.infinity;
+      int shortestIndex = 0;
+      for (final (index, point) in pointFromSource.indexed) {
+        final d = (normalizedTarget.center - point).distance;
+        if (d < distance) {
+          distance = d;
+          shortestPointFromSource = point;
+          shortestIndex = index;
+        }
+      }
+
+      return (shortestPointFromSource, shortestIndex);
+    }
+
+    final (normalizedSource, normalizedTarget) = normalizeRects;
 
     var (shortestPointFromSource, shortestPointFromSourceIndex) =
         calculateShortestPoint(normalizedSource, normalizedTarget);
     var (shortestPointFromTarget, shortestPointFromTargetIndex) =
         calculateShortestPoint(normalizedTarget, normalizedSource);
+    final shortestRect = Rect.fromPoints(
+      shortestPointFromSource,
+      shortestPointFromTarget,
+    );
 
     switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
       case (3, 0):
@@ -203,9 +247,6 @@ class EdgeVisual extends CustomPainter {
         );
     }
 
-    final shortestRect =
-        Rect.fromPoints(shortestPointFromSource, shortestPointFromTarget);
-
     double cubicControlPointDxC1(double base) =>
         switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
           /// left - right
@@ -270,7 +311,6 @@ class EdgeVisual extends CustomPainter {
           (3, 2) => base,
           _ => 0,
         };
-
     double cubicControlPointDxC2(double base) =>
         switch ((shortestPointFromSourceIndex, shortestPointFromTargetIndex)) {
           /// left - right
@@ -338,81 +378,218 @@ class EdgeVisual extends CustomPainter {
           _ => 0,
         };
 
+    final curvePointFirst = Offset(
+      shortestPointFromSource.dx + cubicControlPointDxC1(shortestRect.width),
+      shortestPointFromSource.dy + cubicControlPointDyC1(shortestRect.height),
+    );
+    final curvePointSecond = Offset(
+      shortestPointFromTarget.dx + cubicControlPointDxC2(shortestRect.width),
+      shortestPointFromTarget.dy + cubicControlPointDyC2(shortestRect.height),
+    );
+
+    final middlePoint = getCubicPointAt(
+      shortestPointFromSource,
+      curvePointFirst,
+      curvePointSecond,
+      shortestPointFromTarget,
+      0.5,
+    );
+
+    final angle = getAngleBetweenPoints(
+      middlePoint + Offset(10, 0),
+      middlePoint,
+      getCubicPointAt(
+        shortestPointFromSource,
+        curvePointFirst,
+        curvePointSecond,
+        shortestPointFromTarget,
+        0.6,
+      ),
+    );
+
+    return (
+      shortestPointFromSource,
+      shortestPointFromTarget,
+      curvePointFirst,
+      curvePointSecond,
+      middlePoint,
+      angle,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
+    final (
+      shortestPointFromSource,
+      shortestPointFromTarget,
+      curvePointFirst,
+      curvePointSecond,
+      middlePoint,
+      angle,
+    ) = useMemoized(
+      () => _computeEdgeVisual(context),
+      [normalizeRects],
+    );
+    final showOptions = useState(false);
+    final labelTextController =
+        useTextEditingController(text: data.decoration.label);
+    final labelTextFocusNode = useFocusNode();
+
+    final labelTextStyle = TextStyleVariant.medium.resolve(context).copyWith(
+        fontSize: TextStyleVariant.h5.resolve(context).fontSize,
+        color: ColorVariant.onBackground.resolve(context));
+    return CustomPaint(
+      painter: EdgeVisual(
+        context: context,
+        shortestPointFromSource: shortestPointFromSource,
+        shortestPointFromTarget: shortestPointFromTarget,
+        curvePointFirst: curvePointFirst,
+        curvePointSecond: curvePointSecond,
+      ),
+      child: Portal(
+        child: Stack(
+          children: [
+            Positioned(
+              left: middlePoint.dx - 15 * scale,
+              top: middlePoint.dy - 15 * scale,
+              child: PortalTarget(
+                anchor: Aligned(
+                  follower: Alignment.bottomCenter,
+                  target: Alignment.topCenter,
+                ),
+                portalFollower: VBox(
+                  style: Style(
+                    $flex.mainAxisSize.min(),
+                    $box.margin.bottom.ref(SpaceVariant.gap),
+                  ),
+                  children: [
+                    if (showOptions.value)
+                      DSToolbar(
+                        style: Style(
+                          $box.margin.bottom.ref(SpaceVariant.small),
+                        ),
+                        direction: Axis.horizontal,
+                        children: [
+                          Button(
+                            style: Style(
+                              $box.height(40 * scale),
+                              $box.width(40 * scale),
+                            ),
+                            onPressed: () {},
+                            child: StyledIcon(IconlyLight.chat),
+                          ),
+                          Button(
+                            style: Style(
+                              $box.height(40 * scale),
+                              $box.width(40 * scale),
+                            ),
+                            onPressed: () => onEdgeDeleted(data),
+                            child: StyledIcon(IconlyLight.delete),
+                          ),
+                        ],
+                      ),
+                    IntrinsicWidth(
+                      child: TextField(
+                        controller: labelTextController,
+                        focusNode: labelTextFocusNode,
+                        cursorColor: ColorVariant.onBackground.resolve(context),
+                        maxLength: 50,
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          counter: SizedBox(),
+                          hintText: 'Type here',
+                          hintStyle: labelTextStyle.copyWith(
+                              color: labelTextStyle.color!.withOpacity(
+                                  OpacityVariant.surface
+                                      .resolve(context)
+                                      .value)),
+                        ),
+                        style: labelTextStyle,
+                      ),
+                    ),
+                  ],
+                ),
+                child: GestureDetector(
+                  onTap: () => showOptions.value = !showOptions.value,
+                  child: Transform.rotate(
+                    angle: switch (shortestPointFromTarget.dy >
+                        shortestPointFromSource.dy) {
+                      true => angle,
+                      false => -angle,
+                    },
+                    child: Container(
+                      height: 30 * scale,
+                      width: 30 * scale,
+                      decoration: BoxDecoration(
+                        color: ColorVariant.outline.resolve(context),
+                        shape: BoxShape.circle,
+                      ),
+                      child: StyledIcon(
+                        IconlyLight.arrow_right_2,
+                        style: Style(
+                          $icon.size(20 * scale),
+                          $icon.color.ref(ColorVariant.surface),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EdgeVisual extends CustomPainter {
+  EdgeVisual({
+    super.repaint,
+    required this.context,
+    required this.shortestPointFromSource,
+    required this.shortestPointFromTarget,
+    required this.curvePointFirst,
+    required this.curvePointSecond,
+  });
+
+  final BuildContext context;
+
+  final Offset shortestPointFromSource;
+  final Offset shortestPointFromTarget;
+  final Offset curvePointFirst;
+  final Offset curvePointSecond;
+
+  @override
+  void paint(Canvas canvas, Size size) {
     final strokeWidth = SpaceVariant.gap.resolve(context);
 
+    final path = Path()
+      ..moveTo(shortestPointFromSource.dx, shortestPointFromSource.dy)
+      ..cubicTo(
+        curvePointFirst.dx,
+        curvePointFirst.dy,
+        curvePointSecond.dx,
+        curvePointSecond.dy,
+        shortestPointFromTarget.dx,
+        shortestPointFromTarget.dy,
+      );
+
     canvas.drawPath(
-      Path()
-        ..moveTo(shortestPointFromSource.dx, shortestPointFromSource.dy)
-        ..cubicTo(
-          shortestPointFromSource.dx +
-              cubicControlPointDxC1(shortestRect.width),
-          shortestPointFromSource.dy +
-              cubicControlPointDyC1(shortestRect.height),
-          shortestPointFromTarget.dx +
-              cubicControlPointDxC2(shortestRect.width),
-          shortestPointFromTarget.dy +
-              cubicControlPointDyC2(shortestRect.height),
-          shortestPointFromTarget.dx,
-          shortestPointFromTarget.dy,
-        ),
+      path,
       Paint() //
         ..color = ColorVariant.outline.resolve(context)
         ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke,
     );
-
-    /// Draw an arrow at target
-    drawArrow(
-      canvas,
-      ColorVariant.outline.resolve(context),
-      arrowSize: strokeWidth * 2,
-      target: shortestPointFromTarget +
-          switch (shortestPointFromTargetIndex) {
-            0 => Offset(strokeWidth, 0),
-            1 => Offset(0, strokeWidth),
-            2 => Offset(-strokeWidth, 0),
-            3 => Offset(0, -strokeWidth),
-            _ => Offset.zero,
-          },
-      angle: switch (shortestPointFromTargetIndex) {
-        0 => 0,
-        1 => pi / 2,
-        2 => pi,
-        3 => -pi / 2,
-        _ => 0,
-      },
-    );
-  }
-
-  void drawArrow(
-    Canvas canvas,
-    Color color, {
-    required Offset target,
-    required double angle,
-    required double arrowSize,
-  }) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1
-      ..strokeCap = StrokeCap.round;
-
-    arrowSize *= 1.5;
-
-    const arrowAngle = pi / 6;
-
-    final path = Path();
-
-    path.moveTo(target.dx - arrowSize * cos(angle - arrowAngle),
-        target.dy - arrowSize * sin(angle - arrowAngle));
-    path.lineTo(target.dx, target.dy);
-    path.lineTo(target.dx - arrowSize * cos(angle + arrowAngle),
-        target.dy - arrowSize * sin(angle + arrowAngle));
-    path.close();
-    canvas.drawPath(path, paint);
   }
 
   @override
   bool shouldRepaint(covariant EdgeVisual oldDelegate) {
+    if (oldDelegate.shortestPointFromSource != shortestPointFromSource)
+      return true;
     return false;
   }
 }
