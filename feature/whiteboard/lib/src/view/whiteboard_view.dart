@@ -322,7 +322,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         widget.onCellCreated(cell);
       },
       onTextReceived: (event, value) {
-        final cell = Cell.editable(
+        final cell = Cell.article(
           id: CellId(
             id: Helper.createId(),
             parentId: CellParentId(
@@ -495,6 +495,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   stackPositionDataMap: stackPositionDataMap,
                   edge: edge,
                   onEdgeDeleted: (edge) => widget.onEdgesDeleted([edge.id.id]),
+                  onAskEdge: (data) {},
+                  onEdgeLabelChanged: (label) {},
                 ),
               ),
             );

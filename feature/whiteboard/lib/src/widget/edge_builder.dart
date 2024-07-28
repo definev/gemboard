@@ -15,6 +15,8 @@ class EdgeBuilder extends StatefulWidget {
 
     ///
     required this.onEdgeDeleted,
+    required this.onAskEdge,
+    required this.onEdgeLabelChanged,
   });
 
   static (
@@ -39,6 +41,8 @@ class EdgeBuilder extends StatefulWidget {
 
   ///
   final void Function(Edge edge) onEdgeDeleted;
+  final void Function(String label) onEdgeLabelChanged;
+  final void Function(Edge data) onAskEdge;
 
   @override
   State<StatefulWidget> createState() => _EdgeBuilderState();
@@ -190,6 +194,8 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
       source: sourceCellRect,
       target: targetCellRect,
       onEdgeDeleted: widget.onEdgeDeleted,
+      onAskEdge: widget.onAskEdge,
+      onEdgeLabelChanged: widget.onEdgeLabelChanged,
     );
   }
 }

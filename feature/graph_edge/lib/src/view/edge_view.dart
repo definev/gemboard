@@ -61,6 +61,8 @@ class EdgeView extends HookWidget {
 
     ///
     required this.onEdgeDeleted,
+    required this.onEdgeLabelChanged,
+    required this.onAskEdge,
   });
 
   final Edge data;
@@ -81,6 +83,8 @@ class EdgeView extends HookWidget {
   }();
 
   final void Function(Edge data) onEdgeDeleted;
+  final void Function(String label) onEdgeLabelChanged;
+  final void Function(Edge data) onAskEdge;
 
   (
     Offset shortestPointFromSource,
@@ -431,6 +435,7 @@ class EdgeView extends HookWidget {
       () => _computeEdgeVisual(context),
       [normalizeRects],
     );
+    final showChat = useState(false);
     final showOptions = useState(false);
     final labelTextController =
         useTextEditingController(text: data.decoration.label);
@@ -447,99 +452,93 @@ class EdgeView extends HookWidget {
         curvePointFirst: curvePointFirst,
         curvePointSecond: curvePointSecond,
       ),
-      child: Portal(
-        child: Stack(
-          children: [
-            Positioned(
-              left: middlePoint.dx - 15 * scale,
-              top: middlePoint.dy - 15 * scale,
-              child: PortalTarget(
-                anchor: Aligned(
-                  follower: Alignment.bottomCenter,
-                  target: Alignment.topCenter,
+      child: Stack(
+        children: [
+          Positioned(
+            left: middlePoint.dx - 15 * scale,
+            top: middlePoint.dy - 15 * scale,
+            child: PortalTarget(
+              anchor: Aligned(
+                follower: Alignment.bottomCenter,
+                target: Alignment.topCenter,
+              ),
+              portalFollower: VBox(
+                style: Style(
+                  $flex.mainAxisSize.min(),
+                  $flex.gap.ref(SpaceVariant.small),
+                  $box.margin.bottom.ref(SpaceVariant.gap),
                 ),
-                portalFollower: VBox(
-                  style: Style(
-                    $flex.mainAxisSize.min(),
-                    $box.margin.bottom.ref(SpaceVariant.gap),
-                  ),
-                  children: [
-                    if (showOptions.value)
-                      DSToolbar(
-                        style: Style(
-                          $box.margin.bottom.ref(SpaceVariant.small),
-                        ),
-                        direction: Axis.horizontal,
-                        children: [
-                          Button(
-                            style: Style(
-                              $box.height(40 * scale),
-                              $box.width(40 * scale),
-                            ),
-                            onPressed: () {},
-                            child: StyledIcon(IconlyLight.chat),
-                          ),
-                          Button(
-                            style: Style(
-                              $box.height(40 * scale),
-                              $box.width(40 * scale),
-                            ),
-                            onPressed: () => onEdgeDeleted(data),
-                            child: StyledIcon(IconlyLight.delete),
-                          ),
-                        ],
-                      ),
-                    IntrinsicWidth(
-                      child: TextField(
-                        controller: labelTextController,
-                        focusNode: labelTextFocusNode,
-                        cursorColor: ColorVariant.onBackground.resolve(context),
-                        maxLength: 50,
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          border: InputBorder.none,
-                          counter: SizedBox(),
-                          hintText: 'Type here',
-                          hintStyle: labelTextStyle.copyWith(
-                              color: labelTextStyle.color!.withOpacity(
-                                  OpacityVariant.surface
-                                      .resolve(context)
-                                      .value)),
-                        ),
-                        style: labelTextStyle,
+                children: [
+                  if (showChat.value)
+                    SizedBox(
+                      width: 400 * scale,
+                      child: DSTextbox(
+                        hintText: 'Ask all about this edge',
                       ),
                     ),
-                  ],
-                ),
-                child: GestureDetector(
-                  onTap: () => showOptions.value = !showOptions.value,
-                  child: Transform.rotate(
-                    angle: switch (shortestPointFromTarget.dy >
-                        shortestPointFromSource.dy) {
-                      true => angle,
-                      false => -angle,
-                    },
-                    child: Container(
-                      height: 30 * scale,
-                      width: 30 * scale,
-                      decoration: BoxDecoration(
-                        color: ColorVariant.outline.resolve(context),
-                        shape: BoxShape.circle,
-                      ),
-                      child: StyledIcon(
-                        IconlyLight.arrow_right_2,
-                        style: Style(
-                          $icon.size(20 * scale),
-                          $icon.color.ref(ColorVariant.surface),
+                  if (showOptions.value)
+                    DSToolbar(
+                      direction: Axis.horizontal,
+                      children: [
+                        Button(
+                          style: Style(
+                            $box.height(40 * scale),
+                            $box.width(40 * scale),
+                          ),
+                          onPressed: () => showChat.value = !showChat.value,
+                          child: StyledIcon(IconlyLight.chat),
                         ),
+                        Button(
+                          style: Style(
+                            $box.height(40 * scale),
+                            $box.width(40 * scale),
+                          ),
+                          onPressed: () => onEdgeDeleted(data),
+                          child: StyledIcon(IconlyLight.delete),
+                        ),
+                      ],
+                    ),
+                  IntrinsicWidth(
+                    child: TextField(
+                      controller: labelTextController,
+                      focusNode: labelTextFocusNode,
+                      cursorColor: ColorVariant.onBackground.resolve(context),
+                      maxLength: 50,
+                      onChanged: (value) => onEdgeLabelChanged(value),
+                      decoration: InputDecoration(
+                        isCollapsed: true,
+                        border: InputBorder.none,
+                        counter: SizedBox(),
+                        hintText: 'Type here',
+                        hintStyle: labelTextStyle.copyWith(
+                            color: labelTextStyle.color!.withOpacity(
+                                OpacityVariant.surface.resolve(context).value)),
                       ),
+                      style: labelTextStyle,
                     ),
                   ),
+                ],
+              ),
+              child: Transform.rotate(
+                angle: switch (
+                    shortestPointFromTarget.dy > shortestPointFromSource.dy) {
+                  true => angle,
+                  false => -angle,
+                },
+                child: Button(
+                  kind: ButtonKind.outline,
+                  onPressed: () {
+                    showOptions.value = !showOptions.value;
+                    if (showOptions.value == false) {
+                      showChat.value = false;
+                    }
+                  },
+                  child: StyledIcon(IconlyLight.arrow_right),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
