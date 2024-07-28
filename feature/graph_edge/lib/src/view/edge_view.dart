@@ -509,7 +509,7 @@ class EdgeView extends HookWidget {
                         isCollapsed: true,
                         border: InputBorder.none,
                         counter: SizedBox(),
-                        hintText: 'Type here',
+                        hintText: '.',
                         hintStyle: labelTextStyle.copyWith(
                             color: labelTextStyle.color!.withOpacity(
                                 OpacityVariant.surface.resolve(context).value)),

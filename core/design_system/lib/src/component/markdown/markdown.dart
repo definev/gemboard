@@ -137,6 +137,10 @@ class CodeElementBuilder extends MarkdownElementBuilder {
       String lg = element.attributes['class'] as String;
       language = lg.substring(9);
     }
+    if (!element.textContent.contains('\n')) {
+      return null;
+    }
+
     return SizedBox(
       width: double.maxFinite,
       child: Stack(
