@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +28,50 @@ class ImageCellView extends StatelessWidget {
       ),
       child: SizedBox(
         width: double.infinity,
-        child: Image.network(
-          cell.url.toString(),
-          fit: BoxFit.contain,
-        ),
+        child: switch (cell.url.scheme) {
+          'file' => Image.file(
+              File(cell.url.toFilePath()),
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                print(error);
+                return SizedBox(
+                  height: 100 * scale,
+                  child: Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        StyledText(
+                          '😵',
+                          style: Style(
+                            $text.style.ref(TextStyleVariant.emoji),
+                            $text.style.fontSize(48 * scale),
+                          ),
+                        ),
+                        StyledText(
+                          'Image not found',
+                          style: Style(
+                            $text.style.ref(TextStyleVariant.p),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          'http' || 'https' => Image.network(
+              cell.url.toString(),
+              fit: BoxFit.cover,
+            ),
+          _ => Center(
+              child: StyledText(
+                'This text can\'t displayed',
+                style: Style(
+                  $text.style.ref(TextStyleVariant.p),
+                ),
+              ),
+            )
+        },
       ),
     );
   }

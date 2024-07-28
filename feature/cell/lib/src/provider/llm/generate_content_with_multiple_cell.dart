@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cell/cell.dart';
 import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
@@ -49,9 +51,18 @@ CONTENT: ${value.content}
               };
             },
             image: (value) async {
-              final bundle = NetworkAssetBundle(value.url);
-              final image = await bundle.load('');
-              return Content.data('image/*', image.buffer.asUint8List());
+              switch (value.url.scheme) {
+                case 'file':
+                  final file = File(value.url.toFilePath());
+                  if (!await file.exists()) return null;
+                  final image = await file.readAsBytes();
+                  return Content.data('image/*', image);
+                case 'http' || 'https':
+                  final bundle = NetworkAssetBundle(value.url);
+                  final image = await bundle.load('');
+                  return Content.data('image/*', image.buffer.asUint8List());
+              }
+              return null;
             },
           ),
       ].whereType<Content>(),
