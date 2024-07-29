@@ -79,6 +79,13 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
     final id = data.id;
 
     final showChat = useState(false);
+    final chatTextController = useTextEditingController();
+    useEffect(() {
+      if (showChat.value) {
+        chatTextController.text = '';
+      }
+      return null;
+    }, [showChat.value]);
     final cursorMode = useState(defaultCursorMode);
 
     /// This is base scale for all element in canvas
@@ -434,6 +441,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                     style: Style(
                       $box.padding.all.ref(SpaceVariant.small),
                       $flex.gap.ref(SpaceVariant.small),
+                      $flex.mainAxisSize.min(),
                     ),
                     children: [
                       StyledFlex(
@@ -450,11 +458,16 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                       if (showChat.value)
                         DSTextbox(
                           autofocus: true,
+                          controller: chatTextController,
                           hintText: 'Type a message...',
                           minLines: 1,
                           maxLines: 8,
                           trailing: Button(
-                            onPressed: () {},
+                            onPressed: () {
+                              whiteboardKey.currentState?.cell_onAskNewQuestion(
+                                  chatTextController.text);
+                              showChat.value = false;
+                            },
                             child: StyledIcon(IconlyLight.send),
                           ),
                         ),
@@ -528,15 +541,11 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        body: Stack(
+        body: Column(
           children: [
-            Column(
-              children: [
-                appBar,
-                Expanded(
-                  child: whiteboard,
-                ),
-              ],
+            appBar,
+            Expanded(
+              child: whiteboard,
             ),
           ],
         ),

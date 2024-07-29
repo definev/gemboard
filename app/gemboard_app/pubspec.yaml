@@ -61,7 +61,6 @@ dependency_overrides:
       ref: master
       path: flutter_keyboard_visibility_web
 
-
 flutter:
   uses-material-design: true
   

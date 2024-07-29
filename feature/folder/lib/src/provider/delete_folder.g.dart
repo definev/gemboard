@@ -6,7 +6,7 @@ part of 'delete_folder.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$deleteFolderHash() => r'49d162ab497026d480bb8b69efd03c44a9dcf451';
+String _$deleteFolderHash() => r'529959ba9a0129063231f8cf733b52486bb4a88b';
 
 /// Copied from Dart SDK
 class _SystemHash {

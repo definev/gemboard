@@ -16,6 +16,7 @@ import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
+import 'package:whiteboard/src/domain/repository/whiteboard_object_stack.dart';
 import 'package:whiteboard/src/widget/cell_builder.dart';
 import 'package:whiteboard/src/widget/edge_builder.dart';
 import 'package:whiteboard/src/widget/selection_cells_view.dart';
@@ -154,6 +155,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
           cell,
         );
+        setState(() {});
       }
     }
 
@@ -171,6 +173,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           stackPositionDataMap.remove(edge.id.id);
         }
       }
+      setState(() {});
     }
   };
 
@@ -193,6 +196,9 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ) *
       widget.canvasScale;
 
+  FocusNode whiteboardFocusNode =
+      FocusNode(debugLabel: 'whiteboard_focus_node');
+
   @override
   void initState() {
     super.initState();
@@ -203,6 +209,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
   @override
   void dispose() {
+    whiteboardFocusNode.dispose();
     cellKeys.clear();
     edgeKeys.clear();
     stackPositionDataMap.clear();
@@ -228,7 +235,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           oldWidget.verticalDetails?.controller) {
         verticalDetails.controller?.dispose();
       }
-      print('Update vertical details | ${widget.verticalDetails?.physics}');
       verticalDetails = widget.verticalDetails!;
     }
 
@@ -254,11 +260,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   }
 
   Offset _offsetToViewport(Offset offset) {
-    final topLeft = Offset(
-      horizontalDetails.controller!.offset,
-      verticalDetails.controller!.offset,
-    );
-    return (topLeft + offset) / scaleFactor.value;
+    return (viewportTopLeft + offset) / scaleFactor.value;
   }
 
   void cell_moveViewportToCenterOfCell(Cell cell) {
@@ -309,7 +311,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
             ),
           ),
           offset: _offsetToViewport(event.position.local),
-          width: 200 * widget.canvasScale,
+          width: cellWidth,
           decoration: CellDecoration(color: ColorVariant.purple.name),
           url: uri,
         );
@@ -352,6 +354,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     ref.listen(widget.edgesStreamProvider, updateEdgeKeys);
     ref.watch(widget.cellsStreamProvider);
     ref.watch(widget.edgesStreamProvider);
+    ref.watch(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
 
     Widget child = ListenableBuilder(
       listenable: scaleFactor,
@@ -749,12 +752,17 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellUpdated(cell, newCell);
   }
 
-  Future<void> cell_OnCellLinked(Cell source, Cell target) {
+  Future<void> cell_OnCellLinked(
+    Cell source,
+    Cell target, {
+    EdgeDecoration decoration = const EdgeDecoration(),
+  }) {
     final edge = Edge(
       id: EdgeId(
-        id: 'edge-${source.id.id}-${target.id.id}',
+        id: EdgeId.genId(source.id.id, target.id.id),
         parentId: EdgeParentId(whiteboardId: widget.data.id.id),
       ),
+      decoration: decoration,
       source: source.id.id,
       target: target.id.id,
     );
@@ -775,21 +783,16 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     required double scaleFactor,
   }) =>
       (context, verticalPosition, horizontalPosition) {
-        final topLeft = Offset(
-          horizontalDetails.controller!.offset,
-          verticalDetails.controller!.offset,
-        );
-
         final spacingOffset = Offset(
           SpaceVariant.small.resolve(context),
           SpaceVariant.small.resolve(context),
         );
 
         final viewportSelectionStart =
-            ((selectionStart - topLeft / scaleFactor) - spacingOffset) *
+            ((selectionStart - viewportTopLeft / scaleFactor) - spacingOffset) *
                 scaleFactor;
         final viewportSelectionEnd =
-            ((selectionEnd - topLeft / scaleFactor) + spacingOffset) *
+            ((selectionEnd - viewportTopLeft / scaleFactor) + spacingOffset) *
                 scaleFactor;
 
         return MixTheme(
@@ -828,10 +831,135 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                 selectionStart: selectionStart,
                 selectionEnd: selectionEnd,
               ),
+
+              /// Copy / paste
+              onCellsCopied: () => objectStack_onCellsCopied(selectedCells),
+              onCellsCut: () => objectStack_onCellsCut(selectedCells),
             ),
           ),
         );
       };
+
+  /// This is O(n^3) be careful
+  List<Edge> cells_findAllRelatedEdge(List<Cell> cells) {
+    List<Edge> edges = [];
+    for (int first = 0; first < cells.length - 1; first += 1) {
+      final firstCell = cells[first];
+      for (int second = first + 1; second < cells.length; second += 1) {
+        final secondCell = cells[second];
+        final edgeId = EdgeId.genId(firstCell.id.id, secondCell.id.id);
+        if (edgeKeys[edgeId] case (_, final edge)?) {
+          edges.add(edge);
+        }
+      }
+    }
+    return edges;
+  }
+
+  void objectStack_onCellsCut(List<Cell> cells) async {
+    final stack = ref
+        .read(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
+    final edges = cells_findAllRelatedEdge(cells);
+
+    await selection_cell_onSelectionsDelete(cells.map((c) => c.id.id).toList());
+
+    stack.push(
+      WhiteboardObject(
+        isDeleted: true,
+        cells: cells,
+        edges: edges,
+      ),
+    );
+    FocusScope.of(context).requestFocus(whiteboardFocusNode);
+  }
+
+  void objectStack_onCellsCopied(List<Cell> cells) {
+    final stack = ref
+        .read(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
+    final edges = cells_findAllRelatedEdge(cells);
+
+    stack.push(
+      WhiteboardObject(
+        isDeleted: false,
+        cells: cells,
+        edges: edges,
+      ),
+    );
+    FocusScope.of(context).requestFocus(whiteboardFocusNode);
+  }
+
+  void objectStack_onCellsPasted() async {
+    print('Pasted');
+    final stack = ref
+        .read(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
+    var data = stack.pop();
+    if (data == null) return;
+
+    if (data.isDeleted == false) {
+      List<Cell> oldCells = data.cells.map((c) {
+        final (latestKey, latestCell) = cellKeys[c.id.id]!;
+
+        final newCell = latestCell.copyWith(selected: false);
+
+        cellKeys[c.id.id] = (latestKey, newCell);
+
+        return newCell;
+      }).toList();
+
+      setState(() {});
+
+      widget.onCellsUpdated(oldCells);
+    }
+
+    Map<String, String> idLookupMap = {};
+    Map<String, Offset> offsetLookupMap = {};
+
+    data = data.copyWith(
+      cells: data.cells.map((old) {
+        final newId = Helper.createId();
+        idLookupMap[newId] = old.id.id;
+        offsetLookupMap[newId] = old.offset;
+        return old.copyWith(id: old.id.copyWith(id: newId));
+      }).toList(),
+      edges: data.edges
+          .map((old) {
+            final newSource = idLookupMap[old.source];
+            final newTarget = idLookupMap[old.target];
+            if (newSource == null || newTarget == null) return null;
+            return old.copyWith(
+              id: old.id.copyWith(id: Helper.createId()),
+              source: newSource,
+              target: newTarget,
+            );
+          })
+          .whereNotNull()
+          .toList(),
+    );
+
+    /// Normalize current map
+    Offset selectionTopLeftOffset = Offset(double.infinity, double.infinity);
+    for (final cell in data.cells) {
+      if (cell.offset.dx < selectionTopLeftOffset.dx) {
+        selectionTopLeftOffset =
+            Offset(cell.offset.dx, selectionTopLeftOffset.dy);
+      }
+      if (cell.offset.dy < selectionTopLeftOffset.dy) {
+        selectionTopLeftOffset =
+            Offset(selectionTopLeftOffset.dx, cell.offset.dy);
+      }
+    }
+    List<Cell> newCells = [];
+    for (final cell in data.cells) {
+      newCells.add(
+        cell.copyWith(
+          offset: cell.offset -
+              selectionTopLeftOffset +
+              viewportTopLeft / scaleFactor.value,
+        ),
+      );
+    }
+    data = data.copyWith(cells: newCells);
+  }
 
   void selection_articleCell_onTurnArticleIntoEditable(ArticleCell cell) {
     final (_, articleCell) = cellKeys[cell.id.id]!;
@@ -860,7 +988,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellCreated(editableCell);
   }
 
-  void selection_cell_onSelectionsDelete(List<String> selectedCellIds) async {
+  Future<void> selection_cell_onSelectionsDelete(
+      List<String> selectedCellIds) async {
     for (final id in selectedCellIds) {
       cellKeys.remove(id);
       _cellProcessors[id]?.forEach((_, subscription) => subscription.cancel());
@@ -917,7 +1046,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     setState(() {});
     await widget.onCellCreated(tldrCell);
     cell_moveViewportToCenterOfCell(tldrCell);
-    cell_OnCellLinked(cell, tldrCell);
+    cell_OnCellLinked(
+      cell,
+      tldrCell,
+      decoration: EdgeDecoration(label: 'Summarize'),
+    );
 
     final stream = ref.read(
       summarizeCellProvider(
@@ -1059,6 +1192,65 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     cellKeys[cell.id.id] = (key, newCell);
     setState(() {});
     widget.onCellUpdated(latestCell, newCell);
+  }
+
+  void cell_onAskNewQuestion(String text) async {
+    final cell = Cell.article(
+      offset: _offsetToViewport(constraints.biggest.center(Offset.zero)),
+      id: CellId(
+        parentId: CellParentId(whiteboardId: widget.data.id.id),
+        id: Helper.createId(),
+      ),
+      width: cellWidth,
+      decoration: CellDecoration(color: ColorVariant.yellow.name),
+      title: text,
+      content: '',
+    );
+
+    cellKeys[cell.id.id] = (
+      GlobalKey(
+        debugLabel: 'WhiteboardView.cell | ${cell.id.id}',
+      ),
+      cell,
+    );
+    setState(() {});
+    cell_moveViewportToCenterOfCell(cell);
+    await widget.onCellCreated(cell);
+
+    late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[cell.id.id] = {
+        ..._cellProcessors[cell.id.id] ?? {},
+      }..remove('generate');
+    }
+
+    final stream = ref.read(generateQuestionProvider(text: text));
+    subscription = stream.listen(
+      (text) {
+        final (latestKey, latestCell) = cellKeys[cell.id.id]!;
+        if (latestCell is! ArticleCell) return;
+
+        final newCell = latestCell.copyWith(
+          content: latestCell.content + text,
+        );
+        cellKeys[cell.id.id] = (latestKey, newCell);
+        setState(() {});
+      },
+      onDone: () {
+        print('done generate for cell ${cell.id.id}');
+        cancelSubscription();
+      },
+      onError: (error) {
+        print(error);
+        cancelSubscription();
+      },
+    );
+
+    _cellProcessors[cell.id.id] = {
+      ..._cellProcessors[cell.id.id] ?? {},
+      'generate': subscription,
+    };
   }
 }
 

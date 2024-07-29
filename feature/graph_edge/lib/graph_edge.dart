@@ -3,6 +3,7 @@ library graph_edge;
 
 export 'src/configuration/configuration.dart';
 export 'src/domain/model/edge.dart';
+export 'src/domain/model/edge_decoration.dart';
 export 'src/navigation/navigation.dart';
 export 'src/provider/create_edge.dart';
 export 'src/provider/delete_edge.dart';

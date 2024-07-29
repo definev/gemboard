@@ -34,7 +34,12 @@ Raw<Stream<String>> summarizeCell(
   yield* ref.watch(
     generateTextFromCoreDataProvider(
       coreDataList: [
-        CoreData.model('Sumarize the following content.'),
+        CoreData.model('''
+Sumarize the following content. 
+Extract to the bullet keypoint and provide a concise summary.
+Don't repeat the content, make a summary.
+Don't put the title in the top of response.
+'''),
         CoreData.user(content),
       ],
     ),

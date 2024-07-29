@@ -8,19 +8,6 @@
     ],
     "headers": [
       {
-        "source": "**",
-        "headers": [
-          {
-            "key": "Cross-Origin-Embedder-Policy",
-            "value": "credentialless"
-          },
-          {
-            "key": "Cross-Origin-Opener-Policy",
-            "value": "same-origin"
-          }
-        ]
-      },
-      {
         "source": "**/*.@(unityweb|wasm)",
         "headers": [
           {
@@ -44,6 +31,19 @@
           {
             "key": "Add-Output-Filter-By-Type",
             "value": "DEFLATE"
+          }
+        ]
+      },
+      {
+        "source": "**/*",
+        "headers": [
+          {
+            "key": "Cross-Origin-Embedder-Policy",
+            "value": "credentialless"
+          },
+          {
+            "key": "Cross-Origin-Opener-Policy",
+            "value": "same-origin"
           }
         ]
       }

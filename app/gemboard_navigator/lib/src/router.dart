@@ -15,8 +15,6 @@ part 'routes/settings.dart';
 part 'routes/whiteboard.dart';
 
 final router = () {
-  print('${$appRoutes}');
-
   return GoRouter(
     navigatorKey: RootShell.$navigatorKey,
     routes: [

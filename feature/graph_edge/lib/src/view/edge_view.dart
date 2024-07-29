@@ -442,103 +442,99 @@ class EdgeView extends HookWidget {
     final labelTextFocusNode = useFocusNode();
 
     final labelTextStyle = TextStyleVariant.medium.resolve(context).copyWith(
-        fontSize: TextStyleVariant.h5.resolve(context).fontSize,
-        color: ColorVariant.onBackground.resolve(context));
-    return CustomPaint(
-      painter: EdgeVisual(
-        context: context,
-        shortestPointFromSource: shortestPointFromSource,
-        shortestPointFromTarget: shortestPointFromTarget,
-        curvePointFirst: curvePointFirst,
-        curvePointSecond: curvePointSecond,
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            left: middlePoint.dx - 15 * scale,
-            top: middlePoint.dy - 15 * scale,
-            child: PortalTarget(
-              anchor: Aligned(
-                follower: Alignment.bottomCenter,
-                target: Alignment.topCenter,
-              ),
-              portalFollower: VBox(
-                style: Style(
-                  $flex.mainAxisSize.min(),
-                  $flex.gap.ref(SpaceVariant.small),
-                  $box.margin.bottom.ref(SpaceVariant.gap),
-                ),
-                children: [
-                  if (showChat.value)
-                    SizedBox(
-                      width: 400 * scale,
-                      child: DSTextbox(
-                        hintText: 'Ask all about this edge',
-                      ),
-                    ),
-                  if (showOptions.value)
-                    DSToolbar(
-                      direction: Axis.horizontal,
-                      children: [
-                        Button(
-                          style: Style(
-                            $box.height(40 * scale),
-                            $box.width(40 * scale),
-                          ),
-                          onPressed: () => showChat.value = !showChat.value,
-                          child: StyledIcon(IconlyLight.chat),
-                        ),
-                        Button(
-                          style: Style(
-                            $box.height(40 * scale),
-                            $box.width(40 * scale),
-                          ),
-                          onPressed: () => onEdgeDeleted(data),
-                          child: StyledIcon(IconlyLight.delete),
-                        ),
-                      ],
-                    ),
-                  IntrinsicWidth(
-                    child: TextField(
-                      controller: labelTextController,
-                      focusNode: labelTextFocusNode,
-                      cursorColor: ColorVariant.onBackground.resolve(context),
-                      maxLength: 50,
-                      onChanged: (value) => onEdgeLabelChanged(value),
-                      decoration: InputDecoration(
-                        isCollapsed: true,
-                        border: InputBorder.none,
-                        counter: SizedBox(),
-                        hintText: '.',
-                        hintStyle: labelTextStyle.copyWith(
-                            color: labelTextStyle.color!.withOpacity(
-                                OpacityVariant.surface.resolve(context).value)),
-                      ),
-                      style: labelTextStyle,
-                    ),
-                  ),
-                ],
-              ),
-              child: Transform.rotate(
-                angle: switch (
-                    shortestPointFromTarget.dy > shortestPointFromSource.dy) {
-                  true => angle,
-                  false => -angle,
-                },
-                child: Button(
-                  kind: ButtonKind.outline,
-                  onPressed: () {
-                    showOptions.value = !showOptions.value;
-                    if (showOptions.value == false) {
-                      showChat.value = false;
-                    }
-                  },
-                  child: StyledIcon(IconlyLight.arrow_right),
-                ),
-              ),
-            ),
+        fontSize: TextStyleVariant.h6.resolve(context).fontSize,
+        color: ColorVariant.onSurface.resolve(context));
+    return Portal(
+      child: IgnorePointer(
+        child: CustomPaint(
+          painter: EdgeVisual(
+            context: context,
+            shortestPointFromSource: shortestPointFromSource,
+            shortestPointFromTarget: shortestPointFromTarget,
+            curvePointFirst: curvePointFirst,
+            curvePointSecond: curvePointSecond,
           ),
-        ],
+          child: Stack(
+            children: [
+              Positioned(
+                left: middlePoint.dx - 15 * scale,
+                top: middlePoint.dy - 15 * scale,
+                height: 30 * scale,
+                width: 30 * scale,
+                child: PortalTarget(
+                  anchor: Aligned(
+                    follower: Alignment.bottomCenter,
+                    target: Alignment.bottomCenter,
+                  ),
+                  portalFollower: VBox(
+                    style: Style(
+                      $flex.mainAxisSize.min(),
+                      $flex.gap.ref(SpaceVariant.small),
+                    ),
+                    children: [
+                      if (showOptions.value)
+                        DSToolbar(
+                          direction: Axis.horizontal,
+                          children: [
+                            Button(
+                              style: Style(
+                                $box.height(40 * scale),
+                                $box.width(40 * scale),
+                              ),
+                              onPressed: () => onEdgeDeleted(data),
+                              child: StyledIcon(IconlyLight.delete),
+                            ),
+                          ],
+                        ),
+                      IntrinsicWidth(
+                        child: TextField(
+                          controller: labelTextController,
+                          focusNode: labelTextFocusNode,
+                          cursorColor: ColorVariant.onBackground.resolve(context),
+                          maxLength: 50,
+                          onChanged: (value) => onEdgeLabelChanged(value),
+                          decoration: InputDecoration(
+                            isCollapsed: true,
+                            border: InputBorder.none,
+                            counter: SizedBox(),
+                            hintText: '.',
+                            hintStyle: labelTextStyle.copyWith(
+                                color: labelTextStyle.color!.withOpacity(
+                                    OpacityVariant.surface.resolve(context).value)),
+                          ),
+                          style: labelTextStyle,
+                        ),
+                      ),
+                      Transform.rotate(
+                        angle: switch (shortestPointFromTarget.dy >
+                            shortestPointFromSource.dy) {
+                          true => angle,
+                          false => -angle,
+                        },
+                        child: Button(
+                          background: ColorVariant.onSurface,
+                          kind: ButtonKind.outline,
+                          style: Style(
+                            $box.borderRadius(30 * scale),
+                            $box.foregroundDecoration.borderRadius(30 * scale),
+                          ),
+                          onPressed: () {
+                            showOptions.value = !showOptions.value;
+                            if (showOptions.value == false) {
+                              showChat.value = false;
+                            }
+                          },
+                          child: StyledIcon(IconlyLight.arrow_right),
+                        ),
+                      ),
+                    ],
+                  ),
+                  child: SizedBox(height: 30 * scale, width: 30 * scale),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -579,7 +575,7 @@ class EdgeVisual extends CustomPainter {
     canvas.drawPath(
       path,
       Paint() //
-        ..color = ColorVariant.outline.resolve(context)
+        ..color = ColorVariant.outline.resolve(context).withOpacity(0.5)
         ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke,
     );

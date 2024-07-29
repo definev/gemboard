@@ -180,51 +180,58 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 end: switch (controller.shown) { false => 0, true => 1 },
               ),
               curve: Curves.easeOutCirc,
-              builder: (context, value, child) => Stack(
-                children: [
-                  Positioned.fill(
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: widget.secondChild ?? SizedBox(),
-                        ),
-                        sidebarActionGesture,
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            ignoring: value == 0,
-                            child: GestureDetector(
-                              onTap: () => controller.hide(),
-                              onHorizontalDragEnd: (details) =>
-                                  controller.hide(),
-                              child: ColoredBox(
-                                color: ColorVariant.onBackground
-                                    .resolve(context)
-                                    .withOpacity(OpacityVariant.hightlight
-                                            .resolve(context)
-                                            .value *
-                                        value),
+              builder: (context, value, child) {
+                final firstChild = switch (value == 0) {
+                  true => SizedBox(),
+                  _ => widget.firstChild,
+                };
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: widget.secondChild ?? SizedBox(),
+                          ),
+                          sidebarActionGesture,
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              ignoring: value == 0,
+                              child: GestureDetector(
+                                onTap: () => controller.hide(),
+                                onHorizontalDragEnd: (details) =>
+                                    controller.hide(),
+                                child: ColoredBox(
+                                  color: ColorVariant.onBackground
+                                      .resolve(context)
+                                      .withOpacity(OpacityVariant.hightlight
+                                              .resolve(context)
+                                              .value *
+                                          value),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    left: -constraints.maxWidth + value * constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    width: constraints.maxWidth,
-                    child: widget.firstChild,
-                  ),
-                  Positioned(
-                    left: value * (constraints.maxWidth - expandButtonSize),
-                    child: SafeArea(
-                      bottom: false,
-                      child: expandButton,
+                    Positioned(
+                      left:
+                          -constraints.maxWidth + value * constraints.maxWidth,
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth,
+                      child: firstChild,
                     ),
-                  ),
-                ],
-              ),
+                    Positioned(
+                      left: value * (constraints.maxWidth - expandButtonSize),
+                      child: SafeArea(
+                        bottom: false,
+                        child: expandButton,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           final totalSize when totalSize < tabletBreakpoint =>
             TweenAnimationBuilder(
@@ -234,54 +241,60 @@ class _ResizableFlexState extends State<ResizableFlex> {
                 end: switch (controller.shown) { false => 0, true => 1 },
               ),
               curve: Easing.standard,
-              builder: (context, value, child) => Stack(
-                children: [
-                  Positioned.fill(
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 250 * value),
-                            child: widget.secondChild ?? SizedBox(),
+              builder: (context, value, child) {
+                final firstChild = switch (value == 0) {
+                  true => SizedBox(),
+                  _ => widget.firstChild,
+                };
+                return Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 250 * value),
+                              child: widget.secondChild ?? SizedBox(),
+                            ),
                           ),
-                        ),
-                        sidebarActionGesture,
-                        Positioned.fill(
-                          child: IgnorePointer(
-                            ignoring: value == 0,
-                            child: GestureDetector(
-                              onTap: () => controller.hide(),
-                              onHorizontalDragEnd: (details) =>
-                                  controller.hide(),
-                              child: ColoredBox(
-                                color: ColorVariant.onBackground
-                                    .resolve(context)
-                                    .withOpacity(OpacityVariant.hightlight
-                                            .resolve(context)
-                                            .value *
-                                        value),
+                          sidebarActionGesture,
+                          Positioned.fill(
+                            child: IgnorePointer(
+                              ignoring: value == 0,
+                              child: GestureDetector(
+                                onTap: () => controller.hide(),
+                                onHorizontalDragEnd: (details) =>
+                                    controller.hide(),
+                                child: ColoredBox(
+                                  color: ColorVariant.onBackground
+                                      .resolve(context)
+                                      .withOpacity(OpacityVariant.hightlight
+                                              .resolve(context)
+                                              .value *
+                                          value),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Positioned(
-                    left: -250 + value * 250,
-                    height: constraints.maxHeight,
-                    width: 250,
-                    child: widget.firstChild,
-                  ),
-                  Positioned(
-                    left: value * 202,
-                    child: SafeArea(
-                      bottom: false,
-                      child: expandButton,
+                    Positioned(
+                      left: -250 + value * 250,
+                      height: constraints.maxHeight,
+                      width: 250,
+                      child: firstChild,
                     ),
-                  ),
-                ],
-              ),
+                    Positioned(
+                      left: value * 202,
+                      child: SafeArea(
+                        bottom: false,
+                        child: expandButton,
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
           _ => TweenAnimationBuilder(
               duration: Duration(milliseconds: 500),
@@ -291,6 +304,10 @@ class _ResizableFlexState extends State<ResizableFlex> {
               ),
               curve: Easing.standard,
               builder: (context, value, child) {
+                final firstChild = switch (value == 0) {
+                  true => SizedBox(),
+                  _ => widget.firstChild,
+                };
                 return Stack(
                   children: [
                     Positioned.fill(
@@ -325,7 +342,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                       left: -250 + value * 250,
                       height: constraints.maxHeight,
                       width: 250,
-                      child: widget.firstChild,
+                      child: firstChild,
                     ),
                     Positioned(
                       left: value * 202,

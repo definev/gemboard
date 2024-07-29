@@ -28,6 +28,9 @@ class EdgeId with _$EdgeId implements HasParentId<EdgeParentId> {
   }) = _EdgeId;
 
   factory EdgeId.fromJson(Map<String, dynamic> json) => _$EdgeIdFromJson(json);
+
+  static String genId(String source, String target) =>
+      'edge-${source}-${target}';
 }
 
 @freezed
