@@ -30,7 +30,7 @@ RouteBase get $rootShell => ShellRouteData.$route(
               factory: $HomeGreetingRouteExtension._fromState,
               routes: [
                 GoRouteData.$route(
-                  path: 'whiteboard/:id',
+                  path: ':id',
                   parentNavigatorKey: WhiteboardEditorRoute.$parentNavigatorKey,
                   factory: $WhiteboardEditorRouteExtension._fromState,
                 ),
@@ -92,7 +92,7 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/whiteboard/${Uri.encodeComponent(id)}',
+        '/${Uri.encodeComponent(id)}',
         queryParams: {
           if (folderId != null) 'folder-id': folderId,
         },

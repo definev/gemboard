@@ -5,9 +5,14 @@ import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 
 class HomeView extends StatelessWidget {
-  const HomeView({super.key, required this.onOpenSidebar});
+  const HomeView({
+    super.key,
+    required this.onOpenSidebar,
+    required this.onOpenDesktop,
+  });
 
   final VoidCallback onOpenSidebar;
+  final VoidCallback onOpenDesktop;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,7 @@ class HomeView extends StatelessWidget {
                   StyledText(
                     'Welcome to the home page!',
                     style: Style(
-                      $text.style.ref(TextStyleVariant.h4),
+                      $text.style.ref(TextStyleVariant.h5),
                       $text.style.fontWeight.w500(),
                       $text.textAlign.center(),
                     ),
@@ -36,28 +41,52 @@ class HomeView extends StatelessWidget {
                   StyledText(
                     'You can navigate to the whiteboard editor from the menu.',
                     style: Style(
-                      $text.style.ref(TextStyleVariant.p),
+                      $text.style.ref(TextStyleVariant.p2),
                       $text.style.fontWeight.w500(),
                       $text.textAlign.center(),
                     ),
                   ),
                   SizedBox(height: SpaceVariant.medium.resolve(context)),
-                  Button(
-                    style: Style(
-                      $box.margin.top.ref(SpaceVariant.large),
-                      $box.padding.all.ref(SpaceVariant.medium),
-                    ),
-                    background: ColorVariant.green,
-                    kind: ButtonKind.filled,
-                    onPressed: onOpenSidebar,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        StyledIcon(IconlyBold.message),
-                        SizedBox(width: SpaceVariant.small.resolve(context)),
-                        StyledText('Open sidebar'),
-                      ],
-                    ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Button(
+                        style: Style(
+                          $box.margin.top.ref(SpaceVariant.large),
+                          $box.padding.all.ref(SpaceVariant.medium),
+                        ),
+                        background: ColorVariant.green,
+                        kind: ButtonKind.filled,
+                        onPressed: onOpenSidebar,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            StyledIcon(IconlyBold.message),
+                            SizedBox(
+                                width: SpaceVariant.small.resolve(context)),
+                            StyledText('Open sidebar'),
+                          ],
+                        ),
+                      ),
+                      Button(
+                        style: Style(
+                          $box.margin.top.ref(SpaceVariant.large),
+                          $box.padding.all.ref(SpaceVariant.medium),
+                        ),
+                        background: ColorVariant.green,
+                        kind: ButtonKind.outline,
+                        onPressed: onOpenDesktop,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            StyledIcon(IconlyBold.home),
+                            SizedBox(
+                                width: SpaceVariant.small.resolve(context)),
+                            StyledText('Desktop'),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

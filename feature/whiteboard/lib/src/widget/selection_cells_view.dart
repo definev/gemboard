@@ -22,7 +22,7 @@ class SelectionCellsView extends HookWidget {
     required this.selectedCells,
     required this.cellMaps,
     //
-    required this.onSelectionMove,
+    required this.onSelectionsMove,
     required this.onSelectionsDelete,
     required this.onChatWithSelectedCells,
 
@@ -46,7 +46,7 @@ class SelectionCellsView extends HookWidget {
       selectedCells.map((e) => e.id.id).toList();
   final Map<String, (GlobalKey, Cell)> cellMaps;
 
-  final void Function(Map<String, Offset> newOffsets) onSelectionMove;
+  final void Function(Map<String, Offset> newOffsets) onSelectionsMove;
   final void Function(List<String> selectedCellIds) onSelectionsDelete;
   final void Function(List<String> selectedCellIds, String text)
       onChatWithSelectedCells;
@@ -176,7 +176,7 @@ class SelectionCellsView extends HookWidget {
                                     .value[selectedCellIds[i]]! +
                                 delta,
                         };
-                        onSelectionMove(newSelectedCells);
+                        onSelectionsMove(newSelectedCells);
                       },
                       onPanEnd: (details) {
                         initialLocalPosition.value = Offset.zero;

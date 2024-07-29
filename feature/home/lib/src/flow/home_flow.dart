@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:home/src/view/home_view.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:whiteboard/whiteboard.dart';
 
 part 'home_flow.freezed.dart';
 
@@ -20,6 +21,8 @@ class HomeFlow extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final startPosition = useState(Offset.zero);
+
+    final whiteboardNavigation = ref.watch(WhiteboardNavigation.provider);
 
     return GestureDetector(
       onHorizontalDragStart: (details) {
@@ -45,6 +48,11 @@ class HomeFlow extends HookConsumerWidget {
       },
       child: HomeView(
         onOpenSidebar: () => resizableController.toggle(),
+        onOpenDesktop: () => whiteboardNavigation.openWhiteboardEditor(
+          context,
+          id: WhiteboardId.defaultValue,
+          resizableController: resizableController,
+        ),
       ),
     );
   }

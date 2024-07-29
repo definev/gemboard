@@ -12,6 +12,6 @@ abstract class WhiteboardNavigation {
     BuildContext context, {
     required WhiteboardId id,
     Whiteboard? whiteboard,
-    required ResizableController? resiableController,
+    required ResizableController? resizableController,
   });
 }

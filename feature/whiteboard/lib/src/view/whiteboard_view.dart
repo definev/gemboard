@@ -259,7 +259,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     }
   }
 
-  Offset _offsetToViewport(Offset offset) {
+  Offset offsetToViewport(Offset offset) {
     return (viewportTopLeft + offset) / scaleFactor.value;
   }
 
@@ -295,13 +295,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       horizontalDetails: horizontalDetails,
       verticalDetails: verticalDetails,
       scaleFactor: scaleFactor.value,
-      onCellCreated: (cell) {
-        cell.mapOrNull(
-          brainstorming: (cell) => cell_moveViewportToCenterOfCell(cell),
-          editable: (cell) => cell_moveViewportToCenterOfCell(cell),
-        );
-        widget.onCellCreated(cell);
-      },
+      onCellCreated: cell_onCreated,
       onImageReceived: (event, uri) {
         final cell = Cell.image(
           id: CellId(
@@ -310,7 +304,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
               whiteboardId: widget.data.id.id,
             ),
           ),
-          offset: _offsetToViewport(event.position.local),
+          offset: offsetToViewport(event.position.local),
           width: cellWidth,
           decoration: CellDecoration(color: ColorVariant.purple.name),
           url: uri,
@@ -335,7 +329,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
               whiteboardId: widget.data.id.id,
             ),
           ),
-          offset: _offsetToViewport(event.position.local),
+          offset: offsetToViewport(event.position.local),
           width: cellWidth,
           decoration: CellDecoration(color: ColorVariant.green.name),
           title: 'Text',
@@ -752,6 +746,14 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellUpdated(cell, newCell);
   }
 
+  void cell_onCreated(Cell cell) {
+    cell.mapOrNull(
+      brainstorming: (cell) => cell_moveViewportToCenterOfCell(cell),
+      editable: (cell) => cell_moveViewportToCenterOfCell(cell),
+    );
+    widget.onCellCreated(cell);
+  }
+
   Future<void> cell_OnCellLinked(
     Cell source,
     Cell target, {
@@ -823,7 +825,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
               /// Cell
               onSelectionsDelete: selection_cell_onSelectionsDelete,
-              onSelectionMove: selection_cell_onSelectionMove,
+              onSelectionsMove: selection_cell_onSelectionsMove,
               onChatWithSelectedCells: (selectedCellIds, text) =>
                   selection_cell_onChatWithSelectedCells(
                 selectedCellIds,
@@ -999,15 +1001,15 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     await widget.onCellsDeleted(selectedCellIds);
   }
 
-  void selection_cell_onSelectionMove(Map<String, Offset> newOffsets) {
+  void selection_cell_onSelectionsMove(Map<String, Offset> newOffsets) {
     List<Cell> newCells = [];
     for (final MapEntry(key: id, value: newOffset) in newOffsets.entries) {
       final (key, cell) = cellKeys[id]!;
       final newCell = cell.copyWith(offset: newOffset);
       newCells.add(newCell);
       cellKeys[id] = (key, newCell);
-      setState(() {});
     }
+    setState(() {});
     widget.onCellsUpdated(newCells);
   }
 
@@ -1106,10 +1108,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(rect, 200),
+      offset: randomOffsetAroundRect(rect),
       width: cellWidth,
       decoration: CellDecoration(
-        color: ColorVariant.randonColor(),
+        color: ColorVariant.cyan.name,
         cardKind: CellCardKind.outlined,
       ),
       title: text,
@@ -1196,7 +1198,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
   void cell_onAskNewQuestion(String text) async {
     final cell = Cell.article(
-      offset: _offsetToViewport(constraints.biggest.center(Offset.zero)),
+      offset: offsetToViewport(constraints.biggest.center(Offset.zero)),
       id: CellId(
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),

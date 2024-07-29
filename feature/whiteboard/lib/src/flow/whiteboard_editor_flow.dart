@@ -319,7 +319,23 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                           $box.width(40),
                           $box.alignment.center(),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          final cell = Cell.brainstorming(
+                            id: CellId(
+                              parentId: CellParentId(whiteboardId: id.id),
+                              id: Helper.createId(),
+                            ),
+                            offset:
+                                whiteboardKey.currentState!.offsetToViewport(
+                              constraints.biggest.topCenter(Offset.zero),
+                            ),
+                            width: cellWidth,
+                            decoration: CellDecoration(color: 'yellow'),
+                            question: null,
+                            suggestions: [],
+                          );
+                          whiteboardKey.currentState?.cell_onCreated(cell);
+                        },
                         child: StyledIcon(IconlyLight.discovery),
                       ),
                     ),
@@ -345,7 +361,8 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                         ),
                         offset: localPosition,
                         width: cellWidth,
-                        decoration: CellDecoration(color: 'red'),
+                        decoration:
+                            CellDecoration(color: ColorVariant.randonColor()),
                         title: '',
                         content: '',
                       ).toJson(),
@@ -363,7 +380,24 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                           $box.width(40),
                           $box.alignment.center(),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          final cell = Cell.editable(
+                            id: CellId(
+                              parentId: CellParentId(whiteboardId: id.id),
+                              id: Helper.createId(),
+                            ),
+                            offset:
+                                whiteboardKey.currentState!.offsetToViewport(
+                              constraints.biggest.topCenter(Offset.zero),
+                            ),
+                            width: cellWidth,
+                            decoration: CellDecoration(
+                                color: ColorVariant.randonColor()),
+                            title: '',
+                            content: '',
+                          );
+                          whiteboardKey.currentState?.cell_onCreated(cell);
+                        },
                         child: StyledIcon(IconlyLight.document),
                       ),
                     ),

@@ -71,7 +71,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                             whiteboardNavigation.openWhiteboardEditor(
                           context,
                           id: value.id,
-                          resiableController: resizableController,
+                          resizableController: resizableController,
                         ),
                       ),
                     _ => SizedBox(),
@@ -214,7 +214,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                     whiteboardNavigation.openWhiteboardEditor(
                                       context,
                                       id: data.id,
-                                      resiableController: resizableController,
+                                      resizableController: resizableController,
                                     );
                                   },
                                   children: switch (whiteboardLitAsyncValue) {
@@ -233,7 +233,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                                     .openWhiteboardEditor(
                                               context,
                                               id: whiteboard.id,
-                                              resiableController:
+                                              resizableController:
                                                   resizableController,
                                             ),
                                             child: Row(

@@ -9,15 +9,15 @@ class WhiteboardNavigationImpl implements WhiteboardNavigation {
     BuildContext context, {
     required WhiteboardId id,
     Whiteboard? whiteboard,
-    required ResizableController? resiableController,
+    required ResizableController? resizableController,
   }) {
-    resiableController?.hide();
-    router.pushReplacement(
+    resizableController?.hide();
+    router.go(
       WhiteboardEditorRoute(
         id: id.id,
         folderId: id.parentId.folderId,
       ).location,
-      extra: resiableController,
+      extra: resizableController,
     );
   }
 }
