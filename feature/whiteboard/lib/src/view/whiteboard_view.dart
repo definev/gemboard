@@ -228,14 +228,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           oldWidget.verticalDetails?.controller) {
         verticalDetails.controller?.dispose();
       }
+      print('Update vertical details | ${widget.verticalDetails?.physics}');
       verticalDetails = widget.verticalDetails!;
     }
 
     if (widget.verticalDetails == null && oldWidget.verticalDetails != null) {
-      if (widget.verticalDetails?.controller !=
-          oldWidget.verticalDetails?.controller) {
-        verticalDetails.controller?.dispose();
-      }
+      verticalDetails.controller?.dispose();
       verticalDetails = defaultVerticalDetails;
     }
 
@@ -250,10 +248,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
     if (widget.horizontalDetails == null &&
         oldWidget.horizontalDetails != null) {
-      if (widget.horizontalDetails?.controller !=
-          oldWidget.horizontalDetails?.controller) {
-        horizontalDetails.controller?.dispose();
-      }
+      horizontalDetails.controller?.dispose();
       horizontalDetails = defaultHorizontalDetails;
     }
   }
@@ -318,6 +313,15 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           decoration: CellDecoration(color: ColorVariant.purple.name),
           url: uri,
         );
+
+        cell_moveViewportToCenterOfCell(cell);
+
+        cellKeys[cell.id.id] = (
+          GlobalKey(debugLabel: 'WhiteboardView.cell | ${cell.id.id}'),
+          cell
+        );
+
+        setState(() {});
 
         widget.onCellCreated(cell);
       },
@@ -1142,6 +1146,9 @@ class WhiteboardDropZone extends StatelessWidget {
             Formats.gif,
             Formats.tiff,
             Formats.webp,
+            Formats.heif,
+            Formats.heic,
+            // Formats.svg,
           ];
 
           final reader = item.dataReader!;

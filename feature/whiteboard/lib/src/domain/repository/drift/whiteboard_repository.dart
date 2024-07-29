@@ -91,6 +91,7 @@ class WhiteboardRepositoryDrift implements WhiteboardRepository {
     required WhiteboardId id,
     required WhiteboardPosition position,
   }) async {
+    if (position.offset.isInfinite) return;
     final oldValue = await (database.select(database.whiteboardPositionItem)
           ..where((tbl) => tbl.whiteboardId.equals(id.id)))
         .getSingleOrNull();

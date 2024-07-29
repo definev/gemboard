@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:mix/mix.dart';
 
 class ImageCellView extends StatelessWidget {
@@ -63,12 +64,20 @@ class ImageCellView extends StatelessWidget {
               cell.url.toString(),
               fit: BoxFit.cover,
             ),
-          _ => Center(
-              child: StyledText(
-                'This text can\'t displayed',
-                style: Style(
-                  $text.style.ref(TextStyleVariant.p),
-                ),
+          'data' => HookBuilder(
+              builder: (context) {
+                final base64 =
+                    useMemoized(() => cell.url.data!.contentAsBytes());
+                return Image.memory(
+                  base64,
+                  fit: BoxFit.cover,
+                );
+              },
+            ),
+          _ => StyledText(
+              'This text can\'t displayed',
+              style: Style(
+                $text.style.ref(TextStyleVariant.p),
               ),
             )
         },

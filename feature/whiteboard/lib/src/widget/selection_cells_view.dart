@@ -5,6 +5,7 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
@@ -169,6 +170,18 @@ class SelectionCellsView extends HookWidget {
                   final showChat = useState(false);
                   final chatController = useTextEditingController();
 
+                  final noKeyboardConstraints = useState(constraints);
+                  final keyboardVisibilityController =
+                      useMemoized(() => KeyboardVisibilityController());
+                  useOnStreamChange(
+                    keyboardVisibilityController.onChange,
+                    onData: (event) {
+                      if (event == false) {
+                        noKeyboardConstraints.value = constraints;
+                      }
+                    },
+                  );
+
                   return PortalTarget(
                     visible: showChat.value,
                     portalFollower: Stack(
@@ -176,7 +189,7 @@ class SelectionCellsView extends HookWidget {
                         Positioned(
                           left: viewportSelection.left +
                               (viewportSelection.width - 400) / 2,
-                          bottom: constraints.maxHeight -
+                          bottom: noKeyboardConstraints.value.maxHeight -
                               (viewportSelection.top -
                                   toolbarHeight -
                                   SpaceVariant.small.resolve(context)),

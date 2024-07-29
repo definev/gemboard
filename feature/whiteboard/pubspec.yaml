@@ -55,7 +55,8 @@ dependencies:
   mix: ^1.4.0
 
   # native
-  path_provider: ^2.1.3
+  path_provider: ^2.1.0
+  flutter_keyboard_visibility: ^6.0.0
 
   flextras:
   # Database

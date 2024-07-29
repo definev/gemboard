@@ -23,9 +23,9 @@ class WhiteboardPositionItem extends Table {
 
   TextColumn get whiteboardId => text()();
 
-  RealColumn get offsetDx => real()();
-  RealColumn get offsetDy => real()();
-  RealColumn get scale => real()();
+  RealColumn get offsetDx => real().withDefault(Constant(0.0))();
+  RealColumn get offsetDy => real().withDefault(Constant(0.0))();
+  RealColumn get scale => real().withDefault(Constant(WhiteboardPosition.defaultScaleFactor))();
 }
 
 @DriftDatabase(

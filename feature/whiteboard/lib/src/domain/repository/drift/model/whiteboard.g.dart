@@ -340,18 +340,24 @@ class $WhiteboardPositionItemTable extends WhiteboardPositionItem
   @override
   late final GeneratedColumn<double> offsetDx = GeneratedColumn<double>(
       'offset_dx', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0.0));
   static const VerificationMeta _offsetDyMeta =
       const VerificationMeta('offsetDy');
   @override
   late final GeneratedColumn<double> offsetDy = GeneratedColumn<double>(
       'offset_dy', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: Constant(0.0));
   static const VerificationMeta _scaleMeta = const VerificationMeta('scale');
   @override
   late final GeneratedColumn<double> scale = GeneratedColumn<double>(
       'scale', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      type: DriftSqlType.double,
+      requiredDuringInsert: false,
+      defaultValue: Constant(WhiteboardPosition.defaultScaleFactor));
   @override
   List<GeneratedColumn> get $columns =>
       [id, whiteboardId, offsetDx, offsetDy, scale];
@@ -380,20 +386,14 @@ class $WhiteboardPositionItemTable extends WhiteboardPositionItem
     if (data.containsKey('offset_dx')) {
       context.handle(_offsetDxMeta,
           offsetDx.isAcceptableOrUnknown(data['offset_dx']!, _offsetDxMeta));
-    } else if (isInserting) {
-      context.missing(_offsetDxMeta);
     }
     if (data.containsKey('offset_dy')) {
       context.handle(_offsetDyMeta,
           offsetDy.isAcceptableOrUnknown(data['offset_dy']!, _offsetDyMeta));
-    } else if (isInserting) {
-      context.missing(_offsetDyMeta);
     }
     if (data.containsKey('scale')) {
       context.handle(
           _scaleMeta, scale.isAcceptableOrUnknown(data['scale']!, _scaleMeta));
-    } else if (isInserting) {
-      context.missing(_scaleMeta);
     }
     return context;
   }
@@ -549,13 +549,10 @@ class WhiteboardPositionItemCompanion
   WhiteboardPositionItemCompanion.insert({
     this.id = const Value.absent(),
     required String whiteboardId,
-    required double offsetDx,
-    required double offsetDy,
-    required double scale,
-  })  : whiteboardId = Value(whiteboardId),
-        offsetDx = Value(offsetDx),
-        offsetDy = Value(offsetDy),
-        scale = Value(scale);
+    this.offsetDx = const Value.absent(),
+    this.offsetDy = const Value.absent(),
+    this.scale = const Value.absent(),
+  }) : whiteboardId = Value(whiteboardId);
   static Insertable<WhiteboardPositionItemData> custom({
     Expression<int>? id,
     Expression<String>? whiteboardId,
@@ -762,9 +759,9 @@ typedef $$WhiteboardPositionItemTableCreateCompanionBuilder
     = WhiteboardPositionItemCompanion Function({
   Value<int> id,
   required String whiteboardId,
-  required double offsetDx,
-  required double offsetDy,
-  required double scale,
+  Value<double> offsetDx,
+  Value<double> offsetDy,
+  Value<double> scale,
 });
 typedef $$WhiteboardPositionItemTableUpdateCompanionBuilder
     = WhiteboardPositionItemCompanion Function({
@@ -809,9 +806,9 @@ class $$WhiteboardPositionItemTableTableManager extends RootTableManager<
           createCompanionCallback: ({
             Value<int> id = const Value.absent(),
             required String whiteboardId,
-            required double offsetDx,
-            required double offsetDy,
-            required double scale,
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double> scale = const Value.absent(),
           }) =>
               WhiteboardPositionItemCompanion.insert(
             id: id,

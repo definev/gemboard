@@ -61,6 +61,10 @@ CONTENT: ${value.content}
                   final bundle = NetworkAssetBundle(value.url);
                   final image = await bundle.load('');
                   return Content.data('image/*', image.buffer.asUint8List());
+                case 'data':
+                  final data = value.url.data!;
+                  final image = data.contentAsBytes();
+                  return Content.data('image/*', image);
               }
               return null;
             },

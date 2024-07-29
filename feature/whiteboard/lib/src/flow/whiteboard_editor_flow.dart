@@ -94,7 +94,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         controller: verticalScrollController,
         physics: switch (defaultTargetPlatform) {
           TargetPlatform.android ||
-          TargetPlatform.iOS when cursorMode.value != CursorMode.freeMove =>
+          TargetPlatform.iOS =>
             NeverScrollableScrollPhysics(),
           _ => AlwaysScrollableScrollPhysics(),
         },
@@ -107,7 +107,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         controller: horizontalScrollController,
         physics: switch (defaultTargetPlatform) {
           TargetPlatform.android ||
-          TargetPlatform.iOS when cursorMode.value != CursorMode.freeMove =>
+          TargetPlatform.iOS =>
             NeverScrollableScrollPhysics(),
           _ => AlwaysScrollableScrollPhysics(),
         },
@@ -357,7 +357,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                           $box.alignment.center(),
                         ),
                         onPressed: () {},
-                        child:StyledIcon(IconlyLight.document),
+                        child: StyledIcon(IconlyLight.document),
                       ),
                     ),
                   ),
@@ -374,7 +374,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                   $box.alignment.center(),
                 ),
                 onPressed: () => showChat.value = !showChat.value,
-                child:StyledIcon(IconlyLight.chat),
+                child: StyledIcon(IconlyLight.chat),
               ),
             ),
           ],
@@ -393,7 +393,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                 ),
                 kind: kindBasedOn(cursorMode.value, CursorMode.move),
                 onPressed: () => cursorMode.value = CursorMode.move,
-                child:StyledIcon(LineIcons.mousePointer),
+                child: StyledIcon(LineIcons.mousePointer),
               ),
             ),
             DSTooltip(
@@ -407,21 +407,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                 ),
                 kind: kindBasedOn(cursorMode.value, CursorMode.handTool),
                 onPressed: () => cursorMode.value = CursorMode.handTool,
-                child:StyledIcon(LineIcons.paperHandAlt),
-              ),
-            ),
-            DSTooltip(
-              alignment: Alignment.bottomCenter,
-              label: StyledText('Free move'),
-              child: Button(
-                style: Style(
-                  $box.height(40),
-                  $box.width(40),
-                  $box.alignment.center(),
-                ),
-                kind: kindBasedOn(cursorMode.value, CursorMode.freeMove),
-                onPressed: () => cursorMode.value = CursorMode.freeMove,
-                child:StyledIcon(LineIcons.alternateExpandArrows),
+                child: StyledIcon(LineIcons.paperHandAlt),
               ),
             ),
           ],
@@ -432,49 +418,52 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         final cursorModeToolWidth = SpaceVariant.small.resolve(context) * 4 +
             (SpaceVariant.large.resolve(context) * 2) * 3;
 
-        return Stack(
-          children: [
-            Positioned.fill(child: whiteboardBuilder),
-            Align(
-              alignment: Alignment.topCenter,
-              child: SizedBox(
-                width: actionToolWidth +
-                    cursorModeToolWidth +
-                    SpaceVariant.small.resolve(context) * 2 +
-                    SpaceVariant.medium.resolve(context),
-                child: VBox(
-                  style: Style(
-                    $box.padding.all.ref(SpaceVariant.small),
-                    $flex.gap.ref(SpaceVariant.small),
-                  ),
-                  children: [
-                    StyledFlex(
-                      direction: Axis.horizontal,
-                      style: Style(
-                        $flex.mainAxisSize.min(),
-                        $flex.gap.ref(SpaceVariant.medium),
-                      ),
-                      children: [
-                        actionTool,
-                        cursorModeTool,
-                      ],
+        return MediaQuery.removeViewPadding(
+          context: context,
+          child: Stack(
+            children: [
+              Positioned.fill(child: whiteboardBuilder),
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: actionToolWidth +
+                      cursorModeToolWidth +
+                      SpaceVariant.small.resolve(context) * 2 +
+                      SpaceVariant.medium.resolve(context),
+                  child: VBox(
+                    style: Style(
+                      $box.padding.all.ref(SpaceVariant.small),
+                      $flex.gap.ref(SpaceVariant.small),
                     ),
-                    if (showChat.value)
-                      DSTextbox(
-                        autofocus: true,
-                        hintText: 'Type a message...',
-                        minLines: 1,
-                        maxLines: 8,
-                        trailing: Button(
-                          onPressed: () {},
-                          child:StyledIcon(IconlyLight.send),
+                    children: [
+                      StyledFlex(
+                        direction: Axis.horizontal,
+                        style: Style(
+                          $flex.mainAxisSize.min(),
+                          $flex.gap.ref(SpaceVariant.medium),
                         ),
+                        children: [
+                          actionTool,
+                          cursorModeTool,
+                        ],
                       ),
-                  ],
+                      if (showChat.value)
+                        DSTextbox(
+                          autofocus: true,
+                          hintText: 'Type a message...',
+                          minLines: 1,
+                          maxLines: 8,
+                          trailing: Button(
+                            onPressed: () {},
+                            child: StyledIcon(IconlyLight.send),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -538,6 +527,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         return child!;
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
             Column(
