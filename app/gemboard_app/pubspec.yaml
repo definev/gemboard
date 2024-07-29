@@ -57,7 +57,7 @@ dev_dependencies:
 dependency_overrides:
   flutter_keyboard_visibility_web:
     git:
-      url: https://github.com/raldhafiri/flutter_keyboard_visibility.git
+      url: https://github.com/definev/flutter_keyboard_visibility.git
       ref: master
       path: flutter_keyboard_visibility_web
 

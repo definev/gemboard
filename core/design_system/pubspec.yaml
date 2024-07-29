@@ -45,7 +45,7 @@ dependencies:
 
 dev_dependencies:
   copy_with_extension_gen: 
-  build_runner: ^2.3.3 
+  build_runner: ^2.4.11 
 
 flutter:
   uses-material-design: true
