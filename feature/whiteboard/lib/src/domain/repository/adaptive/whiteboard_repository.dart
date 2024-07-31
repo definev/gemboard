@@ -42,19 +42,8 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
   Future<WhiteboardPosition?> getWhiteboardPosition({
     required WhiteboardId id,
   }) async {
-    try {
-      return await memory.getWhiteboardPosition(id: id);
-    } on String catch (error) {
-      if (error == WhiteboardRepositoryMemory.undefined) {
-        final position = await local.getWhiteboardPosition(id: id);
-        if (position != null) {
-          await memory.setWhiteboardPosition(id: id, position: position);
-        }
-        return position;
-      } else {
-        rethrow;
-      }
-    }
+    final position = await local.getWhiteboardPosition(id: id);
+    return position;
   }
 
   @override
