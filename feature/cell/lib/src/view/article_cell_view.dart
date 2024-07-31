@@ -69,8 +69,17 @@ class ArticleCellView extends StatelessWidget {
             Expanded(
               child: Mix(
                 data: Style(
-                  $text.style.color(cellDecoration.onColorValue(context)),
-                ).of(context),
+                  DSCardKind.flat(
+                    $box.color(cellDecoration.colorValue(context)),
+                    $box.padding.all(0),
+                  ),
+                  DSCardKind.elevated(
+                    $text.style.color(cellDecoration.onColorValue(context)),
+                  ),
+                  DSCardKind.outlined(
+                    $text.style.color(cellDecoration.onColorValue(context)),
+                  ),
+                ).applyVariants([kind]).of(context),
                 child: DSMarkdownBody(data: cell.title),
               ),
             ),

@@ -8,6 +8,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:mix/mix.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class DSMarkdownBody extends StatelessWidget {
@@ -112,13 +113,73 @@ class DSMarkdownBody extends StatelessWidget {
           onTapLink: onTapLink,
           styleSheet: markdownStyleSheet,
         ),
-      true => Markdown(
+      true => SuperListMarkdown(
           data: data,
           builders: builders,
           onTapLink: onTapLink,
           styleSheet: markdownStyleSheet,
         ),
     };
+  }
+}
+
+class SuperListMarkdown extends MarkdownWidget {
+  /// Creates a scrolling widget that parses and displays Markdown.
+  const SuperListMarkdown({
+    super.key,
+    required super.data,
+    super.selectable,
+    super.styleSheet,
+    super.styleSheetTheme = null,
+    super.syntaxHighlighter,
+    super.onSelectionChanged,
+    super.onTapLink,
+    super.onTapText,
+    super.imageDirectory,
+    super.blockSyntaxes,
+    super.inlineSyntaxes,
+    super.extensionSet,
+    super.imageBuilder,
+    super.checkboxBuilder,
+    super.bulletBuilder,
+    super.builders,
+    super.paddingBuilders,
+    super.listItemCrossAxisAlignment,
+    this.padding = EdgeInsets.zero,
+    this.controller,
+    this.physics,
+    this.shrinkWrap = false,
+    super.softLineBreak,
+  });
+
+  /// The amount of space by which to inset the children.
+  final EdgeInsets padding;
+
+  /// An object that can be used to control the position to which this scroll view is scrolled.
+  ///
+  /// See also: [ScrollView.controller]
+  final ScrollController? controller;
+
+  /// How the scroll view should respond to user input.
+  ///
+  /// See also: [ScrollView.physics]
+  final ScrollPhysics? physics;
+
+  /// Whether the extent of the scroll view in the scroll direction should be
+  /// determined by the contents being viewed.
+  ///
+  /// See also: [ScrollView.shrinkWrap]
+  final bool shrinkWrap;
+
+  @override
+  Widget build(BuildContext context, List<Widget>? children) {
+    return SuperListView(
+      padding: padding,
+      controller: controller,
+      physics: physics,
+      shrinkWrap: shrinkWrap,
+      children: children!,
+    );
   }
 }
 
