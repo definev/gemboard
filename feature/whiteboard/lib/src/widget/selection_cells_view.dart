@@ -1,10 +1,10 @@
 import 'dart:ui';
 
+import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_portal/flutter_portal.dart';
@@ -21,6 +21,14 @@ class SelectionCellsView extends HookWidget {
     required this.scaleFactor,
     required this.selectedCells,
     required this.cellMaps,
+    required this.stackPositionDataMap,
+
+    ///
+    required this.selectionStartDxCell,
+    required this.selectionStartDyCell,
+    required this.selectionEndDxCell,
+    required this.selectionEndDyCell,
+
     //
     required this.onSelectionsMove,
     required this.onSelectionsDelete,
@@ -44,7 +52,14 @@ class SelectionCellsView extends HookWidget {
   final List<Cell> selectedCells;
   late final List<String> selectedCellIds =
       selectedCells.map((e) => e.id.id).toList();
+
   final Map<String, (GlobalKey, Cell)> cellMaps;
+  final Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap;
+
+  final Cell selectionStartDxCell;
+  final Cell selectionStartDyCell;
+  final Cell selectionEndDxCell;
+  final Cell selectionEndDyCell;
 
   final void Function(Map<String, Offset> newOffsets) onSelectionsMove;
   final void Function(List<String> selectedCellIds) onSelectionsDelete;
@@ -115,206 +130,220 @@ class SelectionCellsView extends HookWidget {
     final initialLocalPosition = useRef(Offset.zero);
     final initialSelectedCells = useRef(<String, Offset>{});
 
-    return Shortcuts(
-      shortcuts: {
-        /// Copy / Paste shortcut
-        LogicalKeySet(LogicalKeyboardKey.keyC, LogicalKeyboardKey.controlLeft):
-            CopySelectionTextIntent.copy,
-        LogicalKeySet(LogicalKeyboardKey.keyC, LogicalKeyboardKey.controlLeft):
-            CopySelectionTextIntent.cut(SelectionChangedCause.keyboard),
-      },
-      child: Actions(
-        actions: {
-          CopySelectionTextIntent: CallbackAction<CopySelectionTextIntent>(
-            onInvoke: (intent) {
-              if (intent.collapseSelection) {
-                onCellsCut();
-              } else {
-                onCellsCopied();
-              }
-              return null;
-            },
-          ),
-        },
-        child: Focus(
-          autofocus: true,
-          skipTraversal: true,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              final toolbarWidth = calculateToolbarWidth(context);
-              final toolbarHeight = (SpaceVariant.large.resolve(context) +
-                      SpaceVariant.small.resolve(context)) *
-                  2;
-              var left = viewportSelection.left;
-              var top = viewportSelection.top;
-              left += (viewportSelection.width - toolbarWidth) / 2;
-              top -= toolbarHeight;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final toolbarWidth = calculateToolbarWidth(context);
+        final toolbarHeight = (SpaceVariant.large.resolve(context) +
+                SpaceVariant.small.resolve(context)) *
+            2;
+        var left = viewportSelection.left;
+        var top = viewportSelection.top;
+        left += (viewportSelection.width - toolbarWidth) / 2;
+        top -= toolbarHeight;
 
-              return Stack(
-                children: [
-                  Positioned.fromRect(
-                    rect: viewportSelection,
-                    child: GestureDetector(
-                      supportedDevices: {
-                        ...PointerDeviceKind.values,
-                      }..remove(PointerDeviceKind.trackpad),
-                      onPanStart: (details) {
-                        initialLocalPosition.value = details.globalPosition;
-                        initialSelectedCells.value = {
-                          for (var i = 0; i < selectedCellIds.length; i++)
-                            selectedCellIds[i]:
-                                cellMaps[selectedCellIds[i]]!.$2.offset,
-                        };
-                      },
-                      onPanUpdate: (details) {
-                        final delta = (details.globalPosition -
-                                initialLocalPosition.value) /
-                            scaleFactor;
-                        final newSelectedCells = {
-                          for (var i = 0; i < selectedCellIds.length; i++)
-                            selectedCellIds[i]: initialSelectedCells
-                                    .value[selectedCellIds[i]]! +
-                                delta,
-                        };
-                        onSelectionsMove(newSelectedCells);
-                      },
-                      onPanEnd: (details) {
-                        initialLocalPosition.value = Offset.zero;
-                        initialSelectedCells.value = {};
-                      },
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: ColorVariant.yellow
-                              .resolve(context)
-                              .withOpacity(OpacityVariant.hightlight
-                                  .resolve(context)
-                                  .value),
-                          border: Border.all(
-                            color: ColorVariant.yellow.resolve(context),
-                            width: 2 * scaleFactor,
+        return Stack(
+          children: [
+            Positioned.fromRect(
+              rect: viewportSelection,
+              child: GestureDetector(
+                supportedDevices: {
+                  ...PointerDeviceKind.values,
+                }..remove(PointerDeviceKind.trackpad),
+                onPanStart: (details) {
+                  initialLocalPosition.value = details.globalPosition;
+                  initialSelectedCells.value = {
+                    for (var i = 0; i < selectedCellIds.length; i++)
+                      selectedCellIds[i]:
+                          cellMaps[selectedCellIds[i]]!.$2.offset,
+                  };
+                },
+                onPanUpdate: (details) {
+                  final delta =
+                      (details.globalPosition - initialLocalPosition.value) /
+                          scaleFactor;
+                  final newSelectedCells = {
+                    for (var i = 0; i < selectedCellIds.length; i++)
+                      selectedCellIds[i]:
+                          initialSelectedCells.value[selectedCellIds[i]]! +
+                              delta,
+                  };
+                  onSelectionsMove(newSelectedCells);
+                },
+                onPanEnd: (details) {
+                  initialLocalPosition.value = Offset.zero;
+                  initialSelectedCells.value = {};
+                },
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: ColorVariant.yellow.resolve(context).withOpacity(
+                        OpacityVariant.hightlight.resolve(context).value),
+                    border: Border.all(
+                      color: ColorVariant.yellow.resolve(context),
+                      width: 2 * scaleFactor,
+                    ),
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+            ),
+            Positioned(
+              left: left,
+              top: top,
+              child: HookBuilder(
+                builder: (context) {
+                  final showChat = useState(false);
+                  final chatController = useTextEditingController();
+
+                  final noKeyboardConstraints = useState(constraints);
+                  final keyboardVisibilityController =
+                      useMemoized(() => KeyboardVisibilityController());
+                  useOnStreamChange(
+                    keyboardVisibilityController.onChange,
+                    onData: (event) {
+                      if (event == false) {
+                        noKeyboardConstraints.value = constraints;
+                      }
+                    },
+                  );
+
+                  return PortalTarget(
+                    visible: showChat.value,
+                    portalFollower: Stack(
+                      children: [
+                        Positioned(
+                          left: viewportSelection.left +
+                              (viewportSelection.width - 400) / 2,
+                          bottom: noKeyboardConstraints.value.maxHeight -
+                              (viewportSelection.top -
+                                  toolbarHeight -
+                                  SpaceVariant.small.resolve(context)),
+                          width: 400,
+                          child: DSTextbox(
+                            controller: chatController,
+                            autofocus: true,
+                            minLines: 1,
+                            maxLines: 4,
+                            hintText: 'Type a message...',
+                            trailing: Button(
+                              onPressed: () {
+                                showChat.value = false;
+                                if (chatController.text.trim().isEmpty) return;
+                                onChatWithSelectedCells(
+                                  selectedCellIds,
+                                  chatController.text,
+                                );
+                                chatController.clear();
+                              },
+                              child: StyledIcon(IconlyLight.send),
+                            ),
                           ),
                         ),
-                        child: const SizedBox.expand(),
-                      ),
+                      ],
                     ),
-                  ),
-                  Positioned(
-                    left: left,
-                    top: top,
-                    child: HookBuilder(
-                      builder: (context) {
-                        final showChat = useState(false);
-                        final chatController = useTextEditingController();
-
-                        final noKeyboardConstraints = useState(constraints);
-                        final keyboardVisibilityController =
-                            useMemoized(() => KeyboardVisibilityController());
-                        useOnStreamChange(
-                          keyboardVisibilityController.onChange,
-                          onData: (event) {
-                            if (event == false) {
-                              noKeyboardConstraints.value = constraints;
-                            }
-                          },
-                        );
-
-                        return PortalTarget(
-                          visible: showChat.value,
-                          portalFollower: Stack(
-                            children: [
-                              Positioned(
-                                left: viewportSelection.left +
-                                    (viewportSelection.width - 400) / 2,
-                                bottom: noKeyboardConstraints.value.maxHeight -
-                                    (viewportSelection.top -
-                                        toolbarHeight -
-                                        SpaceVariant.small.resolve(context)),
-                                width: 400,
-                                child: DSTextbox(
-                                  controller: chatController,
-                                  autofocus: true,
-                                  minLines: 1,
-                                  maxLines: 4,
-                                  hintText: 'Type a message...',
-                                  trailing: Button(
-                                    onPressed: () {
-                                      showChat.value = false;
-                                      if (chatController.text.trim().isEmpty)
-                                        return;
-                                      onChatWithSelectedCells(
-                                        selectedCellIds,
-                                        chatController.text,
-                                      );
-                                      chatController.clear();
-                                    },
-                                    child: StyledIcon(IconlyLight.send),
+                    child: DSToolbar(
+                      direction: Axis.horizontal,
+                      children: [
+                        DSTooltip(
+                          label: StyledText('Chat'),
+                          alignment: Alignment.bottomCenter,
+                          child: DSToolbarItem(
+                            onPressed: () => showChat.value = !showChat.value,
+                            child: StyledIcon(IconlyLight.chat),
+                          ),
+                        ),
+                        ...switch (selectedCells.length == 1) {
+                          false => [],
+                          true => [
+                              DSTooltip(
+                                label: StyledText('Summarize'),
+                                alignment: Alignment.bottomCenter,
+                                child: DSToolbarItem(
+                                  onPressed: () => onCellSummarize(
+                                    cellMaps[selectedCellIds.first]!.$2,
+                                  ),
+                                  child: StyledIcon(
+                                      CupertinoIcons.doc_text_viewfinder),
+                                ),
+                              ),
+                              if (selectedCells.first is ArticleCell)
+                                DSTooltip(
+                                  label: StyledText('Turn into editable'),
+                                  alignment: Alignment.bottomCenter,
+                                  child: DSToolbarItem(
+                                    onPressed: () => onTurnArticleIntoEditable(
+                                      selectedCells.first as ArticleCell,
+                                    ),
+                                    child: StyledIcon(IconlyLight.document),
                                   ),
                                 ),
-                              ),
                             ],
+                        },
+                        DSTooltip(
+                          label: StyledText('Delete'),
+                          alignment: Alignment.bottomCenter,
+                          child: DSToolbarItem(
+                            onPressed: () =>
+                                onSelectionsDelete(selectedCellIds),
+                            child: StyledIcon(IconlyLight.delete),
                           ),
-                          child: DSToolbar(
-                            direction: Axis.horizontal,
-                            children: [
-                              DSTooltip(
-                                label: StyledText('Chat'),
-                                alignment: Alignment.bottomCenter,
-                                child: DSToolbarItem(
-                                  onPressed: () =>
-                                      showChat.value = !showChat.value,
-                                  child: StyledIcon(IconlyLight.chat),
-                                ),
-                              ),
-                              ...switch (selectedCells.length == 1) {
-                                false => [],
-                                true => [
-                                    DSTooltip(
-                                      label: StyledText('Summarize'),
-                                      alignment: Alignment.bottomCenter,
-                                      child: DSToolbarItem(
-                                        onPressed: () => onCellSummarize(
-                                          cellMaps[selectedCellIds.first]!.$2,
-                                        ),
-                                        child: StyledIcon(
-                                            CupertinoIcons.doc_text_viewfinder),
-                                      ),
-                                    ),
-                                    if (selectedCells.first is ArticleCell)
-                                      DSTooltip(
-                                        label: StyledText('Turn into editable'),
-                                        alignment: Alignment.bottomCenter,
-                                        child: DSToolbarItem(
-                                          onPressed: () =>
-                                              onTurnArticleIntoEditable(
-                                            selectedCells.first as ArticleCell,
-                                          ),
-                                          child:
-                                              StyledIcon(IconlyLight.document),
-                                        ),
-                                      ),
-                                  ],
-                              },
-                              DSTooltip(
-                                label: StyledText('Delete'),
-                                alignment: Alignment.bottomCenter,
-                                child: DSToolbarItem(
-                                  onPressed: () =>
-                                      onSelectionsDelete(selectedCellIds),
-                                  child: StyledIcon(IconlyLight.delete),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
+                  );
+                },
+              ),
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  static Rect computeSelectionRect({
+    required Offset selectionStart,
+    required Offset selectionEnd,
+    required Offset viewportTopLeft,
+    ValueNotifier<StackPositionData>? selectionStartDx,
+    ValueNotifier<StackPositionData>? selectionStartDy,
+    ValueNotifier<StackPositionData>? selectionEndDx,
+    ValueNotifier<StackPositionData>? selectionEndDy,
+    required Offset spacingOffset,
+    required double scaleFactor,
+  }) {
+    selectionStart = Offset(
+      switch (selectionStartDx) {
+        null => selectionStart.dx,
+        final selectionStartDx => selectionStartDx.value.offset.dx,
+      },
+      switch (selectionStartDy) {
+        null => selectionStart.dy,
+        final selectionStartDy => selectionStartDy.value.offset.dy,
+      },
+    );
+    selectionEnd = Offset(
+      switch (selectionEndDx) {
+        null => selectionEnd.dx,
+        final selectionEndDx => selectionEndDx.value.offset.dx +
+            (selectionEndDx.value.width ??
+                selectionEndDx.value.preferredWidth ??
+                0),
+      },
+      switch (selectionEndDy) {
+        null => selectionEnd.dy,
+        final selectionEndDy => selectionEndDy.value.offset.dy +
+            (selectionEndDy.value.height ??
+                selectionEndDy.value.preferredHeight ??
+                0),
+      },
+    );
+
+    var viewportSelectionStart =
+        ((selectionStart - viewportTopLeft / scaleFactor) - spacingOffset) *
+            scaleFactor;
+    var viewportSelectionEnd =
+        ((selectionEnd - viewportTopLeft / scaleFactor) + spacingOffset) *
+            scaleFactor;
+
+    return Rect.fromPoints(viewportSelectionStart, viewportSelectionEnd);
   }
 }

@@ -363,33 +363,53 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           Queue<StackPosition> stackPositions = Queue.from([]);
           Offset? selectionStart;
           Offset? selectionEnd;
+          Cell? selectionStartDxCell;
+          Cell? selectionStartDyCell;
+          Cell? selectionEndDxCell;
+          Cell? selectionEndDyCell;
+
           List<Cell> selectedCells = [];
 
           for (final (key, cell) in cellKeys.values) {
             if (cell.selected) {
               selectedCells.add(cell);
 
-              if (selectionStart == null) {
+              if (selectionStart == null && selectionEnd == null) {
                 selectionStart = cell.offset;
-              }
-              if (selectionEnd == null) {
-                selectionEnd = cell.offset;
+                selectionStartDxCell = cell;
+                selectionStartDyCell = cell;
+                selectionEnd = cell.offset +
+                    Offset(
+                      cell.width,
+                      cell.height ?? cell.preferredHeight ?? 0,
+                    );
+                selectionEndDxCell = cell;
+                selectionEndDyCell = cell;
               }
 
-              selectionStart = Offset(
-                math.min(selectionStart.dx, cell.offset.dx),
-                math.min(selectionStart.dy, cell.offset.dy),
-              );
-              selectionEnd = Offset(
-                math.max(
+              if (cell.offset.dx < selectionStart!.dx) {
+                selectionStart = Offset(cell.offset.dx, selectionStart.dy);
+                selectionStartDxCell = cell;
+              }
+              if (cell.offset.dy < selectionStart.dy) {
+                selectionStart = Offset(selectionStart.dx, cell.offset.dy);
+                selectionStartDyCell = cell;
+              }
+
+              if (selectionEnd!.dx < cell.offset.dx + cell.width) {
+                selectionEnd =
+                    Offset(cell.offset.dx + cell.width, selectionEnd.dy);
+                selectionEndDxCell = cell;
+              }
+
+              if (cell.offset.dy + CellAppearance(cell).rect.height >
+                  selectionEnd.dy) {
+                selectionEnd = Offset(
                   selectionEnd.dx,
-                  cell.offset.dx + cell.width,
-                ),
-                math.max(
-                  selectionEnd.dy,
                   cell.offset.dy + CellAppearance(cell).rect.height,
-                ),
-              );
+                );
+                selectionEndDyCell = cell;
+              }
             }
             stackPositions.addLast(
               StackPosition(
@@ -516,6 +536,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   selectionEnd: selectionEnd!,
                   selectedCells: selectedCells,
                   scaleFactor: scaleFactor,
+                  selectionStartDxCell: selectionStartDxCell!,
+                  selectionStartDyCell: selectionStartDyCell!,
+                  selectionEndDxCell: selectionEndDxCell!,
+                  selectionEndDyCell: selectionEndDyCell!,
                 ),
             },
             delegate: BoundlessStackListDelegate(
@@ -781,21 +805,35 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   TwoDimensionalViewportBuilder buildSuggectionForSelection({
     required Offset selectionStart,
     required Offset selectionEnd,
+    required Cell selectionStartDxCell,
+    required Cell selectionStartDyCell,
+    required Cell selectionEndDxCell,
+    required Cell selectionEndDyCell,
     required List<Cell> selectedCells,
     required double scaleFactor,
   }) =>
       (context, verticalPosition, horizontalPosition) {
-        final spacingOffset = Offset(
-          SpaceVariant.small.resolve(context),
-          SpaceVariant.small.resolve(context),
-        );
+        final selectionStartDx =
+            stackPositionDataMap[selectionStartDxCell.id.id];
+        final selectionStartDy =
+            stackPositionDataMap[selectionStartDyCell.id.id];
+        final selectionEndDx = stackPositionDataMap[selectionEndDxCell.id.id];
+        final selectionEndDy = stackPositionDataMap[selectionEndDyCell.id.id];
 
-        final viewportSelectionStart =
-            ((selectionStart - viewportTopLeft / scaleFactor) - spacingOffset) *
-                scaleFactor;
-        final viewportSelectionEnd =
-            ((selectionEnd - viewportTopLeft / scaleFactor) + spacingOffset) *
-                scaleFactor;
+        final viewportSelection = SelectionCellsView.computeSelectionRect(
+          selectionStart: selectionStart,
+          selectionEnd: selectionEnd,
+          viewportTopLeft: viewportTopLeft,
+          selectionStartDx: selectionStartDx,
+          selectionStartDy: selectionStartDy,
+          selectionEndDx: selectionEndDx,
+          selectionEndDy: selectionEndDy,
+          spacingOffset: Offset(
+            SpaceVariant.small.resolve(context),
+            SpaceVariant.small.resolve(context),
+          ),
+          scaleFactor: scaleFactor,
+        );
 
         return MixTheme(
           data: mixTheme.copyWith(
@@ -810,11 +848,14 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
               verticalPosition: verticalPosition,
               horizontalDetails: horizontalDetails,
               verticalDetails: verticalDetails,
-              viewportSelection: Rect.fromPoints(
-                viewportSelectionStart,
-                viewportSelectionEnd,
-              ),
+              viewportSelection: viewportSelection,
               scaleFactor: scaleFactor,
+
+              stackPositionDataMap: stackPositionDataMap,
+              selectionStartDxCell: selectionStartDxCell,
+              selectionStartDyCell: selectionStartDyCell,
+              selectionEndDxCell: selectionEndDxCell,
+              selectionEndDyCell: selectionEndDyCell,
 
               /// ArticleCell
               onTurnArticleIntoEditable:

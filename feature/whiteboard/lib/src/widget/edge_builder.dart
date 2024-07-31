@@ -85,6 +85,20 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
     return Rect.fromPoints(edgeTopLeft, edgeBottomRight);
   }
 
+  Rect _computeCellBoundWithStackPosition(
+      StackPositionData position, Cell cell) {
+    return Rect.fromLTWH(
+      position.offset.dx,
+      position.offset.dy,
+      position.width ?? position.preferredWidth ?? cell.width,
+      position.height ??
+          cell.height ??
+          position.preferredHeight ??
+          cell.preferredHeight ??
+          0,
+    );
+  }
+
   void computeEdgeBounds(
     (GlobalKey<State<StatefulWidget>>, Cell) source,
     (GlobalKey<State<StatefulWidget>>, Cell) target, {
@@ -93,27 +107,11 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
   }) {
     Rect newSourceCellRect = switch (sourcePosition) {
       null => _computeCellBound(source),
-      final position => Rect.fromLTWH(
-          position.offset.dx,
-          position.offset.dy,
-          position.width ?? source.$2.width,
-          position.height ??
-              source.$2.height ??
-              source.$2.preferredHeight ??
-              100,
-        ),
+      final position => _computeCellBoundWithStackPosition(position, source.$2),
     };
     Rect newTargetCellRect = switch (targetPosition) {
       null => _computeCellBound(target),
-      final position => Rect.fromLTWH(
-          position.offset.dx,
-          position.offset.dy,
-          position.width ?? target.$2.width,
-          position.height ??
-              target.$2.height ??
-              target.$2.preferredHeight ??
-              100,
-        ),
+      final position => _computeCellBoundWithStackPosition(position, target.$2),
     };
 
     Rect newEdgeRect = _computeEdgeRect(newSourceCellRect, newTargetCellRect);

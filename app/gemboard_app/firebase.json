@@ -47,9 +47,6 @@
           }
         ]
       }
-    ],
-    "frameworksBackend": {
-      "region": "us-west1"
-    }
+    ]
   }
 }
