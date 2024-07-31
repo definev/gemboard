@@ -15,7 +15,7 @@ class GridBackground extends StatelessWidget {
 
   static TwoDimensionalViewportBuilder backgroundBuilder({
     required double scale,
-    double dimension = 100,
+    double dimension = 150,
     double dotSize = 10,
   }) {
     return (
@@ -61,10 +61,8 @@ class GridBackground extends StatelessWidget {
                 ..setColor(ColorVariant.background.resolve(context))
                 // onBackground
                 ..setColor(
-                  Color.lerp(
-                      ColorVariant.background.resolve(context),
-                      ColorVariant.onBackground.resolve(context),
-                      OpacityVariant.hightlight.resolve(context).value)!,
+                  Color.lerp(ColorVariant.background.resolve(context),
+                      ColorVariant.onBackground.resolve(context), 0.07)!,
                 );
             });
 

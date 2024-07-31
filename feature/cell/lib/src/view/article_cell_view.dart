@@ -67,7 +67,12 @@ class ArticleCellView extends StatelessWidget {
         header: Row(
           children: [
             Expanded(
-              child: DSMarkdownBody(data: cell.title),
+              child: Mix(
+                data: Style(
+                  $text.style.color(cellDecoration.onColorValue(context)),
+                ).of(context),
+                child: DSMarkdownBody(data: cell.title),
+              ),
             ),
             Button(
               background: background,

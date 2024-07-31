@@ -34,7 +34,7 @@ class DSCardStyle {
         $box.shadow(
           blurRadius: 8 * scale,
           color: background.resolve(context).withOpacity(0.1),
-          offset:  Offset(0, 4 * scale),
+          offset: Offset(0, 4 * scale),
         ),
         $text.style.color.ref(ColorVariant.onSurface),
       ),
@@ -60,9 +60,7 @@ class DSCardStyle {
 
   Style sectionHeaderStyle(BuildContext context) {
     return Style(
-      $box.color(background
-          .resolve(context)
-          .withOpacity(OpacityVariant.blend.resolve(context).value)),
+      $box.color(background.resolve(context)),
       $box.alignment.centerLeft(),
       $box.padding.all.ref(SpaceVariant.small),
       $text.style.ref(TextStyleVariant.p),

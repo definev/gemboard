@@ -2,6 +2,7 @@ import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mix/mix.dart';
 
@@ -35,6 +36,8 @@ class EditableCellView extends HookWidget {
     final background = cellDecoration.colorVariant ?? ColorVariant.surface;
     final onBackground = cellDecoration.onColorValue(context);
 
+    final onEdit = useState(false);
+
     Widget child = DSCard(
       kind: kind,
       background: background,
@@ -42,6 +45,9 @@ class EditableCellView extends HookWidget {
         kind: kind,
         background: background,
         header: HBox(
+          style: Style(
+            $flex.gap.ref(SpaceVariant.gap),
+          ),
           children: [
             Expanded(
               child: DSTextbox(
@@ -66,6 +72,16 @@ class EditableCellView extends HookWidget {
               ),
             ),
             Button(
+              kind: ButtonKind.filled,
+              background: background,
+              onPressed: () => onEdit.value = !onEdit.value,
+              child: StyledIcon(
+                onEdit.value
+                    ? IconlyLight.tick_square
+                    : IconlyLight.edit_square,
+              ),
+            ),
+            Button(
               background: background,
               onPressed: onConstraintChanged,
               child: StyledIcon(
@@ -87,29 +103,43 @@ class EditableCellView extends HookWidget {
           child: Builder(
             builder: (context) {
               final textSpec = TextSpec.of(context);
-              final textBox = DSTextbox(
-                controller: contentController,
-                focusNode: contentFocusNode,
-                hintText: 'Type something',
-                kind: DSTextboxKind.boundless,
-                minLines: 1,
-                onChanged: (content) =>
-                    onContentChanged(titleController.text, content),
-                hintTextStyle: TextStyleVariant.p2.resolve(context).copyWith(
-                    color: (textSpec.style?.color ?? onBackground).withOpacity(
-                        OpacityVariant.surface.resolve(context).value)),
-                textStyle: TextStyleVariant.p2
-                    .resolve(context)
-                    .copyWith(color: textSpec.style?.color ?? onBackground),
-                style: Style(
-                  $box.color(Colors.transparent),
-                  $box.padding.all(0),
-                ),
-              );
+              final child = switch (onEdit.value) {
+                true => DSTextbox(
+                    controller: contentController,
+                    focusNode: contentFocusNode,
+                    hintText: 'Type something',
+                    kind: DSTextboxKind.boundless,
+                    minLines: 1,
+                    onChanged: (content) =>
+                        onContentChanged(titleController.text, content),
+                    hintTextStyle: TextStyleVariant.p2
+                        .resolve(context)
+                        .copyWith(
+                            color: (textSpec.style?.color ?? onBackground)
+                                .withOpacity(OpacityVariant.surface
+                                    .resolve(context)
+                                    .value)),
+                    textStyle: TextStyleVariant.p2
+                        .resolve(context)
+                        .copyWith(color: textSpec.style?.color ?? onBackground),
+                    style: Style(
+                      $box.color(Colors.transparent),
+                      $box.padding.all(0),
+                    ),
+                  ),
+                false => SelectionArea(
+                    child: SingleChildScrollView(
+                      child: DSMarkdownBody(
+                        data: cell.content,
+                        // scrollable: cell.decoration.constraints,
+                      ),
+                    ),
+                  ),
+              };
               if (cell.decoration.constraints) {
-                return IntrinsicHeight(child: textBox);
+                return IntrinsicHeight(child: child);
               }
-              return textBox;
+              return child;
             },
           ),
         ),
