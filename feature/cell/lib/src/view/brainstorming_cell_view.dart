@@ -73,7 +73,7 @@ class BrainstormingCellView extends HookWidget {
                       .resolve(context)
                       .withOpacity(1 - index * 0.2)),
                   $box.margin.horizontal(1.5),
-                  $box.minHeight(32),
+                  $box.minHeight(32 * scale),
                   $box.padding.left.ref(SpaceVariant.small),
                   $box.minWidth(randomWidths[index]),
                   $box.alignment.centerLeft(),
@@ -118,7 +118,12 @@ class BrainstormingCellView extends HookWidget {
                   ),
                   children: [
                     StyledText(suggestion),
-                    StyledIcon(IconlyLight.arrow_right_circle),
+                    StyledIcon(
+                      IconlyLight.arrow_right_circle,
+                      style: Style(
+                        $icon.size(SpaceVariant.large.resolve(context)),
+                      ),
+                    ),
                   ],
                 ),
               ),
