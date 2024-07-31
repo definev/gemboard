@@ -429,6 +429,7 @@ class _CellBuilderState extends State<CellBuilder> {
       ),
       editable: (cell) => EditableCellView(
         cell: cell,
+        onConstraintChanged: () => widget.onConstraintChanged(cell),
         onContentChanged: (title, content) =>
             widget.onContentChanged(cell, title, content),
       ),

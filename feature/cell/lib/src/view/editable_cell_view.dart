@@ -9,15 +9,19 @@ class EditableCellView extends HookWidget {
   const EditableCellView({
     super.key,
     required this.cell,
+    required this.onConstraintChanged,
     required this.onContentChanged,
   });
 
   final EditableCell cell;
 
+  final VoidCallback onConstraintChanged;
   final void Function(String title, String content) onContentChanged;
 
   @override
   Widget build(BuildContext context) {
+    final scale = DesignSystemTheme.of(context).scale;
+
     final cellDecoration = CellDecorationExtension(cell.decoration);
 
     final titleController = useTextEditingController(text: cell.title);
@@ -63,7 +67,7 @@ class EditableCellView extends HookWidget {
             ),
             Button(
               background: background,
-              onPressed: () {},
+              onPressed: onConstraintChanged,
               child: StyledIcon(
                 switch (cell.decoration.constraints) {
                   false => LineIcons.caretUp,
@@ -73,29 +77,41 @@ class EditableCellView extends HookWidget {
             ),
           ],
         ),
-        content: Builder(
-          builder: (context) {
-            final textSpec = TextSpec.of(context);
-            return DSTextbox(
-              controller: contentController,
-              focusNode: contentFocusNode,
-              hintText: 'Type something',
-              kind: DSTextboxKind.boundless,
-              minLines: 1,
-              onChanged: (content) =>
-                  onContentChanged(titleController.text, content),
-              hintTextStyle: TextStyleVariant.p2.resolve(context).copyWith(
-                  color: (textSpec.style?.color ?? onBackground).withOpacity(
-                      OpacityVariant.surface.resolve(context).value)),
-              textStyle: TextStyleVariant.p2
-                  .resolve(context)
-                  .copyWith(color: textSpec.style?.color ?? onBackground),
-              style: Style(
-                $box.color(Colors.transparent),
-                $box.padding.all(0),
-              ),
-            );
-          },
+        content: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: switch (cell.decoration.constraints) {
+              true => 300 * scale,
+              false => double.infinity,
+            },
+          ),
+          child: Builder(
+            builder: (context) {
+              final textSpec = TextSpec.of(context);
+              final textBox = DSTextbox(
+                controller: contentController,
+                focusNode: contentFocusNode,
+                hintText: 'Type something',
+                kind: DSTextboxKind.boundless,
+                minLines: 1,
+                onChanged: (content) =>
+                    onContentChanged(titleController.text, content),
+                hintTextStyle: TextStyleVariant.p2.resolve(context).copyWith(
+                    color: (textSpec.style?.color ?? onBackground).withOpacity(
+                        OpacityVariant.surface.resolve(context).value)),
+                textStyle: TextStyleVariant.p2
+                    .resolve(context)
+                    .copyWith(color: textSpec.style?.color ?? onBackground),
+                style: Style(
+                  $box.color(Colors.transparent),
+                  $box.padding.all(0),
+                ),
+              );
+              if (cell.decoration.constraints) {
+                return IntrinsicHeight(child: textBox);
+              }
+              return textBox;
+            },
+          ),
         ),
       ),
     );
