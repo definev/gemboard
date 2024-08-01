@@ -4,6 +4,7 @@ import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gemboard_common/gemboard_common.dart';
@@ -24,7 +25,7 @@ import 'package:whiteboard/whiteboard.dart';
 
 final defaultCursorMode = switch (defaultTargetPlatform) {
   TargetPlatform.android || TargetPlatform.iOS => CursorMode.handTool,
-  _ => CursorMode.move,
+  _ => CursorMode.selectionTool,
 };
 
 class WhiteboardEditorFlow extends HookConsumerWidget {
@@ -130,11 +131,14 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         cursorMode: cursorMode,
         horizontalDetails: horizontalDetails,
         verticalDetails: verticalDetails,
-        onSelectionStart: () => ref.read(
-          deselectCellProvider(
-            parentId: CellParentId(whiteboardId: id.id),
-          ).future,
-        ),
+        onDoubleTap: () {
+          if (cursorMode.value == CursorMode.selectionTool) {}
+          return ref.read(
+            deselectCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+            ).future,
+          );
+        },
         onSelection: (rect) async {
           final viewportTopLeft = Offset(
             horizontalDetails.controller!.offset,
@@ -425,15 +429,15 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
           children: [
             DSTooltip(
               alignment: Alignment.bottomCenter,
-              label: StyledText('Move'),
+              label: StyledText('Selection tool'),
               child: Button(
                 style: Style(
                   $box.height(40),
                   $box.width(40),
                   $box.alignment.center(),
                 ),
-                kind: kindBasedOn(cursorMode.value, CursorMode.move),
-                onPressed: () => cursorMode.value = CursorMode.move,
+                kind: kindBasedOn(cursorMode.value, CursorMode.selectionTool),
+                onPressed: () => cursorMode.value = CursorMode.selectionTool,
                 child: StyledIcon(LineIcons.mousePointer),
               ),
             ),
@@ -459,59 +463,85 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         final cursorModeToolWidth = SpaceVariant.small.resolve(context) * 4 +
             (SpaceVariant.large.resolve(context) * 2) * 3;
 
-        return MediaQuery.removeViewPadding(
-          context: context,
-          child: Stack(
-            children: [
-              Positioned.fill(child: whiteboardBuilder),
-              Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: actionToolWidth +
-                      cursorModeToolWidth +
-                      SpaceVariant.small.resolve(context) * 2 +
-                      SpaceVariant.medium.resolve(context),
-                  child: VBox(
-                    style: Style(
-                      $box.padding.all.ref(SpaceVariant.small),
-                      $flex.gap.ref(SpaceVariant.small),
-                      $flex.mainAxisSize.min(),
-                    ),
-                    children: [
-                      StyledFlex(
-                        direction: Axis.horizontal,
-                        style: Style(
-                          $flex.mainAxisSize.min(),
-                          $flex.gap.ref(SpaceVariant.medium),
-                        ),
-                        children: [
-                          actionTool,
-                          cursorModeTool,
-                        ],
-                      ),
-                      if (showChat.value)
-                        DSTextbox(
-                          autofocus: true,
-                          controller: chatTextController,
-                          hintText: 'Type a message...',
-                          minLines: 1,
-                          maxLines: 8,
-                          trailing: Button(
-                            onPressed: () {
-                              whiteboardKey.currentState?.cell_onAskNewQuestion(
-                                  chatTextController.text);
-                              showChat.value = false;
-                            },
-                            child: StyledIcon(IconlyLight.send),
-                          ),
-                        ),
-                    ],
+        Widget viewport = Stack(
+          children: [
+            Positioned.fill(child: whiteboardBuilder),
+            Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                width: actionToolWidth +
+                    cursorModeToolWidth +
+                    SpaceVariant.small.resolve(context) * 2 +
+                    SpaceVariant.medium.resolve(context),
+                child: VBox(
+                  style: Style(
+                    $box.padding.all.ref(SpaceVariant.small),
+                    $flex.gap.ref(SpaceVariant.small),
+                    $flex.mainAxisSize.min(),
                   ),
+                  children: [
+                    StyledFlex(
+                      direction: Axis.horizontal,
+                      style: Style(
+                        $flex.mainAxisSize.min(),
+                        $flex.gap.ref(SpaceVariant.medium),
+                      ),
+                      children: [
+                        actionTool,
+                        cursorModeTool,
+                      ],
+                    ),
+                    if (showChat.value)
+                      DSTextbox(
+                        autofocus: true,
+                        controller: chatTextController,
+                        hintText: 'Type a message...',
+                        minLines: 1,
+                        maxLines: 8,
+                        trailing: Button(
+                          onPressed: () {
+                            whiteboardKey.currentState?.cell_onAskNewQuestion(
+                                chatTextController.text);
+                            showChat.value = false;
+                          },
+                          child: StyledIcon(IconlyLight.send),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-            ],
+            ),
+          ],
+        );
+
+        viewport = Shortcuts.manager(
+          manager: WhiteboardShortcutManager(),
+          child: Actions(
+            actions: {
+              ToggleCursorModeIntent: CallbackAction(
+                onInvoke: (_) {
+                  cursorMode.value = cursorMode.value == CursorMode.handTool
+                      ? CursorMode.selectionTool
+                      : CursorMode.handTool;
+                  return null;
+                },
+              ),
+            },
+            child: Focus(
+              autofocus: true,
+              canRequestFocus: true,
+              skipTraversal: true,
+              child: viewport,
+            ),
           ),
         );
+
+        viewport = MediaQuery.removeViewPadding(
+          context: context,
+          child: viewport,
+        );
+
+        return viewport;
       },
     );
 
@@ -526,10 +556,6 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
             final WhiteboardPosition(:offset, :scale) = position;
             WidgetsBinding.instance.addPostFrameCallback((_) async {
               scaleFactor.value = scale;
-              while (!(verticalScrollController.hasClients &&
-                  horizontalScrollController.hasClients)) {
-                await Future.delayed(Duration(milliseconds: 10));
-              }
               if (verticalScrollController.offset != offset.dy) {
                 verticalScrollController.jumpTo(offset.dy);
               }
@@ -587,3 +613,21 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
     );
   }
 }
+
+class WhiteboardShortcutManager extends ShortcutManager {
+  WhiteboardShortcutManager._({
+    super.modal,
+    super.shortcuts,
+  });
+
+  factory WhiteboardShortcutManager() {
+    return WhiteboardShortcutManager._(
+      shortcuts: {
+        SingleActivator(LogicalKeyboardKey.keyC, shift: true):
+            ToggleCursorModeIntent(),
+      },
+    );
+  }
+}
+
+class ToggleCursorModeIntent extends Intent {}

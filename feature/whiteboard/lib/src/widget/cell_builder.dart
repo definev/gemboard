@@ -56,7 +56,8 @@ class CellBuilder extends StatefulWidget {
       onContentChanged;
 
   /// Cell
-  final void Function(Cell source, Cell target) onCellLinked;
+  final void Function(Cell source, Cell target, {required bool autoLabel})
+      onCellLinked;
   final void Function(Cell cell) onConstraintChanged;
 
   @override
@@ -402,7 +403,7 @@ class _CellBuilderState extends State<CellBuilder> {
           onAcceptWithDetails: (details) {
             final DragTargetDetails(:data) = details;
             if (data is Cell) {
-              widget.onCellLinked(data, cell);
+              widget.onCellLinked(data, cell, autoLabel: true);
             }
           },
           builder: (context, candidateData, rejectedData) => GestureDetector(

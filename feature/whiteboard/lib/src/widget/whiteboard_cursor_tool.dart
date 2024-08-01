@@ -14,7 +14,7 @@ class WhiteboardCursorTool extends HookWidget {
     required this.whiteboardBuilder,
     required this.horizontalDetails,
     required this.verticalDetails,
-    required this.onSelectionStart,
+    required this.onDoubleTap,
     required this.onSelection,
   });
 
@@ -28,7 +28,7 @@ class WhiteboardCursorTool extends HookWidget {
     ValueNotifier<bool> onGrab,
   ) whiteboardBuilder;
 
-  final Future<void> Function() onSelectionStart;
+  final Future<void> Function() onDoubleTap;
   final Future<void> Function(Rect rect) onSelection;
 
   @override
@@ -74,13 +74,16 @@ class WhiteboardCursorTool extends HookWidget {
               supportedDevices: {
                 PointerDeviceKind.touch,
                 PointerDeviceKind.mouse,
+                PointerDeviceKind.stylus,
+                PointerDeviceKind.invertedStylus,
               },
+              onDoubleTap: onDoubleTap,
               onPanStart: (details) async {
                 onGrab.value = true;
                 firstPoint.value = details.localPosition;
                 secondPoint.value = details.localPosition;
                 doneOnSelectionStart.value = false;
-                await onSelectionStart();
+                await onDoubleTap();
                 doneOnSelectionStart.value = true;
               },
               onPanUpdate: (details) async {
@@ -202,14 +205,14 @@ class WhiteboardCursorTool extends HookWidget {
                 color: Colors.transparent,
                 child: MouseRegion(
                   cursor: switch (cursorMode.value) {
-                    CursorMode.move => SystemMouseCursors.basic,
+                    CursorMode.selectionTool => SystemMouseCursors.basic,
                     CursorMode.handTool => switch (onGrab.value) {
                         true => SystemMouseCursors.grabbing,
                         false => SystemMouseCursors.grab,
                       },
                   },
                   child: whiteboardBuilder(
-                    cursorMode.value == CursorMode.move,
+                    cursorMode.value == CursorMode.selectionTool,
                     cursorMode.value == CursorMode.handTool,
                     onGrab,
                   ),

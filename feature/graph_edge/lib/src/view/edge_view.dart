@@ -62,7 +62,7 @@ class EdgeView extends HookWidget {
     ///
     required this.onEdgeDeleted,
     required this.onEdgeLabelChanged,
-    required this.onAskEdge,
+    required this.onAutoLabel,
   });
 
   final Edge data;
@@ -84,7 +84,7 @@ class EdgeView extends HookWidget {
 
   final void Function(Edge data) onEdgeDeleted;
   final void Function(String label) onEdgeLabelChanged;
-  final void Function(Edge data) onAskEdge;
+  final void Function(Edge data) onAutoLabel;
 
   (
     Offset shortestPointFromSource,
@@ -435,10 +435,16 @@ class EdgeView extends HookWidget {
       () => _computeEdgeVisual(context),
       [normalizeRects],
     );
-    final showChat = useState(false);
     final showOptions = useState(false);
     final labelTextController =
         useTextEditingController(text: data.decoration.label);
+    useEffect(() {
+      if (data.decoration.label == null) return;
+      if (labelTextController.text != data.decoration.label) {
+        labelTextController.text = data.decoration.label!;
+      }
+      return null;
+    }, [data.decoration.label]);
     final labelTextFocusNode = useFocusNode();
 
     final labelTextStyle = TextStyleVariant.medium.resolve(context).copyWith(
@@ -479,6 +485,22 @@ class EdgeView extends HookWidget {
                             Button(
                               style: Style(
                                 $box.height(40 * scale),
+                              ),
+                              onPressed: () => onAutoLabel(data),
+                              child: HBox(
+                                inherit: true,
+                                style: Style(
+                                  $flex.gap.ref(SpaceVariant.gap),
+                                ),
+                                children: [
+                                  StyledIcon(IconlyLight.discovery),
+                                  StyledText('Auto-label'),
+                                ],
+                              ),
+                            ),
+                            Button(
+                              style: Style(
+                                $box.height(40 * scale),
                                 $box.width(40 * scale),
                               ),
                               onPressed: () => onEdgeDeleted(data),
@@ -490,7 +512,8 @@ class EdgeView extends HookWidget {
                         child: TextField(
                           controller: labelTextController,
                           focusNode: labelTextFocusNode,
-                          cursorColor: ColorVariant.onBackground.resolve(context),
+                          cursorColor:
+                              ColorVariant.onBackground.resolve(context),
                           maxLength: 50,
                           onChanged: (value) => onEdgeLabelChanged(value),
                           decoration: InputDecoration(
@@ -500,7 +523,9 @@ class EdgeView extends HookWidget {
                             hintText: '.',
                             hintStyle: labelTextStyle.copyWith(
                                 color: labelTextStyle.color!.withOpacity(
-                                    OpacityVariant.surface.resolve(context).value)),
+                                    OpacityVariant.surface
+                                        .resolve(context)
+                                        .value)),
                           ),
                           style: labelTextStyle,
                         ),
@@ -518,12 +543,8 @@ class EdgeView extends HookWidget {
                             $box.borderRadius(30 * scale),
                             $box.foregroundDecoration.borderRadius(30 * scale),
                           ),
-                          onPressed: () {
-                            showOptions.value = !showOptions.value;
-                            if (showOptions.value == false) {
-                              showChat.value = false;
-                            }
-                          },
+                          onPressed: () =>
+                              showOptions.value = !showOptions.value,
                           child: StyledIcon(IconlyLight.arrow_right),
                         ),
                       ),

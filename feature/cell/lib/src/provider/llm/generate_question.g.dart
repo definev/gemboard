@@ -157,7 +157,7 @@ class _GenerateQuestionProviderElement
   String get text => (origin as GenerateQuestionProvider).text;
 }
 
-String _$summarizeCellHash() => r'9a5d3393b7d7a48a909d774b097a37eb1a036960';
+String _$summarizeCellHash() => r'f85d203c8b391b28cadeb870773262827466f4e9';
 
 /// See also [summarizeCell].
 @ProviderFor(summarizeCell)

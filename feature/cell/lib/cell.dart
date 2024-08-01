@@ -1,6 +1,5 @@
 library cell;
 
-
 export 'src/configuration/configuration.dart';
 export 'src/domain/model/cell.dart';
 export 'src/domain/model/decoration.dart';
@@ -10,6 +9,7 @@ export 'src/provider/delete_cell.dart';
 export 'src/provider/deselect_cell.dart';
 export 'src/provider/get_cell_list.dart';
 export 'src/provider/llm/generate_content_with_multiple_cell.dart';
+export 'src/provider/llm/generate_label_for_cells.dart';
 export 'src/provider/llm/generate_question.dart';
 export 'src/provider/llm/get_brainstorming_suggestions.dart';
 export 'src/provider/select_cell.dart';

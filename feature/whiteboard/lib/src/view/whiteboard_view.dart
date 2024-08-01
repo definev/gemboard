@@ -516,7 +516,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   stackPositionDataMap: stackPositionDataMap,
                   edge: edge,
                   onEdgeDeleted: (edge) => widget.onEdgesDeleted([edge.id.id]),
-                  onAskEdge: (data) {},
+                  onAutoLabel: (data) {},
                   onEdgeLabelChanged: (label) {},
                 ),
               ),
@@ -784,6 +784,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Future<void> cell_OnCellLinked(
     Cell source,
     Cell target, {
+    required bool autoLabel,
     EdgeDecoration decoration = const EdgeDecoration(),
   }) {
     final edge = Edge(
@@ -800,7 +801,52 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       GlobalKey(debugLabel: 'WhiteboardView.edge | ${edge.id.id}'),
       edge,
     );
+
     setState(() {});
+
+    if (autoLabel) {
+      late StreamSubscription subscription;
+      final stream = ref
+          .read(generateLabelForCellsProvider(
+            source: source,
+            target: target,
+          ).future)
+          .asStream();
+      void cancelSubscription() {
+        subscription.cancel();
+        _cellProcessors[edge.id.id] = {
+          ..._cellProcessors[edge.id.id] ?? {},
+        }..remove('label');
+      }
+
+      subscription = stream.listen(
+        (label) {
+          final latestEdgeKey = edgeKeys[edge.id.id];
+          if (latestEdgeKey == null) {
+            cancelSubscription();
+            return;
+          }
+          final (latestKey, latestEdge) = latestEdgeKey;
+          final newEdge = latestEdge.copyWith(
+            decoration: latestEdge.decoration.copyWith(label: label),
+          );
+          edgeKeys[edge.id.id] = (latestKey, newEdge);
+          setState(() {});
+
+          widget.onEdgeUpdated(latestEdge, newEdge);
+        },
+        onDone: () => cancelSubscription(),
+        onError: (error) {
+          cancelSubscription();
+          print(error);
+        },
+      );
+
+      _cellProcessors[edge.id.id] = {
+        ..._cellProcessors[edge.id.id] ?? {},
+        'label': subscription,
+      };
+    }
 
     return widget.onEdgeCreated(edge);
   }
@@ -1096,6 +1142,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       cell,
       tldrCell,
       decoration: EdgeDecoration(label: 'Summarize'),
+      autoLabel: false,
     );
 
     final stream = ref.read(

@@ -1,4 +1,4 @@
 enum CursorMode {
-  move,
+  selectionTool,
   handTool,
 }

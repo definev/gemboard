@@ -18,7 +18,7 @@ Future<void> selectCell(
           cell.width,
           cell.height ?? cell.preferredHeight ?? 100,
         );
-    final selected = selection.overlaps(cellRect);
+    final selected = cell.selected || selection.overlaps(cellRect);
     await ref.read(
       updateCellProvider(
         id: cell.id,
