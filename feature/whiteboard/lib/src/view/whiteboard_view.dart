@@ -614,7 +614,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  Offset randomOffsetAroundRect(BuildContext context, Rect rect) {
+  Offset randomOffsetAroundRect(
+    BuildContext context,
+    Rect rect, {
+    double? space,
+  }) {
     final scale = DesignSystemTheme.of(context).scale;
 
     final offset = rect.topLeft;
@@ -624,17 +628,19 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     final minRadius = 400 * scale;
     radius = minRadius + (rect.width - minRadius) * random.nextDouble();
     radius = math.max(minRadius, radius);
+    radius = random.nextDouble() * radius;
+    if (space != null) radius = space;
 
     switch (random.nextBool()) {
       case true:
         return Offset(
-          random.nextDouble() * radius + offset.dx + rect.width,
+          radius + offset.dx + rect.width,
           offset.dy,
         );
       case false:
         return Offset(
           offset.dx,
-          random.nextDouble() * radius + offset.dy + rect.height,
+          radius + offset.dy + rect.height,
         );
     }
   }
@@ -1163,7 +1169,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
+      offset: randomOffsetAroundRect(
+        context,
+        CellAppearance(cell).rect,
+        space: 200 * widget.canvasScale,
+      ),
       width: cell.width,
       decoration: cell.decoration.copyWith(
         cardKind: CellCardKind.flat,
@@ -1236,7 +1246,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
+      offset: randomOffsetAroundRect(
+        context,
+        CellAppearance(cell).rect,
+        space: 200 * widget.canvasScale,
+      ),
       width: cell.width,
       decoration: cell.decoration.copyWith(
         cardKind: CellCardKind.flat,
@@ -1311,7 +1325,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
+      offset: randomOffsetAroundRect(
+        context,
+        CellAppearance(cell).rect,
+        space: 200 * widget.canvasScale,
+      ),
       width: cell.width,
       decoration: cell.decoration.copyWith(
         cardKind: CellCardKind.flat,
