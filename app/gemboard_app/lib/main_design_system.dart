@@ -67,8 +67,7 @@ class MasterView extends StatelessWidget {
 
           return ZoomStackGestureDetector(
             scaleFactor: scaleFactor.value,
-            enableMoveByMouse: true,
-            enableMoveByTouch: true,
+            supportedDevices: const {},
             onScaleFactorChanged: (value) => scaleFactor.value = value,
             stack: (key, scaleFactor) => BoundlessStack(
               key: key,

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:developer';
 import 'dart:io' as io;
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
@@ -45,6 +46,8 @@ class WhiteboardView extends ConsumerStatefulWidget {
     ///
     required this.enableMoveByMouse,
     required this.enableMoveByTouch,
+    required this.enableMoveByStylus,
+
     this.scaleFactor,
     this.onScaleStart,
     this.onScaleEnd,
@@ -79,6 +82,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final ScrollableDetails? horizontalDetails;
   final bool enableMoveByMouse;
   final bool enableMoveByTouch;
+  final bool enableMoveByStylus;
 
   @override
   ConsumerState<WhiteboardView> createState() => WhiteboardViewState();
@@ -370,8 +374,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     Widget child = ListenableBuilder(
       listenable: scaleFactor,
       builder: (context, child) => ZoomStackGestureDetector(
-        enableMoveByMouse: widget.enableMoveByMouse,
-        enableMoveByTouch: widget.enableMoveByTouch,
+        supportedDevices: {
+          if (widget.enableMoveByMouse) PointerDeviceKind.mouse,
+          if (widget.enableMoveByTouch) PointerDeviceKind.touch,
+          if (widget.enableMoveByStylus) PointerDeviceKind.stylus,
+        },
         scaleFactor: scaleFactor.value,
         onScaleStart: widget.onScaleStart,
         onScaleEnd: widget.onScaleEnd,
@@ -1663,43 +1670,32 @@ class WhiteboardDropZone extends StatelessWidget {
           if (matchedFormat case final matchedFormat?) {
             print('Dropped image: ${item}');
             if (reader.canProvide(Formats.uri)) {
-              reader.getValue<NamedUri>(Formats.uri, (value) async {
-                if (value != null) {
-                  // You can access values through the `value` property.
-                  print('Dropped image: ${value.name} | ${value.uri}');
-                  log(value.uri.toString());
-                  final validImage =
-                      await NetworkUtils.validateImage(value.uri.toString());
+              Uri? uri;
+              reader.getValue<NamedUri>(
+                Formats.uri,
+                (value) async {
+                  if (value != null) {
+                    uri = value.uri;
+                    // You can access values through the `value` property.
+                    print('Dropped image: ${value.name} | ${value.uri}');
+                    log(value.uri.toString());
+                    final validImage =
+                        await NetworkUtils.validateImage(value.uri.toString());
 
-                  if (validImage) {
-                    onImageReceived(event, value.uri);
-                  } else {
-                    reader.getFile(
-                      matchedFormat,
-                      (value) async {
-                        final directory =
-                            await getApplicationDocumentsDirectory();
-                        var file = io.File(
-                            '${directory.path}/whiteboard/${id.id}/${value.fileName}');
-                        file = await file.create(recursive: true);
-                        final ioSink = file.openWrite();
-                        try {
-                          final stream = value.getStream();
-                          await ioSink.addStream(stream);
-                          onImageReceived(event, file.uri);
-                        } catch (e) {
-                        } finally {
-                          await ioSink.flush();
-                          await ioSink.close();
-                        }
-                      },
-                      onError: (_) => onLinkReceived(event, value.uri),
-                    );
+                    if (validImage) {
+                      onImageReceived(event, value.uri);
+                    } else {
+                      onLinkReceived(event, value.uri);
+                    }
                   }
-                }
-              }, onError: (error) {
-                print('Error reading value $error');
-              });
+                },
+                onError: (error) {
+                  print('Error reading value $error');
+                  if (uri case final uri?) {
+                    onLinkReceived(event, uri);
+                  }
+                },
+              );
               continue;
             } else {
               reader.getFile(
@@ -1730,7 +1726,7 @@ class WhiteboardDropZone extends StatelessWidget {
                 // You can access values through the `value` property.
                 print('Dropped text: $value');
                 final uri = Uri.tryParse(value);
-                if (uri != null) {
+                if (uri != null && uri.scheme.isNotEmpty) {
                   onLinkReceived(event, uri);
                 } else {
                   onTextReceived(event, value);

@@ -156,13 +156,19 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
             ).future,
           );
         },
-        whiteboardBuilder: (enableMoveByMouse, enableMoveByTouch, onGrab) =>
+        whiteboardBuilder: (
+          enableMoveByMouse,
+          enableMoveByTouch,
+          enableMoveByStylus,
+          onGrab,
+        ) =>
             WhiteboardView(
           key: whiteboardKey,
           canvasScale: WhiteboardPosition.canvasScale,
           scaleFactor: scaleFactor,
-          enableMoveByMouse: cursorMode.value == CursorMode.handTool,
-          enableMoveByTouch: cursorMode.value == CursorMode.handTool,
+          enableMoveByMouse: enableMoveByMouse,
+          enableMoveByTouch: enableMoveByTouch,
+          enableMoveByStylus: enableMoveByStylus,
           verticalDetails: verticalDetails,
           horizontalDetails: horizontalDetails,
           onScaleStart: () => onGrab.value = true,

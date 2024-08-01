@@ -77,7 +77,10 @@ class UrlCellView extends ConsumerWidget {
                       .shimmer(),
                 ),
                 Button(
-                  onPressed: () => launchUrl(cell.url),
+                  onPressed: () => launchUrl(
+                    cell.url,
+                    mode: LaunchMode.externalApplication,
+                  ),
                   child: RotatedBox(
                     quarterTurns: 1,
                     child: StyledIcon(IconlyLight.upload),
@@ -86,11 +89,56 @@ class UrlCellView extends ConsumerWidget {
               ],
             ),
           AsyncData(:final value) => switch (value) {
-              null => StyledText(
-                  'No preview available',
+              null => StyledRow(
                   style: Style(
-                    $text.style.ref(TextStyleVariant.p),
+                    $flex.gap.ref(SpaceVariant.small),
                   ),
+                  children: [
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: ColoredBox(
+                        color: ColorVariant.background.resolve(context),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          StyledText(
+                            'Oops! No preview available',
+                            style: Style(
+                              $text.style.ref(TextStyleVariant.p2),
+                              $text.style.fontWeight.bold(),
+                              $text.overflow.ellipsis(),
+                            ),
+                          ),
+                          StyledText(
+                            cell.url.toString(),
+                            style: Style(
+                              $text.style.ref(TextStyleVariant.p4),
+                              $text.style.color.ref(ColorVariant.yellow),
+                              $text.style.decoration.underline(),
+                              $text.style.decorationColor
+                                  .ref(ColorVariant.yellow),
+                              $text.style.decorationStyle.wavy(),
+                              $text.overflow.ellipsis(),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Button(
+                      onPressed: () => launchUrl(
+                        cell.url,
+                        mode: LaunchMode.externalApplication,
+                      ),
+                      child: RotatedBox(
+                        quarterTurns: 1,
+                        child: StyledIcon(IconlyLight.upload),
+                      ),
+                    ),
+                  ],
                 ),
               final value => () {
                   final imageProvider = buildImageProvider(
@@ -144,7 +192,10 @@ class UrlCellView extends ConsumerWidget {
                         ),
                       ),
                       Button(
-                        onPressed: () => launchUrl(cell.url),
+                        onPressed: () => launchUrl(
+                          cell.url,
+                          mode: LaunchMode.externalApplication,
+                        ),
                         child: RotatedBox(
                           quarterTurns: 1,
                           child: StyledIcon(IconlyLight.upload),

@@ -25,6 +25,7 @@ class WhiteboardCursorTool extends HookWidget {
   final Widget Function(
     bool enableMoveByMouse,
     bool enableMoveByTouch,
+    bool enableMoveByStylus,
     ValueNotifier<bool> onGrab,
   ) whiteboardBuilder;
 
@@ -72,24 +73,25 @@ class WhiteboardCursorTool extends HookWidget {
           Positioned.fill(
             child: GestureDetector(
               supportedDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-                PointerDeviceKind.stylus,
-                PointerDeviceKind.invertedStylus,
-              },
+                ...PointerDeviceKind.values,
+              }
+                ..remove(PointerDeviceKind.trackpad)
+                ..removeAll([
+                  if (cursorMode.value == CursorMode.selectionTool)
+                    PointerDeviceKind.stylus,
+                ]),
               onDoubleTap: onDoubleTap,
-              onPanStart: (details) async {
+              onScaleStart: (details) {
                 onGrab.value = true;
-                firstPoint.value = details.localPosition;
-                secondPoint.value = details.localPosition;
+                firstPoint.value = details.localFocalPoint;
+                secondPoint.value = details.localFocalPoint;
                 doneOnSelectionStart.value = false;
-                await onDoubleTap();
                 doneOnSelectionStart.value = true;
               },
-              onPanUpdate: (details) async {
+              onScaleUpdate: (details) async {
                 if (!doneOnSelectionStart.value) return;
 
-                secondPoint.value = secondPoint.value! + details.delta;
+                secondPoint.value = secondPoint.value! + details.focalPointDelta;
 
                 final factor = 2.0;
 
@@ -191,16 +193,16 @@ class WhiteboardCursorTool extends HookWidget {
 
                 await onSelection(getRect()!);
               },
-              onPanEnd: (details) {
+              onScaleEnd: (details) {
                 onGrab.value = false;
                 firstPoint.value = null;
                 secondPoint.value = null;
               },
-              onPanCancel: () {
-                onGrab.value = false;
-                firstPoint.value = null;
-                secondPoint.value = null;
-              },
+              // onPanCancel: () {
+              //   onGrab.value = false;
+              //   firstPoint.value = null;
+              //   secondPoint.value = null;
+              // },
               child: ColoredBox(
                 color: Colors.transparent,
                 child: MouseRegion(
@@ -214,6 +216,7 @@ class WhiteboardCursorTool extends HookWidget {
                   child: whiteboardBuilder(
                     cursorMode.value == CursorMode.selectionTool,
                     cursorMode.value == CursorMode.handTool,
+                    cursorMode.value == CursorMode.selectionTool,
                     onGrab,
                   ),
                 ),

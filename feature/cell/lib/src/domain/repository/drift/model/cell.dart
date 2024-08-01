@@ -83,7 +83,7 @@ class CellDatabase extends _$CellDatabase {
   MigrationStrategy get migration => MigrationStrategy(
         onUpgrade: (m, from, to) async {
           if (from < 2) {
-            m.createTable($UrlCellItemTable(attachedDatabase));
+            await m.createTable($UrlCellItemTable(attachedDatabase));
           }
         },
       );
