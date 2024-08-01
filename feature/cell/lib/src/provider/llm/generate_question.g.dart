@@ -302,5 +302,136 @@ class _SummarizeCellProviderElement
   @override
   String get content => (origin as SummarizeCellProvider).content;
 }
+
+String _$summarizeImageCellHash() =>
+    r'fef9edeb6a6e925a59753337c2858948d3f61b1b';
+
+/// See also [summarizeImageCell].
+@ProviderFor(summarizeImageCell)
+const summarizeImageCellProvider = SummarizeImageCellFamily();
+
+/// See also [summarizeImageCell].
+class SummarizeImageCellFamily extends Family<Raw<Stream<String>>> {
+  /// See also [summarizeImageCell].
+  const SummarizeImageCellFamily();
+
+  /// See also [summarizeImageCell].
+  SummarizeImageCellProvider call({
+    required ImageCell cell,
+  }) {
+    return SummarizeImageCellProvider(
+      cell: cell,
+    );
+  }
+
+  @override
+  SummarizeImageCellProvider getProviderOverride(
+    covariant SummarizeImageCellProvider provider,
+  ) {
+    return call(
+      cell: provider.cell,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'summarizeImageCellProvider';
+}
+
+/// See also [summarizeImageCell].
+class SummarizeImageCellProvider
+    extends AutoDisposeProvider<Raw<Stream<String>>> {
+  /// See also [summarizeImageCell].
+  SummarizeImageCellProvider({
+    required ImageCell cell,
+  }) : this._internal(
+          (ref) => summarizeImageCell(
+            ref as SummarizeImageCellRef,
+            cell: cell,
+          ),
+          from: summarizeImageCellProvider,
+          name: r'summarizeImageCellProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$summarizeImageCellHash,
+          dependencies: SummarizeImageCellFamily._dependencies,
+          allTransitiveDependencies:
+              SummarizeImageCellFamily._allTransitiveDependencies,
+          cell: cell,
+        );
+
+  SummarizeImageCellProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.cell,
+  }) : super.internal();
+
+  final ImageCell cell;
+
+  @override
+  Override overrideWith(
+    Raw<Stream<String>> Function(SummarizeImageCellRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SummarizeImageCellProvider._internal(
+        (ref) => create(ref as SummarizeImageCellRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        cell: cell,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<Raw<Stream<String>>> createElement() {
+    return _SummarizeImageCellProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SummarizeImageCellProvider && other.cell == cell;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, cell.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SummarizeImageCellRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
+  /// The parameter `cell` of this provider.
+  ImageCell get cell;
+}
+
+class _SummarizeImageCellProviderElement
+    extends AutoDisposeProviderElement<Raw<Stream<String>>>
+    with SummarizeImageCellRef {
+  _SummarizeImageCellProviderElement(super.provider);
+
+  @override
+  ImageCell get cell => (origin as SummarizeImageCellProvider).cell;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -339,6 +339,22 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cell_moveViewportToCenterOfCell(cell);
         widget.onCellCreated(cell);
       },
+      onLinkReceived: (event, value) {
+        final cell = Cell.url(
+          id: CellId(
+            id: Helper.createId(),
+            parentId: CellParentId(
+              whiteboardId: widget.data.id.id,
+            ),
+          ),
+          offset: offsetToViewport(event.position.local),
+          width: 330 * widget.canvasScale,
+          decoration: CellDecoration(color: ColorVariant.yellow.name),
+          url: value,
+        );
+        cell_moveViewportToCenterOfCell(cell);
+        widget.onCellCreated(cell);
+      },
       child: child,
     );
   }
@@ -445,18 +461,21 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   height: cell.height,
                   preferredHeight: cell.preferredHeight,
                   thumb: cell.mapOrNull(
+                    image: (value) => DSThumb(
+                      color: CellDecorationExtension(cell.decoration)
+                          .onColorValue(context),
+                    ),
                     editable: (value) => DSThumb(
                       color: CellDecorationExtension(cell.decoration)
                           .colorValue(context),
                     ),
-                    image: (value) => DSThumb(
-                      color: CellDecorationExtension(cell.decoration)
-                          .colorValue(context),
-                    ),
                     article: (value) => DSThumb(
-                      color: CellDecorationExtension(cell.decoration)
-                          .colorValue(context),
-                    ),
+                        color: switch (value.decoration.cardKind) {
+                      CellCardKind.flat =>
+                        ColorVariant.surface.resolve(context),
+                      _ => CellDecorationExtension(cell.decoration)
+                          .onColorValue(context),
+                    }),
                   ),
                   onSizeChanged: (newSize) {
                     final (_, latestCell) = cellKeys[cell.id.id]!;
@@ -580,7 +599,9 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       ),
                       crossAxisMargin: 0,
                       interactive: true,
-                      thumbColor: WidgetStatePropertyAll(ColorVariant.outline.resolve(context).withOpacity(0.5)),
+                      thumbColor: WidgetStatePropertyAll(ColorVariant.outline
+                          .resolve(context)
+                          .withOpacity(0.5)),
                     ),
                   ),
                   child: child,
@@ -1125,7 +1146,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellsUpdated(newCells);
   }
 
-  void selection_cell_onCellSummarize(Cell cell) async {
+  void _cell_generateTLDR(Cell cell) async {
     if (cell is! ArticleCell && cell is! EditableCell) return;
 
     final title = cell.mapOrNull(
@@ -1207,6 +1228,163 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ..._cellProcessors[tldrCell.id.id] ?? {},
       'summarize': subscription,
     };
+  }
+
+  void _imageCell_generateTLDR(ImageCell cell) async {
+    final tldrCell = Cell.article(
+      id: CellId(
+        parentId: CellParentId(whiteboardId: widget.data.id.id),
+        id: Helper.createId(),
+      ),
+      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
+      width: cell.width,
+      decoration: cell.decoration.copyWith(
+        cardKind: CellCardKind.flat,
+        constraints: false,
+      ),
+      title: '___| TLDR |___',
+      content: '',
+    );
+
+    cellKeys[tldrCell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${tldrCell.id.id}'),
+      tldrCell,
+    );
+
+    setState(() {});
+    await widget.onCellCreated(tldrCell);
+    cell_moveViewportToCenterOfCell(tldrCell);
+    cell_OnCellLinked(
+      cell,
+      tldrCell,
+      decoration: EdgeDecoration(label: 'Summarize'),
+      autoLabel: false,
+    );
+
+    final stream = ref.read(
+      summarizeImageCellProvider(cell: cell),
+    );
+
+    late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[tldrCell.id.id] = {
+        ..._cellProcessors[tldrCell.id.id] ?? {},
+      }..remove('summarize');
+    }
+
+    subscription = stream.listen(
+      (event) {
+        final (latestKey, latestCell) = cellKeys[tldrCell.id.id]!;
+        if (latestCell is! ArticleCell) return;
+        final newCell = latestCell.copyWith(
+          content: latestCell.content + event,
+        );
+        cellKeys[tldrCell.id.id] = (latestKey, newCell);
+        setState(() {});
+        widget.onCellUpdated(latestCell, newCell);
+      },
+      onDone: () {
+        print('Done tldr for cell: ${cell.id}');
+        cancelSubscription();
+      },
+      onError: (error) {
+        print(error);
+        cancelSubscription();
+      },
+      cancelOnError: true,
+    );
+    _cellProcessors[tldrCell.id.id] = {
+      ..._cellProcessors[tldrCell.id.id] ?? {},
+      'summarize': subscription,
+    };
+  }
+
+  void _urlCell_generateTLDR(UrlCell cell) async {
+    final linkPreview = await ref
+        .read(UrlCellView.linkPreviewProvider(cell.url.toString()).future);
+    final content = await fetchWithRedirects(cell.url.toString());
+
+    if (linkPreview == null) return;
+    final tldrCell = Cell.article(
+      id: CellId(
+        parentId: CellParentId(whiteboardId: widget.data.id.id),
+        id: Helper.createId(),
+      ),
+      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
+      width: cell.width,
+      decoration: cell.decoration.copyWith(
+        cardKind: CellCardKind.flat,
+        constraints: false,
+      ),
+      title: '___| TLDR |___ ${linkPreview.title ?? 'Untitled'} ___|___',
+      content: '',
+    );
+
+    cellKeys[tldrCell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${tldrCell.id.id}'),
+      tldrCell,
+    );
+
+    setState(() {});
+    await widget.onCellCreated(tldrCell);
+    cell_moveViewportToCenterOfCell(tldrCell);
+    cell_OnCellLinked(
+      cell,
+      tldrCell,
+      decoration: EdgeDecoration(label: 'Summarize'),
+      autoLabel: false,
+    );
+
+    late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[tldrCell.id.id] = {
+        ..._cellProcessors[tldrCell.id.id] ?? {},
+      }..remove('summarize');
+    }
+
+    final stream = ref.read(
+      summarizeCellProvider(
+        title: linkPreview.title ?? 'Web data',
+        content: content.body,
+      ),
+    );
+
+    subscription = stream.listen(
+      (event) {
+        final (latestKey, latestCell) = cellKeys[tldrCell.id.id]!;
+        if (latestCell is! ArticleCell) return;
+        final newCell = latestCell.copyWith(
+          content: latestCell.content + event,
+        );
+        cellKeys[tldrCell.id.id] = (latestKey, newCell);
+        setState(() {});
+        widget.onCellUpdated(latestCell, newCell);
+      },
+      onDone: () {
+        print('Done tldr for cell: ${cell.id}');
+        cancelSubscription();
+      },
+      onError: (error) {
+        print(error);
+        cancelSubscription();
+      },
+    );
+
+    _cellProcessors[tldrCell.id.id] = {
+      ..._cellProcessors[tldrCell.id.id] ?? {},
+      'summarize': subscription,
+    };
+  }
+
+  void selection_cell_onCellSummarize(Cell cell) {
+    cell.mapOrNull(
+      image: _imageCell_generateTLDR,
+      editable: _cell_generateTLDR,
+      article: _cell_generateTLDR,
+      url: _urlCell_generateTLDR,
+    );
   }
 
   void selection_cell_onChatWithSelectedCells(
@@ -1382,6 +1560,7 @@ class WhiteboardDropZone extends StatelessWidget {
     required this.onCellCreated,
     required this.onImageReceived,
     required this.onTextReceived,
+    required this.onLinkReceived,
   });
 
   final WhiteboardId id;
@@ -1393,6 +1572,7 @@ class WhiteboardDropZone extends StatelessWidget {
   final void Function(Cell cell) onCellCreated;
   final void Function(PerformDropEvent event, Uri uri) onImageReceived;
   final void Function(PerformDropEvent event, String value) onTextReceived;
+  final void Function(PerformDropEvent event, Uri uri) onLinkReceived;
 
   final Widget child;
 
@@ -1495,6 +1675,7 @@ class WhiteboardDropZone extends StatelessWidget {
                           await ioSink.close();
                         }
                       },
+                      onError: (_) => onLinkReceived(event, value.uri),
                     );
                   }
                 }
@@ -1530,7 +1711,12 @@ class WhiteboardDropZone extends StatelessWidget {
               if (value != null) {
                 // You can access values through the `value` property.
                 print('Dropped text: $value');
-                onTextReceived(event, value);
+                final uri = Uri.tryParse(value);
+                if (uri != null) {
+                  onLinkReceived(event, uri);
+                } else {
+                  onTextReceived(event, value);
+                }
               }
             }, onError: (error) {
               print('Error reading value $error');

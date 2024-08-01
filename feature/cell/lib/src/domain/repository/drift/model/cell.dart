@@ -49,18 +49,21 @@ class ArticleCellItem extends BaseCellItem {
   TextColumn get content => text()();
 }
 
+class UrlCellItem extends BaseCellItem {
+  TextColumn get url => text()();
+}
+
 @DriftDatabase(
   tables: [
     BrainstormingCellItem,
     EditableCellItem,
     ImageCellItem,
     ArticleCellItem,
+    UrlCellItem,
   ],
 )
 class CellDatabase extends _$CellDatabase {
   CellDatabase() : super(_openConnection());
-
-  int get schemaVersion => 1;
 
   static QueryExecutor _openConnection() {
     return driftDatabase(
@@ -73,6 +76,17 @@ class CellDatabase extends _$CellDatabase {
       ),
     );
   }
+
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (m, from, to) async {
+          if (from < 2) {
+            m.createTable($UrlCellItemTable(attachedDatabase));
+          }
+        },
+      );
 }
 
 @Riverpod(keepAlive: true)
@@ -174,6 +188,29 @@ extension type ArticleCellItemDataParser(ArticleCellItemData cell) {
       ),
       title: cell.title,
       content: cell.content,
+    );
+  }
+}
+
+extension type UrlCellItemDataParser(UrlCellItemData cell) {
+  Cell get asCell {
+    return Cell.url(
+      offset: Offset(cell.offsetDx, cell.offsetDy),
+      id: CellId(
+        id: cell.cellId,
+        parentId: CellParentId(whiteboardId: cell.whiteboardId),
+      ),
+      width: cell.width,
+      height: cell.height,
+      preferredHeight: cell.preferredHeight,
+      layer: cell.layer,
+      selected: cell.selected,
+      decoration: CellDecoration(
+        color: cell.color,
+        cardKind: CellCardKind.values.asNameMap()[cell.cardKind]!,
+        constraints: cell.constraints,
+      ),
+      url: Uri.parse(cell.url),
     );
   }
 }
@@ -285,6 +322,33 @@ extension type ArticleCellTransformer(ArticleCell value) {
       /// Article related
       title: value.title,
       content: value.content,
+    );
+  }
+}
+
+extension type UrlCellTransformer(UrlCell value) {
+  UrlCellItemCompanion get asCompanion {
+    return UrlCellItemCompanion.insert(
+      /// Identity related
+      whiteboardId: value.id.parentId.whiteboardId,
+      cellId: value.id.id,
+
+      /// Position related
+      offsetDx: value.offset.dx,
+      offsetDy: value.offset.dy,
+      width: value.width,
+      height: Value(value.height),
+      preferredHeight: Value(value.preferredHeight),
+
+      /// Decoration related
+      layer: value.layer,
+      selected: value.selected,
+      color: value.decoration.color,
+      cardKind: value.decoration.cardKind.name,
+      constraints: value.decoration.constraints,
+
+      /// Url related
+      url: value.url.toString(),
     );
   }
 }

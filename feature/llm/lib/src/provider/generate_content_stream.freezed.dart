@@ -18,51 +18,57 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$CoreData {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String instruction) system,
-    required TResult Function(String text) text,
+    required TResult Function(String instruction) model,
+    required TResult Function(String text) user,
     required TResult Function(String path) imageFile,
     required TResult Function(String url) imageNetwork,
+    required TResult Function(Uint8List bytes) imageMemory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String instruction)? system,
-    TResult? Function(String text)? text,
+    TResult? Function(String instruction)? model,
+    TResult? Function(String text)? user,
     TResult? Function(String path)? imageFile,
     TResult? Function(String url)? imageNetwork,
+    TResult? Function(Uint8List bytes)? imageMemory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String instruction)? system,
-    TResult Function(String text)? text,
+    TResult Function(String instruction)? model,
+    TResult Function(String text)? user,
     TResult Function(String path)? imageFile,
     TResult Function(String url)? imageNetwork,
+    TResult Function(Uint8List bytes)? imageMemory,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SystemCoreData value) system,
-    required TResult Function(TextCoreData value) text,
+    required TResult Function(SystemCoreData value) model,
+    required TResult Function(TextCoreData value) user,
     required TResult Function(ImageFileCoreData value) imageFile,
     required TResult Function(ImageNetworkCoreData value) imageNetwork,
+    required TResult Function(ImageMemoryCoreData value) imageMemory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SystemCoreData value)? system,
-    TResult? Function(TextCoreData value)? text,
+    TResult? Function(SystemCoreData value)? model,
+    TResult? Function(TextCoreData value)? user,
     TResult? Function(ImageFileCoreData value)? imageFile,
     TResult? Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult? Function(ImageMemoryCoreData value)? imageMemory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SystemCoreData value)? system,
-    TResult Function(TextCoreData value)? text,
+    TResult Function(SystemCoreData value)? model,
+    TResult Function(TextCoreData value)? user,
     TResult Function(ImageFileCoreData value)? imageFile,
     TResult Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult Function(ImageMemoryCoreData value)? imageMemory,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -83,6 +89,9 @@ class _$CoreDataCopyWithImpl<$Res, $Val extends CoreData>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -102,6 +111,8 @@ class __$$SystemCoreDataImplCopyWithImpl<$Res>
       _$SystemCoreDataImpl _value, $Res Function(_$SystemCoreDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -126,7 +137,7 @@ class _$SystemCoreDataImpl implements SystemCoreData {
 
   @override
   String toString() {
-    return 'CoreData.system(instruction: $instruction)';
+    return 'CoreData.model(instruction: $instruction)';
   }
 
   @override
@@ -141,7 +152,9 @@ class _$SystemCoreDataImpl implements SystemCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, instruction);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SystemCoreDataImplCopyWith<_$SystemCoreDataImpl> get copyWith =>
@@ -151,36 +164,39 @@ class _$SystemCoreDataImpl implements SystemCoreData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String instruction) system,
-    required TResult Function(String text) text,
+    required TResult Function(String instruction) model,
+    required TResult Function(String text) user,
     required TResult Function(String path) imageFile,
     required TResult Function(String url) imageNetwork,
+    required TResult Function(Uint8List bytes) imageMemory,
   }) {
-    return system(instruction);
+    return model(instruction);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String instruction)? system,
-    TResult? Function(String text)? text,
+    TResult? Function(String instruction)? model,
+    TResult? Function(String text)? user,
     TResult? Function(String path)? imageFile,
     TResult? Function(String url)? imageNetwork,
+    TResult? Function(Uint8List bytes)? imageMemory,
   }) {
-    return system?.call(instruction);
+    return model?.call(instruction);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String instruction)? system,
-    TResult Function(String text)? text,
+    TResult Function(String instruction)? model,
+    TResult Function(String text)? user,
     TResult Function(String path)? imageFile,
     TResult Function(String url)? imageNetwork,
+    TResult Function(Uint8List bytes)? imageMemory,
     required TResult orElse(),
   }) {
-    if (system != null) {
-      return system(instruction);
+    if (model != null) {
+      return model(instruction);
     }
     return orElse();
   }
@@ -188,36 +204,39 @@ class _$SystemCoreDataImpl implements SystemCoreData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SystemCoreData value) system,
-    required TResult Function(TextCoreData value) text,
+    required TResult Function(SystemCoreData value) model,
+    required TResult Function(TextCoreData value) user,
     required TResult Function(ImageFileCoreData value) imageFile,
     required TResult Function(ImageNetworkCoreData value) imageNetwork,
+    required TResult Function(ImageMemoryCoreData value) imageMemory,
   }) {
-    return system(this);
+    return model(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SystemCoreData value)? system,
-    TResult? Function(TextCoreData value)? text,
+    TResult? Function(SystemCoreData value)? model,
+    TResult? Function(TextCoreData value)? user,
     TResult? Function(ImageFileCoreData value)? imageFile,
     TResult? Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult? Function(ImageMemoryCoreData value)? imageMemory,
   }) {
-    return system?.call(this);
+    return model?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SystemCoreData value)? system,
-    TResult Function(TextCoreData value)? text,
+    TResult Function(SystemCoreData value)? model,
+    TResult Function(TextCoreData value)? user,
     TResult Function(ImageFileCoreData value)? imageFile,
     TResult Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult Function(ImageMemoryCoreData value)? imageMemory,
     required TResult orElse(),
   }) {
-    if (system != null) {
-      return system(this);
+    if (model != null) {
+      return model(this);
     }
     return orElse();
   }
@@ -227,7 +246,10 @@ abstract class SystemCoreData implements CoreData {
   const factory SystemCoreData(final String instruction) = _$SystemCoreDataImpl;
 
   String get instruction;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SystemCoreDataImplCopyWith<_$SystemCoreDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -249,6 +271,8 @@ class __$$TextCoreDataImplCopyWithImpl<$Res>
       _$TextCoreDataImpl _value, $Res Function(_$TextCoreDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -273,7 +297,7 @@ class _$TextCoreDataImpl implements TextCoreData {
 
   @override
   String toString() {
-    return 'CoreData.text(text: $text)';
+    return 'CoreData.user(text: $text)';
   }
 
   @override
@@ -287,7 +311,9 @@ class _$TextCoreDataImpl implements TextCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, text);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$TextCoreDataImplCopyWith<_$TextCoreDataImpl> get copyWith =>
@@ -296,36 +322,39 @@ class _$TextCoreDataImpl implements TextCoreData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String instruction) system,
-    required TResult Function(String text) text,
+    required TResult Function(String instruction) model,
+    required TResult Function(String text) user,
     required TResult Function(String path) imageFile,
     required TResult Function(String url) imageNetwork,
+    required TResult Function(Uint8List bytes) imageMemory,
   }) {
-    return text(this.text);
+    return user(text);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String instruction)? system,
-    TResult? Function(String text)? text,
+    TResult? Function(String instruction)? model,
+    TResult? Function(String text)? user,
     TResult? Function(String path)? imageFile,
     TResult? Function(String url)? imageNetwork,
+    TResult? Function(Uint8List bytes)? imageMemory,
   }) {
-    return text?.call(this.text);
+    return user?.call(text);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String instruction)? system,
-    TResult Function(String text)? text,
+    TResult Function(String instruction)? model,
+    TResult Function(String text)? user,
     TResult Function(String path)? imageFile,
     TResult Function(String url)? imageNetwork,
+    TResult Function(Uint8List bytes)? imageMemory,
     required TResult orElse(),
   }) {
-    if (text != null) {
-      return text(this.text);
+    if (user != null) {
+      return user(text);
     }
     return orElse();
   }
@@ -333,36 +362,39 @@ class _$TextCoreDataImpl implements TextCoreData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SystemCoreData value) system,
-    required TResult Function(TextCoreData value) text,
+    required TResult Function(SystemCoreData value) model,
+    required TResult Function(TextCoreData value) user,
     required TResult Function(ImageFileCoreData value) imageFile,
     required TResult Function(ImageNetworkCoreData value) imageNetwork,
+    required TResult Function(ImageMemoryCoreData value) imageMemory,
   }) {
-    return text(this);
+    return user(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SystemCoreData value)? system,
-    TResult? Function(TextCoreData value)? text,
+    TResult? Function(SystemCoreData value)? model,
+    TResult? Function(TextCoreData value)? user,
     TResult? Function(ImageFileCoreData value)? imageFile,
     TResult? Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult? Function(ImageMemoryCoreData value)? imageMemory,
   }) {
-    return text?.call(this);
+    return user?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SystemCoreData value)? system,
-    TResult Function(TextCoreData value)? text,
+    TResult Function(SystemCoreData value)? model,
+    TResult Function(TextCoreData value)? user,
     TResult Function(ImageFileCoreData value)? imageFile,
     TResult Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult Function(ImageMemoryCoreData value)? imageMemory,
     required TResult orElse(),
   }) {
-    if (text != null) {
-      return text(this);
+    if (user != null) {
+      return user(this);
     }
     return orElse();
   }
@@ -372,7 +404,10 @@ abstract class TextCoreData implements CoreData {
   const factory TextCoreData(final String text) = _$TextCoreDataImpl;
 
   String get text;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$TextCoreDataImplCopyWith<_$TextCoreDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -394,6 +429,8 @@ class __$$ImageFileCoreDataImplCopyWithImpl<$Res>
       $Res Function(_$ImageFileCoreDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -432,7 +469,9 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, path);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ImageFileCoreDataImplCopyWith<_$ImageFileCoreDataImpl> get copyWith =>
@@ -442,10 +481,11 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String instruction) system,
-    required TResult Function(String text) text,
+    required TResult Function(String instruction) model,
+    required TResult Function(String text) user,
     required TResult Function(String path) imageFile,
     required TResult Function(String url) imageNetwork,
+    required TResult Function(Uint8List bytes) imageMemory,
   }) {
     return imageFile(path);
   }
@@ -453,10 +493,11 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String instruction)? system,
-    TResult? Function(String text)? text,
+    TResult? Function(String instruction)? model,
+    TResult? Function(String text)? user,
     TResult? Function(String path)? imageFile,
     TResult? Function(String url)? imageNetwork,
+    TResult? Function(Uint8List bytes)? imageMemory,
   }) {
     return imageFile?.call(path);
   }
@@ -464,10 +505,11 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String instruction)? system,
-    TResult Function(String text)? text,
+    TResult Function(String instruction)? model,
+    TResult Function(String text)? user,
     TResult Function(String path)? imageFile,
     TResult Function(String url)? imageNetwork,
+    TResult Function(Uint8List bytes)? imageMemory,
     required TResult orElse(),
   }) {
     if (imageFile != null) {
@@ -479,10 +521,11 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SystemCoreData value) system,
-    required TResult Function(TextCoreData value) text,
+    required TResult Function(SystemCoreData value) model,
+    required TResult Function(TextCoreData value) user,
     required TResult Function(ImageFileCoreData value) imageFile,
     required TResult Function(ImageNetworkCoreData value) imageNetwork,
+    required TResult Function(ImageMemoryCoreData value) imageMemory,
   }) {
     return imageFile(this);
   }
@@ -490,10 +533,11 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SystemCoreData value)? system,
-    TResult? Function(TextCoreData value)? text,
+    TResult? Function(SystemCoreData value)? model,
+    TResult? Function(TextCoreData value)? user,
     TResult? Function(ImageFileCoreData value)? imageFile,
     TResult? Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult? Function(ImageMemoryCoreData value)? imageMemory,
   }) {
     return imageFile?.call(this);
   }
@@ -501,10 +545,11 @@ class _$ImageFileCoreDataImpl implements ImageFileCoreData {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SystemCoreData value)? system,
-    TResult Function(TextCoreData value)? text,
+    TResult Function(SystemCoreData value)? model,
+    TResult Function(TextCoreData value)? user,
     TResult Function(ImageFileCoreData value)? imageFile,
     TResult Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult Function(ImageMemoryCoreData value)? imageMemory,
     required TResult orElse(),
   }) {
     if (imageFile != null) {
@@ -518,7 +563,10 @@ abstract class ImageFileCoreData implements CoreData {
   const factory ImageFileCoreData(final String path) = _$ImageFileCoreDataImpl;
 
   String get path;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ImageFileCoreDataImplCopyWith<_$ImageFileCoreDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -540,6 +588,8 @@ class __$$ImageNetworkCoreDataImplCopyWithImpl<$Res>
       $Res Function(_$ImageNetworkCoreDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -578,7 +628,9 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   int get hashCode => Object.hash(runtimeType, url);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ImageNetworkCoreDataImplCopyWith<_$ImageNetworkCoreDataImpl>
@@ -589,10 +641,11 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String instruction) system,
-    required TResult Function(String text) text,
+    required TResult Function(String instruction) model,
+    required TResult Function(String text) user,
     required TResult Function(String path) imageFile,
     required TResult Function(String url) imageNetwork,
+    required TResult Function(Uint8List bytes) imageMemory,
   }) {
     return imageNetwork(url);
   }
@@ -600,10 +653,11 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String instruction)? system,
-    TResult? Function(String text)? text,
+    TResult? Function(String instruction)? model,
+    TResult? Function(String text)? user,
     TResult? Function(String path)? imageFile,
     TResult? Function(String url)? imageNetwork,
+    TResult? Function(Uint8List bytes)? imageMemory,
   }) {
     return imageNetwork?.call(url);
   }
@@ -611,10 +665,11 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String instruction)? system,
-    TResult Function(String text)? text,
+    TResult Function(String instruction)? model,
+    TResult Function(String text)? user,
     TResult Function(String path)? imageFile,
     TResult Function(String url)? imageNetwork,
+    TResult Function(Uint8List bytes)? imageMemory,
     required TResult orElse(),
   }) {
     if (imageNetwork != null) {
@@ -626,10 +681,11 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(SystemCoreData value) system,
-    required TResult Function(TextCoreData value) text,
+    required TResult Function(SystemCoreData value) model,
+    required TResult Function(TextCoreData value) user,
     required TResult Function(ImageFileCoreData value) imageFile,
     required TResult Function(ImageNetworkCoreData value) imageNetwork,
+    required TResult Function(ImageMemoryCoreData value) imageMemory,
   }) {
     return imageNetwork(this);
   }
@@ -637,10 +693,11 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(SystemCoreData value)? system,
-    TResult? Function(TextCoreData value)? text,
+    TResult? Function(SystemCoreData value)? model,
+    TResult? Function(TextCoreData value)? user,
     TResult? Function(ImageFileCoreData value)? imageFile,
     TResult? Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult? Function(ImageMemoryCoreData value)? imageMemory,
   }) {
     return imageNetwork?.call(this);
   }
@@ -648,10 +705,11 @@ class _$ImageNetworkCoreDataImpl implements ImageNetworkCoreData {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(SystemCoreData value)? system,
-    TResult Function(TextCoreData value)? text,
+    TResult Function(SystemCoreData value)? model,
+    TResult Function(TextCoreData value)? user,
     TResult Function(ImageFileCoreData value)? imageFile,
     TResult Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult Function(ImageMemoryCoreData value)? imageMemory,
     required TResult orElse(),
   }) {
     if (imageNetwork != null) {
@@ -666,7 +724,171 @@ abstract class ImageNetworkCoreData implements CoreData {
       _$ImageNetworkCoreDataImpl;
 
   String get url;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ImageNetworkCoreDataImplCopyWith<_$ImageNetworkCoreDataImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$ImageMemoryCoreDataImplCopyWith<$Res> {
+  factory _$$ImageMemoryCoreDataImplCopyWith(_$ImageMemoryCoreDataImpl value,
+          $Res Function(_$ImageMemoryCoreDataImpl) then) =
+      __$$ImageMemoryCoreDataImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({Uint8List bytes});
+}
+
+/// @nodoc
+class __$$ImageMemoryCoreDataImplCopyWithImpl<$Res>
+    extends _$CoreDataCopyWithImpl<$Res, _$ImageMemoryCoreDataImpl>
+    implements _$$ImageMemoryCoreDataImplCopyWith<$Res> {
+  __$$ImageMemoryCoreDataImplCopyWithImpl(_$ImageMemoryCoreDataImpl _value,
+      $Res Function(_$ImageMemoryCoreDataImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? bytes = null,
+  }) {
+    return _then(_$ImageMemoryCoreDataImpl(
+      null == bytes
+          ? _value.bytes
+          : bytes // ignore: cast_nullable_to_non_nullable
+              as Uint8List,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$ImageMemoryCoreDataImpl implements ImageMemoryCoreData {
+  const _$ImageMemoryCoreDataImpl(this.bytes);
+
+  @override
+  final Uint8List bytes;
+
+  @override
+  String toString() {
+    return 'CoreData.imageMemory(bytes: $bytes)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ImageMemoryCoreDataImpl &&
+            const DeepCollectionEquality().equals(other.bytes, bytes));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(bytes));
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ImageMemoryCoreDataImplCopyWith<_$ImageMemoryCoreDataImpl> get copyWith =>
+      __$$ImageMemoryCoreDataImplCopyWithImpl<_$ImageMemoryCoreDataImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String instruction) model,
+    required TResult Function(String text) user,
+    required TResult Function(String path) imageFile,
+    required TResult Function(String url) imageNetwork,
+    required TResult Function(Uint8List bytes) imageMemory,
+  }) {
+    return imageMemory(bytes);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String instruction)? model,
+    TResult? Function(String text)? user,
+    TResult? Function(String path)? imageFile,
+    TResult? Function(String url)? imageNetwork,
+    TResult? Function(Uint8List bytes)? imageMemory,
+  }) {
+    return imageMemory?.call(bytes);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String instruction)? model,
+    TResult Function(String text)? user,
+    TResult Function(String path)? imageFile,
+    TResult Function(String url)? imageNetwork,
+    TResult Function(Uint8List bytes)? imageMemory,
+    required TResult orElse(),
+  }) {
+    if (imageMemory != null) {
+      return imageMemory(bytes);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SystemCoreData value) model,
+    required TResult Function(TextCoreData value) user,
+    required TResult Function(ImageFileCoreData value) imageFile,
+    required TResult Function(ImageNetworkCoreData value) imageNetwork,
+    required TResult Function(ImageMemoryCoreData value) imageMemory,
+  }) {
+    return imageMemory(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SystemCoreData value)? model,
+    TResult? Function(TextCoreData value)? user,
+    TResult? Function(ImageFileCoreData value)? imageFile,
+    TResult? Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult? Function(ImageMemoryCoreData value)? imageMemory,
+  }) {
+    return imageMemory?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SystemCoreData value)? model,
+    TResult Function(TextCoreData value)? user,
+    TResult Function(ImageFileCoreData value)? imageFile,
+    TResult Function(ImageNetworkCoreData value)? imageNetwork,
+    TResult Function(ImageMemoryCoreData value)? imageMemory,
+    required TResult orElse(),
+  }) {
+    if (imageMemory != null) {
+      return imageMemory(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ImageMemoryCoreData implements CoreData {
+  const factory ImageMemoryCoreData(final Uint8List bytes) =
+      _$ImageMemoryCoreDataImpl;
+
+  Uint8List get bytes;
+
+  /// Create a copy of CoreData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ImageMemoryCoreDataImplCopyWith<_$ImageMemoryCoreDataImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

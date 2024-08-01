@@ -450,113 +450,120 @@ class EdgeView extends HookWidget {
     final labelTextStyle = TextStyleVariant.medium.resolve(context).copyWith(
         fontSize: TextStyleVariant.h6.resolve(context).fontSize,
         color: ColorVariant.onSurface.resolve(context));
-    return Portal(
-      child: IgnorePointer(
-        child: CustomPaint(
-          painter: EdgeVisual(
-            context: context,
-            shortestPointFromSource: shortestPointFromSource,
-            shortestPointFromTarget: shortestPointFromTarget,
-            curvePointFirst: curvePointFirst,
-            curvePointSecond: curvePointSecond,
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                left: middlePoint.dx - 15 * scale,
-                top: middlePoint.dy - 15 * scale,
-                height: 30 * scale,
-                width: 30 * scale,
-                child: PortalTarget(
-                  anchor: Aligned(
-                    follower: Alignment.bottomCenter,
-                    target: Alignment.bottomCenter,
-                  ),
-                  portalFollower: VBox(
-                    style: Style(
-                      $flex.mainAxisSize.min(),
-                      $flex.gap.ref(SpaceVariant.small),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        Widget child = IgnorePointer(
+          child: CustomPaint(
+            painter: EdgeVisual(
+              context: context,
+              shortestPointFromSource: shortestPointFromSource,
+              shortestPointFromTarget: shortestPointFromTarget,
+              curvePointFirst: curvePointFirst,
+              curvePointSecond: curvePointSecond,
+            ),
+            child: Stack(
+              children: [
+                Positioned(
+                  left: middlePoint.dx - 15 * scale,
+                  top: middlePoint.dy - 15 * scale,
+                  height: 30 * scale,
+                  width: 30 * scale,
+                  child: PortalTarget(
+                    anchor: Aligned(
+                      follower: Alignment.bottomCenter,
+                      target: Alignment.bottomCenter,
                     ),
-                    children: [
-                      if (showOptions.value)
-                        DSToolbar(
-                          direction: Axis.horizontal,
-                          children: [
-                            Button(
-                              style: Style(
-                                $box.height(40 * scale),
-                              ),
-                              onPressed: () => onAutoLabel(data),
-                              child: HBox(
-                                inherit: true,
+                    portalFollower: VBox(
+                      style: Style(
+                        $flex.mainAxisSize.min(),
+                        $flex.gap.ref(SpaceVariant.small),
+                      ),
+                      children: [
+                        if (showOptions.value)
+                          DSToolbar(
+                            direction: Axis.horizontal,
+                            children: [
+                              Button(
                                 style: Style(
-                                  $flex.gap.ref(SpaceVariant.gap),
+                                  $box.height(40 * scale),
                                 ),
-                                children: [
-                                  StyledIcon(IconlyLight.discovery),
-                                  StyledText('Auto-label'),
-                                ],
+                                onPressed: () => onAutoLabel(data),
+                                child: HBox(
+                                  inherit: true,
+                                  style: Style(
+                                    $flex.gap.ref(SpaceVariant.gap),
+                                  ),
+                                  children: [
+                                    StyledIcon(IconlyLight.discovery),
+                                    StyledText('Auto-label'),
+                                  ],
+                                ),
                               ),
-                            ),
-                            Button(
-                              style: Style(
-                                $box.height(40 * scale),
-                                $box.width(40 * scale),
+                              Button(
+                                style: Style(
+                                  $box.height(40 * scale),
+                                  $box.width(40 * scale),
+                                ),
+                                onPressed: () => onEdgeDeleted(data),
+                                child: StyledIcon(IconlyLight.delete),
                               ),
-                              onPressed: () => onEdgeDeleted(data),
-                              child: StyledIcon(IconlyLight.delete),
+                            ],
+                          ),
+                        IntrinsicWidth(
+                          child: TextField(
+                            controller: labelTextController,
+                            focusNode: labelTextFocusNode,
+                            cursorColor:
+                                ColorVariant.onBackground.resolve(context),
+                            maxLength: 50,
+                            onChanged: (value) => onEdgeLabelChanged(value),
+                            decoration: InputDecoration(
+                              isCollapsed: true,
+                              border: InputBorder.none,
+                              counter: SizedBox(),
+                              hintText: '.',
+                              hintStyle: labelTextStyle.copyWith(
+                                  color: labelTextStyle.color!.withOpacity(
+                                      OpacityVariant.surface
+                                          .resolve(context)
+                                          .value)),
                             ),
-                          ],
-                        ),
-                      IntrinsicWidth(
-                        child: TextField(
-                          controller: labelTextController,
-                          focusNode: labelTextFocusNode,
-                          cursorColor:
-                              ColorVariant.onBackground.resolve(context),
-                          maxLength: 50,
-                          onChanged: (value) => onEdgeLabelChanged(value),
-                          decoration: InputDecoration(
-                            isCollapsed: true,
-                            border: InputBorder.none,
-                            counter: SizedBox(),
-                            hintText: '.',
-                            hintStyle: labelTextStyle.copyWith(
-                                color: labelTextStyle.color!.withOpacity(
-                                    OpacityVariant.surface
-                                        .resolve(context)
-                                        .value)),
+                            style: labelTextStyle,
                           ),
-                          style: labelTextStyle,
                         ),
-                      ),
-                      Transform.rotate(
-                        angle: switch (shortestPointFromTarget.dy >
-                            shortestPointFromSource.dy) {
-                          true => angle,
-                          false => -angle,
-                        },
-                        child: Button(
-                          background: ColorVariant.onSurface,
-                          kind: ButtonKind.outline,
-                          style: Style(
-                            $box.borderRadius(30 * scale),
-                            $box.foregroundDecoration.borderRadius(30 * scale),
+                        Transform.rotate(
+                          angle: switch (shortestPointFromTarget.dy >
+                              shortestPointFromSource.dy) {
+                            true => angle,
+                            false => -angle,
+                          },
+                          child: Button(
+                            background: ColorVariant.onSurface,
+                            kind: ButtonKind.outline,
+                            style: Style(
+                              $box.borderRadius(30 * scale),
+                              $box.foregroundDecoration
+                                  .borderRadius(30 * scale),
+                            ),
+                            onPressed: () =>
+                                showOptions.value = !showOptions.value,
+                            child: StyledIcon(IconlyLight.arrow_right),
                           ),
-                          onPressed: () =>
-                              showOptions.value = !showOptions.value,
-                          child: StyledIcon(IconlyLight.arrow_right),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    child: SizedBox(height: 30 * scale, width: 30 * scale),
                   ),
-                  child: SizedBox(height: 30 * scale, width: 30 * scale),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+        if (constraints.maxHeight > 135 * scale) {
+          return Portal(child: child);
+        }
+        return child;
+      },
     );
   }
 }

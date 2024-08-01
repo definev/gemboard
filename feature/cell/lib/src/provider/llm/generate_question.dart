@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cell/cell.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:llm/llm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -104,4 +105,27 @@ Requirement for the output:
   }
 
   return [];
+}
+
+@riverpod
+Raw<Stream<String>> summarizeImageCell(
+  SummarizeImageCellRef ref, {
+  required ImageCell cell,
+}) async* {
+  final bytes = await CellLLM(cell).getImageBytes(cell);
+  if (bytes == null) throw Exception('Failed to get image bytes');
+
+  yield* ref.watch(
+    generateTextFromCoreDataProvider(
+      coreDataList: [
+        CoreData.model('''
+Summarize the following image.
+Extract to the bullet keypoint and provide a concise summary.
+Don't repeat the content, make a summary.
+Don't put the title in the top of response.
+'''),
+        CoreData.imageMemory(bytes),
+      ],
+    ),
+  );
 }

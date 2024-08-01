@@ -19,13 +19,15 @@ sealed class CoreData with _$CoreData {
   const factory CoreData.imageFile(String path) = ImageFileCoreData;
 
   const factory CoreData.imageNetwork(String url) = ImageNetworkCoreData;
+
+  const factory CoreData.imageMemory(Uint8List bytes) = ImageMemoryCoreData;
 }
 
 extension CoreDataX on CoreData {
   Future<Content> convertToGeminiContent() async {
     return when(
-      system: (instruction) => Content.model([TextPart(instruction)]),
-      text: (text) => Content.text(text),
+      model: (instruction) => Content.model([TextPart(instruction)]),
+      user: (text) => Content.text(text),
       imageFile: (path) => () async {
         final file = io.File(path);
         final bytes = await file.readAsBytes();
@@ -38,6 +40,7 @@ extension CoreDataX on CoreData {
           (await bundle.load(url)).buffer.asUint8List(),
         );
       }(),
+      imageMemory: (bytes) => Content.data('image/*', bytes),
     );
   }
 }

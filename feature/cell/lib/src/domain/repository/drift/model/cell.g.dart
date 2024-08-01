@@ -2856,6 +2856,686 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
   }
 }
 
+class $UrlCellItemTable extends UrlCellItem
+    with TableInfo<$UrlCellItemTable, UrlCellItemData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $UrlCellItemTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _whiteboardIdMeta =
+      const VerificationMeta('whiteboardId');
+  @override
+  late final GeneratedColumn<String> whiteboardId = GeneratedColumn<String>(
+      'whiteboard_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cellIdMeta = const VerificationMeta('cellId');
+  @override
+  late final GeneratedColumn<String> cellId = GeneratedColumn<String>(
+      'cell_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _offsetDxMeta =
+      const VerificationMeta('offsetDx');
+  @override
+  late final GeneratedColumn<double> offsetDx = GeneratedColumn<double>(
+      'offset_dx', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _offsetDyMeta =
+      const VerificationMeta('offsetDy');
+  @override
+  late final GeneratedColumn<double> offsetDy = GeneratedColumn<double>(
+      'offset_dy', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _widthMeta = const VerificationMeta('width');
+  @override
+  late final GeneratedColumn<double> width = GeneratedColumn<double>(
+      'width', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _heightMeta = const VerificationMeta('height');
+  @override
+  late final GeneratedColumn<double> height = GeneratedColumn<double>(
+      'height', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredHeightMeta =
+      const VerificationMeta('preferredHeight');
+  @override
+  late final GeneratedColumn<double> preferredHeight = GeneratedColumn<double>(
+      'preferred_height', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _layerMeta = const VerificationMeta('layer');
+  @override
+  late final GeneratedColumn<int> layer = GeneratedColumn<int>(
+      'layer', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _selectedMeta =
+      const VerificationMeta('selected');
+  @override
+  late final GeneratedColumn<bool> selected = GeneratedColumn<bool>(
+      'selected', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("selected" IN (0, 1))'));
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+      'color', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cardKindMeta =
+      const VerificationMeta('cardKind');
+  @override
+  late final GeneratedColumn<String> cardKind = GeneratedColumn<String>(
+      'card_kind', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _constraintsMeta =
+      const VerificationMeta('constraints');
+  @override
+  late final GeneratedColumn<bool> constraints = GeneratedColumn<bool>(
+      'constraints', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _urlMeta = const VerificationMeta('url');
+  @override
+  late final GeneratedColumn<String> url = GeneratedColumn<String>(
+      'url', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        whiteboardId,
+        cellId,
+        offsetDx,
+        offsetDy,
+        width,
+        height,
+        preferredHeight,
+        layer,
+        selected,
+        color,
+        cardKind,
+        constraints,
+        url
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'url_cell_item';
+  @override
+  VerificationContext validateIntegrity(Insertable<UrlCellItemData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('whiteboard_id')) {
+      context.handle(
+          _whiteboardIdMeta,
+          whiteboardId.isAcceptableOrUnknown(
+              data['whiteboard_id']!, _whiteboardIdMeta));
+    } else if (isInserting) {
+      context.missing(_whiteboardIdMeta);
+    }
+    if (data.containsKey('cell_id')) {
+      context.handle(_cellIdMeta,
+          cellId.isAcceptableOrUnknown(data['cell_id']!, _cellIdMeta));
+    } else if (isInserting) {
+      context.missing(_cellIdMeta);
+    }
+    if (data.containsKey('offset_dx')) {
+      context.handle(_offsetDxMeta,
+          offsetDx.isAcceptableOrUnknown(data['offset_dx']!, _offsetDxMeta));
+    } else if (isInserting) {
+      context.missing(_offsetDxMeta);
+    }
+    if (data.containsKey('offset_dy')) {
+      context.handle(_offsetDyMeta,
+          offsetDy.isAcceptableOrUnknown(data['offset_dy']!, _offsetDyMeta));
+    } else if (isInserting) {
+      context.missing(_offsetDyMeta);
+    }
+    if (data.containsKey('width')) {
+      context.handle(
+          _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
+    } else if (isInserting) {
+      context.missing(_widthMeta);
+    }
+    if (data.containsKey('height')) {
+      context.handle(_heightMeta,
+          height.isAcceptableOrUnknown(data['height']!, _heightMeta));
+    }
+    if (data.containsKey('preferred_height')) {
+      context.handle(
+          _preferredHeightMeta,
+          preferredHeight.isAcceptableOrUnknown(
+              data['preferred_height']!, _preferredHeightMeta));
+    }
+    if (data.containsKey('layer')) {
+      context.handle(
+          _layerMeta, layer.isAcceptableOrUnknown(data['layer']!, _layerMeta));
+    } else if (isInserting) {
+      context.missing(_layerMeta);
+    }
+    if (data.containsKey('selected')) {
+      context.handle(_selectedMeta,
+          selected.isAcceptableOrUnknown(data['selected']!, _selectedMeta));
+    } else if (isInserting) {
+      context.missing(_selectedMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    } else if (isInserting) {
+      context.missing(_colorMeta);
+    }
+    if (data.containsKey('card_kind')) {
+      context.handle(_cardKindMeta,
+          cardKind.isAcceptableOrUnknown(data['card_kind']!, _cardKindMeta));
+    } else if (isInserting) {
+      context.missing(_cardKindMeta);
+    }
+    if (data.containsKey('constraints')) {
+      context.handle(
+          _constraintsMeta,
+          constraints.isAcceptableOrUnknown(
+              data['constraints']!, _constraintsMeta));
+    } else if (isInserting) {
+      context.missing(_constraintsMeta);
+    }
+    if (data.containsKey('url')) {
+      context.handle(
+          _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
+    } else if (isInserting) {
+      context.missing(_urlMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  UrlCellItemData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return UrlCellItemData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      whiteboardId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}whiteboard_id'])!,
+      cellId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cell_id'])!,
+      offsetDx: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}offset_dx'])!,
+      offsetDy: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
+      width: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}width'])!,
+      height: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}height']),
+      preferredHeight: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}preferred_height']),
+      layer: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}layer'])!,
+      selected: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}selected'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}color'])!,
+      cardKind: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
+      constraints: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      url: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
+    );
+  }
+
+  @override
+  $UrlCellItemTable createAlias(String alias) {
+    return $UrlCellItemTable(attachedDatabase, alias);
+  }
+}
+
+class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
+  final int id;
+
+  /// Identity related
+  final String whiteboardId;
+  final String cellId;
+
+  /// Position related
+  final double offsetDx;
+  final double offsetDy;
+  final double width;
+  final double? height;
+  final double? preferredHeight;
+
+  /// Decoration related
+  final int layer;
+  final bool selected;
+  final String color;
+  final String cardKind;
+  final bool constraints;
+  final String url;
+  const UrlCellItemData(
+      {required this.id,
+      required this.whiteboardId,
+      required this.cellId,
+      required this.offsetDx,
+      required this.offsetDy,
+      required this.width,
+      this.height,
+      this.preferredHeight,
+      required this.layer,
+      required this.selected,
+      required this.color,
+      required this.cardKind,
+      required this.constraints,
+      required this.url});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['whiteboard_id'] = Variable<String>(whiteboardId);
+    map['cell_id'] = Variable<String>(cellId);
+    map['offset_dx'] = Variable<double>(offsetDx);
+    map['offset_dy'] = Variable<double>(offsetDy);
+    map['width'] = Variable<double>(width);
+    if (!nullToAbsent || height != null) {
+      map['height'] = Variable<double>(height);
+    }
+    if (!nullToAbsent || preferredHeight != null) {
+      map['preferred_height'] = Variable<double>(preferredHeight);
+    }
+    map['layer'] = Variable<int>(layer);
+    map['selected'] = Variable<bool>(selected);
+    map['color'] = Variable<String>(color);
+    map['card_kind'] = Variable<String>(cardKind);
+    map['constraints'] = Variable<bool>(constraints);
+    map['url'] = Variable<String>(url);
+    return map;
+  }
+
+  UrlCellItemCompanion toCompanion(bool nullToAbsent) {
+    return UrlCellItemCompanion(
+      id: Value(id),
+      whiteboardId: Value(whiteboardId),
+      cellId: Value(cellId),
+      offsetDx: Value(offsetDx),
+      offsetDy: Value(offsetDy),
+      width: Value(width),
+      height:
+          height == null && nullToAbsent ? const Value.absent() : Value(height),
+      preferredHeight: preferredHeight == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredHeight),
+      layer: Value(layer),
+      selected: Value(selected),
+      color: Value(color),
+      cardKind: Value(cardKind),
+      constraints: Value(constraints),
+      url: Value(url),
+    );
+  }
+
+  factory UrlCellItemData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return UrlCellItemData(
+      id: serializer.fromJson<int>(json['id']),
+      whiteboardId: serializer.fromJson<String>(json['whiteboardId']),
+      cellId: serializer.fromJson<String>(json['cellId']),
+      offsetDx: serializer.fromJson<double>(json['offsetDx']),
+      offsetDy: serializer.fromJson<double>(json['offsetDy']),
+      width: serializer.fromJson<double>(json['width']),
+      height: serializer.fromJson<double?>(json['height']),
+      preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
+      layer: serializer.fromJson<int>(json['layer']),
+      selected: serializer.fromJson<bool>(json['selected']),
+      color: serializer.fromJson<String>(json['color']),
+      cardKind: serializer.fromJson<String>(json['cardKind']),
+      constraints: serializer.fromJson<bool>(json['constraints']),
+      url: serializer.fromJson<String>(json['url']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'whiteboardId': serializer.toJson<String>(whiteboardId),
+      'cellId': serializer.toJson<String>(cellId),
+      'offsetDx': serializer.toJson<double>(offsetDx),
+      'offsetDy': serializer.toJson<double>(offsetDy),
+      'width': serializer.toJson<double>(width),
+      'height': serializer.toJson<double?>(height),
+      'preferredHeight': serializer.toJson<double?>(preferredHeight),
+      'layer': serializer.toJson<int>(layer),
+      'selected': serializer.toJson<bool>(selected),
+      'color': serializer.toJson<String>(color),
+      'cardKind': serializer.toJson<String>(cardKind),
+      'constraints': serializer.toJson<bool>(constraints),
+      'url': serializer.toJson<String>(url),
+    };
+  }
+
+  UrlCellItemData copyWith(
+          {int? id,
+          String? whiteboardId,
+          String? cellId,
+          double? offsetDx,
+          double? offsetDy,
+          double? width,
+          Value<double?> height = const Value.absent(),
+          Value<double?> preferredHeight = const Value.absent(),
+          int? layer,
+          bool? selected,
+          String? color,
+          String? cardKind,
+          bool? constraints,
+          String? url}) =>
+      UrlCellItemData(
+        id: id ?? this.id,
+        whiteboardId: whiteboardId ?? this.whiteboardId,
+        cellId: cellId ?? this.cellId,
+        offsetDx: offsetDx ?? this.offsetDx,
+        offsetDy: offsetDy ?? this.offsetDy,
+        width: width ?? this.width,
+        height: height.present ? height.value : this.height,
+        preferredHeight: preferredHeight.present
+            ? preferredHeight.value
+            : this.preferredHeight,
+        layer: layer ?? this.layer,
+        selected: selected ?? this.selected,
+        color: color ?? this.color,
+        cardKind: cardKind ?? this.cardKind,
+        constraints: constraints ?? this.constraints,
+        url: url ?? this.url,
+      );
+  UrlCellItemData copyWithCompanion(UrlCellItemCompanion data) {
+    return UrlCellItemData(
+      id: data.id.present ? data.id.value : this.id,
+      whiteboardId: data.whiteboardId.present
+          ? data.whiteboardId.value
+          : this.whiteboardId,
+      cellId: data.cellId.present ? data.cellId.value : this.cellId,
+      offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
+      offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
+      width: data.width.present ? data.width.value : this.width,
+      height: data.height.present ? data.height.value : this.height,
+      preferredHeight: data.preferredHeight.present
+          ? data.preferredHeight.value
+          : this.preferredHeight,
+      layer: data.layer.present ? data.layer.value : this.layer,
+      selected: data.selected.present ? data.selected.value : this.selected,
+      color: data.color.present ? data.color.value : this.color,
+      cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
+      constraints:
+          data.constraints.present ? data.constraints.value : this.constraints,
+      url: data.url.present ? data.url.value : this.url,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UrlCellItemData(')
+          ..write('id: $id, ')
+          ..write('whiteboardId: $whiteboardId, ')
+          ..write('cellId: $cellId, ')
+          ..write('offsetDx: $offsetDx, ')
+          ..write('offsetDy: $offsetDy, ')
+          ..write('width: $width, ')
+          ..write('height: $height, ')
+          ..write('preferredHeight: $preferredHeight, ')
+          ..write('layer: $layer, ')
+          ..write('selected: $selected, ')
+          ..write('color: $color, ')
+          ..write('cardKind: $cardKind, ')
+          ..write('constraints: $constraints, ')
+          ..write('url: $url')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      whiteboardId,
+      cellId,
+      offsetDx,
+      offsetDy,
+      width,
+      height,
+      preferredHeight,
+      layer,
+      selected,
+      color,
+      cardKind,
+      constraints,
+      url);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is UrlCellItemData &&
+          other.id == this.id &&
+          other.whiteboardId == this.whiteboardId &&
+          other.cellId == this.cellId &&
+          other.offsetDx == this.offsetDx &&
+          other.offsetDy == this.offsetDy &&
+          other.width == this.width &&
+          other.height == this.height &&
+          other.preferredHeight == this.preferredHeight &&
+          other.layer == this.layer &&
+          other.selected == this.selected &&
+          other.color == this.color &&
+          other.cardKind == this.cardKind &&
+          other.constraints == this.constraints &&
+          other.url == this.url);
+}
+
+class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
+  final Value<int> id;
+  final Value<String> whiteboardId;
+  final Value<String> cellId;
+  final Value<double> offsetDx;
+  final Value<double> offsetDy;
+  final Value<double> width;
+  final Value<double?> height;
+  final Value<double?> preferredHeight;
+  final Value<int> layer;
+  final Value<bool> selected;
+  final Value<String> color;
+  final Value<String> cardKind;
+  final Value<bool> constraints;
+  final Value<String> url;
+  const UrlCellItemCompanion({
+    this.id = const Value.absent(),
+    this.whiteboardId = const Value.absent(),
+    this.cellId = const Value.absent(),
+    this.offsetDx = const Value.absent(),
+    this.offsetDy = const Value.absent(),
+    this.width = const Value.absent(),
+    this.height = const Value.absent(),
+    this.preferredHeight = const Value.absent(),
+    this.layer = const Value.absent(),
+    this.selected = const Value.absent(),
+    this.color = const Value.absent(),
+    this.cardKind = const Value.absent(),
+    this.constraints = const Value.absent(),
+    this.url = const Value.absent(),
+  });
+  UrlCellItemCompanion.insert({
+    this.id = const Value.absent(),
+    required String whiteboardId,
+    required String cellId,
+    required double offsetDx,
+    required double offsetDy,
+    required double width,
+    this.height = const Value.absent(),
+    this.preferredHeight = const Value.absent(),
+    required int layer,
+    required bool selected,
+    required String color,
+    required String cardKind,
+    required bool constraints,
+    required String url,
+  })  : whiteboardId = Value(whiteboardId),
+        cellId = Value(cellId),
+        offsetDx = Value(offsetDx),
+        offsetDy = Value(offsetDy),
+        width = Value(width),
+        layer = Value(layer),
+        selected = Value(selected),
+        color = Value(color),
+        cardKind = Value(cardKind),
+        constraints = Value(constraints),
+        url = Value(url);
+  static Insertable<UrlCellItemData> custom({
+    Expression<int>? id,
+    Expression<String>? whiteboardId,
+    Expression<String>? cellId,
+    Expression<double>? offsetDx,
+    Expression<double>? offsetDy,
+    Expression<double>? width,
+    Expression<double>? height,
+    Expression<double>? preferredHeight,
+    Expression<int>? layer,
+    Expression<bool>? selected,
+    Expression<String>? color,
+    Expression<String>? cardKind,
+    Expression<bool>? constraints,
+    Expression<String>? url,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (whiteboardId != null) 'whiteboard_id': whiteboardId,
+      if (cellId != null) 'cell_id': cellId,
+      if (offsetDx != null) 'offset_dx': offsetDx,
+      if (offsetDy != null) 'offset_dy': offsetDy,
+      if (width != null) 'width': width,
+      if (height != null) 'height': height,
+      if (preferredHeight != null) 'preferred_height': preferredHeight,
+      if (layer != null) 'layer': layer,
+      if (selected != null) 'selected': selected,
+      if (color != null) 'color': color,
+      if (cardKind != null) 'card_kind': cardKind,
+      if (constraints != null) 'constraints': constraints,
+      if (url != null) 'url': url,
+    });
+  }
+
+  UrlCellItemCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? whiteboardId,
+      Value<String>? cellId,
+      Value<double>? offsetDx,
+      Value<double>? offsetDy,
+      Value<double>? width,
+      Value<double?>? height,
+      Value<double?>? preferredHeight,
+      Value<int>? layer,
+      Value<bool>? selected,
+      Value<String>? color,
+      Value<String>? cardKind,
+      Value<bool>? constraints,
+      Value<String>? url}) {
+    return UrlCellItemCompanion(
+      id: id ?? this.id,
+      whiteboardId: whiteboardId ?? this.whiteboardId,
+      cellId: cellId ?? this.cellId,
+      offsetDx: offsetDx ?? this.offsetDx,
+      offsetDy: offsetDy ?? this.offsetDy,
+      width: width ?? this.width,
+      height: height ?? this.height,
+      preferredHeight: preferredHeight ?? this.preferredHeight,
+      layer: layer ?? this.layer,
+      selected: selected ?? this.selected,
+      color: color ?? this.color,
+      cardKind: cardKind ?? this.cardKind,
+      constraints: constraints ?? this.constraints,
+      url: url ?? this.url,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (whiteboardId.present) {
+      map['whiteboard_id'] = Variable<String>(whiteboardId.value);
+    }
+    if (cellId.present) {
+      map['cell_id'] = Variable<String>(cellId.value);
+    }
+    if (offsetDx.present) {
+      map['offset_dx'] = Variable<double>(offsetDx.value);
+    }
+    if (offsetDy.present) {
+      map['offset_dy'] = Variable<double>(offsetDy.value);
+    }
+    if (width.present) {
+      map['width'] = Variable<double>(width.value);
+    }
+    if (height.present) {
+      map['height'] = Variable<double>(height.value);
+    }
+    if (preferredHeight.present) {
+      map['preferred_height'] = Variable<double>(preferredHeight.value);
+    }
+    if (layer.present) {
+      map['layer'] = Variable<int>(layer.value);
+    }
+    if (selected.present) {
+      map['selected'] = Variable<bool>(selected.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
+    if (cardKind.present) {
+      map['card_kind'] = Variable<String>(cardKind.value);
+    }
+    if (constraints.present) {
+      map['constraints'] = Variable<bool>(constraints.value);
+    }
+    if (url.present) {
+      map['url'] = Variable<String>(url.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('UrlCellItemCompanion(')
+          ..write('id: $id, ')
+          ..write('whiteboardId: $whiteboardId, ')
+          ..write('cellId: $cellId, ')
+          ..write('offsetDx: $offsetDx, ')
+          ..write('offsetDy: $offsetDy, ')
+          ..write('width: $width, ')
+          ..write('height: $height, ')
+          ..write('preferredHeight: $preferredHeight, ')
+          ..write('layer: $layer, ')
+          ..write('selected: $selected, ')
+          ..write('color: $color, ')
+          ..write('cardKind: $cardKind, ')
+          ..write('constraints: $constraints, ')
+          ..write('url: $url')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$CellDatabase extends GeneratedDatabase {
   _$CellDatabase(QueryExecutor e) : super(e);
   $CellDatabaseManager get managers => $CellDatabaseManager(this);
@@ -2866,12 +3546,18 @@ abstract class _$CellDatabase extends GeneratedDatabase {
   late final $ImageCellItemTable imageCellItem = $ImageCellItemTable(this);
   late final $ArticleCellItemTable articleCellItem =
       $ArticleCellItemTable(this);
+  late final $UrlCellItemTable urlCellItem = $UrlCellItemTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [brainstormingCellItem, editableCellItem, imageCellItem, articleCellItem];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        brainstormingCellItem,
+        editableCellItem,
+        imageCellItem,
+        articleCellItem,
+        urlCellItem
+      ];
 }
 
 typedef $$BrainstormingCellItemTableCreateCompanionBuilder
@@ -3989,6 +4675,272 @@ class $$ArticleCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$UrlCellItemTableCreateCompanionBuilder = UrlCellItemCompanion
+    Function({
+  Value<int> id,
+  required String whiteboardId,
+  required String cellId,
+  required double offsetDx,
+  required double offsetDy,
+  required double width,
+  Value<double?> height,
+  Value<double?> preferredHeight,
+  required int layer,
+  required bool selected,
+  required String color,
+  required String cardKind,
+  required bool constraints,
+  required String url,
+});
+typedef $$UrlCellItemTableUpdateCompanionBuilder = UrlCellItemCompanion
+    Function({
+  Value<int> id,
+  Value<String> whiteboardId,
+  Value<String> cellId,
+  Value<double> offsetDx,
+  Value<double> offsetDy,
+  Value<double> width,
+  Value<double?> height,
+  Value<double?> preferredHeight,
+  Value<int> layer,
+  Value<bool> selected,
+  Value<String> color,
+  Value<String> cardKind,
+  Value<bool> constraints,
+  Value<String> url,
+});
+
+class $$UrlCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $UrlCellItemTable,
+    UrlCellItemData,
+    $$UrlCellItemTableFilterComposer,
+    $$UrlCellItemTableOrderingComposer,
+    $$UrlCellItemTableCreateCompanionBuilder,
+    $$UrlCellItemTableUpdateCompanionBuilder> {
+  $$UrlCellItemTableTableManager(_$CellDatabase db, $UrlCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$UrlCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$UrlCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double> width = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String> url = const Value.absent(),
+          }) =>
+              UrlCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            url: url,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            required double width,
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            required String url,
+          }) =>
+              UrlCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            url: url,
+          ),
+        ));
+}
+
+class $$UrlCellItemTableFilterComposer
+    extends FilterComposer<_$CellDatabase, $UrlCellItemTable> {
+  $$UrlCellItemTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
+      column: $state.table.whiteboardId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get cellId => $state.composableBuilder(
+      column: $state.table.cellId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get offsetDx => $state.composableBuilder(
+      column: $state.table.offsetDx,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get offsetDy => $state.composableBuilder(
+      column: $state.table.offsetDy,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get width => $state.composableBuilder(
+      column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get height => $state.composableBuilder(
+      column: $state.table.height,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
+      column: $state.table.preferredHeight,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get layer => $state.composableBuilder(
+      column: $state.table.layer,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get selected => $state.composableBuilder(
+      column: $state.table.selected,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get cardKind => $state.composableBuilder(
+      column: $state.table.cardKind,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get constraints => $state.composableBuilder(
+      column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$UrlCellItemTableOrderingComposer
+    extends OrderingComposer<_$CellDatabase, $UrlCellItemTable> {
+  $$UrlCellItemTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
+      column: $state.table.whiteboardId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get cellId => $state.composableBuilder(
+      column: $state.table.cellId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
+      column: $state.table.offsetDx,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
+      column: $state.table.offsetDy,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get width => $state.composableBuilder(
+      column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get height => $state.composableBuilder(
+      column: $state.table.height,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
+      column: $state.table.preferredHeight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get layer => $state.composableBuilder(
+      column: $state.table.layer,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get selected => $state.composableBuilder(
+      column: $state.table.selected,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get cardKind => $state.composableBuilder(
+      column: $state.table.cardKind,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get constraints => $state.composableBuilder(
+      column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get url => $state.composableBuilder(
+      column: $state.table.url,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $CellDatabaseManager {
   final _$CellDatabase _db;
   $CellDatabaseManager(this._db);
@@ -4000,6 +4952,8 @@ class $CellDatabaseManager {
       $$ImageCellItemTableTableManager(_db, _db.imageCellItem);
   $$ArticleCellItemTableTableManager get articleCellItem =>
       $$ArticleCellItemTableTableManager(_db, _db.articleCellItem);
+  $$UrlCellItemTableTableManager get urlCellItem =>
+      $$UrlCellItemTableTableManager(_db, _db.urlCellItem);
 }
 
 // **************************************************************************

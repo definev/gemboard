@@ -420,6 +420,7 @@ class _CellBuilderState extends State<CellBuilder> {
     widget.stackPositionDataMap[widget.cell.id.id] = widget.notifier;
 
     Widget child = widget.cell.map(
+      url: (cell) => UrlCellView(cell: cell),
       brainstorming: (cell) => BrainstormingCellView(
         cell: cell,
         onSuggestionSelected: (index, color, suggestion) =>

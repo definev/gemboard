@@ -23,6 +23,9 @@ class CellRepositoryDrift implements CellRepository {
   Future<void> add({required CellParentId parentId, required Cell data}) {
     return data.map(
       unknown: (_) async {},
+      url: (value) => database
+          .into(database.urlCellItem)
+          .insertOnConflictUpdate(UrlCellTransformer(value).asCompanion),
       brainstorming: (value) => database
           .into(database.brainstormingCellItem)
           .insertOnConflictUpdate(
@@ -54,6 +57,10 @@ class CellRepositoryDrift implements CellRepository {
         .go();
     if (result >= 1) return;
     result = await (database.delete(database.articleCellItem)
+          ..where((tbl) => tbl.cellId.equals(id.id)))
+        .go();
+    if (result >= 1) return;
+    result = await (database.delete(database.urlCellItem)
           ..where((tbl) => tbl.cellId.equals(id.id)))
         .go();
   }
@@ -96,6 +103,15 @@ class CellRepositoryDrift implements CellRepository {
       return ArticleCellItemDataParser(cell).asCell;
     }
 
+    cells = await (database.select(database.urlCellItem)
+          ..where((tbl) => tbl.cellId.equals(id.id))
+          ..limit(1))
+        .get();
+    if (cells.isNotEmpty) {
+      final cell = cells.first as UrlCellItemData;
+      return UrlCellItemDataParser(cell).asCell;
+    }
+
     return null;
   }
 
@@ -123,6 +139,10 @@ class CellRepositoryDrift implements CellRepository {
           ..where((tbl) => tbl.whiteboardId.equals(parentId.whiteboardId)))
         .get();
     cells.addAll(articles.map((e) => ArticleCellItemDataParser(e).asCell));
+    final urls = await (database.select(database.urlCellItem)
+          ..where((tbl) => tbl.whiteboardId.equals(parentId.whiteboardId)))
+        .get();
+    cells.addAll(urls.map((e) => UrlCellItemDataParser(e).asCell));
 
     return cells;
   }
@@ -131,6 +151,17 @@ class CellRepositoryDrift implements CellRepository {
   Future<void> update({required CellId id, required Cell data}) {
     return data.map(
       unknown: (_) async {},
+      url: (value) async {
+        final oldValue = await (database.select(database.urlCellItem)
+              ..where((tbl) => tbl.cellId.equals(id.id)))
+            .getSingleOrNull();
+        if (oldValue == null) return;
+        await database
+            .into(database.urlCellItem)
+            .insertOnConflictUpdate(UrlCellTransformer(value)
+                .asCompanion
+                .copyWith(id: Value(oldValue.id)));
+      },
       brainstorming: (value) async {
         final oldValue = await (database.select(database.brainstormingCellItem)
               ..where((tbl) => tbl.cellId.equals(id.id)))
@@ -177,7 +208,7 @@ class CellRepositoryDrift implements CellRepository {
 
   @override
   Stream<List<Cell>> watchList({required CellParentId parentId}) async* {
-    final stream = CombineLatestStream.combine4(
+    final stream = CombineLatestStream.combine5(
       database.select(database.brainstormingCellItem).watch().map((event) =>
           event.map((e) => BrainstormingCellItemDataParser(e).asCell).toList()),
       database.select(database.editableCellItem).watch().map((event) =>
@@ -186,7 +217,9 @@ class CellRepositoryDrift implements CellRepository {
           event.map((e) => ImageCellItemDataParser(e).asCell).toList()),
       database.select(database.articleCellItem).watch().map((event) =>
           event.map((e) => ArticleCellItemDataParser(e).asCell).toList()),
-      (a, b, c, d) => [...a, ...b, ...c, ...d],
+      database.select(database.urlCellItem).watch().map((event) =>
+          event.map((e) => UrlCellItemDataParser(e).asCell).toList()),
+      (a, b, c, d, e) => [...a, ...b, ...c, ...d, ...e],
     );
     yield* stream.asBroadcastStream();
   }

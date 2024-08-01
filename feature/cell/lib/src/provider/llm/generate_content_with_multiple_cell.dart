@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cell/cell.dart';
 import 'package:flutter/services.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:http/http.dart' as http;
 import 'package:llm/llm.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -42,6 +43,15 @@ extension type CellLLM(Cell cell) {
   Future<Content?> getContent() {
     return cell.map<Future<Content?>>(
       unknown: (_) async => null,
+      url: (value) async {
+        var client = http.Client();
+        try {
+          var response = await client.get(value.url);
+          return Content.text(response.body);
+        } finally {
+          client.close();
+        }
+      },
       brainstorming: (value) async => switch (value.question) {
         null => null,
         final question => Content.text(question),
@@ -89,6 +99,15 @@ CONTENT: ${value.content}
   Future<Part?> getPart() {
     return cell.map<Future<Part?>>(
       unknown: (_) async => null,
+      url: (value) async {
+        var client = http.Client();
+        try {
+          var response = await client.get(value.url);
+          return TextPart(response.body);
+        } finally {
+          client.close();
+        }
+      },
       brainstorming: (value) async => switch (value.question) {
         null => null,
         final question => TextPart(question),
@@ -131,5 +150,24 @@ CONTENT: ${value.content}
         return null;
       },
     );
+  }
+
+  Future<Uint8List?> getImageBytes(ImageCell cell) async {
+    switch (cell.url.scheme) {
+      case 'file':
+        final file = File(cell.url.toFilePath());
+        if (!await file.exists()) return null;
+        final image = await file.readAsBytes();
+        return image;
+      case 'http' || 'https':
+        final bundle = NetworkAssetBundle(cell.url);
+        final image = await bundle.load('');
+        return image.buffer.asUint8List();
+      case 'data':
+        final data = cell.url.data!;
+        final image = data.contentAsBytes();
+        return image;
+    }
+    return null;
   }
 }
