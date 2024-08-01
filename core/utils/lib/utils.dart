@@ -11,6 +11,7 @@ export 'src/json_serializable/size.dart';
 export 'src/json_serializable/uri.dart';
 export 'src/mixin/mixin.dart';
 export 'src/money.dart';
+export 'src/networks/check_if_image_valid.dart';
 export 'src/repository/crud_dto_repository.dart';
 export 'src/string.dart';
 export 'src/widget/widget_size_listener.dart';

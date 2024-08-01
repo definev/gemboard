@@ -623,8 +623,11 @@ class WhiteboardShortcutManager extends ShortcutManager {
   factory WhiteboardShortcutManager() {
     return WhiteboardShortcutManager._(
       shortcuts: {
-        SingleActivator(LogicalKeyboardKey.keyC, shift: true):
-            ToggleCursorModeIntent(),
+        SingleActivator(
+          LogicalKeyboardKey.keyC,
+          shift: true,
+          control: true,
+        ): ToggleCursorModeIntent(),
       },
     );
   }

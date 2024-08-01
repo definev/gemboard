@@ -18,7 +18,7 @@ class ImageCellView extends StatelessWidget {
   Widget build(BuildContext context) {
     final scale = DesignSystemTheme.of(context).scale;
 
-    return Box(
+    var errorWidget = Box(
       style: Style(
         $box.padding.all.ref(SpaceVariant.medium),
         $box.color.ref(ColorVariant.surface),
@@ -28,60 +28,63 @@ class ImageCellView extends StatelessWidget {
         ),
       ),
       child: SizedBox(
-        width: double.infinity,
-        child: switch (cell.url.scheme) {
-          'file' => Image.file(
-              File(cell.url.toFilePath()),
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                print(error);
-                return SizedBox(
-                  height: 100 * scale,
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        StyledText(
-                          '😵',
-                          style: Style(
-                            $text.style.ref(TextStyleVariant.emoji),
-                            $text.style.fontSize(48 * scale),
-                          ),
-                        ),
-                        StyledText(
-                          'Image not found',
-                          style: Style(
-                            $text.style.ref(TextStyleVariant.p),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          'http' || 'https' => Image.network(
-              cell.url.toString(),
-              fit: BoxFit.cover,
-            ),
-          'data' => HookBuilder(
-              builder: (context) {
-                final base64 =
-                    useMemoized(() => cell.url.data!.contentAsBytes());
-                return Image.memory(
-                  base64,
-                  fit: BoxFit.cover,
-                );
-              },
-            ),
-          _ => StyledText(
-              'This text can\'t displayed',
-              style: Style(
-                $text.style.ref(TextStyleVariant.p),
+        height: 100 * scale,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              StyledText(
+                '😵',
+                style: Style(
+                  $text.style.ref(TextStyleVariant.emoji),
+                  $text.style.fontSize(48 * scale),
+                ),
               ),
-            )
-        },
+              StyledText(
+                'Image not found',
+                style: Style(
+                  $text.style.ref(TextStyleVariant.p),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
+    );
+
+    return SizedBox(
+      width: double.infinity,
+      child: switch (cell.url.scheme) {
+        'file' => Image.file(
+            File(cell.url.toFilePath()),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              print(error);
+              return errorWidget;
+            },
+          ),
+        'http' || 'https' => Image.network(
+            cell.url.toString(),
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => errorWidget,
+          ),
+        'data' => HookBuilder(
+            builder: (context) {
+              final base64 = useMemoized(() => cell.url.data!.contentAsBytes());
+              return Image.memory(
+                base64,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => errorWidget,
+              );
+            },
+          ),
+        _ => StyledText(
+            'This text can\'t displayed',
+            style: Style(
+              $text.style.ref(TextStyleVariant.p),
+            ),
+          )
+      },
     );
   }
 }

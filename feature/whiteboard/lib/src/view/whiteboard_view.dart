@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:developer';
 import 'dart:io' as io;
 import 'dart:math' as math;
 
@@ -1443,11 +1444,38 @@ class WhiteboardDropZone extends StatelessWidget {
           if (matchedFormat case final matchedFormat?) {
             print('Dropped image: ${item}');
             if (reader.canProvide(Formats.uri)) {
-              reader.getValue<NamedUri>(Formats.uri, (value) {
+              reader.getValue<NamedUri>(Formats.uri, (value) async {
                 if (value != null) {
                   // You can access values through the `value` property.
                   print('Dropped image: ${value.name} | ${value.uri}');
-                  onImageReceived(event, value.uri);
+                  log(value.uri.toString());
+                  final validImage =
+                      await NetworkUtils.validateImage(value.uri.toString());
+
+                  if (validImage) {
+                    onImageReceived(event, value.uri);
+                  } else {
+                    reader.getFile(
+                      matchedFormat,
+                      (value) async {
+                        final directory =
+                            await getApplicationDocumentsDirectory();
+                        var file = io.File(
+                            '${directory.path}/whiteboard/${id.id}/${value.fileName}');
+                        file = await file.create(recursive: true);
+                        final ioSink = file.openWrite();
+                        try {
+                          final stream = value.getStream();
+                          await ioSink.addStream(stream);
+                          onImageReceived(event, file.uri);
+                        } catch (e) {
+                        } finally {
+                          await ioSink.flush();
+                          await ioSink.close();
+                        }
+                      },
+                    );
+                  }
                 }
               }, onError: (error) {
                 print('Error reading value $error');
