@@ -36,7 +36,7 @@ class EditableCellView extends HookWidget {
     final background = cellDecoration.colorVariant ?? ColorVariant.surface;
     final onBackground = cellDecoration.onColorValue(context);
 
-    final onEdit = useState(false);
+    final onEdit = useState(cell.content.isEmpty);
 
     Widget child = DSCard(
       kind: kind,
@@ -108,18 +108,16 @@ class EditableCellView extends HookWidget {
                     controller: contentController,
                     focusNode: contentFocusNode,
                     hintText: 'Type something',
+                    autofocus: cell.content.isEmpty,
                     kind: DSTextboxKind.boundless,
                     minLines: 1,
                     onChanged: (content) =>
                         onContentChanged(titleController.text, content),
-                    hintTextStyle: TextStyleVariant.p2
-                        .resolve(context)
-                        .copyWith(
-                            color: (textSpec.style?.color ?? onBackground)
-                                .withOpacity(OpacityVariant.surface
-                                    .resolve(context)
-                                    .value)),
-                    textStyle: TextStyleVariant.p2
+                    hintTextStyle: TextStyleVariant.p.resolve(context).copyWith(
+                        color: (textSpec.style?.color ?? onBackground)
+                            .withOpacity(
+                                OpacityVariant.surface.resolve(context).value)),
+                    textStyle: TextStyleVariant.p
                         .resolve(context)
                         .copyWith(color: textSpec.style?.color ?? onBackground),
                     style: Style(
@@ -131,7 +129,6 @@ class EditableCellView extends HookWidget {
                     child: SingleChildScrollView(
                       child: DSMarkdownBody(
                         data: cell.content,
-                        // scrollable: cell.decoration.constraints,
                       ),
                     ),
                   ),
