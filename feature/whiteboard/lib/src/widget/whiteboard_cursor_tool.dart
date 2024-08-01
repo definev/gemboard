@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:design_system/design_system.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:whiteboard/src/domain/data/cursor_mode.dart';
@@ -68,179 +69,342 @@ class WhiteboardCursorTool extends HookWidget {
     final doneOnSelectionStart = useRef(false);
 
     return LayoutBuilder(
-      builder: (context, constraints) => Stack(
-        children: [
-          Positioned.fill(
-            child: GestureDetector(
-              supportedDevices: {
-                ...PointerDeviceKind.values,
-              }
-                ..remove(PointerDeviceKind.trackpad)
-                ..removeAll([
-                  if (cursorMode.value == CursorMode.selectionTool)
-                    PointerDeviceKind.stylus,
-                ]),
-              onDoubleTap: onDoubleTap,
-              onScaleStart: (details) {
-                onGrab.value = true;
-                firstPoint.value = details.localFocalPoint;
-                secondPoint.value = details.localFocalPoint;
-                doneOnSelectionStart.value = false;
-                doneOnSelectionStart.value = true;
-              },
-              onScaleUpdate: (details) async {
-                if (!doneOnSelectionStart.value) return;
+      builder: (context, constraints) {
+        void onPanStart(DragStartDetails details) {
+          onGrab.value = true;
+          firstPoint.value = details.localPosition;
+          secondPoint.value = details.localPosition;
+          doneOnSelectionStart.value = false;
+          doneOnSelectionStart.value = true;
+        }
 
-                secondPoint.value = secondPoint.value! + details.focalPointDelta;
+        void onPanUpdate(DragUpdateDetails details) async {
+          if (!doneOnSelectionStart.value) return;
 
-                final factor = 2.0;
+          secondPoint.value = secondPoint.value! + details.delta;
 
-                // Left overflow scroll
-                if (secondPoint.value!.dx < 0) {
-                  if (leftTimer.value == null) {
-                    leftTimer.value = Timer.periodic(
-                      Duration(milliseconds: 8),
-                      (timer) {
-                        if (firstPoint.value == null) {
-                          timer.cancel();
-                          leftTimer.value = null;
-                          return;
-                        }
-                        firstPoint.value =
-                            firstPoint.value!.translate(factor, 0);
-                        horizontalDetails.controller!.jumpTo(
-                          horizontalDetails.controller!.offset - factor,
-                        );
-                      },
-                    );
+          final factor = 2.0;
+
+          // Left overflow scroll
+          if (secondPoint.value!.dx < 0) {
+            if (leftTimer.value == null) {
+              leftTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    leftTimer.value = null;
+                    return;
                   }
-                } else {
-                  leftTimer.value?.cancel();
-                  leftTimer.value = null;
-                }
+                  firstPoint.value = firstPoint.value!.translate(factor, 0);
+                  horizontalDetails.controller!.jumpTo(
+                    horizontalDetails.controller!.offset - factor,
+                  );
+                },
+              );
+            }
+          } else {
+            leftTimer.value?.cancel();
+            leftTimer.value = null;
+          }
 
-                // Right overflow scroll
-                if (secondPoint.value!.dx > constraints.maxWidth) {
-                  if (rightTimer.value == null) {
-                    rightTimer.value = Timer.periodic(
-                      Duration(milliseconds: 8),
-                      (timer) {
-                        if (firstPoint.value == null) {
-                          timer.cancel();
-                          rightTimer.value = null;
-                          return;
-                        }
-                        firstPoint.value =
-                            firstPoint.value!.translate(-factor, 0);
-                        horizontalDetails.controller!.jumpTo(
-                          horizontalDetails.controller!.offset + factor,
-                        );
-                      },
-                    );
+          // Right overflow scroll
+          if (secondPoint.value!.dx > constraints.maxWidth) {
+            if (rightTimer.value == null) {
+              rightTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    rightTimer.value = null;
+                    return;
                   }
-                } else {
-                  rightTimer.value?.cancel();
-                  rightTimer.value = null;
-                }
+                  firstPoint.value = firstPoint.value!.translate(-factor, 0);
+                  horizontalDetails.controller!.jumpTo(
+                    horizontalDetails.controller!.offset + factor,
+                  );
+                },
+              );
+            }
+          } else {
+            rightTimer.value?.cancel();
+            rightTimer.value = null;
+          }
 
-                // Top overflow scroll
-                if (secondPoint.value!.dy < 0) {
-                  if (topTimer.value == null) {
-                    topTimer.value = Timer.periodic(
-                      Duration(milliseconds: 8),
-                      (timer) {
-                        if (firstPoint.value == null) {
-                          timer.cancel();
-                          topTimer.value = null;
-                          return;
-                        }
-                        firstPoint.value =
-                            firstPoint.value!.translate(0, factor);
-                        verticalDetails.controller!.jumpTo(
-                          verticalDetails.controller!.offset - factor,
-                        );
-                      },
-                    );
+          // Top overflow scroll
+          if (secondPoint.value!.dy < 0) {
+            if (topTimer.value == null) {
+              topTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    topTimer.value = null;
+                    return;
                   }
-                } else {
-                  topTimer.value?.cancel();
-                  topTimer.value = null;
-                }
+                  firstPoint.value = firstPoint.value!.translate(0, factor);
+                  verticalDetails.controller!.jumpTo(
+                    verticalDetails.controller!.offset - factor,
+                  );
+                },
+              );
+            }
+          } else {
+            topTimer.value?.cancel();
+            topTimer.value = null;
+          }
 
-                // Bottom overflow scroll
-                if (secondPoint.value!.dy > constraints.maxHeight) {
-                  if (bottomTimer.value == null) {
-                    bottomTimer.value = Timer.periodic(
-                      Duration(milliseconds: 8),
-                      (timer) {
-                        if (firstPoint.value == null) {
-                          timer.cancel();
-                          bottomTimer.value = null;
-                          return;
-                        }
-                        firstPoint.value =
-                            firstPoint.value!.translate(0, -factor);
-                        verticalDetails.controller!.jumpTo(
-                          verticalDetails.controller!.offset + factor,
-                        );
-                      },
-                    );
+          // Bottom overflow scroll
+          if (secondPoint.value!.dy > constraints.maxHeight) {
+            if (bottomTimer.value == null) {
+              bottomTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    bottomTimer.value = null;
+                    return;
                   }
-                } else {
-                  bottomTimer.value?.cancel();
-                  bottomTimer.value = null;
-                }
+                  firstPoint.value = firstPoint.value!.translate(0, -factor);
+                  verticalDetails.controller!.jumpTo(
+                    verticalDetails.controller!.offset + factor,
+                  );
+                },
+              );
+            }
+          } else {
+            bottomTimer.value?.cancel();
+            bottomTimer.value = null;
+          }
 
-                await onSelection(getRect()!);
-              },
-              onScaleEnd: (details) {
-                onGrab.value = false;
-                firstPoint.value = null;
-                secondPoint.value = null;
-              },
-              // onPanCancel: () {
-              //   onGrab.value = false;
-              //   firstPoint.value = null;
-              //   secondPoint.value = null;
-              // },
-              child: ColoredBox(
-                color: Colors.transparent,
-                child: MouseRegion(
-                  cursor: switch (cursorMode.value) {
-                    CursorMode.selectionTool => SystemMouseCursors.basic,
-                    CursorMode.handTool => switch (onGrab.value) {
-                        true => SystemMouseCursors.grabbing,
-                        false => SystemMouseCursors.grab,
-                      },
-                  },
-                  child: whiteboardBuilder(
-                    cursorMode.value == CursorMode.selectionTool,
-                    cursorMode.value == CursorMode.handTool,
-                    cursorMode.value == CursorMode.selectionTool,
-                    onGrab,
+          await onSelection(getRect()!);
+        }
+
+        void onPanEnd(DragEndDetails details) {
+          onGrab.value = false;
+          firstPoint.value = null;
+          secondPoint.value = null;
+        }
+
+        void onScaleStart(ScaleStartDetails details) {
+          onGrab.value = true;
+          firstPoint.value = details.localFocalPoint;
+          secondPoint.value = details.localFocalPoint;
+          doneOnSelectionStart.value = false;
+          doneOnSelectionStart.value = true;
+        }
+
+        void onScaleUpdate(ScaleUpdateDetails details) async {
+          if (!doneOnSelectionStart.value) return;
+
+          secondPoint.value = secondPoint.value! + details.focalPointDelta;
+
+          final factor = 2.0;
+
+          // Left overflow scroll
+          if (secondPoint.value!.dx < 0) {
+            if (leftTimer.value == null) {
+              leftTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    leftTimer.value = null;
+                    return;
+                  }
+                  firstPoint.value = firstPoint.value!.translate(factor, 0);
+                  horizontalDetails.controller!.jumpTo(
+                    horizontalDetails.controller!.offset - factor,
+                  );
+                },
+              );
+            }
+          } else {
+            leftTimer.value?.cancel();
+            leftTimer.value = null;
+          }
+
+          // Right overflow scroll
+          if (secondPoint.value!.dx > constraints.maxWidth) {
+            if (rightTimer.value == null) {
+              rightTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    rightTimer.value = null;
+                    return;
+                  }
+                  firstPoint.value = firstPoint.value!.translate(-factor, 0);
+                  horizontalDetails.controller!.jumpTo(
+                    horizontalDetails.controller!.offset + factor,
+                  );
+                },
+              );
+            }
+          } else {
+            rightTimer.value?.cancel();
+            rightTimer.value = null;
+          }
+
+          // Top overflow scroll
+          if (secondPoint.value!.dy < 0) {
+            if (topTimer.value == null) {
+              topTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    topTimer.value = null;
+                    return;
+                  }
+                  firstPoint.value = firstPoint.value!.translate(0, factor);
+                  verticalDetails.controller!.jumpTo(
+                    verticalDetails.controller!.offset - factor,
+                  );
+                },
+              );
+            }
+          } else {
+            topTimer.value?.cancel();
+            topTimer.value = null;
+          }
+
+          // Bottom overflow scroll
+          if (secondPoint.value!.dy > constraints.maxHeight) {
+            if (bottomTimer.value == null) {
+              bottomTimer.value = Timer.periodic(
+                Duration(milliseconds: 8),
+                (timer) {
+                  if (firstPoint.value == null) {
+                    timer.cancel();
+                    bottomTimer.value = null;
+                    return;
+                  }
+                  firstPoint.value = firstPoint.value!.translate(0, -factor);
+                  verticalDetails.controller!.jumpTo(
+                    verticalDetails.controller!.offset + factor,
+                  );
+                },
+              );
+            }
+          } else {
+            bottomTimer.value?.cancel();
+            bottomTimer.value = null;
+          }
+
+          await onSelection(getRect()!);
+        }
+
+        void onScaleEnd(ScaleEndDetails details) {
+          onGrab.value = false;
+          firstPoint.value = null;
+          secondPoint.value = null;
+        }
+
+        return Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                supportedDevices: {
+                  ...PointerDeviceKind.values,
+                }
+                  ..remove(PointerDeviceKind.trackpad)
+                  ..removeAll([
+                    if (cursorMode.value == CursorMode.selectionTool)
+                      PointerDeviceKind.stylus,
+                    if (cursorMode.value == CursorMode.handTool)
+                      PointerDeviceKind.mouse,
+                  ]),
+                onDoubleTap: onDoubleTap,
+                onScaleStart: switch (defaultTargetPlatform) {
+                  TargetPlatform.macOS ||
+                  TargetPlatform.linux ||
+                  TargetPlatform.windows =>
+                    null,
+                  _ => onScaleStart,
+                },
+                onScaleUpdate: switch (defaultTargetPlatform) {
+                  TargetPlatform.macOS ||
+                  TargetPlatform.linux ||
+                  TargetPlatform.windows =>
+                    null,
+                  _ => onScaleUpdate,
+                },
+                onScaleEnd: switch (defaultTargetPlatform) {
+                  TargetPlatform.macOS ||
+                  TargetPlatform.linux ||
+                  TargetPlatform.windows =>
+                    null,
+                  _ => onScaleEnd,
+                },
+
+                /// On pan
+                onPanStart: switch (defaultTargetPlatform) {
+                  TargetPlatform.macOS ||
+                  TargetPlatform.linux ||
+                  TargetPlatform.windows =>
+                    onPanStart,
+                  _ => null,
+                },
+                onPanUpdate: switch (defaultTargetPlatform) {
+                  TargetPlatform.macOS ||
+                  TargetPlatform.linux ||
+                  TargetPlatform.windows =>
+                    onPanUpdate,
+                  _ => null,
+                },
+                onPanEnd: switch (defaultTargetPlatform) {
+                  TargetPlatform.macOS ||
+                  TargetPlatform.linux ||
+                  TargetPlatform.windows =>
+                    onPanEnd,
+                  _ => null,
+                },
+                // onPanCancel: () {
+                //   onGrab.value = false;
+                //   firstPoint.value = null;
+                //   secondPoint.value = null;
+                // },
+                child: ColoredBox(
+                  color: Colors.transparent,
+                  child: MouseRegion(
+                    cursor: switch (cursorMode.value) {
+                      CursorMode.selectionTool => SystemMouseCursors.basic,
+                      CursorMode.handTool => switch (onGrab.value) {
+                          true => SystemMouseCursors.grabbing,
+                          false => SystemMouseCursors.grab,
+                        },
+                    },
+                    child: whiteboardBuilder(
+                      cursorMode.value == CursorMode.handTool,
+                      cursorMode.value == CursorMode.handTool,
+                      cursorMode.value == CursorMode.handTool,
+                      onGrab,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          if (getRect() case final rect?)
-            Positioned.fromRect(
-              rect: rect,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border.all(
+            if (getRect() case final rect?)
+              Positioned.fromRect(
+                rect: rect,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: ColorVariant.blue.resolve(context).withOpacity(
+                            OpacityVariant.blend.resolve(context).value,
+                          ),
+                    ),
                     color: ColorVariant.blue.resolve(context).withOpacity(
-                          OpacityVariant.blend.resolve(context).value,
+                          OpacityVariant.hightlight.resolve(context).value,
                         ),
                   ),
-                  color: ColorVariant.blue.resolve(context).withOpacity(
-                        OpacityVariant.hightlight.resolve(context).value,
-                      ),
                 ),
               ),
-            ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

@@ -3,7 +3,7 @@ description: "gemboard mobile app"
 publish_to: "none"
 version: 0.0.1+1
 
-environment: 
+environment:
   sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
@@ -14,7 +14,7 @@ dependencies:
 
   # native things
   bitsdojo_window: ^0.1.6
-  
+
   # Dependencies
   flutter_riverpod: ^2.5.1
   flutter_hooks: ^0.20.5
@@ -35,24 +35,25 @@ dependencies:
   mix: ^1.4.0
   design_system:
     path: ../../core/design_system
-  
+
   # Navigator
   gemboard_navigator:
     path: ../gemboard_navigator
-  
+
   # Configuration
   gemboard_configuration:
     path: ../gemboard_configuration
-  
+
   # Database
   gemboard_database:
     path: ../gemboard_database
-  
+
   gemboard_common:
     path: ../gemboard_common
 
 dev_dependencies:
   flutter_lints: ^4.0.0
+  icons_launcher: ^2.1.7
 
 dependency_overrides:
   flutter_keyboard_visibility_web:
@@ -61,9 +62,27 @@ dependency_overrides:
       ref: master
       path: flutter_keyboard_visibility_web
 
+icons_launcher:
+  image_path: "assets/logo.png"
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
+    macos:
+      image_path: "assets/macos_logo.png"
+      enable: true
+    web:
+      enable: true
+      favicon_path: "assets/favicon.png"
+    windows:
+      enable: true
+    linux:
+      enable: true
+
 flutter:
   uses-material-design: true
-  
+
   fonts:
     - family: Apple Color Emoji
       fonts:
