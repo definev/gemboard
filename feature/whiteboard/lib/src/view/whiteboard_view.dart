@@ -565,7 +565,28 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           ),
           child: DesignSystemTheme(
             data: designSystemThemeData.copyWith(scale: widget.canvasScale),
-            child: child,
+            child: Builder(
+              builder: (context) {
+                return Theme(
+                  data: Theme.of(context).copyWith(
+                    scrollbarTheme: ScrollbarThemeData(
+                      thickness: WidgetStateProperty.resolveWith(
+                        (states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return SpaceVariant.small.resolve(context);
+                          }
+                          return SpaceVariant.gap.resolve(context);
+                        },
+                      ),
+                      crossAxisMargin: 0,
+                      interactive: true,
+                      thumbColor: WidgetStatePropertyAll(ColorVariant.outline.resolve(context).withOpacity(0.5)),
+                    ),
+                  ),
+                  child: child,
+                );
+              },
+            ),
           ),
         );
       },
