@@ -361,11 +361,6 @@ class WhiteboardCursorTool extends HookWidget {
                     onPanEnd,
                   _ => null,
                 },
-                // onPanCancel: () {
-                //   onGrab.value = false;
-                //   firstPoint.value = null;
-                //   secondPoint.value = null;
-                // },
                 child: ColoredBox(
                   color: Colors.transparent,
                   child: MouseRegion(
@@ -379,7 +374,7 @@ class WhiteboardCursorTool extends HookWidget {
                     child: whiteboardBuilder(
                       cursorMode.value == CursorMode.handTool,
                       cursorMode.value == CursorMode.handTool,
-                      cursorMode.value == CursorMode.handTool,
+                      cursorMode.value == CursorMode.selectionTool,
                       onGrab,
                     ),
                   ),

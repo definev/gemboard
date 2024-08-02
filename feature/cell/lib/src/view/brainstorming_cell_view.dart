@@ -117,7 +117,9 @@ class BrainstormingCellView extends HookWidget {
                     $flex.gap.ref(SpaceVariant.large),
                   ),
                   children: [
-                    StyledText(suggestion),
+                    Expanded(
+                      child: StyledText(suggestion),
+                    ),
                     StyledIcon(
                       IconlyLight.arrow_right_circle,
                       style: Style(

@@ -34,7 +34,7 @@ class DSMarkdownBody extends StatelessWidget {
           _ => null,
         };
 
-    final h4 = TextStyleVariant.h4
+    final h4 = TextStyleVariant.h5
         .resolve(context)
         .copyWith(color: textSpec.style?.color);
     final h5 = TextStyleVariant.h5
