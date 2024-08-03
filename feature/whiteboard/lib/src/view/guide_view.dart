@@ -1,5 +1,6 @@
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 import 'package:sliver_tools/sliver_tools.dart';
 
@@ -14,11 +15,17 @@ class GuideView extends StatelessWidget {
           padding: EdgeInsets.all(SpaceVariant.medium.resolve(context)),
           sliver: MultiSliver(
             children: [
-              StyledText(
-                'Guide - cheat sheet',
-                style: Style(
-                  $text.style.ref(TextStyleVariant.h6),
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  StyledText(
+                    'Guide - cheat sheet',
+                    style: Style(
+                      $text.style.ref(TextStyleVariant.h6),
+                    ),
+                  ),
+                  StyledIcon(IconlyLight.arrow_down_square),
+                ],
               ),
               SizedBox(height: SpaceVariant.medium.resolve(context)),
               DSHorizontalDivider(),
