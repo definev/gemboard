@@ -14,4 +14,6 @@ abstract class WhiteboardNavigation {
     Whiteboard? whiteboard,
     required ResizableController? resizableController,
   });
+
+  Future<Whiteboard?> pushWhiteboardSelector();
 }

@@ -20,4 +20,9 @@ class WhiteboardNavigationImpl implements WhiteboardNavigation {
       extra: resizableController,
     );
   }
+
+  @override
+  Future<Whiteboard?> pushWhiteboardSelector() {
+    return router.push(WhiteboardSelectorRoute().location);
+  }
 }

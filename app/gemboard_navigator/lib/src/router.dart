@@ -13,6 +13,7 @@ part 'routes/home.dart';
 part 'routes/home.greeting.dart';
 part 'routes/settings.dart';
 part 'routes/whiteboard.dart';
+part 'routes/whiteboard.selector.dart';
 
 final router = () {
   return GoRouter(
@@ -48,6 +49,13 @@ final router = () {
             ],
           ),
         ],
+      ),
+      GoRoute(
+        parentNavigatorKey: RootShell.$navigatorKey,
+        path: WhiteboardSelectorRoute.location,
+        pageBuilder: (context, state) => $WhiteboardSelectorRouteExtension
+            ._fromState(state)
+            .buildPage(context, state),
       ),
     ],
     initialLocation: HomeGreetingRoute.location,

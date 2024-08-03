@@ -8,7 +8,6 @@ import 'package:folder/folder.dart';
 import 'package:gemboard_common/gemboard_common.dart';
 import 'package:home/home.dart';
 import 'package:home/src/view/gemboard_sidebar_header.dart';
-import 'package:home/src/widget/gemboard_folder_builder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
@@ -164,101 +163,25 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                         ),
                       ),
                     ],
-                  AsyncData(:final value) => [
-                      MultiSliver(
-                        children: [
-                          for (final folder in value)
-                            Consumer(
-                              builder: (context, ref, child) {
-                                final parentId = WhiteboardParentId(
-                                  folderId: folder.id.id,
-                                );
-                                final whiteboardLitAsyncValue = ref.watch(
-                                  getWhiteboardListProvider(parentId: parentId),
-                                );
-                                return GemboardFolderBuilder(
-                                  background: ColorVariant.purple,
-                                  gemboardEmojiLabelKind:
-                                      gemboardEmojiLabelKind,
-                                  emoji: folder.emoji,
-                                  label: folder.title,
-                                  onChangeEmojiLabel: (emoji, label) =>
-                                      ref.read(
-                                    updateFolderProvider(
-                                      id: folder.id,
-                                      data: folder.copyWith(
-                                        emoji: emoji,
-                                        title: label,
-                                      ),
-                                    ).future,
-                                  ),
-                                  onDeleteFolder: () => ref.read(
-                                    deleteFolderProvider(id: folder.id).future,
-                                  ),
-                                  onCreateGemboard: () async {
-                                    final data = Whiteboard(
-                                      id: WhiteboardId(
-                                        parentId: parentId,
-                                        id: Helper.createId(),
-                                      ),
-                                      emoji: StringUtils.randomEmoji(),
-                                      title: 'Untitled',
-                                    );
-                                    await ref.read(
-                                      createWhiteboardProvider(
-                                        parentId: parentId,
-                                        data: data,
-                                      ).future,
-                                    );
-
-                                    whiteboardNavigation.openWhiteboardEditor(
-                                      context,
-                                      id: data.id,
-                                      resizableController: resizableController,
-                                    );
-                                  },
-                                  children: switch (whiteboardLitAsyncValue) {
-                                    AsyncLoading() => [],
-                                    AsyncError() => [],
-                                    AsyncData(:final value) => [
-                                        for (final whiteboard in value)
-                                          Button(
-                                            background: ColorVariant.purple,
-                                            style: Style(
-                                              $box.padding.right
-                                                  .ref(SpaceVariant.small),
-                                            ),
-                                            onPressed: () =>
-                                                whiteboardNavigation
-                                                    .openWhiteboardEditor(
-                                              context,
-                                              id: whiteboard.id,
-                                              resizableController:
-                                                  resizableController,
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                Expanded(
-                                                  child: EmojiLabel(
-                                                    kind:
-                                                        gemboardEmojiLabelKind,
-                                                    emoji: StyledText(
-                                                        whiteboard.emoji),
-                                                    label: StyledText(
-                                                        whiteboard.title),
-                                                  ),
-                                                ),
-                                                StyledIcon(IconlyLight.edit),
-                                              ],
-                                            ),
-                                          ),
-                                      ],
-                                    _ => [],
-                                  },
-                                );
-                              },
-                            ),
-                        ],
+                  AsyncData(value: final folders) => [
+                      FolderListView(
+                        folders: folders,
+                        gemboardEmojiLabelKind: gemboardEmojiLabelKind,
+                        onCreateGemboard: (data) {
+                          whiteboardNavigation.openWhiteboardEditor(
+                            context,
+                            id: data.id,
+                            whiteboard: data,
+                            resizableController: resizableController,
+                          );
+                        },
+                        onWhiteboardPressed: (whiteboard) {
+                          whiteboardNavigation.openWhiteboardEditor(
+                            context,
+                            id: whiteboard.id,
+                            resizableController: resizableController,
+                          );
+                        },
                       ),
                     ],
                   _ => [],
@@ -331,3 +254,4 @@ class GemboardLeadSidebar extends HookConsumerWidget {
     );
   }
 }
+

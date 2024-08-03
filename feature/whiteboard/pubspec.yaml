@@ -42,6 +42,8 @@ dependencies:
     path: ../../feature/cell
   graph_edge:
     path: ../../feature/graph_edge
+  folder:
+    path: ../../feature/folder
 
   # utils
   utils:

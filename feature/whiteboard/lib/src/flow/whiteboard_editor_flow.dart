@@ -252,6 +252,15 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
               );
             }
           },
+          onMoveCellsToAnotherWhiteboard: ({
+            required List<Cell> cells,
+            required List<Edge> edges,
+          }) async {
+            final whiteboardNavigation =
+                ref.read(WhiteboardNavigation.provider);
+            final whiteboard =
+                await whiteboardNavigation.pushWhiteboardSelector();
+          },
         ),
       ),
     );

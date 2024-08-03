@@ -38,6 +38,11 @@ RouteBase get $rootShell => ShellRouteData.$route(
             ),
           ],
         ),
+        GoRouteData.$route(
+          path: '/whiteboard/selector',
+          parentNavigatorKey: WhiteboardSelectorRoute.$parentNavigatorKey,
+          factory: $WhiteboardSelectorRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -96,6 +101,24 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
         queryParams: {
           if (folderId != null) 'folder-id': folderId,
         },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $WhiteboardSelectorRouteExtension on WhiteboardSelectorRoute {
+  static WhiteboardSelectorRoute _fromState(GoRouterState state) =>
+      const WhiteboardSelectorRoute();
+
+  String get location => GoRouteData.$location(
+        '/whiteboard/selector',
       );
 
   void go(BuildContext context) => context.go(location);

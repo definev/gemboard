@@ -35,6 +35,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.onEdgesUpdated,
     required this.onEdgeCreated,
     required this.onEdgesDeleted,
+    required this.onMoveCellsToAnotherWhiteboard,
 
     ///
     required this.cellsStreamProvider,
@@ -47,7 +48,6 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.enableMoveByMouse,
     required this.enableMoveByTouch,
     required this.enableMoveByStylus,
-
     this.scaleFactor,
     this.onScaleStart,
     this.onScaleEnd,
@@ -65,6 +65,11 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final void Function(List<Cell> cells) onCellsUpdated;
   final Future<void> Function(Cell value) onCellCreated;
   final Future<void> Function(List<String> cellIds) onCellsDeleted;
+
+  final Future<void> Function({
+    required List<Cell> cells,
+    required List<Edge> edges,
+  }) onMoveCellsToAnotherWhiteboard;
 
   /// Whiteboard edges configuration
   final AutoDisposeStreamProvider<List<Edge>> edgesStreamProvider;
@@ -983,10 +988,23 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
               /// Copy / paste
               onCellsCopied: () => objectStack_onCellsCopied(selectedCells),
               onCellsCut: () => objectStack_onCellsCut(selectedCells),
+              onMoveCellsToAnotherWhiteboard:
+                  selection_cell_onMoveCellsToAnotherWhiteboard,
             ),
           ),
         );
       };
+
+  void selection_cell_onMoveCellsToAnotherWhiteboard(
+    List<String> selectionCellIds,
+  ) {
+    final cells = selectionCellIds.map((id) => cellKeys[id]!.$2).toList();
+    final edges = cells_findAllRelatedEdge(cells);
+    widget.onMoveCellsToAnotherWhiteboard(
+      cells: cells,
+      edges: edges,
+    );
+  }
 
   /// This is O(n^3) be careful
   List<Edge> cells_findAllRelatedEdge(List<Cell> cells) {

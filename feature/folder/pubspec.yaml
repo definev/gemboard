@@ -23,12 +23,22 @@ dependencies:
   design_system:
     path: ../../core/design_system
   
+  gemboard_common:
+    path: ../../app/gemboard_common
+  
   utils:
     path: ../../core/utils
   
+  # feature
+  whiteboard:
+    path: ../../feature/whiteboard
+  
+  sliver_tools: ^0.2.12
   
   mix: ^1.4.0
+  iconly: ^1.0.1
   
+  flutter_portal: ^1.1.4
   flextras:
   drift: ^2.19.1+1
   drift_flutter: ^0.1.0

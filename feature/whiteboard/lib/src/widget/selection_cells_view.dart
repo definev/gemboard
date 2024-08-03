@@ -41,6 +41,9 @@ class SelectionCellsView extends HookWidget {
     /// Copy / paste
     required this.onCellsCopied,
     required this.onCellsCut,
+
+    /// Move cell to another whiteboard
+    required this.onMoveCellsToAnotherWhiteboard,
   });
 
   final ViewportOffset horizontalPosition;
@@ -75,6 +78,10 @@ class SelectionCellsView extends HookWidget {
   /// Copy / Paste
   final VoidCallback onCellsCut;
   final VoidCallback onCellsCopied;
+
+  /// Move cell to another whiteboard
+  final void Function(List<String> selectedCellIds)
+      onMoveCellsToAnotherWhiteboard;
 
   Widget buildSingleCellToolbar({
     required Cell cell,
@@ -117,12 +124,12 @@ class SelectionCellsView extends HookWidget {
   double calculateToolbarWidth(BuildContext context) {
     if (selectedCellIds.length == 1) {
       if (selectedCells.first is ArticleCell) {
-        return toolbarWidthCalculator(context, 4);
+        return toolbarWidthCalculator(context, 5);
       }
 
-      return toolbarWidthCalculator(context, 3);
+      return toolbarWidthCalculator(context, 4);
     }
-    return toolbarWidthCalculator(context, 2);
+    return toolbarWidthCalculator(context, 3);
   }
 
   @override
@@ -254,17 +261,30 @@ class SelectionCellsView extends HookWidget {
                         ...switch (selectedCells.length == 1) {
                           false => [],
                           true => [
-                              DSTooltip(
-                                label: StyledText('Summarize'),
-                                alignment: Alignment.bottomCenter,
-                                child: DSToolbarItem(
-                                  onPressed: () => onCellSummarize(
-                                    cellMaps[selectedCellIds.first]!.$2,
+                              if (selectedCells.first is ImageCell)
+                                DSTooltip(
+                                  label: StyledText('Describe image'),
+                                  alignment: Alignment.bottomCenter,
+                                  child: DSToolbarItem(
+                                    onPressed: () => onCellSummarize(
+                                      cellMaps[selectedCellIds.first]!.$2,
+                                    ),
+                                    child: StyledIcon(
+                                        CupertinoIcons.doc_text_viewfinder),
                                   ),
-                                  child: StyledIcon(
-                                      CupertinoIcons.doc_text_viewfinder),
+                                )
+                              else
+                                DSTooltip(
+                                  label: StyledText('Summarize'),
+                                  alignment: Alignment.bottomCenter,
+                                  child: DSToolbarItem(
+                                    onPressed: () => onCellSummarize(
+                                      cellMaps[selectedCellIds.first]!.$2,
+                                    ),
+                                    child: StyledIcon(
+                                        CupertinoIcons.doc_text_viewfinder),
+                                  ),
                                 ),
-                              ),
                               if (selectedCells.first is ArticleCell)
                                 DSTooltip(
                                   label: StyledText('Turn into editable'),
@@ -278,6 +298,14 @@ class SelectionCellsView extends HookWidget {
                                 ),
                             ],
                         },
+                        DSTooltip(
+                          label: StyledText('Export to whiteboard'),
+                          child: DSToolbarItem(
+                            onPressed: () =>
+                                onMoveCellsToAnotherWhiteboard(selectedCellIds),
+                            child: StyledIcon(IconlyLight.upload),
+                          ),
+                        ),
                         DSTooltip(
                           label: StyledText('Delete'),
                           alignment: Alignment.bottomCenter,
