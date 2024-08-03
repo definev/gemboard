@@ -49,11 +49,11 @@ The key to using the whiteboard effectively is to understand the different tools
 
 For touch devices like mobile phones or tablets, you can use these extra features:
 
-- **Stylus Support:**
-  - Use a stylus to select cells on the whiteboard easily.
+**Stylus Support:**
+- Use a stylus to select cells on the whiteboard easily.
 
-- **Pinch to Zoom:**
-  - Select the `Hand tool` from the action bar, then use pinch gestures to zoom in and out on your touch device.
+**Pinch to Zoom:**
+- Select the `Hand tool` from the action bar, then use pinch gestures to zoom in and out on your touch device.
 ''',
                 scrollable: false,
               ),
