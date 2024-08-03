@@ -12,8 +12,22 @@ Future<void> createCell(
 }) async {
   final repository = ref.read(cellRepositoryProvider);
   await repository.add(parentId: parentId, data: data);
-  ref
-      .read(getCellListStreamControllerProvider(parentId: parentId))
-      .sink
-      .add(await repository.getList(parentId: parentId));
+  final controller =
+      ref.read(getCellListStreamControllerProvider(parentId: parentId));
+  controller.sink.add(await repository.getList(parentId: parentId));
+}
+
+@riverpod
+Future<void> createCells(
+  CreateCellsRef ref, {
+  required CellParentId parentId,
+  required List<Cell> data,
+}) async {
+  final repository = ref.read(cellRepositoryProvider);
+  for (final cell in data) {
+    await repository.add(parentId: parentId, data: cell);
+  }
+  final controller =
+      ref.read(getCellListStreamControllerProvider(parentId: parentId));
+  controller.add(await repository.getList(parentId: parentId));
 }

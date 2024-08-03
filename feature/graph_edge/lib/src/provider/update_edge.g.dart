@@ -6,7 +6,7 @@ part of 'update_edge.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updateEdgeHash() => r'f556e57e34c1e26d7ac1b8beeab48743114a670b';
+String _$updateEdgeHash() => r'5851b4211e4d8c693bfcce9295c4771a22b8ff57';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -170,7 +170,7 @@ class _UpdateEdgeProviderElement extends AutoDisposeFutureProviderElement<void>
   Edge get data => (origin as UpdateEdgeProvider).data;
 }
 
-String _$updateEdgesHash() => r'b9150334c5855406973763fb67e9340a69576c62';
+String _$updateEdgesHash() => r'a6e203427615642e08454af01cec93fc827a16ee';
 
 /// See also [updateEdges].
 @ProviderFor(updateEdges)

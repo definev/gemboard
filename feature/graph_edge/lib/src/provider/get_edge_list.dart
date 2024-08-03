@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:graph_edge/src/domain/repository/edge_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -14,19 +15,18 @@ StreamController<List<Edge>> getEdgeListStreamController(
 }) {
   final controller = StreamController<List<Edge>>.broadcast(
     onListen: () {
-      print('Listening to edge list stream');
+      debugPrint('Listening to edge list stream');
     },
     onCancel: () {
-      print('Cancel listening to edge list stream');
+      debugPrint('Cancel listening to edge list stream');
     },
   );
-  final repository = ref.watch(edgeRepositoryProvider);
-  controller.sink.addStream(repository.watchList(parentId: parentId));
 
   ref.onDispose(() {
     controller.close();
-    print('Disposed edge list stream');
+    debugPrint('Disposed edge list stream');
   });
+
   return controller;
 }
 
@@ -35,7 +35,9 @@ Stream<List<Edge>> getEdgeList(
   GetEdgeListRef ref, {
   required EdgeParentId parentId,
 }) async* {
-  yield* ref
-      .watch(getEdgeListStreamControllerProvider(parentId: parentId))
-      .stream;
+  final repository = ref.watch(edgeRepositoryProvider);
+  yield (await repository.getList(parentId: parentId));
+  final controller =
+      ref.watch(getEdgeListStreamControllerProvider(parentId: parentId));
+  yield* controller.stream;
 }

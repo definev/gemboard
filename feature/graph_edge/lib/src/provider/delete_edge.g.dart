@@ -155,7 +155,7 @@ class _DeleteEdgeProviderElement extends AutoDisposeFutureProviderElement<void>
   EdgeId get id => (origin as DeleteEdgeProvider).id;
 }
 
-String _$deleteEdgesHash() => r'08893289568c7a8151f277a6277ad02df59bece0';
+String _$deleteEdgesHash() => r'bba809a445a14f18bafc94e3908a9ab8df18b46c';
 
 /// See also [deleteEdges].
 @ProviderFor(deleteEdges)
@@ -169,9 +169,11 @@ class DeleteEdgesFamily extends Family<AsyncValue<void>> {
   /// See also [deleteEdges].
   DeleteEdgesProvider call({
     required List<EdgeId> ids,
+    bool notify = true,
   }) {
     return DeleteEdgesProvider(
       ids: ids,
+      notify: notify,
     );
   }
 
@@ -181,6 +183,7 @@ class DeleteEdgesFamily extends Family<AsyncValue<void>> {
   ) {
     return call(
       ids: provider.ids,
+      notify: provider.notify,
     );
   }
 
@@ -204,10 +207,12 @@ class DeleteEdgesProvider extends AutoDisposeFutureProvider<void> {
   /// See also [deleteEdges].
   DeleteEdgesProvider({
     required List<EdgeId> ids,
+    bool notify = true,
   }) : this._internal(
           (ref) => deleteEdges(
             ref as DeleteEdgesRef,
             ids: ids,
+            notify: notify,
           ),
           from: deleteEdgesProvider,
           name: r'deleteEdgesProvider',
@@ -219,6 +224,7 @@ class DeleteEdgesProvider extends AutoDisposeFutureProvider<void> {
           allTransitiveDependencies:
               DeleteEdgesFamily._allTransitiveDependencies,
           ids: ids,
+          notify: notify,
         );
 
   DeleteEdgesProvider._internal(
@@ -229,9 +235,11 @@ class DeleteEdgesProvider extends AutoDisposeFutureProvider<void> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.ids,
+    required this.notify,
   }) : super.internal();
 
   final List<EdgeId> ids;
+  final bool notify;
 
   @override
   Override overrideWith(
@@ -247,6 +255,7 @@ class DeleteEdgesProvider extends AutoDisposeFutureProvider<void> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         ids: ids,
+        notify: notify,
       ),
     );
   }
@@ -258,13 +267,16 @@ class DeleteEdgesProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   bool operator ==(Object other) {
-    return other is DeleteEdgesProvider && other.ids == ids;
+    return other is DeleteEdgesProvider &&
+        other.ids == ids &&
+        other.notify == notify;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, ids.hashCode);
+    hash = _SystemHash.combine(hash, notify.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -273,6 +285,9 @@ class DeleteEdgesProvider extends AutoDisposeFutureProvider<void> {
 mixin DeleteEdgesRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `ids` of this provider.
   List<EdgeId> get ids;
+
+  /// The parameter `notify` of this provider.
+  bool get notify;
 }
 
 class _DeleteEdgesProviderElement extends AutoDisposeFutureProviderElement<void>
@@ -281,6 +296,8 @@ class _DeleteEdgesProviderElement extends AutoDisposeFutureProviderElement<void>
 
   @override
   List<EdgeId> get ids => (origin as DeleteEdgesProvider).ids;
+  @override
+  bool get notify => (origin as DeleteEdgesProvider).notify;
 }
 
 String _$deleteCellEdgeHash() => r'c77b95b8f6314e728624ccbfb6ea8bc87d13e0f3';

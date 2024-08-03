@@ -37,7 +37,7 @@ class LinkAnalyzer {
   /// return [Metadata] from cache if available
   static Future<Metadata?> getInfoFromCache(String url) async {
     Metadata? info_;
-    // print(url);
+    // debugPrint(url);
     try {
       final infoJson = await CacheManager.getJson(key: url);
       if (infoJson != null) {
@@ -57,7 +57,7 @@ class LinkAnalyzer {
 
   /// deletes [Metadata] from cache if available
   static void _deleteFromCache(String url) {
-    // print(url);
+    // debugPrint(url);
     try {
       async.unawaited(CacheManager.deleteKey(url));
     } catch (e) {

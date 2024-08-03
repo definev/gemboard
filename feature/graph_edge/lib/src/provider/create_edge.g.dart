@@ -6,7 +6,7 @@ part of 'create_edge.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createEdgeHash() => r'facc48e2aa9a8578046bbbaeec61af0e5fc7174b';
+String _$createEdgeHash() => r'f6b5bd9f0f80689c4cca3c234a7a11e04fe6314f';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -170,6 +170,151 @@ class _CreateEdgeProviderElement extends AutoDisposeFutureProviderElement<void>
   EdgeParentId get parentId => (origin as CreateEdgeProvider).parentId;
   @override
   Edge get data => (origin as CreateEdgeProvider).data;
+}
+
+String _$createEdgesHash() => r'82c1fb1ac7ad56b8eb77a27f32442b6520e41a4c';
+
+/// See also [createEdges].
+@ProviderFor(createEdges)
+const createEdgesProvider = CreateEdgesFamily();
+
+/// See also [createEdges].
+class CreateEdgesFamily extends Family<AsyncValue<void>> {
+  /// See also [createEdges].
+  const CreateEdgesFamily();
+
+  /// See also [createEdges].
+  CreateEdgesProvider call({
+    required EdgeParentId parentId,
+    required List<Edge> data,
+  }) {
+    return CreateEdgesProvider(
+      parentId: parentId,
+      data: data,
+    );
+  }
+
+  @override
+  CreateEdgesProvider getProviderOverride(
+    covariant CreateEdgesProvider provider,
+  ) {
+    return call(
+      parentId: provider.parentId,
+      data: provider.data,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'createEdgesProvider';
+}
+
+/// See also [createEdges].
+class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [createEdges].
+  CreateEdgesProvider({
+    required EdgeParentId parentId,
+    required List<Edge> data,
+  }) : this._internal(
+          (ref) => createEdges(
+            ref as CreateEdgesRef,
+            parentId: parentId,
+            data: data,
+          ),
+          from: createEdgesProvider,
+          name: r'createEdgesProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$createEdgesHash,
+          dependencies: CreateEdgesFamily._dependencies,
+          allTransitiveDependencies:
+              CreateEdgesFamily._allTransitiveDependencies,
+          parentId: parentId,
+          data: data,
+        );
+
+  CreateEdgesProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.parentId,
+    required this.data,
+  }) : super.internal();
+
+  final EdgeParentId parentId;
+  final List<Edge> data;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(CreateEdgesRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CreateEdgesProvider._internal(
+        (ref) => create(ref as CreateEdgesRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        parentId: parentId,
+        data: data,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _CreateEdgesProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CreateEdgesProvider &&
+        other.parentId == parentId &&
+        other.data == data;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
+    hash = _SystemHash.combine(hash, data.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin CreateEdgesRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `parentId` of this provider.
+  EdgeParentId get parentId;
+
+  /// The parameter `data` of this provider.
+  List<Edge> get data;
+}
+
+class _CreateEdgesProviderElement extends AutoDisposeFutureProviderElement<void>
+    with CreateEdgesRef {
+  _CreateEdgesProviderElement(super.provider);
+
+  @override
+  EdgeParentId get parentId => (origin as CreateEdgesProvider).parentId;
+  @override
+  List<Edge> get data => (origin as CreateEdgesProvider).data;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

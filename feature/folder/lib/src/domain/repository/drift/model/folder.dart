@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:folder/src/domain/model/folder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -34,11 +35,11 @@ class FolderDatabase extends _$FolderDatabase {
         driftWorker: Uri.parse('drift_worker.js'),
         onResult: (result) {
           if (result.missingFeatures.isNotEmpty) {
-            print(
+            debugPrint(
                 'Using ${result.chosenImplementation} due to unsupported '
                 'browser features: ${result.missingFeatures}');
           }
-          print('chosenImplementation: ${result.chosenImplementation}');
+          debugPrint('chosenImplementation: ${result.chosenImplementation}');
         },
       ),
     );

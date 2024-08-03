@@ -59,7 +59,7 @@ class ImageCellView extends StatelessWidget {
             File(cell.url.toFilePath()),
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
-              print(error);
+              debugPrint(error.toString());
               return errorWidget;
             },
           ),

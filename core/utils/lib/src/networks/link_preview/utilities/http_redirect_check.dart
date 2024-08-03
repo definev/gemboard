@@ -17,7 +17,7 @@ Future<http.Response> fetchWithRedirects(
   var response = await http.get(Uri.parse(url), headers: allHeaders);
   int redirectCount = 0;
 
-  // print(_isRedirect(response));
+  // debugPrint(_isRedirect(response));
   while (_isRedirect(response) && redirectCount < maxRedirects) {
     String? location = response.headers['location'];
     if (location == null) {

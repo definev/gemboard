@@ -12,8 +12,9 @@ Future<void> updateCell(
 }) async {
   final repository = ref.read(cellRepositoryProvider);
   await repository.update(id: id, data: data);
-  final controller =
-      ref.read(getCellListStreamControllerProvider(parentId: id.parentId));
+  final controller = await ref
+      .read(getCellListStreamControllerProvider(parentId: id.parentId));
+
   controller.sink.add(await repository.getList(parentId: id.parentId));
 }
 
@@ -28,6 +29,6 @@ Future<void> updateCells(
     await repository.update(id: cell.id, data: cell);
   }
   final controller =
-      ref.read(getCellListStreamControllerProvider(parentId: parentId));
+      await ref.read(getCellListStreamControllerProvider(parentId: parentId));
   controller.sink.add(await repository.getList(parentId: parentId));
 }

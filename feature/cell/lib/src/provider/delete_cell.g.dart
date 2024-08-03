@@ -155,7 +155,7 @@ class _DeleteCellProviderElement extends AutoDisposeFutureProviderElement<void>
   CellId get id => (origin as DeleteCellProvider).id;
 }
 
-String _$deleteCellsHash() => r'fd57b7f38fed83359f0401bb15647a365988c4c0';
+String _$deleteCellsHash() => r'9a8855d4d3dbf6102561c544ca610f5d0a05a6dd';
 
 /// See also [deleteCells].
 @ProviderFor(deleteCells)

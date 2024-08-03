@@ -6,7 +6,7 @@ part of 'create_cell.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$createCellHash() => r'c29fe74d1cd0bb45c11c17ee8a07293b904dd885';
+String _$createCellHash() => r'ddc5fb0c2f5f629d2f5131ad6e3a76f6aa70a1de';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -170,6 +170,151 @@ class _CreateCellProviderElement extends AutoDisposeFutureProviderElement<void>
   CellParentId get parentId => (origin as CreateCellProvider).parentId;
   @override
   Cell get data => (origin as CreateCellProvider).data;
+}
+
+String _$createCellsHash() => r'7e12469c544f313679126a7dc1e3103403c0cfd9';
+
+/// See also [createCells].
+@ProviderFor(createCells)
+const createCellsProvider = CreateCellsFamily();
+
+/// See also [createCells].
+class CreateCellsFamily extends Family<AsyncValue<void>> {
+  /// See also [createCells].
+  const CreateCellsFamily();
+
+  /// See also [createCells].
+  CreateCellsProvider call({
+    required CellParentId parentId,
+    required List<Cell> data,
+  }) {
+    return CreateCellsProvider(
+      parentId: parentId,
+      data: data,
+    );
+  }
+
+  @override
+  CreateCellsProvider getProviderOverride(
+    covariant CreateCellsProvider provider,
+  ) {
+    return call(
+      parentId: provider.parentId,
+      data: provider.data,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'createCellsProvider';
+}
+
+/// See also [createCells].
+class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [createCells].
+  CreateCellsProvider({
+    required CellParentId parentId,
+    required List<Cell> data,
+  }) : this._internal(
+          (ref) => createCells(
+            ref as CreateCellsRef,
+            parentId: parentId,
+            data: data,
+          ),
+          from: createCellsProvider,
+          name: r'createCellsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$createCellsHash,
+          dependencies: CreateCellsFamily._dependencies,
+          allTransitiveDependencies:
+              CreateCellsFamily._allTransitiveDependencies,
+          parentId: parentId,
+          data: data,
+        );
+
+  CreateCellsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.parentId,
+    required this.data,
+  }) : super.internal();
+
+  final CellParentId parentId;
+  final List<Cell> data;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(CreateCellsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: CreateCellsProvider._internal(
+        (ref) => create(ref as CreateCellsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        parentId: parentId,
+        data: data,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _CreateCellsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is CreateCellsProvider &&
+        other.parentId == parentId &&
+        other.data == data;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
+    hash = _SystemHash.combine(hash, data.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin CreateCellsRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `parentId` of this provider.
+  CellParentId get parentId;
+
+  /// The parameter `data` of this provider.
+  List<Cell> get data;
+}
+
+class _CreateCellsProviderElement extends AutoDisposeFutureProviderElement<void>
+    with CreateCellsRef {
+  _CreateCellsProviderElement(super.provider);
+
+  @override
+  CellParentId get parentId => (origin as CreateCellsProvider).parentId;
+  @override
+  List<Cell> get data => (origin as CreateCellsProvider).data;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

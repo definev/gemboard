@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:cell/cell.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'cell.g.dart';
@@ -72,7 +73,7 @@ class CellDatabase extends _$CellDatabase {
         sqlite3Wasm: Uri.parse('sqlite3.wasm'),
         driftWorker: Uri.parse('drift_worker.js'),
         onResult: (result) =>
-            print('chosenImplementation: ${result.chosenImplementation}'),
+            debugPrint('chosenImplementation: ${result.chosenImplementation}'),
       ),
     );
   }

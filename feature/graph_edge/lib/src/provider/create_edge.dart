@@ -12,8 +12,23 @@ Future<void> createEdge(
 }) async {
   final repository = ref.read(edgeRepositoryProvider);
   await repository.add(parentId: parentId, data: data);
-  ref
-      .read(getEdgeListStreamControllerProvider(parentId: parentId))
-      .sink
-      .add(await repository.getList(parentId: parentId));
+  final controller =
+      ref.read(getEdgeListStreamControllerProvider(parentId: parentId));
+  controller.sink.add(await repository.getList(parentId: parentId));
+}
+
+@riverpod
+Future<void> createEdges(
+  CreateEdgesRef ref, {
+  required EdgeParentId parentId,
+  required List<Edge> data,
+}) async {
+  final repository = ref.read(edgeRepositoryProvider);
+  for (final edge in data) {
+    await repository.add(parentId: parentId, data: edge);
+  }
+
+  final controller =
+      ref.read(getEdgeListStreamControllerProvider(parentId: parentId));
+  controller.sink.add(await repository.getList(parentId: parentId));
 }

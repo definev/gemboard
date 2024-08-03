@@ -6,7 +6,7 @@ part of 'edge_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$edgeRepositoryHash() => r'ce8179ea2cf98c4762a1bfc91bcc0a3462494cde';
+String _$edgeRepositoryHash() => r'80c5b7f4bdc67d48098b8b510d305140d2a7bbe6';
 
 /// See also [edgeRepository].
 @ProviderFor(edgeRepository)

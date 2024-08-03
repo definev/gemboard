@@ -12,8 +12,9 @@ Future<void> updateEdge(
 }) async {
   final repository = ref.read(edgeRepositoryProvider);
   await repository.update(id: id, data: data);
-  final controller =
-      ref.read(getEdgeListStreamControllerProvider(parentId: id.parentId));
+  final controller = await ref.read(getEdgeListStreamControllerProvider(
+    parentId: id.parentId,
+  ));
   controller.sink.add(await repository.getList(parentId: id.parentId));
 }
 
@@ -27,7 +28,8 @@ Future<void> updateEdges(
   for (final edge in edges) {
     await repository.update(id: edge.id, data: edge);
   }
-  final controller =
-      ref.read(getEdgeListStreamControllerProvider(parentId: parentId));
+  final controller = await ref.read(getEdgeListStreamControllerProvider(
+    parentId: parentId,
+  ));
   controller.sink.add(await repository.getList(parentId: parentId));
 }

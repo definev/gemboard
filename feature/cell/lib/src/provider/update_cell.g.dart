@@ -6,7 +6,7 @@ part of 'update_cell.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updateCellHash() => r'5d141cf4ee667cc2c9541caf49489caa6c1f846c';
+String _$updateCellHash() => r'1acdc01b7bee5fe03ccb8558c3b9325987b58eaa';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -170,7 +170,7 @@ class _UpdateCellProviderElement extends AutoDisposeFutureProviderElement<void>
   Cell get data => (origin as UpdateCellProvider).data;
 }
 
-String _$updateCellsHash() => r'15f5849d720851f2408f086553313323b517a3e5';
+String _$updateCellsHash() => r'b4d8864c6f51df87266203a1084af95d22a9c3c7';
 
 /// See also [updateCells].
 @ProviderFor(updateCells)

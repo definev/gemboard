@@ -21,7 +21,7 @@ Future<void> deleteCells(
   if (ids.isEmpty) return;
 
   final repository = ref.read(cellRepositoryProvider);
-  final controller = ref
+  final controller = await ref
       .read(getCellListStreamControllerProvider(parentId: ids.first.parentId));
 
   for (final id in ids) {

@@ -251,8 +251,8 @@ class MasterView extends StatelessWidget {
                           title: EmojiLabelEditor(
                             emoji: '🪄',
                             label: 'Magic',
-                            onEmojiSelected: (value) => print(value),
-                            onLabelChanged: (value) => print(value),
+                            onEmojiSelected: (value) => debugPrint(value),
+                            onLabelChanged: (value) => debugPrint(value),
                           ),
                         ),
                       ],

@@ -7,7 +7,7 @@ part of 'get_edge_list.dart';
 // **************************************************************************
 
 String _$getEdgeListStreamControllerHash() =>
-    r'a17fe8ffb58967fdaf2956ef88260d908465f0f8';
+    r'589838a63d93f435aa07f6b01439804a28a4dbac';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -164,7 +164,7 @@ class _GetEdgeListStreamControllerProviderElement
       (origin as GetEdgeListStreamControllerProvider).parentId;
 }
 
-String _$getEdgeListHash() => r'99bf37d870ac3ba49ccc944f06d2c86c9024ccde';
+String _$getEdgeListHash() => r'b309f499d33ead4c95d46f48c75dd29cc3b4194a';
 
 /// See also [getEdgeList].
 @ProviderFor(getEdgeList)

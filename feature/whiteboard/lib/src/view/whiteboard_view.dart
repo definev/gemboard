@@ -728,7 +728,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         _cellProcessors[suggestionCell.id.id] = {
           ..._cellProcessors[suggestionCell.id.id] ?? {},
         }..remove('generate');
-        print(error);
+        debugPrint(error);
       },
     );
 
@@ -821,7 +821,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         _cellProcessors[cell.id.id] = {
           ..._cellProcessors[cell.id.id] ?? {},
         }..remove('suggestions');
-        print(error);
+        debugPrint(error);
       },
     );
 
@@ -899,7 +899,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         onDone: () => cancelSubscription(),
         onError: (error) {
           cancelSubscription();
-          print(error);
+          debugPrint(error);
         },
       );
 
@@ -1055,7 +1055,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   }
 
   void objectStack_onCellsPasted() async {
-    print('Pasted');
+    debugPrint('Pasted');
     final stack = ref
         .read(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
     var data = stack.pop();
@@ -1250,11 +1250,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         widget.onCellUpdated(latestCell, newCell);
       },
       onDone: () {
-        print('Done tldr for cell: $title');
+        debugPrint('Done tldr for cell: $title');
         cancelSubscription();
       },
       onError: (error) {
-        print(error);
+        debugPrint(error);
         cancelSubscription();
       },
       cancelOnError: true,
@@ -1324,11 +1324,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         widget.onCellUpdated(latestCell, newCell);
       },
       onDone: () {
-        print('Done tldr for cell: ${cell.id}');
+        debugPrint('Done tldr for cell: ${cell.id}');
         cancelSubscription();
       },
       onError: (error) {
-        print(error);
+        debugPrint(error);
         cancelSubscription();
       },
       cancelOnError: true,
@@ -1406,11 +1406,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         widget.onCellUpdated(latestCell, newCell);
       },
       onDone: () {
-        print('Done tldr for cell: ${cell.id}');
+        debugPrint('Done tldr for cell: ${cell.id}');
         cancelSubscription();
       },
       onError: (error) {
-        print(error);
+        debugPrint(error);
         cancelSubscription();
       },
     );
@@ -1502,11 +1502,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         widget.onCellUpdated(latestCell, newCell);
       },
       onDone: () {
-        print('Done chat with selected cells');
+        debugPrint('Done chat with selected cells');
         cancelSubscription();
       },
       onError: (error) {
-        print(error);
+        debugPrint(error);
         cancelSubscription();
       },
     );
@@ -1574,11 +1574,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         setState(() {});
       },
       onDone: () {
-        print('done generate for cell ${cell.id.id}');
+        debugPrint('done generate for cell ${cell.id.id}');
         cancelSubscription();
       },
       onError: (error) {
-        print(error);
+        debugPrint(error);
         cancelSubscription();
       },
     );
@@ -1637,7 +1637,7 @@ class WhiteboardDropZone extends StatelessWidget {
 
         onCellCreated(cell);
       } catch (e) {
-        print('Error reading cell $e');
+        debugPrint('Error reading cell $e');
       }
       return true;
     }
@@ -1686,7 +1686,7 @@ class WhiteboardDropZone extends StatelessWidget {
             (format) => reader.canProvide(format),
           );
           if (matchedFormat case final matchedFormat?) {
-            print('Dropped image: ${item}');
+            debugPrint('Dropped image: ${item}');
             if (reader.canProvide(Formats.uri)) {
               Uri? uri;
               reader.getValue<NamedUri>(
@@ -1695,7 +1695,7 @@ class WhiteboardDropZone extends StatelessWidget {
                   if (value != null) {
                     uri = value.uri;
                     // You can access values through the `value` property.
-                    print('Dropped image: ${value.name} | ${value.uri}');
+                    debugPrint('Dropped image: ${value.name} | ${value.uri}');
                     log(value.uri.toString());
                     final validImage =
                         await NetworkUtils.validateImage(value.uri.toString());
@@ -1708,7 +1708,7 @@ class WhiteboardDropZone extends StatelessWidget {
                   }
                 },
                 onError: (error) {
-                  print('Error reading value $error');
+                  debugPrint('Error reading value $error');
                   if (uri case final uri?) {
                     onLinkReceived(event, uri);
                   }
@@ -1742,7 +1742,7 @@ class WhiteboardDropZone extends StatelessWidget {
             reader.getValue<String>(Formats.plainText, (value) {
               if (value != null) {
                 // You can access values through the `value` property.
-                print('Dropped text: $value');
+                debugPrint('Dropped text: $value');
                 final uri = Uri.tryParse(value);
                 if (uri != null && uri.scheme.isNotEmpty) {
                   onLinkReceived(event, uri);
@@ -1751,7 +1751,7 @@ class WhiteboardDropZone extends StatelessWidget {
                 }
               }
             }, onError: (error) {
-              print('Error reading value $error');
+              debugPrint('Error reading value $error');
             });
           }
         }

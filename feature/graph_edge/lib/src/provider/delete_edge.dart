@@ -17,18 +17,22 @@ Future<void> deleteEdge(
 Future<void> deleteEdges(
   DeleteEdgesRef ref, {
   required List<EdgeId> ids,
+  bool notify = true,
 }) async {
   if (ids.isEmpty) return;
 
   final repository = ref.read(edgeRepositoryProvider);
-  final controller = ref
-      .read(getEdgeListStreamControllerProvider(parentId: ids.first.parentId));
+  final controller = await ref.read(getEdgeListStreamControllerProvider(
+    parentId: ids.first.parentId,
+  ));
 
   for (final id in ids) {
     await ref.read(deleteEdgeProvider(id: id).future);
   }
 
-  controller.sink.add(await repository.getList(parentId: ids.first.parentId));
+  if (notify) {
+    controller.sink.add(await repository.getList(parentId: ids.first.parentId));
+  }
 }
 
 @riverpod

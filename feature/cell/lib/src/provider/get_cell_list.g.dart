@@ -7,7 +7,7 @@ part of 'get_cell_list.dart';
 // **************************************************************************
 
 String _$getCellListStreamControllerHash() =>
-    r'5081a9286c3c0d4221078a8ccd7f24f058af642f';
+    r'24f7ce69e891a3768ee64de36d852b528625f307';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -164,7 +164,7 @@ class _GetCellListStreamControllerProviderElement
       (origin as GetCellListStreamControllerProvider).parentId;
 }
 
-String _$getCellListHash() => r'a8497b8e5f0d8c221570789c92bc90d8ef37e8e8';
+String _$getCellListHash() => r'15688bfbe16f399470787869ad930144dc23e9cd';
 
 /// See also [getCellList].
 @ProviderFor(getCellList)
