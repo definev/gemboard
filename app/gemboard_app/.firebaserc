@@ -1,5 +1,21 @@
 {
   "projects": {
     "default": "gemboard-ba3bb"
+  },
+  "targets": {
+    "gemboard-ba3bb": {
+      "hosting": {
+        "default": [
+          "gemboard-ba3bb"
+        ]
+      }
+    },
+    "wasm-gemboard": {
+      "hosting": {
+        "default": [
+          "wasm-gemboard"
+        ]
+      }
+    }
   }
 }
