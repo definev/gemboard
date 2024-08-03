@@ -58,6 +58,14 @@ class DSMarkdownBody extends StatelessWidget {
       h4: h4,
       h5: h5,
       h6: h6,
+      horizontalRuleDecoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: ColorVariant.outline.resolve(context).withOpacity(0.5),
+            width: 1.5 * scale,
+          ),
+        ),
+      ),
       a: p.copyWith(
         color: CupertinoColors.activeBlue,
         decorationStyle: TextDecorationStyle.dashed,

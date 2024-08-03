@@ -48,6 +48,8 @@ dependencies:
   # utils
   utils:
     path: ../../core/utils
+  
+  sliver_tools: ^0.2.12
 
   boundless_stack:
     git:

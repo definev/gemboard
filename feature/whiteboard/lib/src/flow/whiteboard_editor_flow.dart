@@ -19,6 +19,7 @@ import 'package:whiteboard/src/domain/data/cursor_mode.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/provider/get_whiteboard_position.dart';
 import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
+import 'package:whiteboard/src/view/guide_view.dart';
 import 'package:whiteboard/src/view/whiteboard_view.dart';
 import 'package:whiteboard/src/widget/whiteboard_cursor_tool.dart';
 import 'package:whiteboard/whiteboard.dart';
@@ -524,6 +525,42 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                       ),
                   ],
                 ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: HookBuilder(
+                builder: (context) {
+                  final open = useState(false);
+
+                  final openStyle = Style(
+                    $box.margin.all.ref(SpaceVariant.medium),
+                    $box.padding.all(0),
+                    $box.height(min(400, constraints.maxHeight)),
+                    $box.width(min(500, constraints.maxWidth)),
+                    $box.color.ref(ColorVariant.surface),
+                    $with.scale(1),
+                  );
+                  final closeStyle = Style(
+                    $box.margin.all.ref(SpaceVariant.medium),
+                    $box.padding.all(0),
+                    $box.height(40),
+                    $box.width(40),
+                    $with.scale(1),
+                  );
+
+                  return Button(
+                    style: switch (open.value) {
+                      true => openStyle,
+                      false => closeStyle,
+                    },
+                    onPressed: () => open.value = !open.value,
+                    child: switch (open.value) {
+                      false => StyledIcon(LineIcons.questionCircleAlt),
+                      true => GuideView(),
+                    },
+                  );
+                },
               ),
             ),
           ],
