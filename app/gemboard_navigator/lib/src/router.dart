@@ -22,8 +22,8 @@ final router = () {
       GoRoute(
         parentNavigatorKey: RootShell.$navigatorKey,
         path: SettingsRoute.location,
-        builder: (context, state) =>
-            $SettingsRouteExtension._fromState(state).build(context, state),
+        pageBuilder: (context, state) =>
+            $SettingsRouteExtension._fromState(state).buildPage(context, state),
       ),
       ShellRoute(
         parentNavigatorKey: RootShell.$navigatorKey,

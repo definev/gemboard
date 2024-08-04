@@ -716,7 +716,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         _cellProcessors[suggestionCell.id.id] = {
           ..._cellProcessors[suggestionCell.id.id] ?? {},
         }..remove('generate');
-        debugPrint(error);
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        widget.onCellsDeleted([suggestionCell.id.id]);
+        debugPrint(error.toString());
       },
     );
 
@@ -787,6 +792,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
 
     late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[cell.id.id] = {
+        ..._cellProcessors[cell.id.id] ?? {},
+      }..remove('suggestions');
+    }
+
     subscription = stream.listen(
       (suggestions) async {
         final latest = cellKeys[cell.id.id];
@@ -797,20 +809,18 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         final newCell = latestCell.copyWith(
           suggestions: suggestions,
         );
-        await subscription.cancel();
-        _cellProcessors[cell.id.id] = {
-          ..._cellProcessors[cell.id.id] ?? {},
-        }..remove('suggestions');
+        cancelSubscription();
         cellKeys[cell.id.id] = (key, newCell);
         setState(() {});
         widget.onCellUpdated(cell, newCell);
       },
       onError: (error) {
-        subscription.cancel();
-        _cellProcessors[cell.id.id] = {
-          ..._cellProcessors[cell.id.id] ?? {},
-        }..remove('suggestions');
-        debugPrint(error);
+        cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        debugPrint(error.toString());
       },
     );
 
@@ -888,7 +898,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         onDone: () => cancelSubscription(),
         onError: (error) {
           cancelSubscription();
-          debugPrint(error);
+          DSToast.error(
+            context: context,
+            title: error.toString(),
+          );
+          debugPrint(error.toString());
         },
       );
 
@@ -1239,8 +1253,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cancelSubscription();
       },
       onError: (error) {
-        debugPrint(error);
         cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        debugPrint(error.toString());
       },
       cancelOnError: true,
     );
@@ -1262,7 +1280,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cardKind: CellCardKind.flat,
         constraints: false,
       ),
-      title: '___| TLDR |___',
+      title: '___| Description |___',
       content: '',
     );
 
@@ -1277,7 +1295,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     cell_OnCellLinked(
       cell,
       tldrCell,
-      decoration: EdgeDecoration(label: 'Summarize'),
+      decoration: EdgeDecoration(label: 'Describe'),
       autoLabel: false,
     );
 
@@ -1309,8 +1327,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cancelSubscription();
       },
       onError: (error) {
-        debugPrint(error);
         cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        widget.onCellsDeleted([tldrCell.id.id]);
+        debugPrint(error.toString());
       },
       cancelOnError: true,
     );
@@ -1387,8 +1410,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cancelSubscription();
       },
       onError: (error) {
-        debugPrint(error);
         cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        widget.onCellsDeleted([tldrCell.id.id]);
+        debugPrint(error.toString());
       },
     );
 
@@ -1483,8 +1511,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cancelSubscription();
       },
       onError: (error) {
-        debugPrint(error);
         cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        debugPrint(error.toString());
+        widget.onCellsDeleted([responseCell.id.id]);
       },
     );
 
@@ -1555,8 +1588,13 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         cancelSubscription();
       },
       onError: (error) {
-        debugPrint(error);
         cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        debugPrint(error.toString());
+        widget.onCellsDeleted([cell.id.id]);
       },
     );
 
