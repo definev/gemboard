@@ -6,7 +6,7 @@ part of 'deselect_cell.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$deselectCellHash() => r'6a3124a126118a76519546a7acd50e7a9d170fa1';
+String _$deselectAllCellHash() => r'aa0f8aace62fc8a14ede4ffc6da5f21a26411a38';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,6 +29,134 @@ class _SystemHash {
   }
 }
 
+/// See also [deselectAllCell].
+@ProviderFor(deselectAllCell)
+const deselectAllCellProvider = DeselectAllCellFamily();
+
+/// See also [deselectAllCell].
+class DeselectAllCellFamily extends Family<AsyncValue<void>> {
+  /// See also [deselectAllCell].
+  const DeselectAllCellFamily();
+
+  /// See also [deselectAllCell].
+  DeselectAllCellProvider call({
+    required CellParentId parentId,
+  }) {
+    return DeselectAllCellProvider(
+      parentId: parentId,
+    );
+  }
+
+  @override
+  DeselectAllCellProvider getProviderOverride(
+    covariant DeselectAllCellProvider provider,
+  ) {
+    return call(
+      parentId: provider.parentId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deselectAllCellProvider';
+}
+
+/// See also [deselectAllCell].
+class DeselectAllCellProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [deselectAllCell].
+  DeselectAllCellProvider({
+    required CellParentId parentId,
+  }) : this._internal(
+          (ref) => deselectAllCell(
+            ref as DeselectAllCellRef,
+            parentId: parentId,
+          ),
+          from: deselectAllCellProvider,
+          name: r'deselectAllCellProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deselectAllCellHash,
+          dependencies: DeselectAllCellFamily._dependencies,
+          allTransitiveDependencies:
+              DeselectAllCellFamily._allTransitiveDependencies,
+          parentId: parentId,
+        );
+
+  DeselectAllCellProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.parentId,
+  }) : super.internal();
+
+  final CellParentId parentId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(DeselectAllCellRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeselectAllCellProvider._internal(
+        (ref) => create(ref as DeselectAllCellRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        parentId: parentId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _DeselectAllCellProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeselectAllCellProvider && other.parentId == parentId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeselectAllCellRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `parentId` of this provider.
+  CellParentId get parentId;
+}
+
+class _DeselectAllCellProviderElement
+    extends AutoDisposeFutureProviderElement<void> with DeselectAllCellRef {
+  _DeselectAllCellProviderElement(super.provider);
+
+  @override
+  CellParentId get parentId => (origin as DeselectAllCellProvider).parentId;
+}
+
+String _$deselectCellHash() => r'2c17d1487d930619a71baffcb53a64485a957679';
+
 /// See also [deselectCell].
 @ProviderFor(deselectCell)
 const deselectCellProvider = DeselectCellFamily();
@@ -41,9 +169,11 @@ class DeselectCellFamily extends Family<AsyncValue<void>> {
   /// See also [deselectCell].
   DeselectCellProvider call({
     required CellParentId parentId,
+    required Rect selection,
   }) {
     return DeselectCellProvider(
       parentId: parentId,
+      selection: selection,
     );
   }
 
@@ -53,6 +183,7 @@ class DeselectCellFamily extends Family<AsyncValue<void>> {
   ) {
     return call(
       parentId: provider.parentId,
+      selection: provider.selection,
     );
   }
 
@@ -76,10 +207,12 @@ class DeselectCellProvider extends AutoDisposeFutureProvider<void> {
   /// See also [deselectCell].
   DeselectCellProvider({
     required CellParentId parentId,
+    required Rect selection,
   }) : this._internal(
           (ref) => deselectCell(
             ref as DeselectCellRef,
             parentId: parentId,
+            selection: selection,
           ),
           from: deselectCellProvider,
           name: r'deselectCellProvider',
@@ -91,6 +224,7 @@ class DeselectCellProvider extends AutoDisposeFutureProvider<void> {
           allTransitiveDependencies:
               DeselectCellFamily._allTransitiveDependencies,
           parentId: parentId,
+          selection: selection,
         );
 
   DeselectCellProvider._internal(
@@ -101,9 +235,11 @@ class DeselectCellProvider extends AutoDisposeFutureProvider<void> {
     required super.debugGetCreateSourceHash,
     required super.from,
     required this.parentId,
+    required this.selection,
   }) : super.internal();
 
   final CellParentId parentId;
+  final Rect selection;
 
   @override
   Override overrideWith(
@@ -119,6 +255,7 @@ class DeselectCellProvider extends AutoDisposeFutureProvider<void> {
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
         parentId: parentId,
+        selection: selection,
       ),
     );
   }
@@ -130,13 +267,16 @@ class DeselectCellProvider extends AutoDisposeFutureProvider<void> {
 
   @override
   bool operator ==(Object other) {
-    return other is DeselectCellProvider && other.parentId == parentId;
+    return other is DeselectCellProvider &&
+        other.parentId == parentId &&
+        other.selection == selection;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parentId.hashCode);
+    hash = _SystemHash.combine(hash, selection.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -145,6 +285,9 @@ class DeselectCellProvider extends AutoDisposeFutureProvider<void> {
 mixin DeselectCellRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `parentId` of this provider.
   CellParentId get parentId;
+
+  /// The parameter `selection` of this provider.
+  Rect get selection;
 }
 
 class _DeselectCellProviderElement
@@ -153,6 +296,8 @@ class _DeselectCellProviderElement
 
   @override
   CellParentId get parentId => (origin as DeselectCellProvider).parentId;
+  @override
+  Rect get selection => (origin as DeselectCellProvider).selection;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

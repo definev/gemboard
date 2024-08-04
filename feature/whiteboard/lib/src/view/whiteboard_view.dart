@@ -16,7 +16,6 @@ import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
 import 'package:whiteboard/src/domain/repository/whiteboard_object_stack.dart';
 import 'package:whiteboard/src/view/whiteboard_drop_zone.dart';
-import 'package:whiteboard/src/view/whiteboard_focusable_gesture.dart';
 import 'package:whiteboard/src/widget/cell_builder.dart';
 import 'package:whiteboard/src/widget/edge_builder.dart';
 import 'package:whiteboard/src/widget/selection_cells_view.dart';
@@ -46,6 +45,13 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.enableMoveByMouse,
     required this.enableMoveByTouch,
     required this.enableMoveByStylus,
+
+    ///
+    required this.onHandToolSelected,
+    required this.onSelectionToolSelected,
+    required this.onToggleSelection,
+
+    ///
     this.scaleFactor,
     this.onScaleStart,
     this.onScaleEnd,
@@ -80,6 +86,11 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final ValueNotifier<double>? scaleFactor;
   final VoidCallback? onScaleStart;
   final VoidCallback? onScaleEnd;
+
+  /// Shortcut callback
+  final VoidCallback onHandToolSelected;
+  final VoidCallback onSelectionToolSelected;
+  final VoidCallback onToggleSelection;
 
   final ScrollableDetails? verticalDetails;
   final ScrollableDetails? horizontalDetails;
@@ -304,14 +315,14 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       verticalDetails: verticalDetails,
       scaleFactor: scaleFactor.value,
       onCellCreated: cell_onCreated,
-      onImageReceived: _cell_onImageReceived,
-      onTextReceived: _cell_onTextReceived,
-      onLinkReceived: _cell_onLinkReceived,
+      onImageReceived: cell_onImageReceived,
+      onTextReceived: cell_onTextReceived,
+      onLinkReceived: cell_onLinkReceived,
       child: child,
     );
   }
 
-  void _cell_onImageReceived(Offset position, Uri uri) {
+  void cell_onImageReceived(Offset position, Uri uri) {
     final cell = Cell.image(
       id: CellId(
         id: Helper.createId(),
@@ -336,7 +347,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellCreated(cell);
   }
 
-  void _cell_onTextReceived(Offset event, String value) {
+  void cell_onTextReceived(Offset event, String value) {
     final cell = Cell.article(
       id: CellId(
         id: Helper.createId(),
@@ -361,7 +372,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellCreated(cell);
   }
 
-  void _cell_onLinkReceived(Offset event, Uri value) {
+  void cell_onLinkReceived(Offset event, Uri value) {
     final cell = Cell.url(
       id: CellId(
         id: Helper.createId(),
@@ -605,10 +616,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
 
     child = buildTheme(
-      child: child,
-    );
-
-    child = buildShortcuts(
       child: child,
     );
 
@@ -1635,16 +1642,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
           },
         ),
       ),
-    );
-  }
-
-  Widget buildShortcuts({required Widget child}) {
-    return WhiteboardFocusableGesture(
-      id: widget.data.id,
-      onImageReceived: _cell_onImageReceived,
-      onLinkReceived: _cell_onLinkReceived,
-      onTextReceived: _cell_onTextReceived,
-      child: child,
     );
   }
 }

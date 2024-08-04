@@ -44,37 +44,39 @@ class GridBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShaderBuilder(
-      assetKey: designSystemAssetPath('assets/shaders/grid_background.frag'),
-      (context, shader, child) {
-        return AnimatedSampler(
-          (image, size, canvas) {
-            shader.setFloatUniforms((uniforms) {
-              uniforms //
-                // topLeft
-                ..setOffset(topLeft)
-                // dimension
-                ..setFloat(dimension * scale)
-                // dotSize
-                ..setFloat(dotSize * scale)
-                // background
-                ..setColor(ColorVariant.background.resolve(context))
-                // onBackground
-                ..setColor(
-                  Color.lerp(ColorVariant.background.resolve(context),
-                      ColorVariant.onBackground.resolve(context), 0.07)!,
-                );
-            });
-
-            canvas.drawRect(
-              Offset.zero & size,
-              Paint()..shader = shader,
-            );
-          },
-          child: child!,
-        );
-      },
-      child: SizedBox.expand(),
+    return IgnorePointer(
+      child: ShaderBuilder(
+        assetKey: designSystemAssetPath('assets/shaders/grid_background.frag'),
+        (context, shader, child) {
+          return AnimatedSampler(
+            (image, size, canvas) {
+              shader.setFloatUniforms((uniforms) {
+                uniforms //
+                  // topLeft
+                  ..setOffset(topLeft)
+                  // dimension
+                  ..setFloat(dimension * scale)
+                  // dotSize
+                  ..setFloat(dotSize * scale)
+                  // background
+                  ..setColor(ColorVariant.background.resolve(context))
+                  // onBackground
+                  ..setColor(
+                    Color.lerp(ColorVariant.background.resolve(context),
+                        ColorVariant.onBackground.resolve(context), 0.07)!,
+                  );
+              });
+      
+              canvas.drawRect(
+                Offset.zero & size,
+                Paint()..shader = shader,
+              );
+            },
+            child: child!,
+          );
+        },
+        child: SizedBox.expand(),
+      ),
     );
   }
 }

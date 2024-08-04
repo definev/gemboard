@@ -77,31 +77,33 @@ class DSTextbox extends StyledWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
-                    child: TextFormField(
-                      selectionHeightStyle: BoxHeightStyle.strut,
-                      readOnly: readOnly,
-                      controller: controller,
-                      focusNode: defaultFocusNode,
-                      autofocus: autofocus,
-                      obscureText: obscureText,
-                      onChanged: onChanged,
-                      onFieldSubmitted: onSubmitted,
-                      cursorColor: textStyle.color ??
-                          ColorVariant.onSurface.resolve(context),
-                      cursorWidth: 1.5 * scale,
-                      // cursorHeight: textStyle.height!,
-                      style: textStyle,
-                      minLines: minLines,
-                      maxLines: switch (obscureText) {
-                        true => 1,
-                        _ => maxLines,
-                      },
-                      decoration: InputDecoration.collapsed(
-                        hintText: hintText,
-                        hintStyle: hintTextStyle ??
-                            textStyle.copyWith(color: Colors.grey.shade400),
-                        focusColor: Colors.transparent,
-                        fillColor: Colors.transparent,
+                    child: DefaultTextEditingShortcuts(
+                      child: TextFormField(
+                        selectionHeightStyle: BoxHeightStyle.strut,
+                        readOnly: readOnly,
+                        controller: controller,
+                        focusNode: defaultFocusNode,
+                        autofocus: autofocus,
+                        obscureText: obscureText,
+                        onChanged: onChanged,
+                        onFieldSubmitted: onSubmitted,
+                        cursorColor: textStyle.color ??
+                            ColorVariant.onSurface.resolve(context),
+                        cursorWidth: 1.5 * scale,
+                        // cursorHeight: textStyle.height!,
+                        style: textStyle,
+                        minLines: minLines,
+                        maxLines: switch (obscureText) {
+                          true => 1,
+                          _ => maxLines,
+                        },
+                        decoration: InputDecoration.collapsed(
+                          hintText: hintText,
+                          hintStyle: hintTextStyle ??
+                              textStyle.copyWith(color: Colors.grey.shade400),
+                          focusColor: Colors.transparent,
+                          fillColor: Colors.transparent,
+                        ),
                       ),
                     ),
                   ),

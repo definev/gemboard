@@ -56,19 +56,11 @@ class GemboardApp extends StatelessWidget {
                   },
             ),
           ),
-          child: GestureDetector(
-            onTap: () {
-              final focusNode = FocusManager.instance.primaryFocus;
-              if (focusNode != null) {
-                focusNode.unfocus();
-              }
-            },
-            child: MixTheme(
-              data: mixTheme,
-              child: DesignSystemTheme(
-                data: designSystemThemeData,
-                child: child!,
-              ),
+          child: MixTheme(
+            data: mixTheme,
+            child: DesignSystemTheme(
+              data: designSystemThemeData,
+              child: child!,
             ),
           ),
         );

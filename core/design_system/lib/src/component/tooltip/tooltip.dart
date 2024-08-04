@@ -48,7 +48,8 @@ class DSTooltip extends HookWidget {
             $box.color.ref(ColorVariant.surface),
             $box.padding.all.ref(SpaceVariant.small),
             $box.margin.all.ref(SpaceVariant.small),
-            $text.style.ref(TextStyleVariant.p),
+            $text.style.ref(TextStyleVariant.p2),
+            $text.textAlign.center(),
           ),
           child: label,
         ) //

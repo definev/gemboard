@@ -4,7 +4,6 @@ import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gemboard_common/gemboard_common.dart';
@@ -25,6 +24,7 @@ import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
 import 'package:whiteboard/src/view/guide_view.dart';
 import 'package:whiteboard/src/view/whiteboard_view.dart';
 import 'package:whiteboard/src/widget/whiteboard_cursor_tool.dart';
+import 'package:whiteboard/src/widget/whiteboard_focusable_gesture.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 final defaultCursorMode = switch (defaultTargetPlatform) {
@@ -86,6 +86,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
     final id = data.id;
 
     final showChat = useState(false);
+    final chatFocusNode = useFocusNode();
     final chatTextController = useTextEditingController();
     useEffect(() {
       if (showChat.value) {
@@ -190,155 +191,6 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
     final whiteboardKey = useMemoized(() =>
         GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
 
-    var whiteboardBuilder = Portal(
-      child: WhiteboardCursorTool(
-        cursorMode: cursorMode,
-        horizontalDetails: horizontalDetails,
-        verticalDetails: verticalDetails,
-        onDoubleTap: () => ref.read(
-          deselectCellProvider(
-            parentId: CellParentId(whiteboardId: id.id),
-          ).future,
-        ),
-        onSelection: (rect) async {
-          final viewportTopLeft = Offset(
-            horizontalDetails.controller!.offset,
-            verticalDetails.controller!.offset,
-          );
-          final viewportRect = Rect.fromPoints(
-            (rect.topLeft + viewportTopLeft) / scaleFactor.value,
-            (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
-          );
-
-          await ref.read(
-            selectCellProvider(
-              parentId: CellParentId(whiteboardId: id.id),
-              selection: viewportRect,
-            ).future,
-          );
-        },
-        whiteboardBuilder: (
-          enableMoveByMouse,
-          enableMoveByTouch,
-          enableMoveByStylus,
-          onGrab,
-        ) =>
-            WhiteboardView(
-          key: whiteboardKey,
-          canvasScale: WhiteboardPosition.canvasScale,
-          scaleFactor: scaleFactor,
-          enableMoveByMouse: enableMoveByMouse,
-          enableMoveByTouch: enableMoveByTouch,
-          enableMoveByStylus: enableMoveByStylus,
-          verticalDetails: verticalDetails,
-          horizontalDetails: horizontalDetails,
-          onScaleStart: () => onGrab.value = true,
-          onScaleEnd: () => onGrab.value = false,
-          data: data,
-
-          /// Edge related
-          edgesStreamProvider: getEdgeListProvider(
-            parentId: EdgeParentId(whiteboardId: id.id),
-          ),
-          onEdgeCreated: (value) => ref.read(
-            createEdgeProvider(
-              parentId: EdgeParentId(whiteboardId: id.id),
-              data: value,
-            ).future,
-          ),
-          onEdgeUpdated: (oldValue, newValue) => ref.read(
-            updateEdgeProvider(
-              id: newValue.id,
-              data: newValue,
-            ).future,
-          ),
-          onEdgesDeleted: (edgeIds) => ref.read(
-            deleteEdgesProvider(
-              ids: [
-                for (final edgeId in edgeIds)
-                  EdgeId(
-                    parentId: EdgeParentId(whiteboardId: id.id),
-                    id: edgeId,
-                  ),
-              ],
-            ).future,
-          ),
-          onEdgesUpdated: (edges) => ref.read(
-            updateEdgesProvider(
-              parentId: EdgeParentId(whiteboardId: id.id),
-              edges: edges,
-            ).future,
-          ),
-
-          /// Cell related
-          cellsStreamProvider: getCellListProvider(
-            parentId: CellParentId(whiteboardId: id.id),
-          ),
-          onCellCreated: (value) => ref.read(
-            createCellProvider(
-              parentId: CellParentId(whiteboardId: id.id),
-              data: value,
-            ).future,
-          ),
-          onCellUpdated: (oldValue, newValue) => ref.read(
-            updateCellProvider(
-              id: newValue.id,
-              data: newValue,
-            ).future,
-          ),
-          onCellsUpdated: (cells) => ref.read(
-            updateCellsProvider(
-              parentId: CellParentId(whiteboardId: id.id),
-              cells: cells,
-            ).future,
-          ),
-          onCellsDeleted: (cellIds) async {
-            await ref.read(
-              deleteCellsProvider(
-                ids: [
-                  for (final cellId in cellIds)
-                    CellId(
-                      parentId: CellParentId(whiteboardId: id.id),
-                      id: cellId,
-                    ),
-                ],
-              ).future,
-            );
-            for (final cellId in cellIds) {
-              await ref.read(
-                deleteCellEdgeProvider(
-                  parentId: EdgeParentId(whiteboardId: id.id),
-                  cellId: cellId,
-                ).future,
-              );
-            }
-          },
-          onMoveCellsToAnotherWhiteboard: ({
-            required List<Cell> cells,
-            required List<Edge> edges,
-          }) async {
-            final whiteboardNavigation =
-                ref.read(WhiteboardNavigation.provider);
-            final whiteboard =
-                await whiteboardNavigation.pushWhiteboardSelector();
-            if (whiteboard == null) return;
-
-            await ref.read(
-              moveCellsAndEdgesToAnotherWhiteboardProvider(
-                viewportTopLeft: Offset(
-                  horizontalDetails.controller!.offset,
-                  verticalDetails.controller!.offset,
-                ),
-                scaleFactor: scaleFactor.value,
-                cells: cells,
-                edges: edges,
-                targetWhiteboard: whiteboard,
-              ).future,
-            );
-          },
-        ),
-      ),
-    );
     final appBar = Align(
       alignment: Alignment.topCenter,
       child: Column(
@@ -391,6 +243,205 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
               480.0,
             ) *
             WhiteboardPosition.canvasScale;
+
+        Widget whiteboardBuilder = WhiteboardCursorTool(
+          cursorMode: cursorMode,
+          horizontalDetails: horizontalDetails,
+          verticalDetails: verticalDetails,
+          onDoubleTap: () => ref.read(
+            deselectAllCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+            ).future,
+          ),
+          onSelection: (rect) async {
+            final viewportTopLeft = Offset(
+              horizontalDetails.controller!.offset,
+              verticalDetails.controller!.offset,
+            );
+            final viewportRect = Rect.fromPoints(
+              (rect.topLeft + viewportTopLeft) / scaleFactor.value,
+              (rect.bottomRight + viewportTopLeft) / scaleFactor.value,
+            );
+
+            if (cursorMode.value == CursorMode.selectionToolInverse) {
+              await ref.read(
+                deselectCellProvider(
+                  parentId: CellParentId(whiteboardId: id.id),
+                  selection: viewportRect,
+                ).future,
+              );
+              return;
+            }
+
+            await ref.read(
+              selectCellProvider(
+                parentId: CellParentId(whiteboardId: id.id),
+                selection: viewportRect,
+              ).future,
+            );
+          },
+          whiteboardBuilder: (
+            enableMoveByMouse,
+            enableMoveByTouch,
+            enableMoveByStylus,
+            onGrab,
+          ) =>
+              WhiteboardView(
+            key: whiteboardKey,
+            canvasScale: WhiteboardPosition.canvasScale,
+            scaleFactor: scaleFactor,
+            enableMoveByMouse: enableMoveByMouse,
+            enableMoveByTouch: enableMoveByTouch,
+            enableMoveByStylus: enableMoveByStylus,
+            verticalDetails: verticalDetails,
+            horizontalDetails: horizontalDetails,
+            onScaleStart: () => onGrab.value = true,
+            onScaleEnd: () => onGrab.value = false,
+            data: data,
+
+            /// Shortcuts Callback
+            onHandToolSelected: () => cursorMode.value = CursorMode.handTool,
+            onSelectionToolSelected: () =>
+                cursorMode.value = CursorMode.selectionTool,
+            onToggleSelection: () => switch (cursorMode.value) {
+              CursorMode.selectionTool => cursorMode.value =
+                  CursorMode.selectionToolInverse,
+              CursorMode.selectionToolInverse => cursorMode.value =
+                  CursorMode.selectionTool,
+              CursorMode.handTool => cursorMode.value =
+                  CursorMode.selectionTool,
+            },
+
+            /// Edge related
+            edgesStreamProvider: getEdgeListProvider(
+              parentId: EdgeParentId(whiteboardId: id.id),
+            ),
+            onEdgeCreated: (value) => ref.read(
+              createEdgeProvider(
+                parentId: EdgeParentId(whiteboardId: id.id),
+                data: value,
+              ).future,
+            ),
+            onEdgeUpdated: (oldValue, newValue) => ref.read(
+              updateEdgeProvider(
+                id: newValue.id,
+                data: newValue,
+              ).future,
+            ),
+            onEdgesDeleted: (edgeIds) => ref.read(
+              deleteEdgesProvider(
+                ids: [
+                  for (final edgeId in edgeIds)
+                    EdgeId(
+                      parentId: EdgeParentId(whiteboardId: id.id),
+                      id: edgeId,
+                    ),
+                ],
+              ).future,
+            ),
+            onEdgesUpdated: (edges) => ref.read(
+              updateEdgesProvider(
+                parentId: EdgeParentId(whiteboardId: id.id),
+                edges: edges,
+              ).future,
+            ),
+
+            /// Cell related
+            cellsStreamProvider: getCellListProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+            ),
+            onCellCreated: (value) => ref.read(
+              createCellProvider(
+                parentId: CellParentId(whiteboardId: id.id),
+                data: value,
+              ).future,
+            ),
+            onCellUpdated: (oldValue, newValue) => ref.read(
+              updateCellProvider(
+                id: newValue.id,
+                data: newValue,
+              ).future,
+            ),
+            onCellsUpdated: (cells) => ref.read(
+              updateCellsProvider(
+                parentId: CellParentId(whiteboardId: id.id),
+                cells: cells,
+              ).future,
+            ),
+            onCellsDeleted: (cellIds) async {
+              await ref.read(
+                deleteCellsProvider(
+                  ids: [
+                    for (final cellId in cellIds)
+                      CellId(
+                        parentId: CellParentId(whiteboardId: id.id),
+                        id: cellId,
+                      ),
+                  ],
+                ).future,
+              );
+              for (final cellId in cellIds) {
+                await ref.read(
+                  deleteCellEdgeProvider(
+                    parentId: EdgeParentId(whiteboardId: id.id),
+                    cellId: cellId,
+                  ).future,
+                );
+              }
+            },
+            onMoveCellsToAnotherWhiteboard: ({
+              required List<Cell> cells,
+              required List<Edge> edges,
+            }) async {
+              final whiteboardNavigation =
+                  ref.read(WhiteboardNavigation.provider);
+              final whiteboard =
+                  await whiteboardNavigation.pushWhiteboardSelector();
+              if (whiteboard == null) return;
+
+              await ref.read(
+                moveCellsAndEdgesToAnotherWhiteboardProvider(
+                  viewportTopLeft: Offset(
+                    horizontalDetails.controller!.offset,
+                    verticalDetails.controller!.offset,
+                  ),
+                  scaleFactor: scaleFactor.value,
+                  cells: cells,
+                  edges: edges,
+                  targetWhiteboard: whiteboard,
+                ).future,
+              );
+            },
+          ),
+        );
+        whiteboardBuilder = WhiteboardKeyboardShortcuts(
+          id: data.id,
+          onImageReceived: (position, uri) =>
+              whiteboardKey.currentState?.cell_onImageReceived(position, uri),
+          onLinkReceived: (position, uri) =>
+              whiteboardKey.currentState?.cell_onLinkReceived(position, uri),
+          onTextReceived: (position, value) =>
+              whiteboardKey.currentState?.cell_onTextReceived(position, value),
+          onHandToolSelected: () => cursorMode.value = CursorMode.handTool,
+          onSelectionToolSelected: () {
+            if (cursorMode.value == CursorMode.selectionTool) {
+              cursorMode.value = CursorMode.selectionToolInverse;
+            } else {
+              cursorMode.value = CursorMode.selectionTool;
+            }
+          },
+          onBrainstormingTriggered: () {},
+          onChatTriggered: () {
+            showChat.value = !showChat.value;
+            chatFocusNode.requestFocus();
+          },
+          onNoteTriggered: () {},
+          child: whiteboardBuilder,
+        );
+        whiteboardBuilder = Portal(
+          child: whiteboardBuilder,
+        );
+
         final actionTool = DSToolbar(
           children: [
             HookBuilder(
@@ -422,7 +473,8 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                   child: DraggableWidget(
                     child: DSTooltip(
                       alignment: Alignment.bottomCenter,
-                      label: StyledText('Brainstorming'),
+                      label: StyledText(
+                          'Brainstorming\n(${WhiteboardKeyboardShortcuts.brainstormingShortcut})'),
                       child: Button(
                         style: Style(
                           $box.height(40),
@@ -483,7 +535,8 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                   child: DraggableWidget(
                     child: DSTooltip(
                       alignment: Alignment.bottomCenter,
-                      label: StyledText('Note'),
+                      label: StyledText(
+                          'Note\n(${WhiteboardKeyboardShortcuts.noteShortcut})'),
                       child: Button(
                         style: Style(
                           $box.height(40),
@@ -517,7 +570,8 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
             ),
             DSTooltip(
               alignment: Alignment.bottomCenter,
-              label: StyledText('Chat'),
+              label: StyledText(
+                  'Chat\n(${WhiteboardKeyboardShortcuts.chatShortcut})'),
               child: Button(
                 style: Style(
                   $box.height(40),
@@ -535,21 +589,35 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
           children: [
             DSTooltip(
               alignment: Alignment.bottomCenter,
-              label: StyledText('Selection tool'),
+              label: switch (cursorMode.value) {
+                CursorMode.selectionToolInverse => StyledText(
+                    'Selection tool (inverse)\n(${WhiteboardKeyboardShortcuts.selectionToolShortcut})'),
+                _ => StyledText(
+                    'Selection tool\n(${WhiteboardKeyboardShortcuts.selectionToolShortcut})'),
+              },
               child: Button(
                 style: Style(
                   $box.height(40),
                   $box.width(40),
                   $box.alignment.center(),
                 ),
-                kind: kindBasedOn(cursorMode.value, CursorMode.selectionTool),
+                kind: switch (cursorMode.value) {
+                  CursorMode.selectionTool => ButtonKind.filled,
+                  CursorMode.selectionToolInverse => ButtonKind.filled,
+                  CursorMode.handTool => ButtonKind.flat,
+                },
                 onPressed: () => cursorMode.value = CursorMode.selectionTool,
-                child: StyledIcon(LineIcons.mousePointer),
+                child: switch (cursorMode.value) {
+                  CursorMode.selectionToolInverse =>
+                    StyledIcon(LineIcons.objectUngroup),
+                  _ => StyledIcon(LineIcons.objectGroup),
+                },
               ),
             ),
             DSTooltip(
               alignment: Alignment.bottomCenter,
-              label: StyledText('Hand tool'),
+              label: StyledText(
+                  'Hand tool\n(${WhiteboardKeyboardShortcuts.handToolShortcut})'),
               child: Button(
                 style: Style(
                   $box.height(40),
@@ -600,6 +668,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                     if (showChat.value)
                       DSTextbox(
                         autofocus: true,
+                        focusNode: chatFocusNode,
                         controller: chatTextController,
                         hintText: 'Type a message...',
                         minLines: 1,
@@ -693,26 +762,11 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
           ],
         );
 
-        viewport = Shortcuts.manager(
-          manager: WhiteboardShortcutManager(),
-          child: Actions(
-            actions: {
-              ToggleCursorModeIntent: CallbackAction(
-                onInvoke: (_) {
-                  cursorMode.value = cursorMode.value == CursorMode.handTool
-                      ? CursorMode.selectionTool
-                      : CursorMode.handTool;
-                  return null;
-                },
-              ),
-            },
-            child: Focus(
-              autofocus: true,
-              canRequestFocus: true,
-              skipTraversal: true,
-              child: viewport,
-            ),
-          ),
+        viewport = Focus(
+          autofocus: true,
+          canRequestFocus: true,
+          skipTraversal: true,
+          child: viewport,
         );
 
         viewport = MediaQuery.removeViewPadding(
@@ -737,23 +791,3 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
     );
   }
 }
-
-class WhiteboardShortcutManager extends ShortcutManager {
-  WhiteboardShortcutManager._({
-    super.shortcuts,
-  });
-
-  factory WhiteboardShortcutManager() {
-    return WhiteboardShortcutManager._(
-      shortcuts: {
-        SingleActivator(
-          LogicalKeyboardKey.keyC,
-          shift: true,
-          control: true,
-        ): ToggleCursorModeIntent(),
-      },
-    );
-  }
-}
-
-class ToggleCursorModeIntent extends Intent {}
