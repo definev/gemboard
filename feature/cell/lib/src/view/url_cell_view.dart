@@ -42,7 +42,7 @@ class UrlCellView extends ConsumerWidget {
                 AspectRatio(
                   aspectRatio: 1,
                   child: ColoredBox(
-                    color: ColorVariant.background.resolve(context),
+                    color: ColorVariant.yellow.resolve(context),
                   ),
                 ),
                 Expanded(
@@ -97,7 +97,7 @@ class UrlCellView extends ConsumerWidget {
                     AspectRatio(
                       aspectRatio: 1,
                       child: ColoredBox(
-                        color: ColorVariant.background.resolve(context),
+                        color: ColorVariant.yellow.resolve(context),
                       ),
                     ),
                     Expanded(
@@ -153,15 +153,22 @@ class UrlCellView extends ConsumerWidget {
                       SizedBox.square(
                         dimension: 34 * scale +
                             SpaceVariant.small.resolve(context) * 2,
-                        child: switch (imageProvider) {
-                          _ when imageProvider.image != null => Image(
-                              image: imageProvider.image!,
-                              fit: BoxFit.cover,
-                            ),
-                          _ when imageProvider.svgImage != null =>
-                            imageProvider.svgImage,
-                          _ => Container(),
-                        },
+                        child: ColoredBox(
+                          color: ColorVariant.yellow.resolve(context).withOpacity(0.2),
+                          child: switch (imageProvider) {
+                            _ when imageProvider.image != null => Image(
+                                image: imageProvider.image!,
+                                fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    ColoredBox(
+                                  color: ColorVariant.yellow.resolve(context),
+                                ),
+                              ),
+                            _ when imageProvider.svgImage != null =>
+                              imageProvider.svgImage,
+                            _ => Container(),
+                          },
+                        ),
                       ),
                       Expanded(
                         child: Column(
@@ -213,7 +220,7 @@ class UrlCellView extends ConsumerWidget {
                 AspectRatio(
                   aspectRatio: 1,
                   child: ColoredBox(
-                    color: ColorVariant.background.resolve(context),
+                    color: ColorVariant.yellow.resolve(context),
                   ),
                 ),
                 Expanded(

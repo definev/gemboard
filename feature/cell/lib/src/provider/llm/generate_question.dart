@@ -19,6 +19,7 @@ Raw<Stream<String>> generateQuestion(
 You will answer the following question by providing a rationale.
 Make it clear and concise. But also make sure to provide enough information to answer the question.
 And if you have any links or references, put them at the bottom of your answer.
+If the question or topic is too general you will provide a general concept and then provide a more specific example, idea for exploration, or question.
 '''),
         CoreData.user(text),
       ],

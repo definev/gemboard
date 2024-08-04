@@ -1,7 +1,5 @@
 import 'dart:async';
 import 'dart:collection';
-import 'dart:developer';
-import 'dart:io' as io;
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -13,12 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:graph_edge/graph_edge.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:mix/mix.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
 import 'package:whiteboard/src/domain/repository/whiteboard_object_stack.dart';
+import 'package:whiteboard/src/view/whiteboard_drop_zone.dart';
 import 'package:whiteboard/src/widget/cell_builder.dart';
 import 'package:whiteboard/src/widget/edge_builder.dart';
 import 'package:whiteboard/src/widget/selection_cells_view.dart';
@@ -626,22 +623,15 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  Offset randomOffsetAroundRect(
-    BuildContext context,
-    Rect rect, {
-    double? space,
-  }) {
+  Offset randomOffsetAroundRect(BuildContext context, Rect rect) {
     final scale = DesignSystemTheme.of(context).scale;
 
     final offset = rect.topLeft;
     final random = math.Random();
 
     double radius;
-    final minRadius = 400 * scale;
-    radius = minRadius + (rect.width - minRadius) * random.nextDouble();
-    radius = math.max(minRadius, radius);
-    radius = random.nextDouble() * radius;
-    if (space != null) radius = space;
+    final minRadius = 500 * scale;
+    radius = minRadius;
 
     switch (random.nextBool()) {
       case true:
@@ -690,7 +680,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     setState(() {});
 
     late StreamSubscription subscription;
-    final stream = ref.read(generateQuestionProvider(text: suggestion));
+    final stream = ref.read(generateQuestionProvider(
+        text: 'CONTEXT: ${parentCell.question} | $suggestion'));
     subscription = stream.listen(
       (data) {
         void defer() {
@@ -737,7 +728,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
   void brainstormingCell_OnSuggestionSelected(
     BrainstormingCell cell,
-    int index,
     ColorVariant color,
     String suggestion,
   ) async {
@@ -759,7 +749,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
     final edge = Edge(
       id: EdgeId(
-        id: 'edge-${cell.id.id}-${suggestionCell.id.id}',
+        id: EdgeId.genId(cell.id.id, suggestionCell.id.id),
         parentId: EdgeParentId(whiteboardId: widget.data.id.id),
       ),
       source: cell.id.id,
@@ -790,12 +780,14 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     final newCell = cell.copyWith(question: question);
     cellKeys[cell.id.id] = (key, newCell);
 
-    final stream = Stream.fromFuture(ref.read(
-      getBrainstormingSuggestionsProvider(
-        key: cell.id.id,
-        question: question,
-      ).future,
-    ));
+    final stream = Stream.fromFuture(
+      ref.read(
+        getBrainstormingSuggestionsProvider(
+          key: cell.id.id,
+          question: question,
+        ).future,
+      ),
+    );
 
     late StreamSubscription subscription;
     subscription = stream.listen(
@@ -1194,11 +1186,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(
-        context,
-        CellAppearance(cell).rect,
-        space: 200 * widget.canvasScale,
-      ),
+      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
       width: cell.width,
       decoration: cell.decoration.copyWith(
         cardKind: CellCardKind.flat,
@@ -1271,11 +1259,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(
-        context,
-        CellAppearance(cell).rect,
-        space: 200 * widget.canvasScale,
-      ),
+      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
       width: cell.width,
       decoration: cell.decoration.copyWith(
         cardKind: CellCardKind.flat,
@@ -1350,11 +1334,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
-      offset: randomOffsetAroundRect(
-        context,
-        CellAppearance(cell).rect,
-        space: 200 * widget.canvasScale,
-      ),
+      offset: randomOffsetAroundRect(context, CellAppearance(cell).rect),
       width: cell.width,
       decoration: cell.decoration.copyWith(
         cardKind: CellCardKind.flat,
@@ -1587,176 +1567,5 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ..._cellProcessors[cell.id.id] ?? {},
       'generate': subscription,
     };
-  }
-}
-
-class WhiteboardDropZone extends StatelessWidget {
-  const WhiteboardDropZone({
-    super.key,
-    required this.id,
-    required this.child,
-    required this.horizontalDetails,
-    required this.verticalDetails,
-    required this.scaleFactor,
-
-    /// Cell
-    required this.onCellCreated,
-    required this.onImageReceived,
-    required this.onTextReceived,
-    required this.onLinkReceived,
-  });
-
-  final WhiteboardId id;
-
-  final double scaleFactor;
-  final ScrollableDetails horizontalDetails;
-  final ScrollableDetails verticalDetails;
-
-  final void Function(Cell cell) onCellCreated;
-  final void Function(PerformDropEvent event, Uri uri) onImageReceived;
-  final void Function(PerformDropEvent event, String value) onTextReceived;
-  final void Function(PerformDropEvent event, Uri uri) onLinkReceived;
-
-  final Widget child;
-
-  Offset _offsetToViewport(Offset offset) {
-    final topLeft = Offset(
-      horizontalDetails.controller!.offset,
-      verticalDetails.controller!.offset,
-    );
-    return (topLeft + offset) / scaleFactor;
-  }
-
-  bool handleLocalData(Object? localData, Offset position) {
-    if (localData case Map<String, dynamic>()) {
-      try {
-        var cell = Cell.fromJson(localData);
-        cell = cell.copyWith(
-          offset: _offsetToViewport(position - cell.offset),
-        );
-
-        onCellCreated(cell);
-      } catch (e) {
-        debugPrint('Error reading cell $e');
-      }
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return DropRegion(
-      // Formats this region can accept.
-      formats: Formats.standardFormats,
-      hitTestBehavior: HitTestBehavior.opaque,
-      onDropOver: (event) {
-        // You can inspect local data here, as well as formats of each item.
-        // However on certain platforms (mobile / web) the actual data is
-        // only available when the drop is accepted (onPerformDrop).
-        // This drop region only supports copy operation.
-        if (event.session.allowedOperations.contains(DropOperation.copy)) {
-          return DropOperation.copy;
-        } else {
-          return DropOperation.none;
-        }
-      },
-      onPerformDrop: (event) async {
-        // Called when user dropped the item. You can now request the data.
-        // Note that data must be requested before the performDrop callback
-        // is over.
-        for (final item in event.session.items) {
-          // data reader is available now
-          bool handled = handleLocalData(item.localData, event.position.local);
-          if (handled) continue;
-
-          final imageFormats = [
-            Formats.jpeg,
-            Formats.png,
-            Formats.gif,
-            Formats.tiff,
-            Formats.webp,
-            Formats.heif,
-            Formats.heic,
-            // Formats.svg,
-          ];
-
-          final reader = item.dataReader!;
-          final matchedFormat = imageFormats.firstWhereOrNull(
-            (format) => reader.canProvide(format),
-          );
-          if (matchedFormat case final matchedFormat?) {
-            debugPrint('Dropped image: ${item}');
-            if (reader.canProvide(Formats.uri)) {
-              Uri? uri;
-              reader.getValue<NamedUri>(
-                Formats.uri,
-                (value) async {
-                  if (value != null) {
-                    uri = value.uri;
-                    // You can access values through the `value` property.
-                    debugPrint('Dropped image: ${value.name} | ${value.uri}');
-                    log(value.uri.toString());
-                    final validImage =
-                        await NetworkUtils.validateImage(value.uri.toString());
-
-                    if (validImage) {
-                      onImageReceived(event, value.uri);
-                    } else {
-                      onLinkReceived(event, value.uri);
-                    }
-                  }
-                },
-                onError: (error) {
-                  debugPrint('Error reading value $error');
-                  if (uri case final uri?) {
-                    onLinkReceived(event, uri);
-                  }
-                },
-              );
-              continue;
-            } else {
-              reader.getFile(
-                matchedFormat,
-                (value) async {
-                  final directory = await getApplicationDocumentsDirectory();
-                  var file = io.File(
-                      '${directory.path}/whiteboard/${id.id}/${value.fileName}');
-                  file = await file.create(recursive: true);
-                  final ioSink = file.openWrite();
-                  try {
-                    final stream = value.getStream();
-                    await ioSink.addStream(stream);
-                    onImageReceived(event, file.uri);
-                  } catch (e) {
-                  } finally {
-                    await ioSink.flush();
-                    await ioSink.close();
-                  }
-                },
-              );
-            }
-          }
-
-          if (reader.canProvide(Formats.plainText)) {
-            reader.getValue<String>(Formats.plainText, (value) {
-              if (value != null) {
-                // You can access values through the `value` property.
-                debugPrint('Dropped text: $value');
-                final uri = Uri.tryParse(value);
-                if (uri != null && uri.scheme.isNotEmpty) {
-                  onLinkReceived(event, uri);
-                } else {
-                  onTextReceived(event, value);
-                }
-              }
-            }, onError: (error) {
-              debugPrint('Error reading value $error');
-            });
-          }
-        }
-      },
-      child: child,
-    );
   }
 }

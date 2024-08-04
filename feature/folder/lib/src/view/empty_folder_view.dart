@@ -37,22 +37,11 @@ class EmptyFolderView extends StatelessWidget {
             height: SpaceVariant.small.resolve(context),
           ),
           StyledText(
-            'Start your first gemboard',
+            'Spark Your Imagination: Craft Your Gemboard!',
             style: Style(
               $text.style.ref(TextStyleVariant.p),
               $text.textAlign.center(),
             ),
-          ),
-          Button(
-            background: ColorVariant.blue,
-            kind: ButtonKind.filled,
-            style: Style(
-              $box.margin.top.ref(SpaceVariant.medium),
-              $box.padding.horizontal.ref(SpaceVariant.mediumLarge),
-              $box.padding.vertical.ref(SpaceVariant.small),
-            ),
-            onPressed: () {},
-            child: StyledText('Create'),
           ),
         ],
       ),

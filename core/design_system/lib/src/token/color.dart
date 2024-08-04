@@ -37,19 +37,19 @@ class ColorVariant extends ColorToken {
         'cyan' => ColorVariant.cyan,
         _ => null,
       };
-  
+
   static final rand = Random();
-  
+
   static String randonColor() => switch (rand.nextInt(7)) {
-    0 => 'red',
-    1 => 'green',
-    2 => 'blue',
-    3 => 'yellow',
-    4 => 'purple',
-    5 => 'pink',
-    6 => 'cyan',
-    _ => 'red',
-  };
+        0 => 'red',
+        1 => 'green',
+        2 => 'blue',
+        3 => 'yellow',
+        4 => 'purple',
+        5 => 'pink',
+        6 => 'cyan',
+        _ => 'red',
+      };
 
   static ColorVariant resolveOnBackground(
     ColorVariant background,
@@ -88,10 +88,10 @@ final colors = {
   ColorVariant.onRed: Color(0xFF000000),
   ColorVariant.green: Color(0xFF81C784),
   ColorVariant.onGreen: Color.fromARGB(255, 255, 255, 255),
-  ColorVariant.blue: Color(0xFF4FC3F7),
+  ColorVariant.blue: Color(0xFF4158A6),
   ColorVariant.onBlue: Color.fromARGB(255, 255, 255, 255),
-  ColorVariant.cyan: Color(0xFF4FC3F7),
-  ColorVariant.onCyan: Color.fromARGB(255, 255, 255, 226),
+  ColorVariant.cyan: Color(0xFF1dadc0),
+  ColorVariant.onCyan: Color.fromARGB(255, 255, 255, 255),
   ColorVariant.purple: Color(0xFFBA68C8),
   ColorVariant.onPurple: Color.fromARGB(255, 240, 239, 253),
   ColorVariant.pink: Color(0xFFF08080),

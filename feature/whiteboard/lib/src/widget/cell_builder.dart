@@ -45,7 +45,6 @@ class CellBuilder extends StatefulWidget {
       onAskForSuggestion;
   final void Function(
     BrainstormingCell cell,
-    int index,
     ColorVariant color,
     String suggestion,
   ) onSuggestionSelected;
@@ -424,7 +423,7 @@ class _CellBuilderState extends State<CellBuilder> {
       brainstorming: (cell) => BrainstormingCellView(
         cell: cell,
         onSuggestionSelected: (index, color, suggestion) =>
-            widget.onSuggestionSelected(cell, index, color, suggestion),
+            widget.onSuggestionSelected(cell, color, suggestion),
         onAskForSuggestion: (question) =>
             widget.onAskForSuggestion(cell, question),
         onAskForSuggestionSubscription: widget.onAskForSuggestionSubscription,

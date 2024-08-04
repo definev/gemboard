@@ -44,6 +44,7 @@ _$UnknownCellImpl _$$UnknownCellImplFromJson(Map<String, dynamic> json) =>
           : const CellDecorationConverter()
               .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
+      preContext: json['preContext'] as String?,
       $type: json['cellType'] as String?,
     );
 
@@ -57,6 +58,7 @@ Map<String, dynamic> _$$UnknownCellImplToJson(_$UnknownCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
+      'preContext': instance.preContext,
       'cellType': instance.$type,
     };
 
@@ -72,6 +74,7 @@ _$BrainstormingCellImpl _$$BrainstormingCellImplFromJson(
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
+      preContext: json['preContext'] as String?,
       question: json['question'] as String?,
       suggestions: (json['suggestions'] as List<dynamic>)
           .map((e) => e as String)
@@ -90,6 +93,7 @@ Map<String, dynamic> _$$BrainstormingCellImplToJson(
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
+      'preContext': instance.preContext,
       'question': instance.question,
       'suggestions': instance.suggestions,
       'cellType': instance.$type,
@@ -106,6 +110,7 @@ _$EditableCellImpl _$$EditableCellImplFromJson(Map<String, dynamic> json) =>
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
+      preContext: json['preContext'] as String?,
       title: json['title'] as String,
       content: json['content'] as String,
       $type: json['cellType'] as String?,
@@ -121,6 +126,7 @@ Map<String, dynamic> _$$EditableCellImplToJson(_$EditableCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
+      'preContext': instance.preContext,
       'title': instance.title,
       'content': instance.content,
       'cellType': instance.$type,
@@ -137,6 +143,7 @@ _$ImageCellImpl _$$ImageCellImplFromJson(Map<String, dynamic> json) =>
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
+      preContext: json['preContext'] as String?,
       url: const UriConverter().fromJson(json['url'] as String),
       $type: json['cellType'] as String?,
     );
@@ -151,6 +158,7 @@ Map<String, dynamic> _$$ImageCellImplToJson(_$ImageCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
+      'preContext': instance.preContext,
       'url': const UriConverter().toJson(instance.url),
       'cellType': instance.$type,
     };
@@ -166,6 +174,7 @@ _$ArticleCellImpl _$$ArticleCellImplFromJson(Map<String, dynamic> json) =>
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
+      preContext: json['preContext'] as String?,
       title: json['title'] as String,
       content: json['content'] as String,
       $type: json['cellType'] as String?,
@@ -181,6 +190,7 @@ Map<String, dynamic> _$$ArticleCellImplToJson(_$ArticleCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
+      'preContext': instance.preContext,
       'title': instance.title,
       'content': instance.content,
       'cellType': instance.$type,
@@ -197,6 +207,7 @@ _$UrlCellImpl _$$UrlCellImplFromJson(Map<String, dynamic> json) =>
       decoration: const CellDecorationConverter()
           .fromJson(json['decoration'] as Map<String, dynamic>),
       selected: json['selected'] as bool? ?? false,
+      preContext: json['preContext'] as String?,
       url: const UriConverter().fromJson(json['url'] as String),
       $type: json['cellType'] as String?,
     );
@@ -211,6 +222,7 @@ Map<String, dynamic> _$$UrlCellImplToJson(_$UrlCellImpl instance) =>
       'preferredHeight': instance.preferredHeight,
       'decoration': const CellDecorationConverter().toJson(instance.decoration),
       'selected': instance.selected,
+      'preContext': instance.preContext,
       'url': const UriConverter().toJson(instance.url),
       'cellType': instance.$type,
     };

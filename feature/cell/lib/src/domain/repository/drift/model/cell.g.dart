@@ -91,6 +91,12 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _preContextMeta =
+      const VerificationMeta('preContext');
+  @override
+  late final GeneratedColumn<String> preContext = GeneratedColumn<String>(
+      'pre_context', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _questionMeta =
       const VerificationMeta('question');
   @override
@@ -118,6 +124,7 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
         color,
         cardKind,
         constraints,
+        preContext,
         question,
         suggestions
       ];
@@ -209,6 +216,12 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
     } else if (isInserting) {
       context.missing(_constraintsMeta);
     }
+    if (data.containsKey('pre_context')) {
+      context.handle(
+          _preContextMeta,
+          preContext.isAcceptableOrUnknown(
+              data['pre_context']!, _preContextMeta));
+    }
     if (data.containsKey('question')) {
       context.handle(_questionMeta,
           question.isAcceptableOrUnknown(data['question']!, _questionMeta));
@@ -255,6 +268,8 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
           .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
       constraints: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      preContext: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pre_context']),
       question: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}question']),
       suggestions: attachedDatabase.typeMapping
@@ -289,6 +304,7 @@ class BrainstormingCellItemData extends DataClass
   final String color;
   final String cardKind;
   final bool constraints;
+  final String? preContext;
   final String? question;
   final String? suggestions;
   const BrainstormingCellItemData(
@@ -305,6 +321,7 @@ class BrainstormingCellItemData extends DataClass
       required this.color,
       required this.cardKind,
       required this.constraints,
+      this.preContext,
       this.question,
       this.suggestions});
   @override
@@ -327,6 +344,9 @@ class BrainstormingCellItemData extends DataClass
     map['color'] = Variable<String>(color);
     map['card_kind'] = Variable<String>(cardKind);
     map['constraints'] = Variable<bool>(constraints);
+    if (!nullToAbsent || preContext != null) {
+      map['pre_context'] = Variable<String>(preContext);
+    }
     if (!nullToAbsent || question != null) {
       map['question'] = Variable<String>(question);
     }
@@ -354,6 +374,9 @@ class BrainstormingCellItemData extends DataClass
       color: Value(color),
       cardKind: Value(cardKind),
       constraints: Value(constraints),
+      preContext: preContext == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preContext),
       question: question == null && nullToAbsent
           ? const Value.absent()
           : Value(question),
@@ -380,6 +403,7 @@ class BrainstormingCellItemData extends DataClass
       color: serializer.fromJson<String>(json['color']),
       cardKind: serializer.fromJson<String>(json['cardKind']),
       constraints: serializer.fromJson<bool>(json['constraints']),
+      preContext: serializer.fromJson<String?>(json['preContext']),
       question: serializer.fromJson<String?>(json['question']),
       suggestions: serializer.fromJson<String?>(json['suggestions']),
     );
@@ -401,6 +425,7 @@ class BrainstormingCellItemData extends DataClass
       'color': serializer.toJson<String>(color),
       'cardKind': serializer.toJson<String>(cardKind),
       'constraints': serializer.toJson<bool>(constraints),
+      'preContext': serializer.toJson<String?>(preContext),
       'question': serializer.toJson<String?>(question),
       'suggestions': serializer.toJson<String?>(suggestions),
     };
@@ -420,6 +445,7 @@ class BrainstormingCellItemData extends DataClass
           String? color,
           String? cardKind,
           bool? constraints,
+          Value<String?> preContext = const Value.absent(),
           Value<String?> question = const Value.absent(),
           Value<String?> suggestions = const Value.absent()}) =>
       BrainstormingCellItemData(
@@ -438,6 +464,7 @@ class BrainstormingCellItemData extends DataClass
         color: color ?? this.color,
         cardKind: cardKind ?? this.cardKind,
         constraints: constraints ?? this.constraints,
+        preContext: preContext.present ? preContext.value : this.preContext,
         question: question.present ? question.value : this.question,
         suggestions: suggestions.present ? suggestions.value : this.suggestions,
       );
@@ -462,6 +489,8 @@ class BrainstormingCellItemData extends DataClass
       cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
       constraints:
           data.constraints.present ? data.constraints.value : this.constraints,
+      preContext:
+          data.preContext.present ? data.preContext.value : this.preContext,
       question: data.question.present ? data.question.value : this.question,
       suggestions:
           data.suggestions.present ? data.suggestions.value : this.suggestions,
@@ -484,6 +513,7 @@ class BrainstormingCellItemData extends DataClass
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('question: $question, ')
           ..write('suggestions: $suggestions')
           ..write(')'))
@@ -505,6 +535,7 @@ class BrainstormingCellItemData extends DataClass
       color,
       cardKind,
       constraints,
+      preContext,
       question,
       suggestions);
   @override
@@ -524,6 +555,7 @@ class BrainstormingCellItemData extends DataClass
           other.color == this.color &&
           other.cardKind == this.cardKind &&
           other.constraints == this.constraints &&
+          other.preContext == this.preContext &&
           other.question == this.question &&
           other.suggestions == this.suggestions);
 }
@@ -543,6 +575,7 @@ class BrainstormingCellItemCompanion
   final Value<String> color;
   final Value<String> cardKind;
   final Value<bool> constraints;
+  final Value<String?> preContext;
   final Value<String?> question;
   final Value<String?> suggestions;
   const BrainstormingCellItemCompanion({
@@ -559,6 +592,7 @@ class BrainstormingCellItemCompanion
     this.color = const Value.absent(),
     this.cardKind = const Value.absent(),
     this.constraints = const Value.absent(),
+    this.preContext = const Value.absent(),
     this.question = const Value.absent(),
     this.suggestions = const Value.absent(),
   });
@@ -576,6 +610,7 @@ class BrainstormingCellItemCompanion
     required String color,
     required String cardKind,
     required bool constraints,
+    this.preContext = const Value.absent(),
     this.question = const Value.absent(),
     this.suggestions = const Value.absent(),
   })  : whiteboardId = Value(whiteboardId),
@@ -602,6 +637,7 @@ class BrainstormingCellItemCompanion
     Expression<String>? color,
     Expression<String>? cardKind,
     Expression<bool>? constraints,
+    Expression<String>? preContext,
     Expression<String>? question,
     Expression<String>? suggestions,
   }) {
@@ -619,6 +655,7 @@ class BrainstormingCellItemCompanion
       if (color != null) 'color': color,
       if (cardKind != null) 'card_kind': cardKind,
       if (constraints != null) 'constraints': constraints,
+      if (preContext != null) 'pre_context': preContext,
       if (question != null) 'question': question,
       if (suggestions != null) 'suggestions': suggestions,
     });
@@ -638,6 +675,7 @@ class BrainstormingCellItemCompanion
       Value<String>? color,
       Value<String>? cardKind,
       Value<bool>? constraints,
+      Value<String?>? preContext,
       Value<String?>? question,
       Value<String?>? suggestions}) {
     return BrainstormingCellItemCompanion(
@@ -654,6 +692,7 @@ class BrainstormingCellItemCompanion
       color: color ?? this.color,
       cardKind: cardKind ?? this.cardKind,
       constraints: constraints ?? this.constraints,
+      preContext: preContext ?? this.preContext,
       question: question ?? this.question,
       suggestions: suggestions ?? this.suggestions,
     );
@@ -701,6 +740,9 @@ class BrainstormingCellItemCompanion
     if (constraints.present) {
       map['constraints'] = Variable<bool>(constraints.value);
     }
+    if (preContext.present) {
+      map['pre_context'] = Variable<String>(preContext.value);
+    }
     if (question.present) {
       map['question'] = Variable<String>(question.value);
     }
@@ -726,6 +768,7 @@ class BrainstormingCellItemCompanion
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('question: $question, ')
           ..write('suggestions: $suggestions')
           ..write(')'))
@@ -821,6 +864,12 @@ class $EditableCellItemTable extends EditableCellItem
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _preContextMeta =
+      const VerificationMeta('preContext');
+  @override
+  late final GeneratedColumn<String> preContext = GeneratedColumn<String>(
+      'pre_context', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -847,6 +896,7 @@ class $EditableCellItemTable extends EditableCellItem
         color,
         cardKind,
         constraints,
+        preContext,
         title,
         content
       ];
@@ -938,6 +988,12 @@ class $EditableCellItemTable extends EditableCellItem
     } else if (isInserting) {
       context.missing(_constraintsMeta);
     }
+    if (data.containsKey('pre_context')) {
+      context.handle(
+          _preContextMeta,
+          preContext.isAcceptableOrUnknown(
+              data['pre_context']!, _preContextMeta));
+    }
     if (data.containsKey('title')) {
       context.handle(
           _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
@@ -985,6 +1041,8 @@ class $EditableCellItemTable extends EditableCellItem
           .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
       constraints: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      preContext: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pre_context']),
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
       content: attachedDatabase.typeMapping
@@ -1019,6 +1077,7 @@ class EditableCellItemData extends DataClass
   final String color;
   final String cardKind;
   final bool constraints;
+  final String? preContext;
   final String title;
   final String content;
   const EditableCellItemData(
@@ -1035,6 +1094,7 @@ class EditableCellItemData extends DataClass
       required this.color,
       required this.cardKind,
       required this.constraints,
+      this.preContext,
       required this.title,
       required this.content});
   @override
@@ -1057,6 +1117,9 @@ class EditableCellItemData extends DataClass
     map['color'] = Variable<String>(color);
     map['card_kind'] = Variable<String>(cardKind);
     map['constraints'] = Variable<bool>(constraints);
+    if (!nullToAbsent || preContext != null) {
+      map['pre_context'] = Variable<String>(preContext);
+    }
     map['title'] = Variable<String>(title);
     map['content'] = Variable<String>(content);
     return map;
@@ -1080,6 +1143,9 @@ class EditableCellItemData extends DataClass
       color: Value(color),
       cardKind: Value(cardKind),
       constraints: Value(constraints),
+      preContext: preContext == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preContext),
       title: Value(title),
       content: Value(content),
     );
@@ -1102,6 +1168,7 @@ class EditableCellItemData extends DataClass
       color: serializer.fromJson<String>(json['color']),
       cardKind: serializer.fromJson<String>(json['cardKind']),
       constraints: serializer.fromJson<bool>(json['constraints']),
+      preContext: serializer.fromJson<String?>(json['preContext']),
       title: serializer.fromJson<String>(json['title']),
       content: serializer.fromJson<String>(json['content']),
     );
@@ -1123,6 +1190,7 @@ class EditableCellItemData extends DataClass
       'color': serializer.toJson<String>(color),
       'cardKind': serializer.toJson<String>(cardKind),
       'constraints': serializer.toJson<bool>(constraints),
+      'preContext': serializer.toJson<String?>(preContext),
       'title': serializer.toJson<String>(title),
       'content': serializer.toJson<String>(content),
     };
@@ -1142,6 +1210,7 @@ class EditableCellItemData extends DataClass
           String? color,
           String? cardKind,
           bool? constraints,
+          Value<String?> preContext = const Value.absent(),
           String? title,
           String? content}) =>
       EditableCellItemData(
@@ -1160,6 +1229,7 @@ class EditableCellItemData extends DataClass
         color: color ?? this.color,
         cardKind: cardKind ?? this.cardKind,
         constraints: constraints ?? this.constraints,
+        preContext: preContext.present ? preContext.value : this.preContext,
         title: title ?? this.title,
         content: content ?? this.content,
       );
@@ -1183,6 +1253,8 @@ class EditableCellItemData extends DataClass
       cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
       constraints:
           data.constraints.present ? data.constraints.value : this.constraints,
+      preContext:
+          data.preContext.present ? data.preContext.value : this.preContext,
       title: data.title.present ? data.title.value : this.title,
       content: data.content.present ? data.content.value : this.content,
     );
@@ -1204,6 +1276,7 @@ class EditableCellItemData extends DataClass
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('title: $title, ')
           ..write('content: $content')
           ..write(')'))
@@ -1225,6 +1298,7 @@ class EditableCellItemData extends DataClass
       color,
       cardKind,
       constraints,
+      preContext,
       title,
       content);
   @override
@@ -1244,6 +1318,7 @@ class EditableCellItemData extends DataClass
           other.color == this.color &&
           other.cardKind == this.cardKind &&
           other.constraints == this.constraints &&
+          other.preContext == this.preContext &&
           other.title == this.title &&
           other.content == this.content);
 }
@@ -1262,6 +1337,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
   final Value<String> color;
   final Value<String> cardKind;
   final Value<bool> constraints;
+  final Value<String?> preContext;
   final Value<String> title;
   final Value<String> content;
   const EditableCellItemCompanion({
@@ -1278,6 +1354,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     this.color = const Value.absent(),
     this.cardKind = const Value.absent(),
     this.constraints = const Value.absent(),
+    this.preContext = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
   });
@@ -1295,6 +1372,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     required String color,
     required String cardKind,
     required bool constraints,
+    this.preContext = const Value.absent(),
     required String title,
     required String content,
   })  : whiteboardId = Value(whiteboardId),
@@ -1323,6 +1401,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     Expression<String>? color,
     Expression<String>? cardKind,
     Expression<bool>? constraints,
+    Expression<String>? preContext,
     Expression<String>? title,
     Expression<String>? content,
   }) {
@@ -1340,6 +1419,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
       if (color != null) 'color': color,
       if (cardKind != null) 'card_kind': cardKind,
       if (constraints != null) 'constraints': constraints,
+      if (preContext != null) 'pre_context': preContext,
       if (title != null) 'title': title,
       if (content != null) 'content': content,
     });
@@ -1359,6 +1439,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
       Value<String>? color,
       Value<String>? cardKind,
       Value<bool>? constraints,
+      Value<String?>? preContext,
       Value<String>? title,
       Value<String>? content}) {
     return EditableCellItemCompanion(
@@ -1375,6 +1456,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
       color: color ?? this.color,
       cardKind: cardKind ?? this.cardKind,
       constraints: constraints ?? this.constraints,
+      preContext: preContext ?? this.preContext,
       title: title ?? this.title,
       content: content ?? this.content,
     );
@@ -1422,6 +1504,9 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     if (constraints.present) {
       map['constraints'] = Variable<bool>(constraints.value);
     }
+    if (preContext.present) {
+      map['pre_context'] = Variable<String>(preContext.value);
+    }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
@@ -1447,6 +1532,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('title: $title, ')
           ..write('content: $content')
           ..write(')'))
@@ -1542,6 +1628,12 @@ class $ImageCellItemTable extends ImageCellItem
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _preContextMeta =
+      const VerificationMeta('preContext');
+  @override
+  late final GeneratedColumn<String> preContext = GeneratedColumn<String>(
+      'pre_context', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _urlMeta = const VerificationMeta('url');
   @override
   late final GeneratedColumn<String> url = GeneratedColumn<String>(
@@ -1562,6 +1654,7 @@ class $ImageCellItemTable extends ImageCellItem
         color,
         cardKind,
         constraints,
+        preContext,
         url
       ];
   @override
@@ -1651,6 +1744,12 @@ class $ImageCellItemTable extends ImageCellItem
     } else if (isInserting) {
       context.missing(_constraintsMeta);
     }
+    if (data.containsKey('pre_context')) {
+      context.handle(
+          _preContextMeta,
+          preContext.isAcceptableOrUnknown(
+              data['pre_context']!, _preContextMeta));
+    }
     if (data.containsKey('url')) {
       context.handle(
           _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
@@ -1692,6 +1791,8 @@ class $ImageCellItemTable extends ImageCellItem
           .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
       constraints: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      preContext: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pre_context']),
       url: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
     );
@@ -1724,6 +1825,7 @@ class ImageCellItemData extends DataClass
   final String color;
   final String cardKind;
   final bool constraints;
+  final String? preContext;
   final String url;
   const ImageCellItemData(
       {required this.id,
@@ -1739,6 +1841,7 @@ class ImageCellItemData extends DataClass
       required this.color,
       required this.cardKind,
       required this.constraints,
+      this.preContext,
       required this.url});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1760,6 +1863,9 @@ class ImageCellItemData extends DataClass
     map['color'] = Variable<String>(color);
     map['card_kind'] = Variable<String>(cardKind);
     map['constraints'] = Variable<bool>(constraints);
+    if (!nullToAbsent || preContext != null) {
+      map['pre_context'] = Variable<String>(preContext);
+    }
     map['url'] = Variable<String>(url);
     return map;
   }
@@ -1782,6 +1888,9 @@ class ImageCellItemData extends DataClass
       color: Value(color),
       cardKind: Value(cardKind),
       constraints: Value(constraints),
+      preContext: preContext == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preContext),
       url: Value(url),
     );
   }
@@ -1803,6 +1912,7 @@ class ImageCellItemData extends DataClass
       color: serializer.fromJson<String>(json['color']),
       cardKind: serializer.fromJson<String>(json['cardKind']),
       constraints: serializer.fromJson<bool>(json['constraints']),
+      preContext: serializer.fromJson<String?>(json['preContext']),
       url: serializer.fromJson<String>(json['url']),
     );
   }
@@ -1823,6 +1933,7 @@ class ImageCellItemData extends DataClass
       'color': serializer.toJson<String>(color),
       'cardKind': serializer.toJson<String>(cardKind),
       'constraints': serializer.toJson<bool>(constraints),
+      'preContext': serializer.toJson<String?>(preContext),
       'url': serializer.toJson<String>(url),
     };
   }
@@ -1841,6 +1952,7 @@ class ImageCellItemData extends DataClass
           String? color,
           String? cardKind,
           bool? constraints,
+          Value<String?> preContext = const Value.absent(),
           String? url}) =>
       ImageCellItemData(
         id: id ?? this.id,
@@ -1858,6 +1970,7 @@ class ImageCellItemData extends DataClass
         color: color ?? this.color,
         cardKind: cardKind ?? this.cardKind,
         constraints: constraints ?? this.constraints,
+        preContext: preContext.present ? preContext.value : this.preContext,
         url: url ?? this.url,
       );
   ImageCellItemData copyWithCompanion(ImageCellItemCompanion data) {
@@ -1880,6 +1993,8 @@ class ImageCellItemData extends DataClass
       cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
       constraints:
           data.constraints.present ? data.constraints.value : this.constraints,
+      preContext:
+          data.preContext.present ? data.preContext.value : this.preContext,
       url: data.url.present ? data.url.value : this.url,
     );
   }
@@ -1900,6 +2015,7 @@ class ImageCellItemData extends DataClass
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('url: $url')
           ..write(')'))
         .toString();
@@ -1920,6 +2036,7 @@ class ImageCellItemData extends DataClass
       color,
       cardKind,
       constraints,
+      preContext,
       url);
   @override
   bool operator ==(Object other) =>
@@ -1938,6 +2055,7 @@ class ImageCellItemData extends DataClass
           other.color == this.color &&
           other.cardKind == this.cardKind &&
           other.constraints == this.constraints &&
+          other.preContext == this.preContext &&
           other.url == this.url);
 }
 
@@ -1955,6 +2073,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
   final Value<String> color;
   final Value<String> cardKind;
   final Value<bool> constraints;
+  final Value<String?> preContext;
   final Value<String> url;
   const ImageCellItemCompanion({
     this.id = const Value.absent(),
@@ -1970,6 +2089,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     this.color = const Value.absent(),
     this.cardKind = const Value.absent(),
     this.constraints = const Value.absent(),
+    this.preContext = const Value.absent(),
     this.url = const Value.absent(),
   });
   ImageCellItemCompanion.insert({
@@ -1986,6 +2106,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     required String color,
     required String cardKind,
     required bool constraints,
+    this.preContext = const Value.absent(),
     required String url,
   })  : whiteboardId = Value(whiteboardId),
         cellId = Value(cellId),
@@ -2012,6 +2133,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     Expression<String>? color,
     Expression<String>? cardKind,
     Expression<bool>? constraints,
+    Expression<String>? preContext,
     Expression<String>? url,
   }) {
     return RawValuesInsertable({
@@ -2028,6 +2150,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
       if (color != null) 'color': color,
       if (cardKind != null) 'card_kind': cardKind,
       if (constraints != null) 'constraints': constraints,
+      if (preContext != null) 'pre_context': preContext,
       if (url != null) 'url': url,
     });
   }
@@ -2046,6 +2169,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
       Value<String>? color,
       Value<String>? cardKind,
       Value<bool>? constraints,
+      Value<String?>? preContext,
       Value<String>? url}) {
     return ImageCellItemCompanion(
       id: id ?? this.id,
@@ -2061,6 +2185,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
       color: color ?? this.color,
       cardKind: cardKind ?? this.cardKind,
       constraints: constraints ?? this.constraints,
+      preContext: preContext ?? this.preContext,
       url: url ?? this.url,
     );
   }
@@ -2107,6 +2232,9 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     if (constraints.present) {
       map['constraints'] = Variable<bool>(constraints.value);
     }
+    if (preContext.present) {
+      map['pre_context'] = Variable<String>(preContext.value);
+    }
     if (url.present) {
       map['url'] = Variable<String>(url.value);
     }
@@ -2129,6 +2257,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('url: $url')
           ..write(')'))
         .toString();
@@ -2223,6 +2352,12 @@ class $ArticleCellItemTable extends ArticleCellItem
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _preContextMeta =
+      const VerificationMeta('preContext');
+  @override
+  late final GeneratedColumn<String> preContext = GeneratedColumn<String>(
+      'pre_context', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _titleMeta = const VerificationMeta('title');
   @override
   late final GeneratedColumn<String> title = GeneratedColumn<String>(
@@ -2249,6 +2384,7 @@ class $ArticleCellItemTable extends ArticleCellItem
         color,
         cardKind,
         constraints,
+        preContext,
         title,
         content
       ];
@@ -2340,6 +2476,12 @@ class $ArticleCellItemTable extends ArticleCellItem
     } else if (isInserting) {
       context.missing(_constraintsMeta);
     }
+    if (data.containsKey('pre_context')) {
+      context.handle(
+          _preContextMeta,
+          preContext.isAcceptableOrUnknown(
+              data['pre_context']!, _preContextMeta));
+    }
     if (data.containsKey('title')) {
       context.handle(
           _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
@@ -2387,6 +2529,8 @@ class $ArticleCellItemTable extends ArticleCellItem
           .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
       constraints: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      preContext: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pre_context']),
       title: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
       content: attachedDatabase.typeMapping
@@ -2421,6 +2565,7 @@ class ArticleCellItemData extends DataClass
   final String color;
   final String cardKind;
   final bool constraints;
+  final String? preContext;
   final String title;
   final String content;
   const ArticleCellItemData(
@@ -2437,6 +2582,7 @@ class ArticleCellItemData extends DataClass
       required this.color,
       required this.cardKind,
       required this.constraints,
+      this.preContext,
       required this.title,
       required this.content});
   @override
@@ -2459,6 +2605,9 @@ class ArticleCellItemData extends DataClass
     map['color'] = Variable<String>(color);
     map['card_kind'] = Variable<String>(cardKind);
     map['constraints'] = Variable<bool>(constraints);
+    if (!nullToAbsent || preContext != null) {
+      map['pre_context'] = Variable<String>(preContext);
+    }
     map['title'] = Variable<String>(title);
     map['content'] = Variable<String>(content);
     return map;
@@ -2482,6 +2631,9 @@ class ArticleCellItemData extends DataClass
       color: Value(color),
       cardKind: Value(cardKind),
       constraints: Value(constraints),
+      preContext: preContext == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preContext),
       title: Value(title),
       content: Value(content),
     );
@@ -2504,6 +2656,7 @@ class ArticleCellItemData extends DataClass
       color: serializer.fromJson<String>(json['color']),
       cardKind: serializer.fromJson<String>(json['cardKind']),
       constraints: serializer.fromJson<bool>(json['constraints']),
+      preContext: serializer.fromJson<String?>(json['preContext']),
       title: serializer.fromJson<String>(json['title']),
       content: serializer.fromJson<String>(json['content']),
     );
@@ -2525,6 +2678,7 @@ class ArticleCellItemData extends DataClass
       'color': serializer.toJson<String>(color),
       'cardKind': serializer.toJson<String>(cardKind),
       'constraints': serializer.toJson<bool>(constraints),
+      'preContext': serializer.toJson<String?>(preContext),
       'title': serializer.toJson<String>(title),
       'content': serializer.toJson<String>(content),
     };
@@ -2544,6 +2698,7 @@ class ArticleCellItemData extends DataClass
           String? color,
           String? cardKind,
           bool? constraints,
+          Value<String?> preContext = const Value.absent(),
           String? title,
           String? content}) =>
       ArticleCellItemData(
@@ -2562,6 +2717,7 @@ class ArticleCellItemData extends DataClass
         color: color ?? this.color,
         cardKind: cardKind ?? this.cardKind,
         constraints: constraints ?? this.constraints,
+        preContext: preContext.present ? preContext.value : this.preContext,
         title: title ?? this.title,
         content: content ?? this.content,
       );
@@ -2585,6 +2741,8 @@ class ArticleCellItemData extends DataClass
       cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
       constraints:
           data.constraints.present ? data.constraints.value : this.constraints,
+      preContext:
+          data.preContext.present ? data.preContext.value : this.preContext,
       title: data.title.present ? data.title.value : this.title,
       content: data.content.present ? data.content.value : this.content,
     );
@@ -2606,6 +2764,7 @@ class ArticleCellItemData extends DataClass
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('title: $title, ')
           ..write('content: $content')
           ..write(')'))
@@ -2627,6 +2786,7 @@ class ArticleCellItemData extends DataClass
       color,
       cardKind,
       constraints,
+      preContext,
       title,
       content);
   @override
@@ -2646,6 +2806,7 @@ class ArticleCellItemData extends DataClass
           other.color == this.color &&
           other.cardKind == this.cardKind &&
           other.constraints == this.constraints &&
+          other.preContext == this.preContext &&
           other.title == this.title &&
           other.content == this.content);
 }
@@ -2664,6 +2825,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
   final Value<String> color;
   final Value<String> cardKind;
   final Value<bool> constraints;
+  final Value<String?> preContext;
   final Value<String> title;
   final Value<String> content;
   const ArticleCellItemCompanion({
@@ -2680,6 +2842,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     this.color = const Value.absent(),
     this.cardKind = const Value.absent(),
     this.constraints = const Value.absent(),
+    this.preContext = const Value.absent(),
     this.title = const Value.absent(),
     this.content = const Value.absent(),
   });
@@ -2697,6 +2860,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     required String color,
     required String cardKind,
     required bool constraints,
+    this.preContext = const Value.absent(),
     required String title,
     required String content,
   })  : whiteboardId = Value(whiteboardId),
@@ -2725,6 +2889,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     Expression<String>? color,
     Expression<String>? cardKind,
     Expression<bool>? constraints,
+    Expression<String>? preContext,
     Expression<String>? title,
     Expression<String>? content,
   }) {
@@ -2742,6 +2907,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
       if (color != null) 'color': color,
       if (cardKind != null) 'card_kind': cardKind,
       if (constraints != null) 'constraints': constraints,
+      if (preContext != null) 'pre_context': preContext,
       if (title != null) 'title': title,
       if (content != null) 'content': content,
     });
@@ -2761,6 +2927,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
       Value<String>? color,
       Value<String>? cardKind,
       Value<bool>? constraints,
+      Value<String?>? preContext,
       Value<String>? title,
       Value<String>? content}) {
     return ArticleCellItemCompanion(
@@ -2777,6 +2944,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
       color: color ?? this.color,
       cardKind: cardKind ?? this.cardKind,
       constraints: constraints ?? this.constraints,
+      preContext: preContext ?? this.preContext,
       title: title ?? this.title,
       content: content ?? this.content,
     );
@@ -2824,6 +2992,9 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     if (constraints.present) {
       map['constraints'] = Variable<bool>(constraints.value);
     }
+    if (preContext.present) {
+      map['pre_context'] = Variable<String>(preContext.value);
+    }
     if (title.present) {
       map['title'] = Variable<String>(title.value);
     }
@@ -2849,6 +3020,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('title: $title, ')
           ..write('content: $content')
           ..write(')'))
@@ -2944,6 +3116,12 @@ class $UrlCellItemTable extends UrlCellItem
       requiredDuringInsert: true,
       defaultConstraints: GeneratedColumn.constraintIsAlways(
           'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _preContextMeta =
+      const VerificationMeta('preContext');
+  @override
+  late final GeneratedColumn<String> preContext = GeneratedColumn<String>(
+      'pre_context', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
   static const VerificationMeta _urlMeta = const VerificationMeta('url');
   @override
   late final GeneratedColumn<String> url = GeneratedColumn<String>(
@@ -2964,6 +3142,7 @@ class $UrlCellItemTable extends UrlCellItem
         color,
         cardKind,
         constraints,
+        preContext,
         url
       ];
   @override
@@ -3053,6 +3232,12 @@ class $UrlCellItemTable extends UrlCellItem
     } else if (isInserting) {
       context.missing(_constraintsMeta);
     }
+    if (data.containsKey('pre_context')) {
+      context.handle(
+          _preContextMeta,
+          preContext.isAcceptableOrUnknown(
+              data['pre_context']!, _preContextMeta));
+    }
     if (data.containsKey('url')) {
       context.handle(
           _urlMeta, url.isAcceptableOrUnknown(data['url']!, _urlMeta));
@@ -3094,6 +3279,8 @@ class $UrlCellItemTable extends UrlCellItem
           .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
       constraints: attachedDatabase.typeMapping
           .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      preContext: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pre_context']),
       url: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}url'])!,
     );
@@ -3125,6 +3312,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
   final String color;
   final String cardKind;
   final bool constraints;
+  final String? preContext;
   final String url;
   const UrlCellItemData(
       {required this.id,
@@ -3140,6 +3328,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       required this.color,
       required this.cardKind,
       required this.constraints,
+      this.preContext,
       required this.url});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -3161,6 +3350,9 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
     map['color'] = Variable<String>(color);
     map['card_kind'] = Variable<String>(cardKind);
     map['constraints'] = Variable<bool>(constraints);
+    if (!nullToAbsent || preContext != null) {
+      map['pre_context'] = Variable<String>(preContext);
+    }
     map['url'] = Variable<String>(url);
     return map;
   }
@@ -3183,6 +3375,9 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       color: Value(color),
       cardKind: Value(cardKind),
       constraints: Value(constraints),
+      preContext: preContext == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preContext),
       url: Value(url),
     );
   }
@@ -3204,6 +3399,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       color: serializer.fromJson<String>(json['color']),
       cardKind: serializer.fromJson<String>(json['cardKind']),
       constraints: serializer.fromJson<bool>(json['constraints']),
+      preContext: serializer.fromJson<String?>(json['preContext']),
       url: serializer.fromJson<String>(json['url']),
     );
   }
@@ -3224,6 +3420,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       'color': serializer.toJson<String>(color),
       'cardKind': serializer.toJson<String>(cardKind),
       'constraints': serializer.toJson<bool>(constraints),
+      'preContext': serializer.toJson<String?>(preContext),
       'url': serializer.toJson<String>(url),
     };
   }
@@ -3242,6 +3439,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
           String? color,
           String? cardKind,
           bool? constraints,
+          Value<String?> preContext = const Value.absent(),
           String? url}) =>
       UrlCellItemData(
         id: id ?? this.id,
@@ -3259,6 +3457,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
         color: color ?? this.color,
         cardKind: cardKind ?? this.cardKind,
         constraints: constraints ?? this.constraints,
+        preContext: preContext.present ? preContext.value : this.preContext,
         url: url ?? this.url,
       );
   UrlCellItemData copyWithCompanion(UrlCellItemCompanion data) {
@@ -3281,6 +3480,8 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
       constraints:
           data.constraints.present ? data.constraints.value : this.constraints,
+      preContext:
+          data.preContext.present ? data.preContext.value : this.preContext,
       url: data.url.present ? data.url.value : this.url,
     );
   }
@@ -3301,6 +3502,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('url: $url')
           ..write(')'))
         .toString();
@@ -3321,6 +3523,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       color,
       cardKind,
       constraints,
+      preContext,
       url);
   @override
   bool operator ==(Object other) =>
@@ -3339,6 +3542,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
           other.color == this.color &&
           other.cardKind == this.cardKind &&
           other.constraints == this.constraints &&
+          other.preContext == this.preContext &&
           other.url == this.url);
 }
 
@@ -3356,6 +3560,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
   final Value<String> color;
   final Value<String> cardKind;
   final Value<bool> constraints;
+  final Value<String?> preContext;
   final Value<String> url;
   const UrlCellItemCompanion({
     this.id = const Value.absent(),
@@ -3371,6 +3576,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     this.color = const Value.absent(),
     this.cardKind = const Value.absent(),
     this.constraints = const Value.absent(),
+    this.preContext = const Value.absent(),
     this.url = const Value.absent(),
   });
   UrlCellItemCompanion.insert({
@@ -3387,6 +3593,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     required String color,
     required String cardKind,
     required bool constraints,
+    this.preContext = const Value.absent(),
     required String url,
   })  : whiteboardId = Value(whiteboardId),
         cellId = Value(cellId),
@@ -3413,6 +3620,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     Expression<String>? color,
     Expression<String>? cardKind,
     Expression<bool>? constraints,
+    Expression<String>? preContext,
     Expression<String>? url,
   }) {
     return RawValuesInsertable({
@@ -3429,6 +3637,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
       if (color != null) 'color': color,
       if (cardKind != null) 'card_kind': cardKind,
       if (constraints != null) 'constraints': constraints,
+      if (preContext != null) 'pre_context': preContext,
       if (url != null) 'url': url,
     });
   }
@@ -3447,6 +3656,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
       Value<String>? color,
       Value<String>? cardKind,
       Value<bool>? constraints,
+      Value<String?>? preContext,
       Value<String>? url}) {
     return UrlCellItemCompanion(
       id: id ?? this.id,
@@ -3462,6 +3672,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
       color: color ?? this.color,
       cardKind: cardKind ?? this.cardKind,
       constraints: constraints ?? this.constraints,
+      preContext: preContext ?? this.preContext,
       url: url ?? this.url,
     );
   }
@@ -3508,6 +3719,9 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     if (constraints.present) {
       map['constraints'] = Variable<bool>(constraints.value);
     }
+    if (preContext.present) {
+      map['pre_context'] = Variable<String>(preContext.value);
+    }
     if (url.present) {
       map['url'] = Variable<String>(url.value);
     }
@@ -3530,6 +3744,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
           ..write('color: $color, ')
           ..write('cardKind: $cardKind, ')
           ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
           ..write('url: $url')
           ..write(')'))
         .toString();
@@ -3575,6 +3790,7 @@ typedef $$BrainstormingCellItemTableCreateCompanionBuilder
   required String color,
   required String cardKind,
   required bool constraints,
+  Value<String?> preContext,
   Value<String?> question,
   Value<String?> suggestions,
 });
@@ -3593,6 +3809,7 @@ typedef $$BrainstormingCellItemTableUpdateCompanionBuilder
   Value<String> color,
   Value<String> cardKind,
   Value<bool> constraints,
+  Value<String?> preContext,
   Value<String?> question,
   Value<String?> suggestions,
 });
@@ -3628,6 +3845,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             Value<String> color = const Value.absent(),
             Value<String> cardKind = const Value.absent(),
             Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
             Value<String?> question = const Value.absent(),
             Value<String?> suggestions = const Value.absent(),
           }) =>
@@ -3645,6 +3863,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             question: question,
             suggestions: suggestions,
           ),
@@ -3662,6 +3881,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             required String color,
             required String cardKind,
             required bool constraints,
+            Value<String?> preContext = const Value.absent(),
             Value<String?> question = const Value.absent(),
             Value<String?> suggestions = const Value.absent(),
           }) =>
@@ -3679,6 +3899,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             question: question,
             suggestions: suggestions,
           ),
@@ -3750,6 +3971,11 @@ class $$BrainstormingCellItemTableFilterComposer
 
   ColumnFilters<bool> get constraints => $state.composableBuilder(
       column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -3832,6 +4058,11 @@ class $$BrainstormingCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get question => $state.composableBuilder(
       column: $state.table.question,
       builder: (column, joinBuilders) =>
@@ -3858,6 +4089,7 @@ typedef $$EditableCellItemTableCreateCompanionBuilder
   required String color,
   required String cardKind,
   required bool constraints,
+  Value<String?> preContext,
   required String title,
   required String content,
 });
@@ -3876,6 +4108,7 @@ typedef $$EditableCellItemTableUpdateCompanionBuilder
   Value<String> color,
   Value<String> cardKind,
   Value<bool> constraints,
+  Value<String?> preContext,
   Value<String> title,
   Value<String> content,
 });
@@ -3911,6 +4144,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             Value<String> color = const Value.absent(),
             Value<String> cardKind = const Value.absent(),
             Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
             Value<String> title = const Value.absent(),
             Value<String> content = const Value.absent(),
           }) =>
@@ -3928,6 +4162,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             title: title,
             content: content,
           ),
@@ -3945,6 +4180,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             required String color,
             required String cardKind,
             required bool constraints,
+            Value<String?> preContext = const Value.absent(),
             required String title,
             required String content,
           }) =>
@@ -3962,6 +4198,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             title: title,
             content: content,
           ),
@@ -4033,6 +4270,11 @@ class $$EditableCellItemTableFilterComposer
 
   ColumnFilters<bool> get constraints => $state.composableBuilder(
       column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4115,6 +4357,11 @@ class $$EditableCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get title => $state.composableBuilder(
       column: $state.table.title,
       builder: (column, joinBuilders) =>
@@ -4141,6 +4388,7 @@ typedef $$ImageCellItemTableCreateCompanionBuilder = ImageCellItemCompanion
   required String color,
   required String cardKind,
   required bool constraints,
+  Value<String?> preContext,
   required String url,
 });
 typedef $$ImageCellItemTableUpdateCompanionBuilder = ImageCellItemCompanion
@@ -4158,6 +4406,7 @@ typedef $$ImageCellItemTableUpdateCompanionBuilder = ImageCellItemCompanion
   Value<String> color,
   Value<String> cardKind,
   Value<bool> constraints,
+  Value<String?> preContext,
   Value<String> url,
 });
 
@@ -4191,6 +4440,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             Value<String> color = const Value.absent(),
             Value<String> cardKind = const Value.absent(),
             Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
             Value<String> url = const Value.absent(),
           }) =>
               ImageCellItemCompanion(
@@ -4207,6 +4457,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             url: url,
           ),
           createCompanionCallback: ({
@@ -4223,6 +4474,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             required String color,
             required String cardKind,
             required bool constraints,
+            Value<String?> preContext = const Value.absent(),
             required String url,
           }) =>
               ImageCellItemCompanion.insert(
@@ -4239,6 +4491,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             url: url,
           ),
         ));
@@ -4309,6 +4562,11 @@ class $$ImageCellItemTableFilterComposer
 
   ColumnFilters<bool> get constraints => $state.composableBuilder(
       column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4386,6 +4644,11 @@ class $$ImageCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get url => $state.composableBuilder(
       column: $state.table.url,
       builder: (column, joinBuilders) =>
@@ -4407,6 +4670,7 @@ typedef $$ArticleCellItemTableCreateCompanionBuilder = ArticleCellItemCompanion
   required String color,
   required String cardKind,
   required bool constraints,
+  Value<String?> preContext,
   required String title,
   required String content,
 });
@@ -4425,6 +4689,7 @@ typedef $$ArticleCellItemTableUpdateCompanionBuilder = ArticleCellItemCompanion
   Value<String> color,
   Value<String> cardKind,
   Value<bool> constraints,
+  Value<String?> preContext,
   Value<String> title,
   Value<String> content,
 });
@@ -4460,6 +4725,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             Value<String> color = const Value.absent(),
             Value<String> cardKind = const Value.absent(),
             Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
             Value<String> title = const Value.absent(),
             Value<String> content = const Value.absent(),
           }) =>
@@ -4477,6 +4743,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             title: title,
             content: content,
           ),
@@ -4494,6 +4761,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             required String color,
             required String cardKind,
             required bool constraints,
+            Value<String?> preContext = const Value.absent(),
             required String title,
             required String content,
           }) =>
@@ -4511,6 +4779,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             title: title,
             content: content,
           ),
@@ -4582,6 +4851,11 @@ class $$ArticleCellItemTableFilterComposer
 
   ColumnFilters<bool> get constraints => $state.composableBuilder(
       column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4664,6 +4938,11 @@ class $$ArticleCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<String> get title => $state.composableBuilder(
       column: $state.table.title,
       builder: (column, joinBuilders) =>
@@ -4690,6 +4969,7 @@ typedef $$UrlCellItemTableCreateCompanionBuilder = UrlCellItemCompanion
   required String color,
   required String cardKind,
   required bool constraints,
+  Value<String?> preContext,
   required String url,
 });
 typedef $$UrlCellItemTableUpdateCompanionBuilder = UrlCellItemCompanion
@@ -4707,6 +4987,7 @@ typedef $$UrlCellItemTableUpdateCompanionBuilder = UrlCellItemCompanion
   Value<String> color,
   Value<String> cardKind,
   Value<bool> constraints,
+  Value<String?> preContext,
   Value<String> url,
 });
 
@@ -4740,6 +5021,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             Value<String> color = const Value.absent(),
             Value<String> cardKind = const Value.absent(),
             Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
             Value<String> url = const Value.absent(),
           }) =>
               UrlCellItemCompanion(
@@ -4756,6 +5038,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             url: url,
           ),
           createCompanionCallback: ({
@@ -4772,6 +5055,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             required String color,
             required String cardKind,
             required bool constraints,
+            Value<String?> preContext = const Value.absent(),
             required String url,
           }) =>
               UrlCellItemCompanion.insert(
@@ -4788,6 +5072,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             color: color,
             cardKind: cardKind,
             constraints: constraints,
+            preContext: preContext,
             url: url,
           ),
         ));
@@ -4858,6 +5143,11 @@ class $$UrlCellItemTableFilterComposer
 
   ColumnFilters<bool> get constraints => $state.composableBuilder(
       column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4932,6 +5222,11 @@ class $$UrlCellItemTableOrderingComposer
 
   ColumnOrderings<bool> get constraints => $state.composableBuilder(
       column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 

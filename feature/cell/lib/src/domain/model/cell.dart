@@ -79,6 +79,7 @@ class Cell with _$Cell, HasId<CellId> {
     @CellDecorationConverter()
     CellDecoration decoration,
     @Default(false) bool selected,
+    String? preContext,
   }) = UnknownCell;
 
   const factory Cell.brainstorming({
@@ -92,6 +93,7 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
+    String? preContext,
 
     ///
     required String? question,
@@ -109,6 +111,9 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
+    String? preContext,
+
+    ///
     required String title,
     required String content,
   }) = EditableCell;
@@ -124,6 +129,9 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
+    String? preContext,
+
+    ///
     @UriConverter() required Uri url,
   }) = ImageCell;
 
@@ -138,6 +146,9 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
+    String? preContext,
+
+    ///
     required String title,
     required String content,
   }) = ArticleCell;
@@ -153,6 +164,9 @@ class Cell with _$Cell, HasId<CellId> {
     double? preferredHeight,
     @CellDecorationConverter() required CellDecoration decoration,
     @Default(false) bool selected,
+    String? preContext,
+
+    ///
     @UriConverter() required Uri url,
   }) = UrlCell;
 

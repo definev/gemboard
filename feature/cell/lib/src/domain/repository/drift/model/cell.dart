@@ -29,6 +29,7 @@ class BaseCellItem extends Table {
   TextColumn get color => text()();
   TextColumn get cardKind => text()();
   BoolColumn get constraints => boolean()();
+  TextColumn get preContext => text().nullable()();
 }
 
 class BrainstormingCellItem extends BaseCellItem {
@@ -78,13 +79,32 @@ class CellDatabase extends _$CellDatabase {
     );
   }
 
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onUpgrade: (m, from, to) async {
           if (from < 2) {
             await m.createTable($UrlCellItemTable(attachedDatabase));
+          }
+          if (from < 3) {
+            final brainstormingCellItemTable =
+                $BrainstormingCellItemTable(attachedDatabase);
+            await m.addColumn(brainstormingCellItemTable,
+                brainstormingCellItemTable.preContext);
+            final editableCellItemTable =
+                $EditableCellItemTable(attachedDatabase);
+            await m.addColumn(
+                editableCellItemTable, editableCellItemTable.preContext);
+            final imageCellItemTable = $ImageCellItemTable(attachedDatabase);
+            await m.addColumn(
+                imageCellItemTable, imageCellItemTable.preContext);
+            final articleCellItemTable =
+                $ArticleCellItemTable(attachedDatabase);
+            await m.addColumn(
+                articleCellItemTable, articleCellItemTable.preContext);
+            final urlCellItemTable = $UrlCellItemTable(attachedDatabase);
+            await m.addColumn(urlCellItemTable, urlCellItemTable.preContext);
           }
         },
       );

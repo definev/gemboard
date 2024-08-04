@@ -385,6 +385,7 @@ mixin _$Cell {
   @CellDecorationConverter()
   CellDecoration get decoration => throw _privateConstructorUsedError;
   bool get selected => throw _privateConstructorUsedError;
+  String? get preContext => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -395,7 +396,8 @@ mixin _$Cell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -406,6 +408,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -418,6 +421,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -430,6 +434,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -441,6 +446,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -453,6 +459,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) =>
@@ -467,7 +474,8 @@ mixin _$Cell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -478,6 +486,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -490,6 +499,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -502,6 +512,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -513,6 +524,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -525,6 +537,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) =>
@@ -539,7 +552,8 @@ mixin _$Cell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -550,6 +564,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -562,6 +577,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -574,6 +590,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -585,6 +602,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -597,6 +615,7 @@ mixin _$Cell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
@@ -656,7 +675,8 @@ abstract class $CellCopyWith<$Res> {
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
-      bool selected});
+      bool selected,
+      String? preContext});
 
   $CellIdCopyWith<$Res> get id;
   $CellDecorationCopyWith<$Res> get decoration;
@@ -685,6 +705,7 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
   }) {
     return _then(_value.copyWith(
       layer: null == layer
@@ -719,6 +740,10 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -758,7 +783,8 @@ abstract class _$$UnknownCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
-      bool selected});
+      bool selected,
+      String? preContext});
 
   @override
   $CellIdCopyWith<$Res> get id;
@@ -787,6 +813,7 @@ class __$$UnknownCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
   }) {
     return _then(_$UnknownCellImpl(
       layer: null == layer
@@ -821,6 +848,10 @@ class __$$UnknownCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -839,6 +870,7 @@ class _$UnknownCellImpl implements UnknownCell {
       @CellDecorationConverter()
       this.decoration = const CellDecoration(color: ''),
       this.selected = false,
+      this.preContext,
       final String? $type})
       : $type = $type ?? 'unknown';
 
@@ -871,13 +903,15 @@ class _$UnknownCellImpl implements UnknownCell {
   @override
   @JsonKey()
   final bool selected;
+  @override
+  final String? preContext;
 
   @JsonKey(name: 'cellType')
   final String $type;
 
   @override
   String toString() {
-    return 'Cell.unknown(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected)';
+    return 'Cell.unknown(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext)';
   }
 
   @override
@@ -895,13 +929,15 @@ class _$UnknownCellImpl implements UnknownCell {
             (identical(other.decoration, decoration) ||
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
-                other.selected == selected));
+                other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected);
+      preferredHeight, decoration, selected, preContext);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -922,7 +958,8 @@ class _$UnknownCellImpl implements UnknownCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -933,6 +970,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -945,6 +983,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -957,6 +996,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -968,6 +1008,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -980,11 +1021,12 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) {
     return unknown(layer, offset, id, width, height, preferredHeight,
-        decoration, selected);
+        decoration, selected, preContext);
   }
 
   @override
@@ -998,7 +1040,8 @@ class _$UnknownCellImpl implements UnknownCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -1009,6 +1052,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -1021,6 +1065,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -1033,6 +1078,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -1044,6 +1090,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -1056,11 +1103,12 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) {
     return unknown?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected);
+        decoration, selected, preContext);
   }
 
   @override
@@ -1074,7 +1122,8 @@ class _$UnknownCellImpl implements UnknownCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -1085,6 +1134,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -1097,6 +1147,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -1109,6 +1160,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -1120,6 +1172,7 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -1132,13 +1185,14 @@ class _$UnknownCellImpl implements UnknownCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
   }) {
     if (unknown != null) {
       return unknown(layer, offset, id, width, height, preferredHeight,
-          decoration, selected);
+          decoration, selected, preContext);
     }
     return orElse();
   }
@@ -1203,7 +1257,8 @@ abstract class UnknownCell implements Cell {
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() final CellDecoration decoration,
-      final bool selected}) = _$UnknownCellImpl;
+      final bool selected,
+      final String? preContext}) = _$UnknownCellImpl;
 
   factory UnknownCell.fromJson(Map<String, dynamic> json) =
       _$UnknownCellImpl.fromJson;
@@ -1229,6 +1284,8 @@ abstract class UnknownCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+  @override
+  String? get preContext;
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -1255,6 +1312,7 @@ abstract class _$$BrainstormingCellImplCopyWith<$Res>
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
+      String? preContext,
       String? question,
       List<String> suggestions});
 
@@ -1285,6 +1343,7 @@ class __$$BrainstormingCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
     Object? question = freezed,
     Object? suggestions = null,
   }) {
@@ -1321,6 +1380,10 @@ class __$$BrainstormingCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
       question: freezed == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -1345,6 +1408,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
+      this.preContext,
       required this.question,
       required final List<String> suggestions,
       final String? $type})
@@ -1377,6 +1441,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   @override
   @JsonKey()
   final bool selected;
+  @override
+  final String? preContext;
 
   ///
   @override
@@ -1394,7 +1460,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
 
   @override
   String toString() {
-    return 'Cell.brainstorming(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, question: $question, suggestions: $suggestions)';
+    return 'Cell.brainstorming(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, question: $question, suggestions: $suggestions)';
   }
 
   @override
@@ -1413,6 +1479,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext) &&
             (identical(other.question, question) ||
                 other.question == question) &&
             const DeepCollectionEquality()
@@ -1431,6 +1499,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
       preferredHeight,
       decoration,
       selected,
+      preContext,
       question,
       const DeepCollectionEquality().hash(_suggestions));
 
@@ -1454,7 +1523,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -1465,6 +1535,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -1477,6 +1548,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -1489,6 +1561,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -1500,6 +1573,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -1512,11 +1586,12 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) {
     return brainstorming(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, question, suggestions);
+        decoration, selected, preContext, question, suggestions);
   }
 
   @override
@@ -1530,7 +1605,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -1541,6 +1617,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -1553,6 +1630,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -1565,6 +1643,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -1576,6 +1655,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -1588,11 +1668,22 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) {
-    return brainstorming?.call(layer, offset, id, width, height,
-        preferredHeight, decoration, selected, question, suggestions);
+    return brainstorming?.call(
+        layer,
+        offset,
+        id,
+        width,
+        height,
+        preferredHeight,
+        decoration,
+        selected,
+        preContext,
+        question,
+        suggestions);
   }
 
   @override
@@ -1606,7 +1697,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -1617,6 +1709,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -1629,6 +1722,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -1641,6 +1735,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -1652,6 +1747,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -1664,13 +1760,14 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
   }) {
     if (brainstorming != null) {
       return brainstorming(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, question, suggestions);
+          decoration, selected, preContext, question, suggestions);
     }
     return orElse();
   }
@@ -1736,6 +1833,7 @@ abstract class BrainstormingCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
+      final String? preContext,
       required final String? question,
       required final List<String> suggestions}) = _$BrainstormingCellImpl;
 
@@ -1763,6 +1861,8 @@ abstract class BrainstormingCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+  @override
+  String? get preContext;
 
   ///
   String? get question;
@@ -1793,6 +1893,7 @@ abstract class _$$EditableCellImplCopyWith<$Res>
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
+      String? preContext,
       String title,
       String content});
 
@@ -1823,6 +1924,7 @@ class __$$EditableCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
     Object? title = null,
     Object? content = null,
   }) {
@@ -1859,6 +1961,10 @@ class __$$EditableCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -1883,6 +1989,7 @@ class _$EditableCellImpl implements EditableCell {
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
+      this.preContext,
       required this.title,
       required this.content,
       final String? $type})
@@ -1915,6 +2022,10 @@ class _$EditableCellImpl implements EditableCell {
   @JsonKey()
   final bool selected;
   @override
+  final String? preContext;
+
+  ///
+  @override
   final String title;
   @override
   final String content;
@@ -1924,7 +2035,7 @@ class _$EditableCellImpl implements EditableCell {
 
   @override
   String toString() {
-    return 'Cell.editable(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, title: $title, content: $content)';
+    return 'Cell.editable(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title, content: $content)';
   }
 
   @override
@@ -1943,6 +2054,8 @@ class _$EditableCellImpl implements EditableCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content));
   }
@@ -1950,7 +2063,7 @@ class _$EditableCellImpl implements EditableCell {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, title, content);
+      preferredHeight, decoration, selected, preContext, title, content);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -1971,7 +2084,8 @@ class _$EditableCellImpl implements EditableCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -1982,6 +2096,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -1994,6 +2109,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -2006,6 +2122,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -2017,6 +2134,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -2029,11 +2147,12 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) {
     return editable(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, title, content);
+        decoration, selected, preContext, title, content);
   }
 
   @override
@@ -2047,7 +2166,8 @@ class _$EditableCellImpl implements EditableCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -2058,6 +2178,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -2070,6 +2191,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -2082,6 +2204,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -2093,6 +2216,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -2105,11 +2229,12 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) {
     return editable?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, title, content);
+        decoration, selected, preContext, title, content);
   }
 
   @override
@@ -2123,7 +2248,8 @@ class _$EditableCellImpl implements EditableCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -2134,6 +2260,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -2146,6 +2273,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -2158,6 +2286,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -2169,6 +2298,7 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -2181,13 +2311,14 @@ class _$EditableCellImpl implements EditableCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
   }) {
     if (editable != null) {
       return editable(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, title, content);
+          decoration, selected, preContext, title, content);
     }
     return orElse();
   }
@@ -2253,6 +2384,7 @@ abstract class EditableCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
+      final String? preContext,
       required final String title,
       required final String content}) = _$EditableCellImpl;
 
@@ -2280,6 +2412,10 @@ abstract class EditableCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+  @override
+  String? get preContext;
+
+  ///
   String get title;
   String get content;
 
@@ -2307,6 +2443,7 @@ abstract class _$$ImageCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
+      String? preContext,
       @UriConverter() Uri url});
 
   @override
@@ -2336,6 +2473,7 @@ class __$$ImageCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
     Object? url = null,
   }) {
     return _then(_$ImageCellImpl(
@@ -2371,6 +2509,10 @@ class __$$ImageCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -2391,6 +2533,7 @@ class _$ImageCellImpl implements ImageCell {
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
+      this.preContext,
       @UriConverter() required this.url,
       final String? $type})
       : $type = $type ?? 'image';
@@ -2422,6 +2565,10 @@ class _$ImageCellImpl implements ImageCell {
   @JsonKey()
   final bool selected;
   @override
+  final String? preContext;
+
+  ///
+  @override
   @UriConverter()
   final Uri url;
 
@@ -2430,7 +2577,7 @@ class _$ImageCellImpl implements ImageCell {
 
   @override
   String toString() {
-    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, url: $url)';
+    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, url: $url)';
   }
 
   @override
@@ -2449,13 +2596,15 @@ class _$ImageCellImpl implements ImageCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext) &&
             (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, url);
+      preferredHeight, decoration, selected, preContext, url);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -2476,7 +2625,8 @@ class _$ImageCellImpl implements ImageCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -2487,6 +2637,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -2499,6 +2650,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -2511,6 +2663,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -2522,6 +2675,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -2534,11 +2688,12 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) {
     return image(layer, offset, id, width, height, preferredHeight, decoration,
-        selected, this.url);
+        selected, preContext, this.url);
   }
 
   @override
@@ -2552,7 +2707,8 @@ class _$ImageCellImpl implements ImageCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -2563,6 +2719,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -2575,6 +2732,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -2587,6 +2745,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -2598,6 +2757,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -2610,11 +2770,12 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) {
     return image?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, this.url);
+        decoration, selected, preContext, this.url);
   }
 
   @override
@@ -2628,7 +2789,8 @@ class _$ImageCellImpl implements ImageCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -2639,6 +2801,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -2651,6 +2814,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -2663,6 +2827,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -2674,6 +2839,7 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -2686,13 +2852,14 @@ class _$ImageCellImpl implements ImageCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
   }) {
     if (image != null) {
       return image(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, this.url);
+          decoration, selected, preContext, this.url);
     }
     return orElse();
   }
@@ -2758,6 +2925,7 @@ abstract class ImageCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
+      final String? preContext,
       @UriConverter() required final Uri url}) = _$ImageCellImpl;
 
   factory ImageCell.fromJson(Map<String, dynamic> json) =
@@ -2784,6 +2952,10 @@ abstract class ImageCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+  @override
+  String? get preContext;
+
+  ///
   @UriConverter()
   Uri get url;
 
@@ -2811,6 +2983,7 @@ abstract class _$$ArticleCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
+      String? preContext,
       String title,
       String content});
 
@@ -2841,6 +3014,7 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
     Object? title = null,
     Object? content = null,
   }) {
@@ -2877,6 +3051,10 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -2901,6 +3079,7 @@ class _$ArticleCellImpl implements ArticleCell {
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
+      this.preContext,
       required this.title,
       required this.content,
       final String? $type})
@@ -2933,6 +3112,10 @@ class _$ArticleCellImpl implements ArticleCell {
   @JsonKey()
   final bool selected;
   @override
+  final String? preContext;
+
+  ///
+  @override
   final String title;
   @override
   final String content;
@@ -2942,7 +3125,7 @@ class _$ArticleCellImpl implements ArticleCell {
 
   @override
   String toString() {
-    return 'Cell.article(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, title: $title, content: $content)';
+    return 'Cell.article(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title, content: $content)';
   }
 
   @override
@@ -2961,6 +3144,8 @@ class _$ArticleCellImpl implements ArticleCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.content, content) || other.content == content));
   }
@@ -2968,7 +3153,7 @@ class _$ArticleCellImpl implements ArticleCell {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, title, content);
+      preferredHeight, decoration, selected, preContext, title, content);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -2989,7 +3174,8 @@ class _$ArticleCellImpl implements ArticleCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -3000,6 +3186,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -3012,6 +3199,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -3024,6 +3212,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -3035,6 +3224,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -3047,11 +3237,12 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) {
     return article(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, title, content);
+        decoration, selected, preContext, title, content);
   }
 
   @override
@@ -3065,7 +3256,8 @@ class _$ArticleCellImpl implements ArticleCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -3076,6 +3268,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -3088,6 +3281,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -3100,6 +3294,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -3111,6 +3306,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -3123,11 +3319,12 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) {
     return article?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, title, content);
+        decoration, selected, preContext, title, content);
   }
 
   @override
@@ -3141,7 +3338,8 @@ class _$ArticleCellImpl implements ArticleCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -3152,6 +3350,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -3164,6 +3363,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -3176,6 +3376,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -3187,6 +3388,7 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -3199,13 +3401,14 @@ class _$ArticleCellImpl implements ArticleCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
   }) {
     if (article != null) {
       return article(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, title, content);
+          decoration, selected, preContext, title, content);
     }
     return orElse();
   }
@@ -3271,6 +3474,7 @@ abstract class ArticleCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
+      final String? preContext,
       required final String title,
       required final String content}) = _$ArticleCellImpl;
 
@@ -3298,6 +3502,10 @@ abstract class ArticleCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+  @override
+  String? get preContext;
+
+  ///
   String get title;
   String get content;
 
@@ -3325,6 +3533,7 @@ abstract class _$$UrlCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
       bool selected,
+      String? preContext,
       @UriConverter() Uri url});
 
   @override
@@ -3354,6 +3563,7 @@ class __$$UrlCellImplCopyWithImpl<$Res>
     Object? preferredHeight = freezed,
     Object? decoration = null,
     Object? selected = null,
+    Object? preContext = freezed,
     Object? url = null,
   }) {
     return _then(_$UrlCellImpl(
@@ -3389,6 +3599,10 @@ class __$$UrlCellImplCopyWithImpl<$Res>
           ? _value.selected
           : selected // ignore: cast_nullable_to_non_nullable
               as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
       url: null == url
           ? _value.url
           : url // ignore: cast_nullable_to_non_nullable
@@ -3409,6 +3623,7 @@ class _$UrlCellImpl implements UrlCell {
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
       this.selected = false,
+      this.preContext,
       @UriConverter() required this.url,
       final String? $type})
       : $type = $type ?? 'url';
@@ -3440,6 +3655,10 @@ class _$UrlCellImpl implements UrlCell {
   @JsonKey()
   final bool selected;
   @override
+  final String? preContext;
+
+  ///
+  @override
   @UriConverter()
   final Uri url;
 
@@ -3448,7 +3667,7 @@ class _$UrlCellImpl implements UrlCell {
 
   @override
   String toString() {
-    return 'Cell.url(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, url: $url)';
+    return 'Cell.url(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, url: $url)';
   }
 
   @override
@@ -3467,13 +3686,15 @@ class _$UrlCellImpl implements UrlCell {
                 other.decoration == decoration) &&
             (identical(other.selected, selected) ||
                 other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext) &&
             (identical(other.url, url) || other.url == url));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, url);
+      preferredHeight, decoration, selected, preContext, url);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -3494,7 +3715,8 @@ class _$UrlCellImpl implements UrlCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)
+            bool selected,
+            String? preContext)
         unknown,
     required TResult Function(
             int layer,
@@ -3505,6 +3727,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)
         brainstorming,
@@ -3517,6 +3740,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         editable,
@@ -3529,6 +3753,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         image,
     required TResult Function(
@@ -3540,6 +3765,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)
         article,
@@ -3552,11 +3778,12 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)
         url,
   }) {
     return url(layer, offset, id, width, height, preferredHeight, decoration,
-        selected, this.url);
+        selected, preContext, this.url);
   }
 
   @override
@@ -3570,7 +3797,8 @@ class _$UrlCellImpl implements UrlCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult? Function(
             int layer,
@@ -3581,6 +3809,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -3593,6 +3822,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -3605,6 +3835,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult? Function(
@@ -3616,6 +3847,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -3628,11 +3860,12 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
   }) {
     return url?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, this.url);
+        decoration, selected, preContext, this.url);
   }
 
   @override
@@ -3646,7 +3879,8 @@ class _$UrlCellImpl implements UrlCell {
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
-            bool selected)?
+            bool selected,
+            String? preContext)?
         unknown,
     TResult Function(
             int layer,
@@ -3657,6 +3891,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String? question,
             List<String> suggestions)?
         brainstorming,
@@ -3669,6 +3904,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         editable,
@@ -3681,6 +3917,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         image,
     TResult Function(
@@ -3692,6 +3929,7 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             String title,
             String content)?
         article,
@@ -3704,13 +3942,14 @@ class _$UrlCellImpl implements UrlCell {
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
             bool selected,
+            String? preContext,
             @UriConverter() Uri url)?
         url,
     required TResult orElse(),
   }) {
     if (url != null) {
       return url(layer, offset, id, width, height, preferredHeight, decoration,
-          selected, this.url);
+          selected, preContext, this.url);
     }
     return orElse();
   }
@@ -3776,6 +4015,7 @@ abstract class UrlCell implements Cell {
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
       final bool selected,
+      final String? preContext,
       @UriConverter() required final Uri url}) = _$UrlCellImpl;
 
   factory UrlCell.fromJson(Map<String, dynamic> json) = _$UrlCellImpl.fromJson;
@@ -3801,6 +4041,10 @@ abstract class UrlCell implements Cell {
   CellDecoration get decoration;
   @override
   bool get selected;
+  @override
+  String? get preContext;
+
+  ///
   @UriConverter()
   Uri get url;
 
