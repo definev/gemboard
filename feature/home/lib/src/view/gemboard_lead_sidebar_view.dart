@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:folder/folder.dart';
 import 'package:gemboard_common/gemboard_common.dart';
@@ -110,7 +107,6 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                             emoji: StyledText('🗂️'),
                             label: StyledText('Create folder'),
                           ),
-                          // highlight: ButtonHighlight.focus,
                         ),
                         pickerSize: panelSize,
                       );
@@ -122,45 +118,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                   AsyncError() => [],
                   AsyncData(:final value) when value.isEmpty => [
                       SliverFillRemaining(
-                        child: Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              StyledText(
-                                '💎',
-                                style: Style(
-                                  $text.style.ref(TextStyleVariant.emoji),
-                                  $text.style.fontSize(48),
-                                ),
-                              )
-                                  .animate(
-                                      onPlay: (controller) =>
-                                          controller.loop(reverse: true))
-                                  .scaleXY(
-                                    begin: 1.0,
-                                    end: 1.1,
-                                  )
-                                  .shake(
-                                    delay: Duration(seconds: 1),
-                                    duration: Duration(
-                                      milliseconds: 400,
-                                    ),
-                                    hz: 2.5,
-                                    rotation: pi / 10,
-                                  ),
-                              SizedBox(
-                                height: SpaceVariant.small.resolve(context),
-                              ),
-                              StyledText(
-                                'Start your first gemboard',
-                                style: Style(
-                                  $text.style.ref(TextStyleVariant.p),
-                                  $text.textAlign.center(),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
+                        child: EmptyFolderView(),
                       ),
                     ],
                   AsyncData(value: final folders) => [
@@ -254,4 +212,3 @@ class GemboardLeadSidebar extends HookConsumerWidget {
     );
   }
 }
-

@@ -9,6 +9,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:gemboard_common/gemboard_common.dart';
 import 'package:graph_edge/graph_edge.dart';
+import 'package:home/home.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
@@ -79,6 +80,8 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final homeNavigation = ref.read(HomeNavigation.provider);
+
     final id = data.id;
 
     final showChat = useState(false);
@@ -358,6 +361,22 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                   ).future,
                 ),
               ),
+            ),
+            trailing: Button(
+              style: Style(
+                $box.height(32),
+                $box.width(32),
+                $box.margin.horizontal.ref(SpaceVariant.small),
+                $box.borderRadius.circular(SpaceVariant.small.resolve(context)),
+              ),
+              background: ColorVariant.onBackground,
+              onPressed: () async {
+                await ref.read(
+                  deleteWhiteboardProvider(id: id).future,
+                );
+                homeNavigation.goToHome();
+              },
+              child: StyledIcon(IconlyLight.delete),
             ),
           ),
         ],

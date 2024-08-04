@@ -38,6 +38,8 @@ dependencies:
     path: ../../app/gemboard_common
 
   # feature
+  home:
+    path: ../../feature/home
   cell:
     path: ../../feature/cell
   graph_edge:

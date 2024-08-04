@@ -37,6 +37,7 @@ dependencies:
   
   mix: ^1.4.0
   iconly: ^1.0.1
+  flutter_animate: ^4.5.0
   
   flutter_portal: ^1.1.4
   flextras:

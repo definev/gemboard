@@ -13,11 +13,13 @@ class DSAppbar extends StyledWidget {
     super.inherit,
     super.style,
     this.leading,
+    this.trailing,
     this.border,
   });
 
   final Color? border;
   final Widget? leading;
+  final Widget? trailing;
   final Widget title;
 
   @override
@@ -61,6 +63,11 @@ class DSAppbar extends StyledWidget {
                         alignment: Alignment.centerLeft,
                         child: leading,
                       ),
+                    if (trailing case final trailing?)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: trailing,
+                      ),
                   ],
                 ),
               ),
@@ -83,7 +90,7 @@ class DSBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.all(SpaceVariant.small.resolve(context)),
+      padding: EdgeInsets.all(SpaceVariant.small.resolve(context)),
       child: Button(
         style: Style(
           $box.borderRadius.circular(SpaceVariant.gap.resolve(context)),

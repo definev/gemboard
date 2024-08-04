@@ -77,12 +77,14 @@ Future<void> moveCellsAndEdgesToAnotherWhiteboard(
       data: newCells.toList(),
     ).future,
   );
-  await ref.read(
-    createEdgesProvider(
-      parentId: newEdges.first.id.parentId,
-      data: newEdges.toList(),
-    ).future,
-  );
+  if (newEdges.isNotEmpty) {
+    await ref.read(
+      createEdgesProvider(
+        parentId: newEdges.first.id.parentId,
+        data: newEdges.toList(),
+      ).future,
+    );
+  }
 
   await ref.read(
     setWhiteboardPositionProvider(
