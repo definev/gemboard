@@ -158,6 +158,27 @@ class WhiteboardDropZone extends StatelessWidget {
                 }
               },
             );
+          } else if (reader.canProvide(Formats.uri)) {
+            reader.getValue<NamedUri>(
+              Formats.uri,
+              (value) async {
+                if (value != null) {
+                  // You can access values through the `value` property.
+                  debugPrint('Dropped image: ${value.name} | ${value.uri}');
+                  final validImage = await NetworkUtils.validateImage(
+                      value.uri.toString());
+
+                  if (validImage) {
+                    onImageReceived(event.position.local, value.uri);
+                  } else {
+                    onLinkReceived(event.position.local, value.uri);
+                  }
+                }
+              },
+              onError: (error) {
+                debugPrint('Error reading value $error');
+              },
+            );
           } else if (reader.canProvide(Formats.plainText)) {
             reader.getValue<String>(Formats.plainText, (value) {
               if (value != null) {
