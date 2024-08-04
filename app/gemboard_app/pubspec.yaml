@@ -82,8 +82,3 @@ icons_launcher:
 
 flutter:
   uses-material-design: true
-
-  fonts:
-    - family: Apple Color Emoji
-      fonts:
-        - asset: fonts/AppleColorEmoji.ttf
