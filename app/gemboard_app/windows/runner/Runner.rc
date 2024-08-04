@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.definev.gemboard" "\0"
-            VALUE "FileDescription", "gemboard_app" "\0"
+            VALUE "FileDescription", "Gemboard" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "gemboard_app" "\0"
+            VALUE "InternalName", "Gemboard" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.definev.gemboard. All rights reserved." "\0"
-            VALUE "OriginalFilename", "gemboard_app.exe" "\0"
-            VALUE "ProductName", "gemboard_app" "\0"
+            VALUE "OriginalFilename", "Gemboard.exe" "\0"
+            VALUE "ProductName", "Gemboard" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

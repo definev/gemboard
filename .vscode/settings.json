@@ -2,5 +2,19 @@
   "dart.flutterSdkPath": ".fvm/versions/master",
   "search.exclude": {
     "packages/drift": true
+  },
+  "files.associations": {
+    "__hash_table": "cpp",
+    "__split_buffer": "cpp",
+    "__tree": "cpp",
+    "array": "cpp",
+    "bitset": "cpp",
+    "initializer_list": "cpp",
+    "map": "cpp",
+    "set": "cpp",
+    "string": "cpp",
+    "string_view": "cpp",
+    "unordered_map": "cpp",
+    "vector": "cpp"
   }
 }
