@@ -1,4 +1,4 @@
-package com.definev.gemboard.gemboard_app
+package com.zennn.gemboard
 
 import io.flutter.embedding.android.FlutterActivity
 

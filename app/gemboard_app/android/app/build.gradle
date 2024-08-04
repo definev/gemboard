@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.definev.gemboard.gemboard_app"
+    namespace = "com.zennn.gemboard"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.definev.gemboard.gemboard_app"
+        applicationId = "com.zennn.gemboard"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdk = 23

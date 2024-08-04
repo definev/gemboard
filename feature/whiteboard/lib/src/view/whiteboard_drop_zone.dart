@@ -4,9 +4,27 @@ import 'package:cell/cell.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:super_clipboard/super_clipboard.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
+
+final imageFormats = [
+  Formats.jpeg,
+  Formats.png,
+  Formats.gif,
+  Formats.tiff,
+  Formats.webp,
+  Formats.heif,
+  Formats.heic,
+  // Formats.svg,
+];
+
+SimpleFileFormat? canProvideSupportedImageFormat(DataReader reader) {
+  return imageFormats.firstWhereOrNull(
+    (format) => reader.canProvide(format),
+  );
+}
 
 class WhiteboardDropZone extends StatelessWidget {
   const WhiteboardDropZone({
@@ -31,9 +49,9 @@ class WhiteboardDropZone extends StatelessWidget {
   final ScrollableDetails verticalDetails;
 
   final void Function(Cell cell) onCellCreated;
-  final void Function(PerformDropEvent event, Uri uri) onImageReceived;
-  final void Function(PerformDropEvent event, String value) onTextReceived;
-  final void Function(PerformDropEvent event, Uri uri) onLinkReceived;
+  final void Function(Offset offset, Uri uri) onImageReceived;
+  final void Function(Offset offset, String value) onTextReceived;
+  final void Function(Offset offset, Uri uri) onLinkReceived;
 
   final Widget child;
 
@@ -88,21 +106,8 @@ class WhiteboardDropZone extends StatelessWidget {
           bool handled = handleLocalData(item.localData, event.position.local);
           if (handled) continue;
 
-          final imageFormats = [
-            Formats.jpeg,
-            Formats.png,
-            Formats.gif,
-            Formats.tiff,
-            Formats.webp,
-            Formats.heif,
-            Formats.heic,
-            // Formats.svg,
-          ];
-
           final reader = item.dataReader!;
-          final matchedFormat = imageFormats.firstWhereOrNull(
-            (format) => reader.canProvide(format),
-          );
+          final matchedFormat = canProvideSupportedImageFormat(reader);
           if (matchedFormat case final matchedFormat?) {
             reader.getFile(
               matchedFormat,
@@ -115,7 +120,7 @@ class WhiteboardDropZone extends StatelessWidget {
                 try {
                   final stream = value.getStream();
                   await ioSink.addStream(stream);
-                  onImageReceived(event, file.uri);
+                  onImageReceived(event.position.local, file.uri);
                 } catch (e) {
                 } finally {
                   await ioSink.flush();
@@ -137,16 +142,16 @@ class WhiteboardDropZone extends StatelessWidget {
                             value.uri.toString());
 
                         if (validImage) {
-                          onImageReceived(event, value.uri);
+                          onImageReceived(event.position.local, value.uri);
                         } else {
-                          onLinkReceived(event, value.uri);
+                          onLinkReceived(event.position.local, value.uri);
                         }
                       }
                     },
                     onError: (error) {
                       debugPrint('Error reading value $error');
                       if (uri case final uri?) {
-                        onLinkReceived(event, uri);
+                        onLinkReceived(event.position.local, uri);
                       }
                     },
                   );
@@ -160,9 +165,9 @@ class WhiteboardDropZone extends StatelessWidget {
                 debugPrint('Dropped text: $value');
                 final uri = Uri.tryParse(value);
                 if (uri != null && uri.scheme.isNotEmpty) {
-                  onLinkReceived(event, uri);
+                  onLinkReceived(event.position.local, uri);
                 } else {
-                  onTextReceived(event, value);
+                  onTextReceived(event.position.local, value);
                 }
               }
             }, onError: (error) {

@@ -1219,7 +1219,7 @@ packages:
     source: hosted
     version: "1.1.0"
   super_clipboard:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: super_clipboard
       sha256: c72d2ae8c3a66b20a104523add86b7c2813b1d4cced893a9764b84fb97ac8e2a

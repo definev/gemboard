@@ -16,6 +16,7 @@ import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
 import 'package:whiteboard/src/domain/repository/whiteboard_object_stack.dart';
 import 'package:whiteboard/src/view/whiteboard_drop_zone.dart';
+import 'package:whiteboard/src/view/whiteboard_focusable_gesture.dart';
 import 'package:whiteboard/src/widget/cell_builder.dart';
 import 'package:whiteboard/src/widget/edge_builder.dart';
 import 'package:whiteboard/src/widget/selection_cells_view.dart';
@@ -303,66 +304,85 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       verticalDetails: verticalDetails,
       scaleFactor: scaleFactor.value,
       onCellCreated: cell_onCreated,
-      onImageReceived: (event, uri) {
-        final cell = Cell.image(
-          id: CellId(
-            id: Helper.createId(),
-            parentId: CellParentId(
-              whiteboardId: widget.data.id.id,
-            ),
-          ),
-          offset: offsetToViewport(event.position.local),
-          width: cellWidth,
-          decoration: CellDecoration(color: ColorVariant.purple.name),
-          url: uri,
-        );
-
-        cell_moveViewportToCenterOfCell(cell);
-
-        cellKeys[cell.id.id] = (
-          GlobalKey(debugLabel: 'WhiteboardView.cell | ${cell.id.id}'),
-          cell
-        );
-
-        setState(() {});
-
-        widget.onCellCreated(cell);
-      },
-      onTextReceived: (event, value) {
-        final cell = Cell.article(
-          id: CellId(
-            id: Helper.createId(),
-            parentId: CellParentId(
-              whiteboardId: widget.data.id.id,
-            ),
-          ),
-          offset: offsetToViewport(event.position.local),
-          width: cellWidth,
-          decoration: CellDecoration(color: ColorVariant.green.name),
-          title: 'Text',
-          content: value,
-        );
-        cell_moveViewportToCenterOfCell(cell);
-        widget.onCellCreated(cell);
-      },
-      onLinkReceived: (event, value) {
-        final cell = Cell.url(
-          id: CellId(
-            id: Helper.createId(),
-            parentId: CellParentId(
-              whiteboardId: widget.data.id.id,
-            ),
-          ),
-          offset: offsetToViewport(event.position.local),
-          width: 330 * widget.canvasScale,
-          decoration: CellDecoration(color: ColorVariant.yellow.name),
-          url: value,
-        );
-        cell_moveViewportToCenterOfCell(cell);
-        widget.onCellCreated(cell);
-      },
+      onImageReceived: _cell_onImageReceived,
+      onTextReceived: _cell_onTextReceived,
+      onLinkReceived: _cell_onLinkReceived,
       child: child,
     );
+  }
+
+  void _cell_onImageReceived(Offset position, Uri uri) {
+    final cell = Cell.image(
+      id: CellId(
+        id: Helper.createId(),
+        parentId: CellParentId(
+          whiteboardId: widget.data.id.id,
+        ),
+      ),
+      offset: offsetToViewport(position),
+      width: cellWidth,
+      decoration: CellDecoration(color: ColorVariant.purple.name),
+      url: uri,
+    );
+
+    cell_moveViewportToCenterOfCell(cell);
+
+    cellKeys[cell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${cell.id.id}'),
+      cell,
+    );
+    setState(() {});
+
+    widget.onCellCreated(cell);
+  }
+
+  void _cell_onTextReceived(Offset event, String value) {
+    final cell = Cell.article(
+      id: CellId(
+        id: Helper.createId(),
+        parentId: CellParentId(
+          whiteboardId: widget.data.id.id,
+        ),
+      ),
+      offset: offsetToViewport(event),
+      width: cellWidth,
+      decoration: CellDecoration(color: ColorVariant.green.name),
+      title: 'Text',
+      content: value,
+    );
+
+    cell_moveViewportToCenterOfCell(cell);
+    cellKeys[cell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${cell.id.id}'),
+      cell,
+    );
+    setState(() {});
+
+    widget.onCellCreated(cell);
+  }
+
+  void _cell_onLinkReceived(Offset event, Uri value) {
+    final cell = Cell.url(
+      id: CellId(
+        id: Helper.createId(),
+        parentId: CellParentId(
+          whiteboardId: widget.data.id.id,
+        ),
+      ),
+      offset: offsetToViewport(event),
+      width: 330 * widget.canvasScale,
+      decoration: CellDecoration(color: ColorVariant.yellow.name),
+      url: value,
+    );
+
+    cell_moveViewportToCenterOfCell(cell);
+    cellKeys[cell.id.id] = (
+      GlobalKey(debugLabel: 'WhiteboardView.cell | ${cell.id.id}'),
+      cell,
+    );
+    setState(() {});
+
+    widget.onCellCreated(cell);
   }
 
   @override
@@ -584,41 +604,18 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       child: child,
     );
 
+    child = buildTheme(
+      child: child,
+    );
+
+    child = buildShortcuts(
+      child: child,
+    );
+
     return LayoutBuilder(
       builder: (context, constraints) {
         this.constraints = constraints;
-        return MixTheme(
-          data: mixTheme.copyWith(
-            spaces: scaleSpaces(widget.canvasScale),
-          ),
-          child: DesignSystemTheme(
-            data: designSystemThemeData.copyWith(scale: widget.canvasScale),
-            child: Builder(
-              builder: (context) {
-                return Theme(
-                  data: Theme.of(context).copyWith(
-                    scrollbarTheme: ScrollbarThemeData(
-                      thickness: WidgetStateProperty.resolveWith(
-                        (states) {
-                          if (states.contains(WidgetState.hovered)) {
-                            return SpaceVariant.small.resolve(context);
-                          }
-                          return SpaceVariant.gap.resolve(context);
-                        },
-                      ),
-                      crossAxisMargin: 0,
-                      interactive: true,
-                      thumbColor: WidgetStatePropertyAll(ColorVariant.outline
-                          .resolve(context)
-                          .withOpacity(0.5)),
-                    ),
-                  ),
-                  child: child,
-                );
-              },
-            ),
-          ),
-        );
+        return child;
       },
     );
   }
@@ -1567,5 +1564,49 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       ..._cellProcessors[cell.id.id] ?? {},
       'generate': subscription,
     };
+  }
+
+  Widget buildTheme({required Widget child}) {
+    return MixTheme(
+      data: mixTheme.copyWith(
+        spaces: scaleSpaces(widget.canvasScale),
+      ),
+      child: DesignSystemTheme(
+        data: designSystemThemeData.copyWith(scale: widget.canvasScale),
+        child: Builder(
+          builder: (context) {
+            return Theme(
+              data: Theme.of(context).copyWith(
+                scrollbarTheme: ScrollbarThemeData(
+                  thickness: WidgetStateProperty.resolveWith(
+                    (states) {
+                      if (states.contains(WidgetState.hovered)) {
+                        return SpaceVariant.small.resolve(context);
+                      }
+                      return SpaceVariant.gap.resolve(context);
+                    },
+                  ),
+                  crossAxisMargin: 0,
+                  interactive: true,
+                  thumbColor: WidgetStatePropertyAll(
+                      ColorVariant.outline.resolve(context).withOpacity(0.5)),
+                ),
+              ),
+              child: child,
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget buildShortcuts({required Widget child}) {
+    return WhiteboardFocusableGesture(
+      id: widget.data.id,
+      onImageReceived: _cell_onImageReceived,
+      onLinkReceived: _cell_onLinkReceived,
+      onTextReceived: _cell_onTextReceived,
+      child: child,
+    );
   }
 }
