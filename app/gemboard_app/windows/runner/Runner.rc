@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.definev.gemboard" "\0"
-            VALUE "FileDescription", "Gemboard" "\0"
+            VALUE "CompanyName", "com.zennn.gemboard" "\0"
+            VALUE "FileDescription", "gemboard" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Gemboard" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2024 com.definev.gemboard. All rights reserved." "\0"
-            VALUE "OriginalFilename", "Gemboard.exe" "\0"
-            VALUE "ProductName", "Gemboard" "\0"
+            VALUE "InternalName", "gemboard" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2024 com.zennn.gemboard. All rights reserved." "\0"
+            VALUE "OriginalFilename", "gemboard.exe" "\0"
+            VALUE "ProductName", "gemboard" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
