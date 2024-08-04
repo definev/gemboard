@@ -46,6 +46,8 @@ dependencies:
     path: ../../feature/graph_edge
   folder:
     path: ../../feature/folder
+  settings:
+    path: ../../feature/settings
 
   # utils
   utils:

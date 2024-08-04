@@ -45,6 +45,8 @@ dependencies:
     path: ../../feature/settings
   folder:
     path: ../../feature/folder
+  llm:
+    path: ../../feature/llm
   
   mix: ^1.4.0
   flextras: ^1.0.0

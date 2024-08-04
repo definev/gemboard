@@ -14,6 +14,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mix/mix.dart';
+import 'package:settings/settings.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/cursor_mode.dart';
@@ -616,11 +617,21 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: HookBuilder(
-                builder: (context) {
+            Positioned.fill(
+              child: HookConsumer(
+                builder: (context, ref, child) {
                   final open = useState(false);
+                  ref.listen(
+                    getIsOnboardedProvider,
+                    (_, next) async {
+                      if (next is AsyncData) {
+                        open.value = !next.value!;
+                        if (next.value == false) {
+                          await ref.read(setIsOnboardedProvider(true).future);
+                        }
+                      }
+                    },
+                  );
 
                   final openStyle = Style(
                     $box.margin.all.ref(SpaceVariant.medium),
@@ -638,16 +649,43 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                     $with.scale(1),
                   );
 
-                  return Button(
-                    style: switch (open.value) {
-                      true => openStyle,
-                      false => closeStyle,
-                    },
-                    onPressed: () => open.value = !open.value,
-                    child: switch (open.value) {
-                      false => StyledIcon(LineIcons.questionCircleAlt),
-                      true => GuideView(),
-                    },
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: IgnorePointer(
+                          ignoring: !open.value,
+                          child: GestureDetector(
+                            onTap: () => open.value = false,
+                            child: Box(
+                              style: Style(
+                                switch (open.value) {
+                                  true => $box.color(ColorVariant.onBackground
+                                      .resolve(context)
+                                      .withOpacity(OpacityVariant.hightlight
+                                          .resolve(context)
+                                          .value)),
+                                  false => $box.color.transparent(),
+                                },
+                              ).animate(),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Button(
+                          style: switch (open.value) {
+                            true => openStyle,
+                            false => closeStyle,
+                          },
+                          onPressed: () => open.value = !open.value,
+                          child: switch (open.value) {
+                            false => StyledIcon(LineIcons.questionCircleAlt),
+                            true => GuideView(),
+                          },
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
