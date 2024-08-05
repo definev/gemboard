@@ -2,20 +2,22 @@ part of '../router.dart';
 
 @TypedShellRoute<RootShell>(
   routes: [
-    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
     TypedShellRoute<HomeShell>(
       routes: [
-        TypedGoRoute<HomeGreetingRoute>(
-          path: HomeGreetingRoute.location,
+        TypedGoRoute<HomeGreetingRoute>(path: HomeGreetingRoute.location),
+        TypedGoRoute<WhiteboardEditorRoute>(
+          path: WhiteboardEditorRoute.location,
           routes: [
-            TypedGoRoute<WhiteboardEditorRoute>(
-                path: WhiteboardEditorRoute.subLocation),
+            TypedGoRoute<WhiteboardExportRoute>(
+                path: WhiteboardExportRoute.subLocation),
           ],
         ),
       ],
     ),
+    TypedGoRoute<SettingsRoute>(path: SettingsRoute.location),
     TypedGoRoute<WhiteboardSelectorRoute>(
-        path: WhiteboardSelectorRoute.location),
+      path: WhiteboardSelectorRoute.location,
+    ),
   ],
 )
 class RootShell extends ShellRouteData {

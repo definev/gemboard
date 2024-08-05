@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home/home.dart';
+import 'package:import_export/import_export.dart';
 import 'package:settings/settings.dart';
+import 'package:utils/utils.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 part 'router.g.dart';
@@ -13,53 +15,13 @@ part 'routes/home.dart';
 part 'routes/home.greeting.dart';
 part 'routes/settings.dart';
 part 'routes/whiteboard.dart';
+part 'routes/whiteboard.export.dart';
 part 'routes/whiteboard.selector.dart';
 
 final router = () {
-  return GoRouter(
-    navigatorKey: RootShell.$navigatorKey,
-    routes: [
-      GoRoute(
-        parentNavigatorKey: RootShell.$navigatorKey,
-        path: SettingsRoute.location,
-        pageBuilder: (context, state) =>
-            $SettingsRouteExtension._fromState(state).buildPage(context, state),
-      ),
-      ShellRoute(
-        parentNavigatorKey: RootShell.$navigatorKey,
-        navigatorKey: HomeShell.$navigatorKey,
-        builder: (context, state, navigator) => $HomeShellExtension
-            ._fromState(state)
-            .builder(context, state, navigator),
-        routes: [
-          GoRoute(
-            path: HomeGreetingRoute.location,
-            parentNavigatorKey: HomeShell.$navigatorKey,
-            builder: (context, state) => $HomeGreetingRouteExtension
-                ._fromState(state)
-                .build(context, state),
-            routes: [
-              GoRoute(
-                path: WhiteboardEditorRoute.subLocation,
-                parentNavigatorKey: HomeShell.$navigatorKey,
-                builder: (context, state) => $WhiteboardEditorRouteExtension
-                    ._fromState(state)
-                    .build(context, state),
-              ),
-            ],
-          ),
-        ],
-      ),
-      GoRoute(
-        parentNavigatorKey: RootShell.$navigatorKey,
-        path: WhiteboardSelectorRoute.location,
-        pageBuilder: (context, state) => $WhiteboardSelectorRouteExtension
-            ._fromState(state)
-            .buildPage(context, state),
-      ),
-    ],
+  final router = GoRouter(
+    routes: $appRoutes,
     initialLocation: HomeGreetingRoute.location,
-    // initialLocation: MyDeskRoute.location,
-    initialExtra: HomeShell.resizableController,
   );
+  return router;
 }();

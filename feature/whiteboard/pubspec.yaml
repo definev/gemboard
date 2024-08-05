@@ -48,6 +48,8 @@ dependencies:
     path: ../../feature/folder
   settings:
     path: ../../feature/settings
+  import_export:
+    path: ../../feature/import_export
 
   # utils
   utils:

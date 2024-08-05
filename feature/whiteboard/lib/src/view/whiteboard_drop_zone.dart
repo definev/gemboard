@@ -51,7 +51,8 @@ class WhiteboardDropZone extends StatelessWidget {
   final void Function(Cell cell) onCellCreated;
   final void Function(Offset offset, Uri uri) onImageReceived;
   final void Function(Offset offset, String value) onTextReceived;
-  final void Function(Offset offset, Uri uri) onLinkReceived;
+  final void Function(Offset offset, Uri uri, {required bool moveToNewCell})
+      onLinkReceived;
 
   final Widget child;
 
@@ -65,6 +66,22 @@ class WhiteboardDropZone extends StatelessWidget {
 
   bool handleLocalData(Object? localData, Offset position) {
     if (localData case Map<String, dynamic>()) {
+      if (localData['type'] == 'markdown') {
+        /// Handle link
+        final element = localData['element'];
+        switch (element['tag']) {
+          case 'a':
+            onLinkReceived(
+              position,
+              Uri.parse(element['href']),
+              moveToNewCell: false,
+            );
+            return true;
+          default:
+            return false;
+        }
+      }
+
       try {
         var cell = Cell.fromJson(localData);
         cell = cell.copyWith(
@@ -144,14 +161,22 @@ class WhiteboardDropZone extends StatelessWidget {
                         if (validImage) {
                           onImageReceived(event.position.local, value.uri);
                         } else {
-                          onLinkReceived(event.position.local, value.uri);
+                          onLinkReceived(
+                            event.position.local,
+                            value.uri,
+                            moveToNewCell: true,
+                          );
                         }
                       }
                     },
                     onError: (error) {
                       debugPrint('Error reading value $error');
                       if (uri case final uri?) {
-                        onLinkReceived(event.position.local, uri);
+                        onLinkReceived(
+                          event.position.local,
+                          uri,
+                          moveToNewCell: true,
+                        );
                       }
                     },
                   );
@@ -165,13 +190,17 @@ class WhiteboardDropZone extends StatelessWidget {
                 if (value != null) {
                   // You can access values through the `value` property.
                   debugPrint('Dropped image: ${value.name} | ${value.uri}');
-                  final validImage = await NetworkUtils.validateImage(
-                      value.uri.toString());
+                  final validImage =
+                      await NetworkUtils.validateImage(value.uri.toString());
 
                   if (validImage) {
                     onImageReceived(event.position.local, value.uri);
                   } else {
-                    onLinkReceived(event.position.local, value.uri);
+                    onLinkReceived(
+                      event.position.local,
+                      value.uri,
+                      moveToNewCell: true,
+                    );
                   }
                 }
               },
@@ -186,7 +215,11 @@ class WhiteboardDropZone extends StatelessWidget {
                 debugPrint('Dropped text: $value');
                 final uri = Uri.tryParse(value);
                 if (uri != null && uri.scheme.isNotEmpty) {
-                  onLinkReceived(event.position.local, uri);
+                  onLinkReceived(
+                    event.position.local,
+                    uri,
+                    moveToNewCell: true,
+                  );
                 } else {
                   onTextReceived(event.position.local, value);
                 }

@@ -6,8 +6,8 @@ class WhiteboardEditorRoute extends GoRouteData {
     this.folderId,
   });
 
-  static const location = '/whiteboard/:id';
-  static const subLocation = ':id';
+  static const location = '/whiteboard/q/:id';
+  static const subLocation = 'q/:id';
 
   static final $parentNavigatorKey = HomeShell.$navigatorKey;
 

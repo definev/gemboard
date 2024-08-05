@@ -3,7 +3,7 @@ part of '../router.dart';
 class HomeGreetingRoute extends GoRouteData {
   const HomeGreetingRoute();
 
-  static const location = '/';
+  static const location = '/greeting';
   static final $parentNavigatorKey = HomeShell.$navigatorKey;
 
   @override

@@ -19,5 +19,6 @@ export 'src/networks/link_preview/parser/base.dart';
 export 'src/networks/link_preview/utilities/http_redirect_check.dart';
 export 'src/networks/link_preview/utilities/image_provider.dart';
 export 'src/repository/crud_dto_repository.dart';
+export 'src/router/dialog_page.dart';
 export 'src/string.dart';
 export 'src/widget/widget_size_listener.dart';

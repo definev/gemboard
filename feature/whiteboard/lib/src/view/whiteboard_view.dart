@@ -372,7 +372,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellCreated(cell);
   }
 
-  void cell_onLinkReceived(Offset event, Uri value) {
+  void cell_onLinkReceived(
+    Offset event,
+    Uri value, {
+    bool moveToNewCell = true,
+  }) {
     final cell = Cell.url(
       id: CellId(
         id: Helper.createId(),
@@ -386,7 +390,9 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       url: value,
     );
 
-    cell_moveViewportToCenterOfCell(cell);
+    if (moveToNewCell) {
+      cell_moveViewportToCenterOfCell(cell);
+    }
     cellKeys[cell.id.id] = (
       GlobalKey(debugLabel: 'WhiteboardView.cell | ${cell.id.id}'),
       cell,

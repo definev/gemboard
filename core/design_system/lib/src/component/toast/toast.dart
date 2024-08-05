@@ -14,8 +14,13 @@ final class DSToast {
     Alignment alignment = Alignment.topCenter,
   }) {
     toastification.dismissAll();
-    final missingApiKey = title ==
-        '''Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.''';
+    final missingApiKey = switch (title) {
+      'Exception: API key is required' => true,
+      '''Method doesn't allow unregistered callers (callers without established identity). Please use API Key or other form of API consumer identity to call this API.''' =>
+        true,
+      _ => false,
+    };
+
     return toastification.showCustom(
       context: context, // optional if you use ToastificationWrapper
       dismissDirection: DismissDirection.up,
@@ -105,6 +110,59 @@ final class DSToast {
         true => null,
         false => const Duration(seconds: 5),
       },
+      alignment: alignment,
+    );
+  }
+
+  static ToastificationItem success({
+    required BuildContext context,
+    required String title,
+    Alignment alignment = Alignment.topCenter,
+  }) {
+    toastification.dismissAll();
+
+    return toastification.showCustom(
+      context: context, // optional if you use ToastificationWrapper
+      dismissDirection: DismissDirection.up,
+      builder: (context, holder) {
+        var notificationRow = StyledRow(
+          style: Style(
+            $flex.gap.ref(SpaceVariant.medium),
+          ),
+          children: [
+            StyledIcon(
+              LineIcons.check,
+              style: Style(
+                $icon.color.ref(ColorVariant.green),
+              ),
+            ),
+            Expanded(
+              child: StyledText(title),
+            ),
+            GestureDetector(
+              onTap: () => toastification.dismiss(holder),
+              child: StyledIcon(
+                LineIcons.times,
+                style: Style(
+                  $icon.color.ref(ColorVariant.green),
+                ),
+              ),
+            ),
+          ],
+        );
+        return DSCard(
+          style: Style(
+            $box.padding.all(SpaceVariant.small.resolve(context)),
+            $box.margin.bottom(SpaceVariant.medium.resolve(context)),
+            $box.margin.top(18 + SpaceVariant.small.resolve(context)),
+          ),
+          kind: DSCardKind.outlined,
+          background: ColorVariant.green,
+          child: notificationRow,
+        );
+      },
+      animationDuration: Duration(milliseconds: 300),
+      autoCloseDuration: const Duration(seconds: 5),
       alignment: alignment,
     );
   }

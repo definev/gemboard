@@ -51,7 +51,7 @@ class GemboardApp extends StatelessWidget {
               top: md.padding.top +
                   switch (defaultTargetPlatform) {
                     TargetPlatform.macOS => titlebarHeight,
-                    TargetPlatform.windows => titlebarHeight,
+                    // TargetPlatform.windows => titlebarHeight,
                     _ => 0,
                   },
             ),

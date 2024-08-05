@@ -11,6 +11,7 @@ import 'package:graph_edge/graph_edge.dart';
 import 'package:home/home.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:import_export/import_export.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:mix/mix.dart';
 import 'package:settings/settings.dart';
@@ -82,6 +83,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final homeNavigation = ref.read(HomeNavigation.provider);
+    final importExportNavigation = ref.read(ImportExportNavigation.provider);
 
     final id = data.id;
 
@@ -224,21 +226,48 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                 ),
               ),
             ),
-            trailing: Button(
-              style: Style(
-                $box.height(32),
-                $box.width(32),
-                $box.margin.horizontal.ref(SpaceVariant.small),
-                $box.borderRadius.circular(SpaceVariant.small.resolve(context)),
-              ),
-              background: ColorVariant.onBackground,
-              onPressed: () async {
-                await ref.read(
-                  deleteWhiteboardProvider(id: id).future,
-                );
-                homeNavigation.goToHome();
-              },
-              child: StyledIcon(IconlyLight.delete),
+            trailing: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                DSTooltip(
+                  label: StyledText('Export file'),
+                  alignment: Alignment.bottomCenter,
+                  child: Button(
+                    style: Style(
+                      $box.height(32),
+                      $box.width(32),
+                      $box.borderRadius
+                          .circular(SpaceVariant.small.resolve(context)),
+                    ),
+                    background: ColorVariant.onBackground,
+                    onPressed: () async {
+                      importExportNavigation.pushToExportFlow(id);
+                    },
+                    child: StyledIcon(IconlyLight.upload),
+                  ),
+                ),
+                DSTooltip(
+                  label: StyledText('Delete'),
+                  alignment: Alignment.bottomCenter,
+                  child: Button(
+                    style: Style(
+                      $box.height(32),
+                      $box.width(32),
+                      $box.margin.horizontal.ref(SpaceVariant.small),
+                      $box.borderRadius
+                          .circular(SpaceVariant.small.resolve(context)),
+                    ),
+                    background: ColorVariant.onBackground,
+                    onPressed: () async {
+                      await ref.read(
+                        deleteWhiteboardProvider(id: id).future,
+                      );
+                      homeNavigation.goToHome();
+                    },
+                    child: StyledIcon(IconlyLight.delete),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

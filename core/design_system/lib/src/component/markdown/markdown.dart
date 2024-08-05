@@ -8,8 +8,8 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:mix/mix.dart';
+import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class DSMarkdownBody extends StatelessWidget {
   const DSMarkdownBody({
@@ -27,12 +27,9 @@ class DSMarkdownBody extends StatelessWidget {
     final textSpec = TextSpec.of(context);
 
     var builders = {
-      'code': CodeElementBuilder(context),
+      'code': CodeElementBuilder(),
+      'a': LinkElementBuilder(),
     };
-    final onTapLink = (text, href, title) => switch (href) {
-          final href? => launchUrlString(href),
-          _ => null,
-        };
 
     final h4 = TextStyleVariant.h5
         .resolve(context)
@@ -118,13 +115,11 @@ class DSMarkdownBody extends StatelessWidget {
       false => MarkdownBody(
           data: data,
           builders: builders,
-          onTapLink: onTapLink,
           styleSheet: markdownStyleSheet,
         ),
       true => SuperListMarkdown(
           data: data,
           builders: builders,
-          onTapLink: onTapLink,
           styleSheet: markdownStyleSheet,
         ),
     };
@@ -192,12 +187,11 @@ class SuperListMarkdown extends MarkdownWidget {
 }
 
 class CodeElementBuilder extends MarkdownElementBuilder {
-  final BuildContext context;
-
-  CodeElementBuilder(this.context);
+  CodeElementBuilder();
 
   @override
-  Widget? visitElementAfter(md.Element element, TextStyle? preferredStyle) {
+  Widget? visitElementAfterWithContext(BuildContext context, md.Element element,
+      TextStyle? preferredStyle, TextStyle? parentStyle) {
     final scale = DesignSystemTheme.of(context).scale;
 
     var language = '';
@@ -265,6 +259,56 @@ class CodeElementBuilder extends MarkdownElementBuilder {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class LinkElementBuilder extends MarkdownElementBuilder {
+  LinkElementBuilder();
+
+  @override
+  Widget? visitElementAfterWithContext(
+    BuildContext context,
+    md.Element element,
+    TextStyle? preferredStyle,
+    TextStyle? parentStyle,
+  ) {
+    final text = element.textContent;
+    final href = element.attributes['href'];
+
+    return Text.rich(
+      WidgetSpan(
+        child: DragItemWidget(
+          dragItemProvider: (request) async {
+            // DragItem represents the content begin dragged.
+            final item = DragItem(
+              localData: {
+                'type': 'markdown',
+                'element': {
+                  'tag': 'a',
+                  'text': text,
+                  'href': href,
+                },
+              },
+            );
+            item.add(Formats.plainText(href ?? ''));
+            return item;
+          },
+          allowedOperations: () => [DropOperation.copy],
+          // DraggableWidget represents the actual draggable area. It looks
+          // for parent DragItemWidget in widget hierarchy to provide the DragItem.
+          child: DraggableWidget(
+            child: Text(
+              text,
+              style: TextStyleVariant.medium
+                  .resolve(context)
+                  .merge(preferredStyle),
+            ),
+          ),
+        ),
+        alignment: PlaceholderAlignment.baseline,
+        baseline: TextBaseline.alphabetic,
       ),
     );
   }

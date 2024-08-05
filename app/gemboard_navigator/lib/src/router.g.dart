@@ -14,29 +14,34 @@ RouteBase get $rootShell => ShellRouteData.$route(
       navigatorKey: RootShell.$navigatorKey,
       factory: $RootShellExtension._fromState,
       routes: [
-        GoRouteData.$route(
-          path: '/settings',
-          parentNavigatorKey: SettingsRoute.$parentNavigatorKey,
-          factory: $SettingsRouteExtension._fromState,
-        ),
         ShellRouteData.$route(
           navigatorKey: HomeShell.$navigatorKey,
           parentNavigatorKey: HomeShell.$parentNavigatorKey,
           factory: $HomeShellExtension._fromState,
           routes: [
             GoRouteData.$route(
-              path: '/',
+              path: '/greeting',
               parentNavigatorKey: HomeGreetingRoute.$parentNavigatorKey,
               factory: $HomeGreetingRouteExtension._fromState,
+            ),
+            GoRouteData.$route(
+              path: '/whiteboard/q/:id',
+              parentNavigatorKey: WhiteboardEditorRoute.$parentNavigatorKey,
+              factory: $WhiteboardEditorRouteExtension._fromState,
               routes: [
                 GoRouteData.$route(
-                  path: ':id',
-                  parentNavigatorKey: WhiteboardEditorRoute.$parentNavigatorKey,
-                  factory: $WhiteboardEditorRouteExtension._fromState,
+                  path: 'export',
+                  parentNavigatorKey: WhiteboardExportRoute.$parentNavigatorKey,
+                  factory: $WhiteboardExportRouteExtension._fromState,
                 ),
               ],
             ),
           ],
+        ),
+        GoRouteData.$route(
+          path: '/settings',
+          parentNavigatorKey: SettingsRoute.$parentNavigatorKey,
+          factory: $SettingsRouteExtension._fromState,
         ),
         GoRouteData.$route(
           path: '/whiteboard/selector',
@@ -50,23 +55,6 @@ extension $RootShellExtension on RootShell {
   static RootShell _fromState(GoRouterState state) => const RootShell();
 }
 
-extension $SettingsRouteExtension on SettingsRoute {
-  static SettingsRoute _fromState(GoRouterState state) => const SettingsRoute();
-
-  String get location => GoRouteData.$location(
-        '/settings',
-      );
-
-  void go(BuildContext context) => context.go(location);
-
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  void replace(BuildContext context) => context.replace(location);
-}
-
 extension $HomeShellExtension on HomeShell {
   static HomeShell _fromState(GoRouterState state) => const HomeShell();
 }
@@ -76,7 +64,7 @@ extension $HomeGreetingRouteExtension on HomeGreetingRoute {
       const HomeGreetingRoute();
 
   String get location => GoRouteData.$location(
-        '/',
+        '/greeting',
       );
 
   void go(BuildContext context) => context.go(location);
@@ -97,10 +85,51 @@ extension $WhiteboardEditorRouteExtension on WhiteboardEditorRoute {
       );
 
   String get location => GoRouteData.$location(
-        '/${Uri.encodeComponent(id)}',
+        '/whiteboard/q/${Uri.encodeComponent(id)}',
         queryParams: {
           if (folderId != null) 'folder-id': folderId,
         },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $WhiteboardExportRouteExtension on WhiteboardExportRoute {
+  static WhiteboardExportRoute _fromState(GoRouterState state) =>
+      WhiteboardExportRoute(
+        id: state.pathParameters['id']!,
+        folderId: state.uri.queryParameters['folder-id'],
+      );
+
+  String get location => GoRouteData.$location(
+        '/whiteboard/q/${Uri.encodeComponent(id)}/export',
+        queryParams: {
+          if (folderId != null) 'folder-id': folderId,
+        },
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $SettingsRouteExtension on SettingsRoute {
+  static SettingsRoute _fromState(GoRouterState state) => const SettingsRoute();
+
+  String get location => GoRouteData.$location(
+        '/settings',
       );
 
   void go(BuildContext context) => context.go(location);

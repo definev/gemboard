@@ -35,7 +35,7 @@ class HomeShell extends ShellRouteData {
     GoRouterState state,
     Widget navigator,
   ) {
-    return CupertinoModalSheetPage(
+    return MaterialPage(
       key: state.pageKey,
       child: builder(context, state, navigator),
     );
