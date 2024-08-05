@@ -33,9 +33,9 @@ Raw<Stream<String>> generateContentWithMultipleCell(
   );
 
   await for (final content in stream) {
-    if (content.promptFeedback?.blockReasonMessage case final message?) {
-      throw Exception(message);
-    }
+    // if (content.promptFeedback?.blockReasonMessage case final message?) {
+    //   throw Exception(message);
+    // }
     yield content.text ?? '';
   }
 }

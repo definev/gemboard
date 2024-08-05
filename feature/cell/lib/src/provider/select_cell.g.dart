@@ -6,7 +6,7 @@ part of 'select_cell.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$selectCellHash() => r'6649b88d904152527d89909dce2666aaec747d1b';
+String _$selectAllCellHash() => r'6e9a09b682e345ebffedd0177473a04f01efa93e';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -28,6 +28,134 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [selectAllCell].
+@ProviderFor(selectAllCell)
+const selectAllCellProvider = SelectAllCellFamily();
+
+/// See also [selectAllCell].
+class SelectAllCellFamily extends Family<AsyncValue<void>> {
+  /// See also [selectAllCell].
+  const SelectAllCellFamily();
+
+  /// See also [selectAllCell].
+  SelectAllCellProvider call({
+    required CellParentId parentId,
+  }) {
+    return SelectAllCellProvider(
+      parentId: parentId,
+    );
+  }
+
+  @override
+  SelectAllCellProvider getProviderOverride(
+    covariant SelectAllCellProvider provider,
+  ) {
+    return call(
+      parentId: provider.parentId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'selectAllCellProvider';
+}
+
+/// See also [selectAllCell].
+class SelectAllCellProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [selectAllCell].
+  SelectAllCellProvider({
+    required CellParentId parentId,
+  }) : this._internal(
+          (ref) => selectAllCell(
+            ref as SelectAllCellRef,
+            parentId: parentId,
+          ),
+          from: selectAllCellProvider,
+          name: r'selectAllCellProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$selectAllCellHash,
+          dependencies: SelectAllCellFamily._dependencies,
+          allTransitiveDependencies:
+              SelectAllCellFamily._allTransitiveDependencies,
+          parentId: parentId,
+        );
+
+  SelectAllCellProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.parentId,
+  }) : super.internal();
+
+  final CellParentId parentId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(SelectAllCellRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: SelectAllCellProvider._internal(
+        (ref) => create(ref as SelectAllCellRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        parentId: parentId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _SelectAllCellProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is SelectAllCellProvider && other.parentId == parentId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin SelectAllCellRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `parentId` of this provider.
+  CellParentId get parentId;
+}
+
+class _SelectAllCellProviderElement
+    extends AutoDisposeFutureProviderElement<void> with SelectAllCellRef {
+  _SelectAllCellProviderElement(super.provider);
+
+  @override
+  CellParentId get parentId => (origin as SelectAllCellProvider).parentId;
+}
+
+String _$selectCellHash() => r'6649b88d904152527d89909dce2666aaec747d1b';
 
 /// See also [selectCell].
 @ProviderFor(selectCell)

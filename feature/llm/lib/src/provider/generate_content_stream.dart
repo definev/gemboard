@@ -49,7 +49,8 @@ final safetySettings = [
   SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.none),
   SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.none),
   SafetySetting(HarmCategory.harassment, HarmBlockThreshold.none),
-  SafetySetting(HarmCategory.unspecified, HarmBlockThreshold.low),
+  SafetySetting(HarmCategory.sexuallyExplicit, HarmBlockThreshold.none),
+  // SafetySetting(HarmCategory.unspecified, HarmBlockThreshold.none),
 ];
 
 @riverpod

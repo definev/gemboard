@@ -52,9 +52,9 @@ The out put should less or equal to 10 items
     ),
   );
 
-  if (response.promptFeedback?.blockReasonMessage != null) {
-    throw Exception(response.promptFeedback!.blockReasonMessage);
-  }
+  // if (response.promptFeedback?.blockReasonMessage != null) {
+  //   throw Exception(response.promptFeedback!.blockReasonMessage);
+  // }
 
   if (response.text case var text?) {
     text = text.substring(text.indexOf('['), text.indexOf(']') + 1);

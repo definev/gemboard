@@ -282,5 +282,134 @@ class _DeleteCellsProviderElement extends AutoDisposeFutureProviderElement<void>
   @override
   List<CellId> get ids => (origin as DeleteCellsProvider).ids;
 }
+
+String _$deleteSelectedCellHash() =>
+    r'a4fe69647cd39e51f69879c0119fca5307637521';
+
+/// See also [deleteSelectedCell].
+@ProviderFor(deleteSelectedCell)
+const deleteSelectedCellProvider = DeleteSelectedCellFamily();
+
+/// See also [deleteSelectedCell].
+class DeleteSelectedCellFamily extends Family<AsyncValue<void>> {
+  /// See also [deleteSelectedCell].
+  const DeleteSelectedCellFamily();
+
+  /// See also [deleteSelectedCell].
+  DeleteSelectedCellProvider call({
+    required CellParentId parentId,
+  }) {
+    return DeleteSelectedCellProvider(
+      parentId: parentId,
+    );
+  }
+
+  @override
+  DeleteSelectedCellProvider getProviderOverride(
+    covariant DeleteSelectedCellProvider provider,
+  ) {
+    return call(
+      parentId: provider.parentId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'deleteSelectedCellProvider';
+}
+
+/// See also [deleteSelectedCell].
+class DeleteSelectedCellProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [deleteSelectedCell].
+  DeleteSelectedCellProvider({
+    required CellParentId parentId,
+  }) : this._internal(
+          (ref) => deleteSelectedCell(
+            ref as DeleteSelectedCellRef,
+            parentId: parentId,
+          ),
+          from: deleteSelectedCellProvider,
+          name: r'deleteSelectedCellProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$deleteSelectedCellHash,
+          dependencies: DeleteSelectedCellFamily._dependencies,
+          allTransitiveDependencies:
+              DeleteSelectedCellFamily._allTransitiveDependencies,
+          parentId: parentId,
+        );
+
+  DeleteSelectedCellProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.parentId,
+  }) : super.internal();
+
+  final CellParentId parentId;
+
+  @override
+  Override overrideWith(
+    FutureOr<void> Function(DeleteSelectedCellRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: DeleteSelectedCellProvider._internal(
+        (ref) => create(ref as DeleteSelectedCellRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        parentId: parentId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<void> createElement() {
+    return _DeleteSelectedCellProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is DeleteSelectedCellProvider && other.parentId == parentId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, parentId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin DeleteSelectedCellRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `parentId` of this provider.
+  CellParentId get parentId;
+}
+
+class _DeleteSelectedCellProviderElement
+    extends AutoDisposeFutureProviderElement<void> with DeleteSelectedCellRef {
+  _DeleteSelectedCellProviderElement(super.provider);
+
+  @override
+  CellParentId get parentId => (origin as DeleteSelectedCellProvider).parentId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

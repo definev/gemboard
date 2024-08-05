@@ -30,3 +30,19 @@ Future<void> deleteCells(
 
   controller.sink.add(await repository.getList(parentId: ids.first.parentId));
 }
+
+@riverpod
+Future<void> deleteSelectedCell(
+  DeleteSelectedCellRef ref, {
+  required CellParentId parentId,
+}) async {
+  final cellList =
+      await ref.read(getCellListProvider(parentId: parentId).future);
+  final selectedCells = cellList.where((cell) => cell.selected).toList();
+
+  if (selectedCells.isEmpty) return;
+  await ref.read(
+    deleteCellsProvider(ids: selectedCells.map((cell) => cell.id).toList())
+        .future,
+  );
+}

@@ -10,6 +10,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
+import 'package:utils/utils.dart';
 
 class SelectionCellsView extends HookWidget {
   SelectionCellsView({
@@ -200,6 +201,26 @@ class SelectionCellsView extends HookWidget {
                 builder: (context) {
                   final showChat = useState(false);
                   final chatController = useTextEditingController();
+                  void onSubmit() {
+                    showChat.value = false;
+                    if (chatController.text.trim().isEmpty) return;
+                    onChatWithSelectedCells(
+                      selectedCellIds,
+                      chatController.text,
+                    );
+                    chatController.clear();
+                  }
+
+                  final chatFocusNode = useFocusNode(
+                    onKey: handleEnterKey(onSubmit: onSubmit),
+                  );
+                  useEffect(() {
+                    if (showChat.value) {
+                      chatController.clear();
+                      chatFocusNode.requestFocus();
+                    }
+                    return null;
+                  }, [showChat.value]);
 
                   final noKeyboardConstraints = useState(constraints);
                   final keyboardVisibilityController =
@@ -227,20 +248,13 @@ class SelectionCellsView extends HookWidget {
                           width: 400,
                           child: DSTextbox(
                             controller: chatController,
+                            focusNode: chatFocusNode,
                             autofocus: true,
                             minLines: 1,
                             maxLines: 4,
                             hintText: 'Type a message...',
                             trailing: Button(
-                              onPressed: () {
-                                showChat.value = false;
-                                if (chatController.text.trim().isEmpty) return;
-                                onChatWithSelectedCells(
-                                  selectedCellIds,
-                                  chatController.text,
-                                );
-                                chatController.clear();
-                              },
+                              onPressed: onSubmit,
                               child: StyledIcon(IconlyLight.send),
                             ),
                           ),

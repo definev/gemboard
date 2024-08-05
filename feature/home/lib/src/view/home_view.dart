@@ -43,8 +43,7 @@ class HomeView extends StatelessWidget {
                   SizedBox(height: SpaceVariant.medium.resolve(context)),
                   StyledText(
                     '''
-You can navigate to the whiteboard editor from the menu.
-You can start discovering Gemboard by opening the "Desktop" board.''',
+Access the whiteboard editor from the menu\nand begin exploring Gemboard with the 'Desktop' board''',
                     style: Style(
                       $text.style.ref(TextStyleVariant.p2),
                       $text.style.fontWeight.w500(),

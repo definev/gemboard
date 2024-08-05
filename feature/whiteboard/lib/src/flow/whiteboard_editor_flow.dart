@@ -24,7 +24,7 @@ import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
 import 'package:whiteboard/src/view/guide_view.dart';
 import 'package:whiteboard/src/view/whiteboard_view.dart';
 import 'package:whiteboard/src/widget/whiteboard_cursor_tool.dart';
-import 'package:whiteboard/src/widget/whiteboard_focusable_gesture.dart';
+import 'package:whiteboard/src/widget/whiteboard_keyboard_shortcuts.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 final defaultCursorMode = switch (defaultTargetPlatform) {
@@ -85,15 +85,27 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
 
     final id = data.id;
 
+    final whiteboardKey = useMemoized(() =>
+        GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
     final showChat = useState(false);
-    final chatFocusNode = useFocusNode();
     final chatTextController = useTextEditingController();
+    void onChatSubmit() {
+      whiteboardKey.currentState
+          ?.cell_onAskNewQuestion(chatTextController.text);
+      showChat.value = false;
+    }
+
+    final chatFocusNode = useFocusNode(
+      onKey: handleEnterKey(onSubmit: onChatSubmit),
+    );
     useEffect(() {
       if (showChat.value) {
         chatTextController.text = '';
+        chatFocusNode.requestFocus();
       }
       return null;
     }, [showChat.value]);
+
     final cursorMode = useState(defaultCursorMode);
 
     /// This is base scale for all element in canvas
@@ -187,9 +199,6 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         debouncer.cancel();
       };
     }, []);
-
-    final whiteboardKey = useMemoized(() =>
-        GlobalKey<WhiteboardViewState>(debugLabel: 'whiteboard ${id.id}'));
 
     final appBar = Align(
       alignment: Alignment.topCenter,
@@ -430,6 +439,21 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
               cursorMode.value = CursorMode.selectionTool;
             }
           },
+          onDeleteSelectedCell: () => ref.read(
+            deleteSelectedCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+            ).future,
+          ),
+          onSelectAllCell: () => ref.read(
+            selectAllCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+            ).future,
+          ),
+          onDeselectAllCell: () => ref.read(
+            deselectAllCellProvider(
+              parentId: CellParentId(whiteboardId: id.id),
+            ).future,
+          ),
           onBrainstormingTriggered: () {},
           onChatTriggered: () {
             showChat.value = !showChat.value;
@@ -672,13 +696,9 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                         controller: chatTextController,
                         hintText: 'Type a message...',
                         minLines: 1,
-                        maxLines: 8,
+                        // maxLines: 8,
                         trailing: Button(
-                          onPressed: () {
-                            whiteboardKey.currentState?.cell_onAskNewQuestion(
-                                chatTextController.text);
-                            showChat.value = false;
-                          },
+                          onPressed: onChatSubmit,
                           child: StyledIcon(IconlyLight.send),
                         ),
                       ),

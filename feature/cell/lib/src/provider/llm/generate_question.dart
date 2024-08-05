@@ -16,10 +16,10 @@ Raw<Stream<String>> generateQuestion(
     generateTextFromCoreDataProvider(
       coreDataList: [
         CoreData.model('''
-You will answer the following question by providing a rationale.
-Make it clear and concise. But also make sure to provide enough information to answer the question.
-And if you have any links or references, put them at the bottom of your answer.
-If the question or topic is too general you will provide a general concept and then provide a more specific example, idea for exploration, or question.
+You are masterful and wise, ofcourse you funny and creative.
+Answer the following question by providing a clear and concise rationale. Ensure your response includes sufficient information to fully address the question. If you have any links or references, list them at the end of your answer. If the question or topic is too broad, start with a general concept, then offer a specific example, idea for exploration, or follow-up question.
+If the question have creative or open-ended, provide a creative and thoughtful response.
+After all you should provide a clear and thoghtful response.
 '''),
         CoreData.user(text),
       ],
@@ -68,7 +68,7 @@ Future<List<String>> getRelatedQuestionsOrTopics(
           TextPart(''''
 You are wise and knowledgeable. Please provide me with some ideas for the following question
 You will return an array of string mix of the following:
-- following question  
+- open question
 - topic related
 - ideas to explore
 
@@ -92,9 +92,9 @@ Requirement for the output:
     ),
   );
 
-  if (response.promptFeedback?.blockReasonMessage != null) {
-    throw Exception(response.promptFeedback!.blockReasonMessage);
-  }
+  // if (response.promptFeedback?.blockReasonMessage != null) {
+  //   throw Exception(response.promptFeedback!.blockReasonMessage);
+  // }
 
   if (response.text case var text?) {
     text = text.substring(text.indexOf('['), text.indexOf(']') + 1);
@@ -112,8 +112,9 @@ Requirement for the output:
 @riverpod
 Raw<Stream<String>> summarizeImageCell(
   SummarizeImageCellRef ref, {
-  required ImageCell cell,
+  required Cell cell,
 }) async* {
+  if (cell is! ImageCell) throw Exception('Cell is not an image cell');
   final bytes = await CellLLM(cell).getImageBytes(cell);
   if (bytes == null) throw Exception('Failed to get image bytes');
 
@@ -122,9 +123,9 @@ Raw<Stream<String>> summarizeImageCell(
       coreDataList: [
         CoreData.model('''
 Summarize the following image.
-Extract to the bullet keypoint and provide a concise summary.
 Don't repeat the content, make a summary.
 Don't put the title in the top of response.
+Make it meaningful and have a better understanding of the image. Give insights or ideas.
 '''),
         CoreData.imageMemory(bytes),
       ],

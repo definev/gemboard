@@ -6,7 +6,7 @@ part of 'generate_question.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$generateQuestionHash() => r'5ccf8d65789bccddd388303df42dbf1fa0a9346c';
+String _$generateQuestionHash() => r'5bc5c1b8545a509bb7fac42c7f2e80b76b154d65';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -304,7 +304,7 @@ class _SummarizeCellProviderElement
 }
 
 String _$summarizeImageCellHash() =>
-    r'fef9edeb6a6e925a59753337c2858948d3f61b1b';
+    r'b11a5ae997cb074dab04e2698466b290cecd183f';
 
 /// See also [summarizeImageCell].
 @ProviderFor(summarizeImageCell)
@@ -317,7 +317,7 @@ class SummarizeImageCellFamily extends Family<Raw<Stream<String>>> {
 
   /// See also [summarizeImageCell].
   SummarizeImageCellProvider call({
-    required ImageCell cell,
+    required Cell cell,
   }) {
     return SummarizeImageCellProvider(
       cell: cell,
@@ -353,7 +353,7 @@ class SummarizeImageCellProvider
     extends AutoDisposeProvider<Raw<Stream<String>>> {
   /// See also [summarizeImageCell].
   SummarizeImageCellProvider({
-    required ImageCell cell,
+    required Cell cell,
   }) : this._internal(
           (ref) => summarizeImageCell(
             ref as SummarizeImageCellRef,
@@ -381,7 +381,7 @@ class SummarizeImageCellProvider
     required this.cell,
   }) : super.internal();
 
-  final ImageCell cell;
+  final Cell cell;
 
   @override
   Override overrideWith(
@@ -422,7 +422,7 @@ class SummarizeImageCellProvider
 
 mixin SummarizeImageCellRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `cell` of this provider.
-  ImageCell get cell;
+  Cell get cell;
 }
 
 class _SummarizeImageCellProviderElement
@@ -431,7 +431,7 @@ class _SummarizeImageCellProviderElement
   _SummarizeImageCellProviderElement(super.provider);
 
   @override
-  ImageCell get cell => (origin as SummarizeImageCellProvider).cell;
+  Cell get cell => (origin as SummarizeImageCellProvider).cell;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

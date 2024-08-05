@@ -10,6 +10,7 @@ export 'src/json_serializable/offset.dart';
 export 'src/json_serializable/rect.dart';
 export 'src/json_serializable/size.dart';
 export 'src/json_serializable/uri.dart';
+export 'src/keyboard/handle_enter_key.dart';
 export 'src/mixin/mixin.dart';
 export 'src/money.dart';
 export 'src/networks/check_if_image_valid.dart';

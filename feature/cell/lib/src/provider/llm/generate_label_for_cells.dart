@@ -60,9 +60,9 @@ Requirement for label:
     ),
   );
 
-  if (response.promptFeedback?.blockReasonMessage != null) {
-    return '';
-  }
+  // if (response.promptFeedback?.blockReasonMessage != null) {
+  //   return '';
+  // }
 
   if (response.text == null) {
     return '';

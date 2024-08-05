@@ -24,7 +24,7 @@ sealed class WhiteboardPosition with _$WhiteboardPosition {
       );
 
   /// A canvas scale is used to scale the base size to the "logical" size of the canvas.
-  static const canvasScale = 2.3;
+  static const canvasScale = 5.0;
 
   /// The initial scale factor for the whiteboard.
   static const defaultScaleFactor = 1 / canvasScale;
