@@ -59,6 +59,7 @@ Future<List<String>> getRelatedQuestionsOrTopics(
     model: 'gemini-1.5-flash-latest',
     apiKey: apiKey,
     generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    safetySettings: safetySettings,
   );
   final response = await model.generateContent(
     [

@@ -19,6 +19,7 @@ Future<List<String>> getBrainstormingSuggestions(
     model: 'gemini-1.5-flash-latest',
     apiKey: apiKey,
     generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    safetySettings: safetySettings,
   );
   final response = await model.generateContent(
     [

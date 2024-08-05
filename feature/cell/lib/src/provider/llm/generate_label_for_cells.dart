@@ -17,11 +17,13 @@ Future<String> generateLabelForCells(
   if (apiKey == null) throw Exception('API key is required');
 
   final model = GenerativeModel(
-      model: 'gemini-1.5-flash-latest',
-      apiKey: apiKey,
-      generationConfig: GenerationConfig(
-        responseMimeType: 'application/json',
-      ));
+    model: 'gemini-1.5-flash-latest',
+    apiKey: apiKey,
+    generationConfig: GenerationConfig(
+      responseMimeType: 'application/json',
+    ),
+    safetySettings: safetySettings,
+  );
   final sourcePart = await CellLLM(source).getPart();
   final targetPart = await CellLLM(target).getPart();
 

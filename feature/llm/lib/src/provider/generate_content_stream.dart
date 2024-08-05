@@ -45,6 +45,13 @@ extension CoreDataX on CoreData {
   }
 }
 
+final safetySettings = [
+  SafetySetting(HarmCategory.hateSpeech, HarmBlockThreshold.none),
+  SafetySetting(HarmCategory.dangerousContent, HarmBlockThreshold.none),
+  SafetySetting(HarmCategory.harassment, HarmBlockThreshold.none),
+  SafetySetting(HarmCategory.unspecified, HarmBlockThreshold.low),
+];
+
 @riverpod
 Raw<Stream<GenerateContentResponse>> generateContentStream(
   GenerateContentStreamRef ref, {
@@ -56,6 +63,7 @@ Raw<Stream<GenerateContentResponse>> generateContentStream(
     apiKey: configuration.apiKey ??
         (await ref.read(getGeminiApiKeyProvider.future)) ??
         (throw Exception('API key is required')),
+    safetySettings: safetySettings,
   );
 
   final prompt = [
