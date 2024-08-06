@@ -8,6 +8,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
+import 'package:utils/utils.dart';
 
 class BrainstormingCellView extends HookWidget {
   const BrainstormingCellView({
@@ -51,6 +52,13 @@ class BrainstormingCellView extends HookWidget {
 
     final askForSuggestionTextController = useTextEditingController(
       text: cell.question,
+    );
+    void onSubmit() {
+      onAskForSuggestion(askForSuggestionTextController.text);
+    }
+
+    final askForSuggestionFocusNode = useFocusNode(
+      onKey: handleEnterKey(onSubmit: onSubmit),
     );
 
     AsyncSnapshot onAskForSuggestionAsyncValue = useFuture(
@@ -197,15 +205,14 @@ class BrainstormingCellView extends HookWidget {
       children: [
         DSTextbox(
           controller: askForSuggestionTextController,
+          focusNode: askForSuggestionFocusNode,
           hintText: 'Let your ideas flow freely, write down your topic here',
           autofocus: cell.question == null,
-          readOnly: cell.question != null,
           onSubmitted: onAskForSuggestion,
           trailing: Button(
             highlight: ButtonHighlight.pressed,
             background: ColorVariant.onSurface,
-            onPressed: () =>
-                onAskForSuggestion(askForSuggestionTextController.text),
+            onPressed: onSubmit,
             child: StyledIcon(IconlyLight.send),
           ),
         ),

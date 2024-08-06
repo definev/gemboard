@@ -15,8 +15,8 @@ class GridBackground extends StatelessWidget {
 
   static TwoDimensionalViewportBuilder backgroundBuilder({
     required double scale,
-    double dimension = 150,
-    double dotSize = 10,
+    double dimension = 100,
+    double dotSize = 5,
   }) {
     return (
       BuildContext context,

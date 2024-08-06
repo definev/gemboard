@@ -54,7 +54,7 @@ class DSCardStyle {
       $flex.crossAxisAlignment.start(),
       $flex.mainAxisAlignment.start(),
       $flex.mainAxisSize.min(),
-      $box.padding.all.ref(SpaceVariant.medium),
+      $box.padding.bottom.ref(SpaceVariant.mediumLarge),
     );
   }
 
@@ -76,6 +76,7 @@ class DSCardStyle {
       $text.style.ref(TextStyleVariant.p),
       $text.style.color.ref(ColorVariant.onSurface),
       $flex.mainAxisSize.min(),
+      $box.padding.horizontal.ref(SpaceVariant.small),
       DSCardKind.flat(
         $box.color.ref(onBackground),
       ),

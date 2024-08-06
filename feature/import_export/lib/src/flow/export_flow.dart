@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:import_export/src/provider/compress_whiteboard_to_file.dart';
-import 'package:import_export/src/view/import_export_view.dart';
+import 'package:import_export/src/view/export_view.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 part 'export_flow.freezed.dart';
@@ -39,6 +39,7 @@ class ExportFlow extends ConsumerWidget {
             context: context,
             title: 'Copied to clipboard',
           );
+          Navigator.of(context).pop();
         }
       },
       onExport: (directory, fileName) async {

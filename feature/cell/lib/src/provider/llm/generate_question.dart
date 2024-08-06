@@ -58,7 +58,11 @@ Future<List<String>> getRelatedQuestionsOrTopics(
   final model = GenerativeModel(
     model: 'gemini-1.5-flash-latest',
     apiKey: apiKey,
-    generationConfig: GenerationConfig(responseMimeType: 'application/json'),
+    generationConfig: GenerationConfig(
+      responseMimeType: 'application/json',
+      temperature: 2,
+      topP: 0.8,
+    ),
     safetySettings: safetySettings,
   );
   final response = await model.generateContent(
@@ -66,14 +70,15 @@ Future<List<String>> getRelatedQuestionsOrTopics(
       Content.model(
         [
           TextPart(''''
-You are wise and knowledgeable. Please provide me with some ideas for the following question
+You are wise and knowledgeable. Please provide me with some ideas or relate question for the following question
+This question or idea is must be specific and relevant to the topic as possible.
 You will return an array of string mix of the following:
 - open question
 - topic related
 - ideas to explore
 
 Requirement for the output:
-- Max 10 items
+- Max 6 items
 - Ranked by relevance
 '''),
         ],

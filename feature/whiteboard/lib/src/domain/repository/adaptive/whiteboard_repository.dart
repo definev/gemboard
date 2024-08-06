@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
-import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 import '../drift/whiteboard_repository.dart';
@@ -43,7 +42,7 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
     required WhiteboardId id,
   }) async {
     final position = await local.getWhiteboardPosition(id: id);
-    return position;
+    return position ?? await memory.getWhiteboardPosition(id: id);
   }
 
   @override
@@ -53,5 +52,11 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
   }) async {
     local.setWhiteboardPosition(id: id, position: position);
     return await memory.setWhiteboardPosition(id: id, position: position);
+  }
+  
+  @override
+  Future<void> deleteWhiteboardPosition({required WhiteboardId id}) {
+    local.deleteWhiteboardPosition(id: id);
+    return memory.deleteWhiteboardPosition(id: id);
   }
 }

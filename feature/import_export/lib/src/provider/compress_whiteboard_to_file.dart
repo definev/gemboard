@@ -16,9 +16,13 @@ Future<Map<String, dynamic>> compressWhiteboardToJson(
   final whiteboard = await ref.read(
     getWhiteboardByIdProvider(id: whiteboardId).future,
   );
+  final whiteboardPosition = await ref.read(
+    getWhiteboardPositionProvider(id: whiteboardId).future,
+  );
 
   Map<String, dynamic> fileContent = {
     'whiteboard': whiteboard.toJson(),
+    'position': whiteboardPosition.toJson(),
     'cells': [],
     'edges': [],
   };
@@ -38,12 +42,12 @@ Future<Map<String, dynamic>> compressWhiteboardToJson(
       if (cell.url.isScheme('file')) {
         try {
           final file = File(cell.url.toFilePath());
-          String base64Image = base64Encode(await file.readAsBytes());
           newCells.add(
             cell.copyWith(
-              url: Uri.dataFromString(
-                base64Image,
+              url: Uri.dataFromBytes(
+                await file.readAsBytes(),
                 mimeType: 'image/*',
+                percentEncoded: true,
               ),
             ),
           );

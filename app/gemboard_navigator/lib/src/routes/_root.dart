@@ -18,6 +18,9 @@ part of '../router.dart';
     TypedGoRoute<WhiteboardSelectorRoute>(
       path: WhiteboardSelectorRoute.location,
     ),
+    TypedGoRoute<WhiteboardImportRoute>(
+      path: WhiteboardImportRoute.location,
+    ),
   ],
 )
 class RootShell extends ShellRouteData {

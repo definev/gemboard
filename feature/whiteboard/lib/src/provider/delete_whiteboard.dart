@@ -9,7 +9,8 @@ Future<void> deleteWhiteboard(
   required WhiteboardId id,
 }) async {
   final repository = ref.watch(whiteboardRepositoryProvider);
-  repository.delete(id: id);
+  await repository.delete(id: id);
+  await repository.deleteWhiteboardPosition(id: id);
   ref.invalidate(getWhiteboardListProvider);
   ref.invalidate(getWhiteboardByIdProvider(id: id));
 }

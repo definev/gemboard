@@ -520,7 +520,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                       CellCardKind.flat =>
                         ColorVariant.surface.resolve(context),
                       _ => CellDecorationExtension(cell.decoration)
-                          .onColorValue(context),
+                          .colorValue(context),
                     }),
                   ),
                   onSizeChanged: (newSize) {
@@ -1158,6 +1158,8 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       width: articleCell.width,
       decoration: articleCell.decoration,
     );
+
+    cell_moveViewportToCenterOfCell(editableCell);
 
     cellKeys[editableCell.id.id] = (
       GlobalKey(

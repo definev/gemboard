@@ -2,6 +2,7 @@ import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:folder/folder.dart';
 import 'package:go_router/go_router.dart';
 import 'package:home/home.dart';
 import 'package:import_export/import_export.dart';
@@ -16,6 +17,7 @@ part 'routes/home.greeting.dart';
 part 'routes/settings.dart';
 part 'routes/whiteboard.dart';
 part 'routes/whiteboard.export.dart';
+part 'routes/whiteboard.import.dart';
 part 'routes/whiteboard.selector.dart';
 
 final router = () {

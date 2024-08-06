@@ -65,6 +65,10 @@ Raw<Stream<GenerateContentResponse>> generateContentStream(
         (await ref.read(getGeminiApiKeyProvider.future)) ??
         (throw Exception('API key is required')),
     safetySettings: safetySettings,
+    generationConfig: GenerationConfig(
+      temperature: 0.7,
+      topP: 0.6,
+    ),
   );
 
   final prompt = [

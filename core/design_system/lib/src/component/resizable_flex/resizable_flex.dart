@@ -253,7 +253,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                         children: [
                           Positioned.fill(
                             child: Padding(
-                              padding: EdgeInsets.only(left: 250 * value),
+                              padding: EdgeInsets.only(left: 300 * value),
                               child: widget.secondChild ?? SizedBox(),
                             ),
                           ),
@@ -280,13 +280,13 @@ class _ResizableFlexState extends State<ResizableFlex> {
                       ),
                     ),
                     Positioned(
-                      left: -250 + value * 250,
+                      left: -300 + value * 300,
                       height: constraints.maxHeight,
-                      width: 250,
+                      width: 300,
                       child: firstChild,
                     ),
                     Positioned(
-                      left: value * 202,
+                      left: value * (300 - 48),
                       child: SafeArea(
                         bottom: false,
                         child: expandButton,
@@ -339,13 +339,13 @@ class _ResizableFlexState extends State<ResizableFlex> {
                       ),
                     ),
                     Positioned(
-                      left: -250 + value * 250,
+                      left: -300 + value * 300,
                       height: constraints.maxHeight,
-                      width: 250,
+                      width: 300,
                       child: firstChild,
                     ),
                     Positioned(
-                      left: value * 202,
+                      left: value * (300 - 48),
                       child: SafeArea(
                         bottom: false,
                         child: expandButton,

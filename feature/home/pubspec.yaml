@@ -47,6 +47,8 @@ dependencies:
     path: ../../feature/folder
   llm:
     path: ../../feature/llm
+  import_export:
+    path: ../../feature/import_export
   
   mix: ^1.4.0
   flextras: ^1.0.0

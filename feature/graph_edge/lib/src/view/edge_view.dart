@@ -510,25 +510,19 @@ class EdgeView extends HookWidget {
                             ],
                           ),
                         IntrinsicWidth(
-                          child: TextField(
+                          child: DSTextbox(
+                            style: Style(
+                              $box.color.transparent(),
+                              $box.padding(0),
+                            ),
                             controller: labelTextController,
                             focusNode: labelTextFocusNode,
-                            cursorColor:
-                                ColorVariant.onBackground.resolve(context),
+                            kind: DSTextboxKind.boundless,
                             maxLength: 50,
+                            textStyle: labelTextStyle,
+                            hintText: '.',
                             onChanged: (value) => onEdgeLabelChanged(value),
-                            decoration: InputDecoration(
-                              isCollapsed: true,
-                              border: InputBorder.none,
-                              counter: SizedBox(),
-                              hintText: '.',
-                              hintStyle: labelTextStyle.copyWith(
-                                  color: labelTextStyle.color!.withOpacity(
-                                      OpacityVariant.surface
-                                          .resolve(context)
-                                          .value)),
-                            ),
-                            style: labelTextStyle,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                         Transform.rotate(

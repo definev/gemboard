@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
-import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 part 'whiteboard_repository.g.dart';
@@ -31,5 +30,10 @@ class WhiteboardRepositoryMemory extends WhiteboardRepository
     required WhiteboardPosition position,
   }) async {
     _positions[id.id] = position;
+  }
+
+  @override
+  Future<void> deleteWhiteboardPosition({required WhiteboardId id}) async {
+    _positions.remove(id.id);
   }
 }

@@ -23,4 +23,6 @@ abstract class WhiteboardRepository
     required WhiteboardId id,
     required WhiteboardPosition position,
   });
+
+  Future<void> deleteWhiteboardPosition({required WhiteboardId id});
 }

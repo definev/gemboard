@@ -37,7 +37,7 @@ class EmptyFolderView extends StatelessWidget {
             height: SpaceVariant.small.resolve(context),
           ),
           StyledText(
-            'Spark Your Imagination: Craft Your Gemboard!',
+            'Empty folder',
             style: Style(
               $text.style.ref(TextStyleVariant.p),
               $text.textAlign.center(),

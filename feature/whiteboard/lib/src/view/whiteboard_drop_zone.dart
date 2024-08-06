@@ -131,7 +131,7 @@ class WhiteboardDropZone extends StatelessWidget {
               (value) async {
                 final directory = await getApplicationDocumentsDirectory();
                 var file = io.File(
-                    '${directory.path}/whiteboard/${id.id}/${value.fileName}');
+                    '${directory.path}/whiteboard/${id.id}/${UniqueKey()}_${value.fileName}');
                 file = await file.create(recursive: true);
                 final ioSink = file.openWrite();
                 try {

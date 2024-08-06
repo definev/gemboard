@@ -7,6 +7,7 @@ import 'package:home/home.dart';
 import 'package:home/src/view/gemboard_sidebar_header.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
+import 'package:import_export/import_export.dart';
 import 'package:mix/mix.dart';
 import 'package:settings/settings.dart';
 import 'package:sliver_tools/sliver_tools.dart';
@@ -29,6 +30,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
     final whiteboardNavigation = ref.read(WhiteboardNavigation.provider);
     final settingsNavigation = ref.read(SettingsNavigation.provider);
     final homeNavigation = ref.read(HomeNavigation.provider);
+    final importExportNavigation = ref.read(ImportExportNavigation.provider);
 
     final foldersAsyncValue = ref.watch(getFolderListProvider);
 
@@ -97,22 +99,87 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                           );
                           showCreateForm.value = false;
                         },
-                        child: Button(
-                          background: ColorVariant.yellow,
-                          kind: ButtonKind.outline,
-                          onPressed: () =>
-                              showCreateForm.value = !showCreateForm.value,
-                          child: EmojiLabel(
-                            kind: gemboardEmojiLabelKind,
-                            emoji: StyledText('🗂️'),
-                            label: StyledText('Create folder'),
-                          ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: Button(
+                                background: ColorVariant.yellow,
+                                onPressed: () async {
+                                  final data = Whiteboard(
+                                    id: WhiteboardId(
+                                      parentId: WhiteboardParentId(),
+                                      id: Helper.createId(),
+                                    ),
+                                    emoji: StringUtils.randomEmoji(),
+                                    title: 'Untitled',
+                                  );
+                                  await ref.read(
+                                    createWhiteboardProvider(
+                                      parentId: WhiteboardParentId(),
+                                      data: data,
+                                    ).future,
+                                  );
+                                  whiteboardNavigation.openWhiteboardEditor(
+                                    context,
+                                    id: data.id,
+                                    whiteboard: data,
+                                    resizableController: resizableController,
+                                  );
+                                },
+                                child: EmojiLabel(
+                                  kind: gemboardEmojiLabelKind,
+                                  emoji: StyledText('📜'),
+                                  label: StyledText('Start new gemboard'),
+                                ),
+                              ),
+                            ),
+                            Button(
+                              style: Style(
+                                $box.width(40),
+                                $box.height(40),
+                              ),
+                              background: ColorVariant.yellow,
+                              kind: ButtonKind.flat,
+                              highlight: ButtonHighlight.pressed,
+                              onPressed: () =>
+                                  showCreateForm.value = !showCreateForm.value,
+                              child: Center(
+                                child: StyledText(
+                                  '🗂️',
+                                  style: Style(
+                                    $text.style.ref(TextStyleVariant.emoji),
+                                    $text.style.fontSize(24),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         pickerSize: panelSize,
                       );
                     },
                   ),
                 ),
+                ...switch (ref.watch(getWhiteboardListProvider(
+                    parentId: const WhiteboardParentId()))) {
+                  AsyncLoading() => [],
+                  AsyncData(:final value) => [
+                      for (final whiteboard in value)
+                        if (whiteboard.id != WhiteboardId.defaultValue)
+                          WhiteboardEditorButton(
+                            background: ColorVariant.yellow,
+                            whiteboard: whiteboard,
+                            onWhiteboardPressed: (whiteboard) =>
+                                whiteboardNavigation.openWhiteboardEditor(
+                              context,
+                              id: whiteboard.id,
+                              resizableController: resizableController,
+                            ),
+                          ),
+                    ],
+                  _ => [],
+                },
                 ...switch (foldersAsyncValue) {
                   AsyncLoading() => [],
                   AsyncError() => [],
@@ -167,6 +234,18 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                   children: [
                     Expanded(
                       child: folderList,
+                    ),
+                    Button(
+                      background: ColorVariant.green,
+                      kind: ButtonKind.outline,
+                      style: Style(
+                        $box.padding.horizontal.ref(SpaceVariant.small),
+                        $box.padding.vertical.ref(SpaceVariant.medium),
+                        $box.alignment.center(),
+                      ),
+                      onPressed: () =>
+                          importExportNavigation.pushToImportFlow(),
+                      child: StyledText('Import gemboard'),
                     ),
                     Button(
                       onPressed: () {

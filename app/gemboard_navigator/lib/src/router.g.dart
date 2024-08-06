@@ -48,6 +48,11 @@ RouteBase get $rootShell => ShellRouteData.$route(
           parentNavigatorKey: WhiteboardSelectorRoute.$parentNavigatorKey,
           factory: $WhiteboardSelectorRouteExtension._fromState,
         ),
+        GoRouteData.$route(
+          path: '/whiteboard/import',
+          parentNavigatorKey: WhiteboardImportRoute.$parentNavigatorKey,
+          factory: $WhiteboardImportRouteExtension._fromState,
+        ),
       ],
     );
 
@@ -148,6 +153,31 @@ extension $WhiteboardSelectorRouteExtension on WhiteboardSelectorRoute {
 
   String get location => GoRouteData.$location(
         '/whiteboard/selector',
+      );
+
+  void go(BuildContext context) => context.go(location);
+
+  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
+
+  void pushReplacement(BuildContext context) =>
+      context.pushReplacement(location);
+
+  void replace(BuildContext context) => context.replace(location);
+}
+
+extension $WhiteboardImportRouteExtension on WhiteboardImportRoute {
+  static WhiteboardImportRoute _fromState(GoRouterState state) =>
+      WhiteboardImportRoute(
+        folderId: state.uri.queryParameters['folder-id'],
+        parentFolderId: state.uri.queryParameters['parent-folder-id'],
+      );
+
+  String get location => GoRouteData.$location(
+        '/whiteboard/import',
+        queryParams: {
+          if (folderId != null) 'folder-id': folderId,
+          if (parentFolderId != null) 'parent-folder-id': parentFolderId,
+        },
       );
 
   void go(BuildContext context) => context.go(location);

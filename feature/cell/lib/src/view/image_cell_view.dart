@@ -41,7 +41,7 @@ class ImageCellView extends StatelessWidget {
                 ),
               ),
               StyledText(
-                'Image not found',
+                'Something went wrong',
                 style: Style(
                   $text.style.ref(TextStyleVariant.p),
                 ),

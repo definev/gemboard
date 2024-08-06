@@ -548,7 +548,7 @@ packages:
     source: sdk
     version: "0.0.0"
   folder:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "../../feature/folder"
       relative: true

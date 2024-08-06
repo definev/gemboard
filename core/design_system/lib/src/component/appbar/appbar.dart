@@ -5,7 +5,7 @@ import 'package:mix/mix.dart';
 
 part 'appbar.style.dart';
 
-class DSAppbar extends StyledWidget {
+class DSAppbar extends StyledWidget implements PreferredSizeWidget {
   const DSAppbar({
     super.key,
     required this.title,
@@ -77,6 +77,9 @@ class DSAppbar extends StyledWidget {
       },
     );
   }
+
+  @override
+  Size get preferredSize => Size.fromHeight(48);
 }
 
 class DSBackButton extends StatelessWidget {

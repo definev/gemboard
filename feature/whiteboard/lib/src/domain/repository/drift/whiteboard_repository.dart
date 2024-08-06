@@ -92,9 +92,10 @@ class WhiteboardRepositoryDrift implements WhiteboardRepository {
     required WhiteboardPosition position,
   }) async {
     if (position.offset.isInfinite) return;
-    final oldValue = await (database.select(database.whiteboardPositionItem)
+    final oldValues = await (database.select(database.whiteboardPositionItem)
           ..where((tbl) => tbl.whiteboardId.equals(id.id)))
-        .getSingleOrNull();
+        .get();
+    final oldValue = oldValues.firstOrNull;
     if (oldValue == null) {
       await database
           .into(database.whiteboardPositionItem)
@@ -106,5 +107,12 @@ class WhiteboardRepositoryDrift implements WhiteboardRepository {
         .write(WhiteboardPositionTransformer(position)
             .asCompanion
             .copyWith(id: Value(oldValue.id)));
+  }
+
+  @override
+  Future<void> deleteWhiteboardPosition({required WhiteboardId id}) {
+    return (database.delete(database.whiteboardPositionItem)
+          ..where((tbl) => tbl.whiteboardId.equals(id.id)))
+        .go();
   }
 }

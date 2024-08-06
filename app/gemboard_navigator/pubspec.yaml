@@ -37,6 +37,8 @@ dependencies:
     path: ../../feature/whiteboard
   import_export:
     path: ../../feature/import_export
+  folder:
+    path: ../../feature/folder
 
 dev_dependencies:
   build_runner: ^2.4.11

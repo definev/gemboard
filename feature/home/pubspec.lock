@@ -681,7 +681,7 @@ packages:
     source: hosted
     version: "1.0.0"
   import_export:
-    dependency: "direct overridden"
+    dependency: "direct main"
     description:
       path: "../import_export"
       relative: true

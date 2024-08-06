@@ -39,28 +39,31 @@ class GemboardApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       theme: dsTheme,
       routeInformationProvider: nav.routeInformationProvider,
       routeInformationParser: nav.routeInformationParser,
       routerDelegate: nav.routerDelegate,
       builder: (context, child) {
         final md = MediaQuery.of(context);
-        return MediaQuery(
-          data: md.copyWith(
-            padding: md.padding.copyWith(
-              top: md.padding.top +
-                  switch (defaultTargetPlatform) {
-                    TargetPlatform.macOS => titlebarHeight,
-                    // TargetPlatform.windows => titlebarHeight,
-                    _ => 0,
-                  },
+        return WindowMover(
+          child: MediaQuery(
+            data: md.copyWith(
+              padding: md.padding.copyWith(
+                top: md.padding.top +
+                    switch (defaultTargetPlatform) {
+                      TargetPlatform.macOS => titlebarHeight,
+                      // TargetPlatform.windows => titlebarHeight,
+                      _ => 0,
+                    },
+              ),
             ),
-          ),
-          child: MixTheme(
-            data: mixTheme,
-            child: DesignSystemTheme(
-              data: designSystemThemeData,
-              child: child!,
+            child: MixTheme(
+              data: mixTheme,
+              child: DesignSystemTheme(
+                data: designSystemThemeData,
+                child: child!,
+              ),
             ),
           ),
         );

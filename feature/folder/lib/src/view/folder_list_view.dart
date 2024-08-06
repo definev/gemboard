@@ -91,39 +91,10 @@ class FolderListView extends StatelessWidget {
                   AsyncError() => [],
                   AsyncData(:final value) => [
                       for (final whiteboard in value)
-                        Button(
+                        WhiteboardEditorButton(
+                          onWhiteboardPressed: onWhiteboardPressed,
+                          whiteboard: whiteboard,
                           background: ColorVariant.purple,
-                          style: Style(
-                            $box.padding.right.ref(SpaceVariant.small),
-                          ),
-                          onPressed: () => onWhiteboardPressed(whiteboard),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: EmojiLabelEditor(
-                                  autofocus: whiteboard.title.isEmpty,
-                                  emoji: whiteboard.emoji,
-                                  label: whiteboard.title,
-                                  onEmojiSelected: (value) => ref.read(
-                                    updateWhiteboardProvider(
-                                      id: whiteboard.id,
-                                      data: whiteboard.copyWith(emoji: value),
-                                    ).future,
-                                  ),
-                                  onLabelChanged: (value) => ref.read(
-                                    updateWhiteboardProvider(
-                                      id: whiteboard.id,
-                                      data: whiteboard.copyWith(title: value),
-                                    ).future,
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () => onWhiteboardPressed(whiteboard),
-                                child: StyledIcon(IconlyLight.arrow_right_square),
-                              ),
-                            ],
-                          ),
                         ),
                     ],
                   _ => [],
@@ -135,3 +106,4 @@ class FolderListView extends StatelessWidget {
     );
   }
 }
+

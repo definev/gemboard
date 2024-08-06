@@ -22,6 +22,8 @@ dependencies:
   # design system
   design_system:
     path: ../../core/design_system
+  utils:
+    path: ../../core/utils
   
   # feature
   whiteboard:
@@ -30,6 +32,8 @@ dependencies:
     path: ../../feature/cell
   graph_edge:
     path: ../../feature/graph_edge
+  folder:
+    path: ../../feature/folder
   
   mix: ^1.4.0
   sliver_tools: ^0.2.12

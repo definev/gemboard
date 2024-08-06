@@ -117,8 +117,8 @@ class DSCardSection extends StatelessWidget {
             child: header,
           ),
         if (content case final content?)
-          Mix(
-            data: style.contentStyle(context).of(context),
+          Box(
+            style: style.contentStyle(context),
             child: content,
           ),
         if (footer case final footer?) footer,

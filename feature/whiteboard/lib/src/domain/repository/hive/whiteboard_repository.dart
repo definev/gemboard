@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utils/utils.dart';
-import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 part 'whiteboard_repository.g.dart';
@@ -48,5 +47,10 @@ class WhiteboardRepositoryHive extends WhiteboardRepository
       'whiteboard_offset_${id.id}',
       jsonEncode(position.toJson()),
     );
+  }
+
+  @override
+  Future<void> deleteWhiteboardPosition({required WhiteboardId id}) {
+    return prefs.then((store) => store.remove('whiteboard_offset_${id.id}'));
   }
 }
