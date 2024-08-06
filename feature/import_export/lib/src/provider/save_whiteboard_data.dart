@@ -71,12 +71,14 @@ Future<void> saveWhiteboardData(
     createCellsProvider(
       parentId: CellParentId(whiteboardId: newWhiteboard.id.id),
       data: newCells,
+      silent: true,
     ).future,
   );
   await ref.read(
     createEdgesProvider(
       parentId: EdgeParentId(whiteboardId: newWhiteboard.id.id),
       data: newEdges,
+      silent: true,
     ).future,
   );
 

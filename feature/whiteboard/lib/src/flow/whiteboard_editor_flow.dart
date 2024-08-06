@@ -18,10 +18,7 @@ import 'package:settings/settings.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:utils/utils.dart';
 import 'package:whiteboard/src/domain/data/cursor_mode.dart';
-import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
-import 'package:whiteboard/src/provider/get_whiteboard_position.dart';
 import 'package:whiteboard/src/provider/move_cells_and_edges_to_another_whiteboard.dart';
-import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
 import 'package:whiteboard/src/view/guide_view.dart';
 import 'package:whiteboard/src/view/whiteboard_view.dart';
 import 'package:whiteboard/src/widget/whiteboard_cursor_tool.dart';
@@ -144,6 +141,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
       [cursorMode.value],
     );
 
+    final whiteboardPositionInitialized = useState(false);
     useEffect(() {
       Debouncer debouncer = Debouncer();
       () async {
@@ -153,10 +151,10 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
         final WhiteboardPosition(:offset, :scale) = position;
         debugPrint('WhiteboardPosition: topLeft: $offset, scale: $scale');
         WidgetsBinding.instance.addPostFrameCallback((_) async {
-          while (!verticalScrollController.hasClients ||
-              !horizontalScrollController.hasClients) {
-            await Future.delayed(Duration(milliseconds: 1));
-          }
+          // while (!verticalScrollController.hasClients ||
+          //     !horizontalScrollController.hasClients) {
+          //   await Future.delayed(Duration(milliseconds: 1));
+          // }
           scaleFactor.value = scale;
           if (verticalScrollController.offset != offset.dy) {
             verticalScrollController.jumpTo(offset.dy);
@@ -165,6 +163,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
           if (horizontalScrollController.offset != offset.dx) {
             horizontalScrollController.jumpTo(offset.dx);
           }
+          whiteboardPositionInitialized.value = true;
         });
       }();
 
@@ -829,11 +828,29 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Column(
+      body: Stack(
         children: [
-          appBar,
-          Expanded(
-            child: whiteboard,
+          Positioned.fill(
+            child: Column(
+              children: [
+                appBar,
+                Expanded(
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: whiteboard,
+                      ),
+                      if (whiteboardPositionInitialized.value == false)
+                        Positioned.fill(
+                          child: ColoredBox(
+                            color: ColorVariant.background.resolve(context),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -42,11 +42,12 @@ Future<Map<String, dynamic>> compressWhiteboardToJson(
       if (cell.url.isScheme('file')) {
         try {
           final file = File(cell.url.toFilePath());
+          final filetype = file.path.split('.').last;
           newCells.add(
             cell.copyWith(
               url: Uri.dataFromBytes(
                 await file.readAsBytes(),
-                mimeType: 'image/*',
+                mimeType: 'image/$filetype',
                 percentEncoded: true,
               ),
             ),

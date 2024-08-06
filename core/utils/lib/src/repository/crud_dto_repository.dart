@@ -115,7 +115,7 @@ abstract mixin class CrudDtoRepositoryAdaptive<
   CrudDTORepository<PID, ID, Data> get storage;
   CrudDTORepository<PID, ID, Data> get interactive;
 
-  bool firstTime = true;
+  Map<String, bool> _firstTimeState = {};
 
   @override
   Future<void> add({required PID parentId, required Data data}) async {
@@ -152,12 +152,12 @@ abstract mixin class CrudDtoRepositoryAdaptive<
     int page = 0,
     int size = 10,
   }) async {
-    if (firstTime) {
+    if (_firstTimeState[parentId.id] == null) {
       final storageData = await storage.getList(parentId: parentId);
       for (var item in storageData) {
         await interactive.add(parentId: parentId, data: item);
       }
-      firstTime = false;
+      _firstTimeState[parentId.id] = true;
       return storageData;
     }
     try {

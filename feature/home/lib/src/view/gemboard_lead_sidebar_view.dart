@@ -77,6 +77,25 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                 },
               ),
               children: [
+                ...switch (ref.watch(getWhiteboardListProvider(
+                    parentId: const WhiteboardParentId()))) {
+                  AsyncLoading() => [],
+                  AsyncData(:final value) => [
+                      for (final whiteboard in value)
+                        if (whiteboard.id != WhiteboardId.defaultValue)
+                          WhiteboardEditorButton(
+                            background: ColorVariant.yellow,
+                            whiteboard: whiteboard,
+                            onWhiteboardPressed: (whiteboard) =>
+                                whiteboardNavigation.openWhiteboardEditor(
+                              context,
+                              id: whiteboard.id,
+                              resizableController: resizableController,
+                            ),
+                          ),
+                    ],
+                  _ => [],
+                },
                 SliverPinnedHeader(
                   child: HookBuilder(
                     builder: (context) {
@@ -105,6 +124,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                               flex: 3,
                               child: Button(
                                 background: ColorVariant.yellow,
+                                highlight: ButtonHighlight.focus,
                                 onPressed: () async {
                                   final data = Whiteboard(
                                     id: WhiteboardId(
@@ -140,8 +160,7 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                                 $box.height(40),
                               ),
                               background: ColorVariant.yellow,
-                              kind: ButtonKind.flat,
-                              highlight: ButtonHighlight.pressed,
+                              kind: ButtonKind.filled,
                               onPressed: () =>
                                   showCreateForm.value = !showCreateForm.value,
                               child: Center(
@@ -161,25 +180,6 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                     },
                   ),
                 ),
-                ...switch (ref.watch(getWhiteboardListProvider(
-                    parentId: const WhiteboardParentId()))) {
-                  AsyncLoading() => [],
-                  AsyncData(:final value) => [
-                      for (final whiteboard in value)
-                        if (whiteboard.id != WhiteboardId.defaultValue)
-                          WhiteboardEditorButton(
-                            background: ColorVariant.yellow,
-                            whiteboard: whiteboard,
-                            onWhiteboardPressed: (whiteboard) =>
-                                whiteboardNavigation.openWhiteboardEditor(
-                              context,
-                              id: whiteboard.id,
-                              resizableController: resizableController,
-                            ),
-                          ),
-                    ],
-                  _ => [],
-                },
                 ...switch (foldersAsyncValue) {
                   AsyncLoading() => [],
                   AsyncError() => [],
@@ -192,6 +192,9 @@ class GemboardLeadSidebar extends HookConsumerWidget {
                       FolderListView(
                         folders: folders,
                         gemboardEmojiLabelKind: gemboardEmojiLabelKind,
+                        onImport: (id) {
+                          importExportNavigation.pushToImportFlow(folderId: id);
+                        },
                         onCreateGemboard: (data) {
                           whiteboardNavigation.openWhiteboardEditor(
                             context,

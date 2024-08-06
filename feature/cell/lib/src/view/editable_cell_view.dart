@@ -143,20 +143,11 @@ class EditableCellView extends HookWidget {
       ),
     );
 
-    if (cell.height != null) {
-      child = SizedBox(
-        height: cell.height,
-        width: cell.width,
-        child: child,
-      );
-    } else {
-      child = IntrinsicHeight(
-        child: SizedBox(
-          width: cell.width,
-          child: child,
-        ),
-      );
-    }
+    child = SizedBox(
+      height: cell.height,
+      width: cell.width,
+      child: child,
+    );
 
     return child;
   }

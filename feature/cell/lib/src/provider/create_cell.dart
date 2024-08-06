@@ -22,11 +22,15 @@ Future<void> createCells(
   CreateCellsRef ref, {
   required CellParentId parentId,
   required List<Cell> data,
+  bool silent = false,
 }) async {
   final repository = ref.read(cellRepositoryProvider);
   for (final cell in data) {
     await repository.add(parentId: parentId, data: cell);
   }
+
+  if (silent) return;
+
   final controller =
       ref.read(getCellListStreamControllerProvider(parentId: parentId));
   controller.add(await repository.getList(parentId: parentId));

@@ -23,7 +23,12 @@ class ImportFlow extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final jsonTextController = useTextEditingController();
 
-    VoidCallback onImport(String raw) {
+    final folder = switch (folderId) {
+      null => null,
+      final folderId => ref.watch(getFolderByIdProvider(folderId.id)),
+    };
+
+    Future<void> Function() onImport(String raw) {
       return () async {
         try {
           final json = jsonDecode(raw);
@@ -60,14 +65,18 @@ class ImportFlow extends HookConsumerWidget {
             children: [
               DSAppbar(
                 leading: DSBackButton(),
-                title: StyledText('Import'),
+                title: switch (folder) {
+                  AsyncData(:final value) =>
+                    StyledText('Import to "${value.title}"'),
+                  _ => StyledText('Import'),
+                },
               ),
               PaddedColumn(
                 padding: EdgeInsets.all(SpaceVariant.small.resolve(context)),
                 children: [
                   DSTextbox(
                     hintText: 'Enter the gemboard JSON',
-                    maxLines: 10,
+                    maxLines: 5,
                   ),
                   SizedBox(height: SpaceVariant.medium.resolve(context)),
                   Row(
@@ -87,8 +96,14 @@ class ImportFlow extends HookConsumerWidget {
                               withData: true,
                             );
                             if (result == null) return;
-                            for (final file in result.files) {
-                              onImport(utf8.decode(file.bytes!))();
+                            try {
+                              for (final file in result.files) {
+                                await onImport(utf8.decode(file.bytes!))();
+                              }
+
+                              Navigator.pop(context);
+                            } catch (e) {
+                              debugPrint(e.toString());
                             }
                           },
                           child: StyledText('Import from file'),

@@ -172,7 +172,7 @@ class _CreateEdgeProviderElement extends AutoDisposeFutureProviderElement<void>
   Edge get data => (origin as CreateEdgeProvider).data;
 }
 
-String _$createEdgesHash() => r'82c1fb1ac7ad56b8eb77a27f32442b6520e41a4c';
+String _$createEdgesHash() => r'25241265db149ec147b5141a996e6ffce5f1345c';
 
 /// See also [createEdges].
 @ProviderFor(createEdges)
@@ -187,10 +187,12 @@ class CreateEdgesFamily extends Family<AsyncValue<void>> {
   CreateEdgesProvider call({
     required EdgeParentId parentId,
     required List<Edge> data,
+    bool silent = false,
   }) {
     return CreateEdgesProvider(
       parentId: parentId,
       data: data,
+      silent: silent,
     );
   }
 
@@ -201,6 +203,7 @@ class CreateEdgesFamily extends Family<AsyncValue<void>> {
     return call(
       parentId: provider.parentId,
       data: provider.data,
+      silent: provider.silent,
     );
   }
 
@@ -225,11 +228,13 @@ class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
   CreateEdgesProvider({
     required EdgeParentId parentId,
     required List<Edge> data,
+    bool silent = false,
   }) : this._internal(
           (ref) => createEdges(
             ref as CreateEdgesRef,
             parentId: parentId,
             data: data,
+            silent: silent,
           ),
           from: createEdgesProvider,
           name: r'createEdgesProvider',
@@ -242,6 +247,7 @@ class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
               CreateEdgesFamily._allTransitiveDependencies,
           parentId: parentId,
           data: data,
+          silent: silent,
         );
 
   CreateEdgesProvider._internal(
@@ -253,10 +259,12 @@ class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
     required super.from,
     required this.parentId,
     required this.data,
+    required this.silent,
   }) : super.internal();
 
   final EdgeParentId parentId;
   final List<Edge> data;
+  final bool silent;
 
   @override
   Override overrideWith(
@@ -273,6 +281,7 @@ class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
         debugGetCreateSourceHash: null,
         parentId: parentId,
         data: data,
+        silent: silent,
       ),
     );
   }
@@ -286,7 +295,8 @@ class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
   bool operator ==(Object other) {
     return other is CreateEdgesProvider &&
         other.parentId == parentId &&
-        other.data == data;
+        other.data == data &&
+        other.silent == silent;
   }
 
   @override
@@ -294,6 +304,7 @@ class CreateEdgesProvider extends AutoDisposeFutureProvider<void> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parentId.hashCode);
     hash = _SystemHash.combine(hash, data.hashCode);
+    hash = _SystemHash.combine(hash, silent.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -305,6 +316,9 @@ mixin CreateEdgesRef on AutoDisposeFutureProviderRef<void> {
 
   /// The parameter `data` of this provider.
   List<Edge> get data;
+
+  /// The parameter `silent` of this provider.
+  bool get silent;
 }
 
 class _CreateEdgesProviderElement extends AutoDisposeFutureProviderElement<void>
@@ -315,6 +329,8 @@ class _CreateEdgesProviderElement extends AutoDisposeFutureProviderElement<void>
   EdgeParentId get parentId => (origin as CreateEdgesProvider).parentId;
   @override
   List<Edge> get data => (origin as CreateEdgesProvider).data;
+  @override
+  bool get silent => (origin as CreateEdgesProvider).silent;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

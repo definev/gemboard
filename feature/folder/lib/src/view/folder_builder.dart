@@ -17,6 +17,7 @@ class FolderBuilder extends HookWidget {
     required this.onChangeEmojiLabel,
     required this.onCreateGemboard,
     required this.onDeleteFolder,
+    required this.onImport,
     this.anchor,
     required this.children,
   });
@@ -29,6 +30,7 @@ class FolderBuilder extends HookWidget {
   final void Function(String emoji, String label) onChangeEmojiLabel;
   final VoidCallback onCreateGemboard;
   final VoidCallback onDeleteFolder;
+  final VoidCallback? onImport;
   final Anchor? anchor;
 
   final List<Widget> children;
@@ -118,6 +120,18 @@ class FolderBuilder extends HookWidget {
                           label: StyledText('Edit'),
                         ),
                       ),
+                      if (onImport != null)
+                        Button(
+                          onPressed: () {
+                            openMenu.value = false;
+                            onImport!();
+                          },
+                          background: ColorVariant.purple,
+                          child: EmojiLabel(
+                            emoji: StyledText('➕'),
+                            label: StyledText('Import'),
+                          ),
+                        ),
                       Button(
                         onPressed: () {
                           openMenu.value = false;

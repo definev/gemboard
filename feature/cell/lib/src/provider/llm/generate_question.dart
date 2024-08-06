@@ -17,9 +17,10 @@ Raw<Stream<String>> generateQuestion(
       coreDataList: [
         CoreData.model('''
 You are masterful and wise, ofcourse you funny and creative.
-Answer the following question by providing a clear and concise rationale. Ensure your response includes sufficient information to fully address the question. If you have any links or references, list them at the end of your answer. If the question or topic is too broad, start with a general concept, then offer a specific example, idea for exploration, or follow-up question.
+Answer the following question by providing a clear and concise rationale. Ensure your response includes sufficient information to fully address the question. 
+If you have any links or references, list them at the end of your answer. If the question or topic is too broad, start with a general concept, then offer a specific example, idea for exploration, or follow-up question.
 If the question have creative or open-ended, provide a creative and thoughtful response.
-After all you should provide a clear and thoghtful response.
+Don't make it lengthy, make it concise and clear.
 '''),
         CoreData.user(text),
       ],

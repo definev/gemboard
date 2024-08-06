@@ -1,5 +1,9 @@
+import 'dart:io' as io;
+
 import 'package:cell/cell.dart';
+import 'package:flutter/foundation.dart';
 import 'package:graph_edge/graph_edge.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:whiteboard/whiteboard.dart';
 
@@ -31,9 +35,32 @@ Future<WhiteboardFileData> decompressWhiteboardData(
     false =>
       WhiteboardPosition.fromJson(data['position'] as Map<String, dynamic>),
   };
-  final cells = (data['cells'] as List)
-      .map((e) => Cell.fromJson(e as Map<String, dynamic>))
-      .toList();
+
+  List<Cell> cells = [];
+  for (final e in data['cells'] as List) {
+    var cell = Cell.fromJson(e as Map<String, dynamic>);
+    if (cell is ImageCell) {
+      if (!(kIsWasm || kIsWeb)) {
+        if (cell.url.data case final data?) {
+          final filetype = data.mimeType.split('/').last;
+          final directory = await getApplicationDocumentsDirectory();
+          var file = io.File(
+              '${directory.path}/whiteboard/${whiteboard.id.id}/${UniqueKey()}.${filetype}');
+          file = await file.create(recursive: true);
+          final ioSink = file.openWrite();
+          try {
+            ioSink.add(data.contentAsBytes());
+            cell = cell.copyWith(url: file.uri);
+          } catch (e) {
+          } finally {
+            await ioSink.flush();
+            await ioSink.close();
+          }
+        }
+      }
+    }
+    cells.add(cell);
+  }
   final edges = (data['edges'] as List)
       .map((e) => Edge.fromJson(e as Map<String, dynamic>))
       .toList();

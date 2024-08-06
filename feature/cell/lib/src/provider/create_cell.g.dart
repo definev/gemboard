@@ -172,7 +172,7 @@ class _CreateCellProviderElement extends AutoDisposeFutureProviderElement<void>
   Cell get data => (origin as CreateCellProvider).data;
 }
 
-String _$createCellsHash() => r'7e12469c544f313679126a7dc1e3103403c0cfd9';
+String _$createCellsHash() => r'54913aa6a55eda15f602bec9e5a702cd578f851a';
 
 /// See also [createCells].
 @ProviderFor(createCells)
@@ -187,10 +187,12 @@ class CreateCellsFamily extends Family<AsyncValue<void>> {
   CreateCellsProvider call({
     required CellParentId parentId,
     required List<Cell> data,
+    bool silent = false,
   }) {
     return CreateCellsProvider(
       parentId: parentId,
       data: data,
+      silent: silent,
     );
   }
 
@@ -201,6 +203,7 @@ class CreateCellsFamily extends Family<AsyncValue<void>> {
     return call(
       parentId: provider.parentId,
       data: provider.data,
+      silent: provider.silent,
     );
   }
 
@@ -225,11 +228,13 @@ class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
   CreateCellsProvider({
     required CellParentId parentId,
     required List<Cell> data,
+    bool silent = false,
   }) : this._internal(
           (ref) => createCells(
             ref as CreateCellsRef,
             parentId: parentId,
             data: data,
+            silent: silent,
           ),
           from: createCellsProvider,
           name: r'createCellsProvider',
@@ -242,6 +247,7 @@ class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
               CreateCellsFamily._allTransitiveDependencies,
           parentId: parentId,
           data: data,
+          silent: silent,
         );
 
   CreateCellsProvider._internal(
@@ -253,10 +259,12 @@ class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
     required super.from,
     required this.parentId,
     required this.data,
+    required this.silent,
   }) : super.internal();
 
   final CellParentId parentId;
   final List<Cell> data;
+  final bool silent;
 
   @override
   Override overrideWith(
@@ -273,6 +281,7 @@ class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
         debugGetCreateSourceHash: null,
         parentId: parentId,
         data: data,
+        silent: silent,
       ),
     );
   }
@@ -286,7 +295,8 @@ class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
   bool operator ==(Object other) {
     return other is CreateCellsProvider &&
         other.parentId == parentId &&
-        other.data == data;
+        other.data == data &&
+        other.silent == silent;
   }
 
   @override
@@ -294,6 +304,7 @@ class CreateCellsProvider extends AutoDisposeFutureProvider<void> {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
     hash = _SystemHash.combine(hash, parentId.hashCode);
     hash = _SystemHash.combine(hash, data.hashCode);
+    hash = _SystemHash.combine(hash, silent.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -305,6 +316,9 @@ mixin CreateCellsRef on AutoDisposeFutureProviderRef<void> {
 
   /// The parameter `data` of this provider.
   List<Cell> get data;
+
+  /// The parameter `silent` of this provider.
+  bool get silent;
 }
 
 class _CreateCellsProviderElement extends AutoDisposeFutureProviderElement<void>
@@ -315,6 +329,8 @@ class _CreateCellsProviderElement extends AutoDisposeFutureProviderElement<void>
   CellParentId get parentId => (origin as CreateCellsProvider).parentId;
   @override
   List<Cell> get data => (origin as CreateCellsProvider).data;
+  @override
+  bool get silent => (origin as CreateCellsProvider).silent;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

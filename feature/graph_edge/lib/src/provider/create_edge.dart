@@ -22,11 +22,14 @@ Future<void> createEdges(
   CreateEdgesRef ref, {
   required EdgeParentId parentId,
   required List<Edge> data,
+  bool silent = false,
 }) async {
   final repository = ref.read(edgeRepositoryProvider);
   for (final edge in data) {
     await repository.add(parentId: parentId, data: edge);
   }
+
+  if (silent) return;
 
   final controller =
       ref.read(getEdgeListStreamControllerProvider(parentId: parentId));
