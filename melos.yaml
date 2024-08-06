@@ -1,6 +1,6 @@
 name: gemboard
 
-sdkPath: .fvm/flutter_sdk
+# sdkPath: .fvm/flutter_sdk
 
 packages:
   - app/*
