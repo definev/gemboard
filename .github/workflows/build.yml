@@ -72,11 +72,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         shell: bash
-      - run: zip -r web.zip app/gemboard_app/build/web
+      - run: zip -r web_wasm.zip app/gemboard_app/build/web
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          files: web.zip
+          files: web_wasm.zip
   build_windows:
     runs-on: windows-latest
     steps:
