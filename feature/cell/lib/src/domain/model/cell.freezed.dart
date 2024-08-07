@@ -363,6 +363,8 @@ Cell _$CellFromJson(Map<String, dynamic> json) {
       return ArticleCell.fromJson(json);
     case 'url':
       return UrlCell.fromJson(json);
+    case 'header':
+      return HeaderCell.fromJson(json);
 
     default:
       throw CheckedFromJsonException(json, 'cellType', 'Cell',
@@ -377,7 +379,8 @@ mixin _$Cell {
   Offset get offset => throw _privateConstructorUsedError;
   @CellIdConverter()
   CellId get id => throw _privateConstructorUsedError;
-  double get width => throw _privateConstructorUsedError;
+  double? get width => throw _privateConstructorUsedError;
+  double? get preferredWidth => throw _privateConstructorUsedError;
   double? get height => throw _privateConstructorUsedError;
 
   /// A lazy height that will be calculated when the cell is rendered.
@@ -392,7 +395,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -403,7 +407,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -416,7 +421,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -429,7 +435,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -441,7 +448,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -454,7 +462,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -462,6 +471,19 @@ mixin _$Cell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -470,7 +492,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -481,7 +504,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -494,7 +518,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -507,7 +532,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -519,7 +545,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -532,7 +559,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -540,6 +568,19 @@ mixin _$Cell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -548,7 +589,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -559,7 +601,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -572,7 +615,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -585,7 +629,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -597,7 +642,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -610,7 +656,8 @@ mixin _$Cell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -618,6 +665,19 @@ mixin _$Cell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -629,6 +689,7 @@ mixin _$Cell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -639,6 +700,7 @@ mixin _$Cell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -649,6 +711,7 @@ mixin _$Cell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -671,7 +734,8 @@ abstract class $CellCopyWith<$Res> {
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -700,7 +764,8 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -720,10 +785,14 @@ class _$CellCopyWithImpl<$Res, $Val extends Cell>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -779,7 +848,8 @@ abstract class _$$UnknownCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -808,7 +878,8 @@ class __$$UnknownCellImplCopyWithImpl<$Res>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -828,10 +899,14 @@ class __$$UnknownCellImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -864,7 +939,8 @@ class _$UnknownCellImpl implements UnknownCell {
       @OffsetConverter() required this.offset,
       @CellIdConverter()
       this.id = const CellId(parentId: CellParentId(whiteboardId: ''), id: ''),
-      this.width = 100,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       @CellDecorationConverter()
@@ -888,8 +964,9 @@ class _$UnknownCellImpl implements UnknownCell {
   @CellIdConverter()
   final CellId id;
   @override
-  @JsonKey()
-  final double width;
+  final double? width;
+  @override
+  final double? preferredWidth;
   @override
   final double? height;
 
@@ -911,7 +988,7 @@ class _$UnknownCellImpl implements UnknownCell {
 
   @override
   String toString() {
-    return 'Cell.unknown(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext)';
+    return 'Cell.unknown(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext)';
   }
 
   @override
@@ -923,6 +1000,8 @@ class _$UnknownCellImpl implements UnknownCell {
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.preferredHeight, preferredHeight) ||
                 other.preferredHeight == preferredHeight) &&
@@ -936,8 +1015,18 @@ class _$UnknownCellImpl implements UnknownCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, preContext);
+  int get hashCode => Object.hash(
+      runtimeType,
+      layer,
+      offset,
+      id,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      decoration,
+      selected,
+      preContext);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -954,7 +1043,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -965,7 +1055,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -978,7 +1069,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -991,7 +1083,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1003,7 +1096,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1016,7 +1110,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1024,9 +1119,22 @@ class _$UnknownCellImpl implements UnknownCell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) {
-    return unknown(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext);
+    return unknown(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext);
   }
 
   @override
@@ -1036,7 +1144,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1047,7 +1156,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1060,7 +1170,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1073,7 +1184,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1085,7 +1197,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1098,7 +1211,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1106,9 +1220,22 @@ class _$UnknownCellImpl implements UnknownCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) {
-    return unknown?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext);
+    return unknown?.call(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext);
   }
 
   @override
@@ -1118,7 +1245,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1129,7 +1257,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1142,7 +1271,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1155,7 +1285,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1167,7 +1298,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1180,7 +1312,8 @@ class _$UnknownCellImpl implements UnknownCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1188,11 +1321,24 @@ class _$UnknownCellImpl implements UnknownCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) {
     if (unknown != null) {
-      return unknown(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, preContext);
+      return unknown(layer, offset, id, width, preferredWidth, height,
+          preferredHeight, decoration, selected, preContext);
     }
     return orElse();
   }
@@ -1206,6 +1352,7 @@ class _$UnknownCellImpl implements UnknownCell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) {
     return unknown(this);
   }
@@ -1219,6 +1366,7 @@ class _$UnknownCellImpl implements UnknownCell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) {
     return unknown?.call(this);
   }
@@ -1232,6 +1380,7 @@ class _$UnknownCellImpl implements UnknownCell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) {
     if (unknown != null) {
@@ -1253,7 +1402,8 @@ abstract class UnknownCell implements Cell {
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() final CellId id,
-      final double width,
+      final double? width,
+      final double? preferredWidth,
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() final CellDecoration decoration,
@@ -1272,7 +1422,9 @@ abstract class UnknownCell implements Cell {
   @CellIdConverter()
   CellId get id;
   @override
-  double get width;
+  double? get width;
+  @override
+  double? get preferredWidth;
   @override
   double? get height;
 
@@ -1307,7 +1459,8 @@ abstract class _$$BrainstormingCellImplCopyWith<$Res>
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -1338,7 +1491,8 @@ class __$$BrainstormingCellImplCopyWithImpl<$Res>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -1360,10 +1514,14 @@ class __$$BrainstormingCellImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -1403,7 +1561,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
       {this.layer = 9,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
@@ -1428,7 +1587,9 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
   @CellIdConverter()
   final CellId id;
   @override
-  final double width;
+  final double? width;
+  @override
+  final double? preferredWidth;
   @override
   final double? height;
 
@@ -1460,7 +1621,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
 
   @override
   String toString() {
-    return 'Cell.brainstorming(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, question: $question, suggestions: $suggestions)';
+    return 'Cell.brainstorming(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, question: $question, suggestions: $suggestions)';
   }
 
   @override
@@ -1472,6 +1633,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.preferredHeight, preferredHeight) ||
                 other.preferredHeight == preferredHeight) &&
@@ -1495,6 +1658,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
       offset,
       id,
       width,
+      preferredWidth,
       height,
       preferredHeight,
       decoration,
@@ -1519,7 +1683,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1530,7 +1695,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1543,7 +1709,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1556,7 +1723,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1568,7 +1736,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1581,7 +1750,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1589,9 +1759,33 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) {
-    return brainstorming(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, question, suggestions);
+    return brainstorming(
+        layer,
+        offset,
+        id,
+        width,
+        preferredWidth,
+        height,
+        preferredHeight,
+        decoration,
+        selected,
+        preContext,
+        question,
+        suggestions);
   }
 
   @override
@@ -1601,7 +1795,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1612,7 +1807,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1625,7 +1821,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1638,7 +1835,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1650,7 +1848,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1663,7 +1862,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1671,12 +1871,26 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) {
     return brainstorming?.call(
         layer,
         offset,
         id,
         width,
+        preferredWidth,
         height,
         preferredHeight,
         decoration,
@@ -1693,7 +1907,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1704,7 +1919,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1717,7 +1933,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1730,7 +1947,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1742,7 +1960,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1755,7 +1974,8 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -1763,11 +1983,35 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) {
     if (brainstorming != null) {
-      return brainstorming(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, preContext, question, suggestions);
+      return brainstorming(
+          layer,
+          offset,
+          id,
+          width,
+          preferredWidth,
+          height,
+          preferredHeight,
+          decoration,
+          selected,
+          preContext,
+          question,
+          suggestions);
     }
     return orElse();
   }
@@ -1781,6 +2025,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) {
     return brainstorming(this);
   }
@@ -1794,6 +2039,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) {
     return brainstorming?.call(this);
   }
@@ -1807,6 +2053,7 @@ class _$BrainstormingCellImpl implements BrainstormingCell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) {
     if (brainstorming != null) {
@@ -1828,7 +2075,8 @@ abstract class BrainstormingCell implements Cell {
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
-      required final double width,
+      final double? width,
+      final double? preferredWidth,
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
@@ -1849,7 +2097,9 @@ abstract class BrainstormingCell implements Cell {
   @CellIdConverter()
   CellId get id;
   @override
-  double get width;
+  double? get width;
+  @override
+  double? get preferredWidth;
   @override
   double? get height;
 
@@ -1888,7 +2138,8 @@ abstract class _$$EditableCellImplCopyWith<$Res>
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -1919,7 +2170,8 @@ class __$$EditableCellImplCopyWithImpl<$Res>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -1941,10 +2193,14 @@ class __$$EditableCellImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -1984,7 +2240,8 @@ class _$EditableCellImpl implements EditableCell {
       {this.layer = 10,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
@@ -2008,7 +2265,9 @@ class _$EditableCellImpl implements EditableCell {
   @CellIdConverter()
   final CellId id;
   @override
-  final double width;
+  final double? width;
+  @override
+  final double? preferredWidth;
   @override
   final double? height;
 
@@ -2035,7 +2294,7 @@ class _$EditableCellImpl implements EditableCell {
 
   @override
   String toString() {
-    return 'Cell.editable(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title, content: $content)';
+    return 'Cell.editable(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title, content: $content)';
   }
 
   @override
@@ -2047,6 +2306,8 @@ class _$EditableCellImpl implements EditableCell {
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.preferredHeight, preferredHeight) ||
                 other.preferredHeight == preferredHeight) &&
@@ -2062,8 +2323,20 @@ class _$EditableCellImpl implements EditableCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, preContext, title, content);
+  int get hashCode => Object.hash(
+      runtimeType,
+      layer,
+      offset,
+      id,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      decoration,
+      selected,
+      preContext,
+      title,
+      content);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -2080,7 +2353,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2091,7 +2365,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2104,7 +2379,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2117,7 +2393,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2129,7 +2406,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2142,7 +2420,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2150,9 +2429,22 @@ class _$EditableCellImpl implements EditableCell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) {
-    return editable(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, title, content);
+    return editable(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, title, content);
   }
 
   @override
@@ -2162,7 +2454,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2173,7 +2466,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2186,7 +2480,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2199,7 +2494,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2211,7 +2507,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2224,7 +2521,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2232,9 +2530,22 @@ class _$EditableCellImpl implements EditableCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) {
-    return editable?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, title, content);
+    return editable?.call(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, title, content);
   }
 
   @override
@@ -2244,7 +2555,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2255,7 +2567,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2268,7 +2581,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2281,7 +2595,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2293,7 +2608,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2306,7 +2622,8 @@ class _$EditableCellImpl implements EditableCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2314,11 +2631,24 @@ class _$EditableCellImpl implements EditableCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) {
     if (editable != null) {
-      return editable(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, preContext, title, content);
+      return editable(layer, offset, id, width, preferredWidth, height,
+          preferredHeight, decoration, selected, preContext, title, content);
     }
     return orElse();
   }
@@ -2332,6 +2662,7 @@ class _$EditableCellImpl implements EditableCell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) {
     return editable(this);
   }
@@ -2345,6 +2676,7 @@ class _$EditableCellImpl implements EditableCell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) {
     return editable?.call(this);
   }
@@ -2358,6 +2690,7 @@ class _$EditableCellImpl implements EditableCell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) {
     if (editable != null) {
@@ -2379,7 +2712,8 @@ abstract class EditableCell implements Cell {
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
-      required final double width,
+      final double? width,
+      final double? preferredWidth,
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
@@ -2400,7 +2734,9 @@ abstract class EditableCell implements Cell {
   @CellIdConverter()
   CellId get id;
   @override
-  double get width;
+  double? get width;
+  @override
+  double? get preferredWidth;
   @override
   double? get height;
 
@@ -2438,7 +2774,8 @@ abstract class _$$ImageCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -2468,7 +2805,8 @@ class __$$ImageCellImplCopyWithImpl<$Res>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -2489,10 +2827,14 @@ class __$$ImageCellImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -2528,7 +2870,8 @@ class _$ImageCellImpl implements ImageCell {
       {this.layer = 10,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
@@ -2551,7 +2894,9 @@ class _$ImageCellImpl implements ImageCell {
   @CellIdConverter()
   final CellId id;
   @override
-  final double width;
+  final double? width;
+  @override
+  final double? preferredWidth;
   @override
   final double? height;
 
@@ -2577,7 +2922,7 @@ class _$ImageCellImpl implements ImageCell {
 
   @override
   String toString() {
-    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, url: $url)';
+    return 'Cell.image(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, url: $url)';
   }
 
   @override
@@ -2589,6 +2934,8 @@ class _$ImageCellImpl implements ImageCell {
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.preferredHeight, preferredHeight) ||
                 other.preferredHeight == preferredHeight) &&
@@ -2603,8 +2950,19 @@ class _$ImageCellImpl implements ImageCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, preContext, url);
+  int get hashCode => Object.hash(
+      runtimeType,
+      layer,
+      offset,
+      id,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      decoration,
+      selected,
+      preContext,
+      url);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -2621,7 +2979,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2632,7 +2991,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2645,7 +3005,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2658,7 +3019,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2670,7 +3032,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2683,7 +3046,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2691,9 +3055,22 @@ class _$ImageCellImpl implements ImageCell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) {
-    return image(layer, offset, id, width, height, preferredHeight, decoration,
-        selected, preContext, this.url);
+    return image(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, this.url);
   }
 
   @override
@@ -2703,7 +3080,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2714,7 +3092,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2727,7 +3106,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2740,7 +3120,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2752,7 +3133,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2765,7 +3147,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2773,9 +3156,22 @@ class _$ImageCellImpl implements ImageCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) {
-    return image?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, this.url);
+    return image?.call(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, this.url);
   }
 
   @override
@@ -2785,7 +3181,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2796,7 +3193,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2809,7 +3207,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2822,7 +3221,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2834,7 +3234,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2847,7 +3248,8 @@ class _$ImageCellImpl implements ImageCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -2855,11 +3257,24 @@ class _$ImageCellImpl implements ImageCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) {
     if (image != null) {
-      return image(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, preContext, this.url);
+      return image(layer, offset, id, width, preferredWidth, height,
+          preferredHeight, decoration, selected, preContext, this.url);
     }
     return orElse();
   }
@@ -2873,6 +3288,7 @@ class _$ImageCellImpl implements ImageCell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) {
     return image(this);
   }
@@ -2886,6 +3302,7 @@ class _$ImageCellImpl implements ImageCell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) {
     return image?.call(this);
   }
@@ -2899,6 +3316,7 @@ class _$ImageCellImpl implements ImageCell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) {
     if (image != null) {
@@ -2920,7 +3338,8 @@ abstract class ImageCell implements Cell {
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
-      required final double width,
+      final double? width,
+      final double? preferredWidth,
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
@@ -2940,7 +3359,9 @@ abstract class ImageCell implements Cell {
   @CellIdConverter()
   CellId get id;
   @override
-  double get width;
+  double? get width;
+  @override
+  double? get preferredWidth;
   @override
   double? get height;
 
@@ -2978,7 +3399,8 @@ abstract class _$$ArticleCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -3009,7 +3431,8 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -3031,10 +3454,14 @@ class __$$ArticleCellImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -3074,7 +3501,8 @@ class _$ArticleCellImpl implements ArticleCell {
       {this.layer = 10,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
@@ -3098,7 +3526,9 @@ class _$ArticleCellImpl implements ArticleCell {
   @CellIdConverter()
   final CellId id;
   @override
-  final double width;
+  final double? width;
+  @override
+  final double? preferredWidth;
   @override
   final double? height;
 
@@ -3125,7 +3555,7 @@ class _$ArticleCellImpl implements ArticleCell {
 
   @override
   String toString() {
-    return 'Cell.article(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title, content: $content)';
+    return 'Cell.article(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title, content: $content)';
   }
 
   @override
@@ -3137,6 +3567,8 @@ class _$ArticleCellImpl implements ArticleCell {
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.preferredHeight, preferredHeight) ||
                 other.preferredHeight == preferredHeight) &&
@@ -3152,8 +3584,20 @@ class _$ArticleCellImpl implements ArticleCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, preContext, title, content);
+  int get hashCode => Object.hash(
+      runtimeType,
+      layer,
+      offset,
+      id,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      decoration,
+      selected,
+      preContext,
+      title,
+      content);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -3170,7 +3614,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3181,7 +3626,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3194,7 +3640,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3207,7 +3654,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3219,7 +3667,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3232,7 +3681,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3240,9 +3690,22 @@ class _$ArticleCellImpl implements ArticleCell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) {
-    return article(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, title, content);
+    return article(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, title, content);
   }
 
   @override
@@ -3252,7 +3715,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3263,7 +3727,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3276,7 +3741,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3289,7 +3755,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3301,7 +3768,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3314,7 +3782,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3322,9 +3791,22 @@ class _$ArticleCellImpl implements ArticleCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) {
-    return article?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, title, content);
+    return article?.call(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, title, content);
   }
 
   @override
@@ -3334,7 +3816,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3345,7 +3828,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3358,7 +3842,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3371,7 +3856,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3383,7 +3869,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3396,7 +3883,8 @@ class _$ArticleCellImpl implements ArticleCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3404,11 +3892,24 @@ class _$ArticleCellImpl implements ArticleCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) {
     if (article != null) {
-      return article(layer, offset, id, width, height, preferredHeight,
-          decoration, selected, preContext, title, content);
+      return article(layer, offset, id, width, preferredWidth, height,
+          preferredHeight, decoration, selected, preContext, title, content);
     }
     return orElse();
   }
@@ -3422,6 +3923,7 @@ class _$ArticleCellImpl implements ArticleCell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) {
     return article(this);
   }
@@ -3435,6 +3937,7 @@ class _$ArticleCellImpl implements ArticleCell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) {
     return article?.call(this);
   }
@@ -3448,6 +3951,7 @@ class _$ArticleCellImpl implements ArticleCell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) {
     if (article != null) {
@@ -3469,7 +3973,8 @@ abstract class ArticleCell implements Cell {
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
-      required final double width,
+      final double? width,
+      final double? preferredWidth,
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
@@ -3490,7 +3995,9 @@ abstract class ArticleCell implements Cell {
   @CellIdConverter()
   CellId get id;
   @override
-  double get width;
+  double? get width;
+  @override
+  double? get preferredWidth;
   @override
   double? get height;
 
@@ -3528,7 +4035,8 @@ abstract class _$$UrlCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
       {int layer,
       @OffsetConverter() Offset offset,
       @CellIdConverter() CellId id,
-      double width,
+      double? width,
+      double? preferredWidth,
       double? height,
       double? preferredHeight,
       @CellDecorationConverter() CellDecoration decoration,
@@ -3558,7 +4066,8 @@ class __$$UrlCellImplCopyWithImpl<$Res>
     Object? layer = null,
     Object? offset = null,
     Object? id = null,
-    Object? width = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
     Object? height = freezed,
     Object? preferredHeight = freezed,
     Object? decoration = null,
@@ -3579,10 +4088,14 @@ class __$$UrlCellImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as CellId,
-      width: null == width
+      width: freezed == width
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
       height: freezed == height
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
@@ -3618,7 +4131,8 @@ class _$UrlCellImpl implements UrlCell {
       {this.layer = 10,
       @OffsetConverter() required this.offset,
       @CellIdConverter() required this.id,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       @CellDecorationConverter() required this.decoration,
@@ -3641,7 +4155,9 @@ class _$UrlCellImpl implements UrlCell {
   @CellIdConverter()
   final CellId id;
   @override
-  final double width;
+  final double? width;
+  @override
+  final double? preferredWidth;
   @override
   final double? height;
 
@@ -3667,7 +4183,7 @@ class _$UrlCellImpl implements UrlCell {
 
   @override
   String toString() {
-    return 'Cell.url(layer: $layer, offset: $offset, id: $id, width: $width, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, url: $url)';
+    return 'Cell.url(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, url: $url)';
   }
 
   @override
@@ -3679,6 +4195,8 @@ class _$UrlCellImpl implements UrlCell {
             (identical(other.offset, offset) || other.offset == offset) &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
             (identical(other.height, height) || other.height == height) &&
             (identical(other.preferredHeight, preferredHeight) ||
                 other.preferredHeight == preferredHeight) &&
@@ -3693,8 +4211,19 @@ class _$UrlCellImpl implements UrlCell {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, layer, offset, id, width, height,
-      preferredHeight, decoration, selected, preContext, url);
+  int get hashCode => Object.hash(
+      runtimeType,
+      layer,
+      offset,
+      id,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      decoration,
+      selected,
+      preContext,
+      url);
 
   /// Create a copy of Cell
   /// with the given fields replaced by the non-null parameter values.
@@ -3711,7 +4240,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3722,7 +4252,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3735,7 +4266,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3748,7 +4280,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3760,7 +4293,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3773,7 +4307,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3781,9 +4316,22 @@ class _$UrlCellImpl implements UrlCell {
             String? preContext,
             @UriConverter() Uri url)
         url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
   }) {
-    return url(layer, offset, id, width, height, preferredHeight, decoration,
-        selected, preContext, this.url);
+    return url(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, this.url);
   }
 
   @override
@@ -3793,7 +4341,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3804,7 +4353,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3817,7 +4367,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3830,7 +4381,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3842,7 +4394,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3855,7 +4408,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3863,9 +4417,22 @@ class _$UrlCellImpl implements UrlCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
   }) {
-    return url?.call(layer, offset, id, width, height, preferredHeight,
-        decoration, selected, preContext, this.url);
+    return url?.call(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, this.url);
   }
 
   @override
@@ -3875,7 +4442,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3886,7 +4454,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3899,7 +4468,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3912,7 +4482,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3924,7 +4495,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3937,7 +4509,8 @@ class _$UrlCellImpl implements UrlCell {
             int layer,
             @OffsetConverter() Offset offset,
             @CellIdConverter() CellId id,
-            double width,
+            double? width,
+            double? preferredWidth,
             double? height,
             double? preferredHeight,
             @CellDecorationConverter() CellDecoration decoration,
@@ -3945,11 +4518,24 @@ class _$UrlCellImpl implements UrlCell {
             String? preContext,
             @UriConverter() Uri url)?
         url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
     required TResult orElse(),
   }) {
     if (url != null) {
-      return url(layer, offset, id, width, height, preferredHeight, decoration,
-          selected, preContext, this.url);
+      return url(layer, offset, id, width, preferredWidth, height,
+          preferredHeight, decoration, selected, preContext, this.url);
     }
     return orElse();
   }
@@ -3963,6 +4549,7 @@ class _$UrlCellImpl implements UrlCell {
     required TResult Function(ImageCell value) image,
     required TResult Function(ArticleCell value) article,
     required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
   }) {
     return url(this);
   }
@@ -3976,6 +4563,7 @@ class _$UrlCellImpl implements UrlCell {
     TResult? Function(ImageCell value)? image,
     TResult? Function(ArticleCell value)? article,
     TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
   }) {
     return url?.call(this);
   }
@@ -3989,6 +4577,7 @@ class _$UrlCellImpl implements UrlCell {
     TResult Function(ImageCell value)? image,
     TResult Function(ArticleCell value)? article,
     TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
     required TResult orElse(),
   }) {
     if (url != null) {
@@ -4010,7 +4599,8 @@ abstract class UrlCell implements Cell {
       {final int layer,
       @OffsetConverter() required final Offset offset,
       @CellIdConverter() required final CellId id,
-      required final double width,
+      final double? width,
+      final double? preferredWidth,
       final double? height,
       final double? preferredHeight,
       @CellDecorationConverter() required final CellDecoration decoration,
@@ -4029,7 +4619,9 @@ abstract class UrlCell implements Cell {
   @CellIdConverter()
   CellId get id;
   @override
-  double get width;
+  double? get width;
+  @override
+  double? get preferredWidth;
   @override
   double? get height;
 
@@ -4053,5 +4645,628 @@ abstract class UrlCell implements Cell {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UrlCellImplCopyWith<_$UrlCellImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$HeaderCellImplCopyWith<$Res> implements $CellCopyWith<$Res> {
+  factory _$$HeaderCellImplCopyWith(
+          _$HeaderCellImpl value, $Res Function(_$HeaderCellImpl) then) =
+      __$$HeaderCellImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int layer,
+      @OffsetConverter() Offset offset,
+      @CellIdConverter() CellId id,
+      double? width,
+      double? preferredWidth,
+      double? height,
+      double? preferredHeight,
+      @CellDecorationConverter() CellDecoration decoration,
+      bool selected,
+      String? preContext,
+      String title});
+
+  @override
+  $CellIdCopyWith<$Res> get id;
+  @override
+  $CellDecorationCopyWith<$Res> get decoration;
+}
+
+/// @nodoc
+class __$$HeaderCellImplCopyWithImpl<$Res>
+    extends _$CellCopyWithImpl<$Res, _$HeaderCellImpl>
+    implements _$$HeaderCellImplCopyWith<$Res> {
+  __$$HeaderCellImplCopyWithImpl(
+      _$HeaderCellImpl _value, $Res Function(_$HeaderCellImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? layer = null,
+    Object? offset = null,
+    Object? id = null,
+    Object? width = freezed,
+    Object? preferredWidth = freezed,
+    Object? height = freezed,
+    Object? preferredHeight = freezed,
+    Object? decoration = null,
+    Object? selected = null,
+    Object? preContext = freezed,
+    Object? title = null,
+  }) {
+    return _then(_$HeaderCellImpl(
+      layer: null == layer
+          ? _value.layer
+          : layer // ignore: cast_nullable_to_non_nullable
+              as int,
+      offset: null == offset
+          ? _value.offset
+          : offset // ignore: cast_nullable_to_non_nullable
+              as Offset,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as CellId,
+      width: freezed == width
+          ? _value.width
+          : width // ignore: cast_nullable_to_non_nullable
+              as double?,
+      preferredWidth: freezed == preferredWidth
+          ? _value.preferredWidth
+          : preferredWidth // ignore: cast_nullable_to_non_nullable
+              as double?,
+      height: freezed == height
+          ? _value.height
+          : height // ignore: cast_nullable_to_non_nullable
+              as double?,
+      preferredHeight: freezed == preferredHeight
+          ? _value.preferredHeight
+          : preferredHeight // ignore: cast_nullable_to_non_nullable
+              as double?,
+      decoration: null == decoration
+          ? _value.decoration
+          : decoration // ignore: cast_nullable_to_non_nullable
+              as CellDecoration,
+      selected: null == selected
+          ? _value.selected
+          : selected // ignore: cast_nullable_to_non_nullable
+              as bool,
+      preContext: freezed == preContext
+          ? _value.preContext
+          : preContext // ignore: cast_nullable_to_non_nullable
+              as String?,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$HeaderCellImpl implements HeaderCell {
+  const _$HeaderCellImpl(
+      {this.layer = 10,
+      @OffsetConverter() required this.offset,
+      @CellIdConverter() required this.id,
+      this.width,
+      this.preferredWidth,
+      this.height,
+      this.preferredHeight,
+      @CellDecorationConverter() required this.decoration,
+      this.selected = false,
+      this.preContext,
+      required this.title,
+      final String? $type})
+      : $type = $type ?? 'header';
+
+  factory _$HeaderCellImpl.fromJson(Map<String, dynamic> json) =>
+      _$$HeaderCellImplFromJson(json);
+
+  @override
+  @JsonKey()
+  final int layer;
+  @override
+  @OffsetConverter()
+  final Offset offset;
+  @override
+  @CellIdConverter()
+  final CellId id;
+  @override
+  final double? width;
+  @override
+  final double? preferredWidth;
+  @override
+  final double? height;
+
+  /// A lazy height that will be calculated when the cell is rendered.
+  @override
+  final double? preferredHeight;
+  @override
+  @CellDecorationConverter()
+  final CellDecoration decoration;
+  @override
+  @JsonKey()
+  final bool selected;
+  @override
+  final String? preContext;
+
+  ///
+  @override
+  final String title;
+
+  @JsonKey(name: 'cellType')
+  final String $type;
+
+  @override
+  String toString() {
+    return 'Cell.header(layer: $layer, offset: $offset, id: $id, width: $width, preferredWidth: $preferredWidth, height: $height, preferredHeight: $preferredHeight, decoration: $decoration, selected: $selected, preContext: $preContext, title: $title)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$HeaderCellImpl &&
+            (identical(other.layer, layer) || other.layer == layer) &&
+            (identical(other.offset, offset) || other.offset == offset) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.width, width) || other.width == width) &&
+            (identical(other.preferredWidth, preferredWidth) ||
+                other.preferredWidth == preferredWidth) &&
+            (identical(other.height, height) || other.height == height) &&
+            (identical(other.preferredHeight, preferredHeight) ||
+                other.preferredHeight == preferredHeight) &&
+            (identical(other.decoration, decoration) ||
+                other.decoration == decoration) &&
+            (identical(other.selected, selected) ||
+                other.selected == selected) &&
+            (identical(other.preContext, preContext) ||
+                other.preContext == preContext) &&
+            (identical(other.title, title) || other.title == title));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      layer,
+      offset,
+      id,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      decoration,
+      selected,
+      preContext,
+      title);
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$HeaderCellImplCopyWith<_$HeaderCellImpl> get copyWith =>
+      __$$HeaderCellImplCopyWithImpl<_$HeaderCellImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext)
+        unknown,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String? question,
+            List<String> suggestions)
+        brainstorming,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title,
+            String content)
+        editable,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            @UriConverter() Uri url)
+        image,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title,
+            String content)
+        article,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            @UriConverter() Uri url)
+        url,
+    required TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)
+        header,
+  }) {
+    return header(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, title);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext)?
+        unknown,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String? question,
+            List<String> suggestions)?
+        brainstorming,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title,
+            String content)?
+        editable,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            @UriConverter() Uri url)?
+        image,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title,
+            String content)?
+        article,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            @UriConverter() Uri url)?
+        url,
+    TResult? Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
+  }) {
+    return header?.call(layer, offset, id, width, preferredWidth, height,
+        preferredHeight, decoration, selected, preContext, title);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext)?
+        unknown,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String? question,
+            List<String> suggestions)?
+        brainstorming,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title,
+            String content)?
+        editable,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            @UriConverter() Uri url)?
+        image,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title,
+            String content)?
+        article,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            @UriConverter() Uri url)?
+        url,
+    TResult Function(
+            int layer,
+            @OffsetConverter() Offset offset,
+            @CellIdConverter() CellId id,
+            double? width,
+            double? preferredWidth,
+            double? height,
+            double? preferredHeight,
+            @CellDecorationConverter() CellDecoration decoration,
+            bool selected,
+            String? preContext,
+            String title)?
+        header,
+    required TResult orElse(),
+  }) {
+    if (header != null) {
+      return header(layer, offset, id, width, preferredWidth, height,
+          preferredHeight, decoration, selected, preContext, title);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(UnknownCell value) unknown,
+    required TResult Function(BrainstormingCell value) brainstorming,
+    required TResult Function(EditableCell value) editable,
+    required TResult Function(ImageCell value) image,
+    required TResult Function(ArticleCell value) article,
+    required TResult Function(UrlCell value) url,
+    required TResult Function(HeaderCell value) header,
+  }) {
+    return header(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(UnknownCell value)? unknown,
+    TResult? Function(BrainstormingCell value)? brainstorming,
+    TResult? Function(EditableCell value)? editable,
+    TResult? Function(ImageCell value)? image,
+    TResult? Function(ArticleCell value)? article,
+    TResult? Function(UrlCell value)? url,
+    TResult? Function(HeaderCell value)? header,
+  }) {
+    return header?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(UnknownCell value)? unknown,
+    TResult Function(BrainstormingCell value)? brainstorming,
+    TResult Function(EditableCell value)? editable,
+    TResult Function(ImageCell value)? image,
+    TResult Function(ArticleCell value)? article,
+    TResult Function(UrlCell value)? url,
+    TResult Function(HeaderCell value)? header,
+    required TResult orElse(),
+  }) {
+    if (header != null) {
+      return header(this);
+    }
+    return orElse();
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$HeaderCellImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class HeaderCell implements Cell {
+  const factory HeaderCell(
+      {final int layer,
+      @OffsetConverter() required final Offset offset,
+      @CellIdConverter() required final CellId id,
+      final double? width,
+      final double? preferredWidth,
+      final double? height,
+      final double? preferredHeight,
+      @CellDecorationConverter() required final CellDecoration decoration,
+      final bool selected,
+      final String? preContext,
+      required final String title}) = _$HeaderCellImpl;
+
+  factory HeaderCell.fromJson(Map<String, dynamic> json) =
+      _$HeaderCellImpl.fromJson;
+
+  @override
+  int get layer;
+  @override
+  @OffsetConverter()
+  Offset get offset;
+  @override
+  @CellIdConverter()
+  CellId get id;
+  @override
+  double? get width;
+  @override
+  double? get preferredWidth;
+  @override
+  double? get height;
+
+  /// A lazy height that will be calculated when the cell is rendered.
+  @override
+  double? get preferredHeight;
+  @override
+  @CellDecorationConverter()
+  CellDecoration get decoration;
+  @override
+  bool get selected;
+  @override
+  String? get preContext;
+
+  ///
+  String get title;
+
+  /// Create a copy of Cell
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$HeaderCellImplCopyWith<_$HeaderCellImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

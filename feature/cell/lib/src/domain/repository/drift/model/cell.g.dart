@@ -44,8 +44,14 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
   static const VerificationMeta _widthMeta = const VerificationMeta('width');
   @override
   late final GeneratedColumn<double> width = GeneratedColumn<double>(
-      'width', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      'width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredWidthMeta =
+      const VerificationMeta('preferredWidth');
+  @override
+  late final GeneratedColumn<double> preferredWidth = GeneratedColumn<double>(
+      'preferred_width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
   late final GeneratedColumn<double> height = GeneratedColumn<double>(
@@ -117,6 +123,7 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
         offsetDx,
         offsetDy,
         width,
+        preferredWidth,
         height,
         preferredHeight,
         layer,
@@ -171,8 +178,12 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
     if (data.containsKey('width')) {
       context.handle(
           _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
-    } else if (isInserting) {
-      context.missing(_widthMeta);
+    }
+    if (data.containsKey('preferred_width')) {
+      context.handle(
+          _preferredWidthMeta,
+          preferredWidth.isAcceptableOrUnknown(
+              data['preferred_width']!, _preferredWidthMeta));
     }
     if (data.containsKey('height')) {
       context.handle(_heightMeta,
@@ -253,7 +264,9 @@ class $BrainstormingCellItemTable extends BrainstormingCellItem
       offsetDy: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
       width: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}width'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}width']),
+      preferredWidth: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}preferred_width']),
       height: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}height']),
       preferredHeight: attachedDatabase.typeMapping.read(
@@ -294,7 +307,8 @@ class BrainstormingCellItemData extends DataClass
   /// Position related
   final double offsetDx;
   final double offsetDy;
-  final double width;
+  final double? width;
+  final double? preferredWidth;
   final double? height;
   final double? preferredHeight;
 
@@ -313,7 +327,8 @@ class BrainstormingCellItemData extends DataClass
       required this.cellId,
       required this.offsetDx,
       required this.offsetDy,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       required this.layer,
@@ -332,7 +347,12 @@ class BrainstormingCellItemData extends DataClass
     map['cell_id'] = Variable<String>(cellId);
     map['offset_dx'] = Variable<double>(offsetDx);
     map['offset_dy'] = Variable<double>(offsetDy);
-    map['width'] = Variable<double>(width);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<double>(width);
+    }
+    if (!nullToAbsent || preferredWidth != null) {
+      map['preferred_width'] = Variable<double>(preferredWidth);
+    }
     if (!nullToAbsent || height != null) {
       map['height'] = Variable<double>(height);
     }
@@ -363,7 +383,11 @@ class BrainstormingCellItemData extends DataClass
       cellId: Value(cellId),
       offsetDx: Value(offsetDx),
       offsetDy: Value(offsetDy),
-      width: Value(width),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      preferredWidth: preferredWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredWidth),
       height:
           height == null && nullToAbsent ? const Value.absent() : Value(height),
       preferredHeight: preferredHeight == null && nullToAbsent
@@ -395,7 +419,8 @@ class BrainstormingCellItemData extends DataClass
       cellId: serializer.fromJson<String>(json['cellId']),
       offsetDx: serializer.fromJson<double>(json['offsetDx']),
       offsetDy: serializer.fromJson<double>(json['offsetDy']),
-      width: serializer.fromJson<double>(json['width']),
+      width: serializer.fromJson<double?>(json['width']),
+      preferredWidth: serializer.fromJson<double?>(json['preferredWidth']),
       height: serializer.fromJson<double?>(json['height']),
       preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
       layer: serializer.fromJson<int>(json['layer']),
@@ -417,7 +442,8 @@ class BrainstormingCellItemData extends DataClass
       'cellId': serializer.toJson<String>(cellId),
       'offsetDx': serializer.toJson<double>(offsetDx),
       'offsetDy': serializer.toJson<double>(offsetDy),
-      'width': serializer.toJson<double>(width),
+      'width': serializer.toJson<double?>(width),
+      'preferredWidth': serializer.toJson<double?>(preferredWidth),
       'height': serializer.toJson<double?>(height),
       'preferredHeight': serializer.toJson<double?>(preferredHeight),
       'layer': serializer.toJson<int>(layer),
@@ -437,7 +463,8 @@ class BrainstormingCellItemData extends DataClass
           String? cellId,
           double? offsetDx,
           double? offsetDy,
-          double? width,
+          Value<double?> width = const Value.absent(),
+          Value<double?> preferredWidth = const Value.absent(),
           Value<double?> height = const Value.absent(),
           Value<double?> preferredHeight = const Value.absent(),
           int? layer,
@@ -454,7 +481,9 @@ class BrainstormingCellItemData extends DataClass
         cellId: cellId ?? this.cellId,
         offsetDx: offsetDx ?? this.offsetDx,
         offsetDy: offsetDy ?? this.offsetDy,
-        width: width ?? this.width,
+        width: width.present ? width.value : this.width,
+        preferredWidth:
+            preferredWidth.present ? preferredWidth.value : this.preferredWidth,
         height: height.present ? height.value : this.height,
         preferredHeight: preferredHeight.present
             ? preferredHeight.value
@@ -479,6 +508,9 @@ class BrainstormingCellItemData extends DataClass
       offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
       offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
       width: data.width.present ? data.width.value : this.width,
+      preferredWidth: data.preferredWidth.present
+          ? data.preferredWidth.value
+          : this.preferredWidth,
       height: data.height.present ? data.height.value : this.height,
       preferredHeight: data.preferredHeight.present
           ? data.preferredHeight.value
@@ -506,6 +538,7 @@ class BrainstormingCellItemData extends DataClass
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -528,6 +561,7 @@ class BrainstormingCellItemData extends DataClass
       offsetDx,
       offsetDy,
       width,
+      preferredWidth,
       height,
       preferredHeight,
       layer,
@@ -548,6 +582,7 @@ class BrainstormingCellItemData extends DataClass
           other.offsetDx == this.offsetDx &&
           other.offsetDy == this.offsetDy &&
           other.width == this.width &&
+          other.preferredWidth == this.preferredWidth &&
           other.height == this.height &&
           other.preferredHeight == this.preferredHeight &&
           other.layer == this.layer &&
@@ -567,7 +602,8 @@ class BrainstormingCellItemCompanion
   final Value<String> cellId;
   final Value<double> offsetDx;
   final Value<double> offsetDy;
-  final Value<double> width;
+  final Value<double?> width;
+  final Value<double?> preferredWidth;
   final Value<double?> height;
   final Value<double?> preferredHeight;
   final Value<int> layer;
@@ -585,6 +621,7 @@ class BrainstormingCellItemCompanion
     this.offsetDx = const Value.absent(),
     this.offsetDy = const Value.absent(),
     this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     this.layer = const Value.absent(),
@@ -602,7 +639,8 @@ class BrainstormingCellItemCompanion
     required String cellId,
     required double offsetDx,
     required double offsetDy,
-    required double width,
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     required int layer,
@@ -617,7 +655,6 @@ class BrainstormingCellItemCompanion
         cellId = Value(cellId),
         offsetDx = Value(offsetDx),
         offsetDy = Value(offsetDy),
-        width = Value(width),
         layer = Value(layer),
         selected = Value(selected),
         color = Value(color),
@@ -630,6 +667,7 @@ class BrainstormingCellItemCompanion
     Expression<double>? offsetDx,
     Expression<double>? offsetDy,
     Expression<double>? width,
+    Expression<double>? preferredWidth,
     Expression<double>? height,
     Expression<double>? preferredHeight,
     Expression<int>? layer,
@@ -648,6 +686,7 @@ class BrainstormingCellItemCompanion
       if (offsetDx != null) 'offset_dx': offsetDx,
       if (offsetDy != null) 'offset_dy': offsetDy,
       if (width != null) 'width': width,
+      if (preferredWidth != null) 'preferred_width': preferredWidth,
       if (height != null) 'height': height,
       if (preferredHeight != null) 'preferred_height': preferredHeight,
       if (layer != null) 'layer': layer,
@@ -667,7 +706,8 @@ class BrainstormingCellItemCompanion
       Value<String>? cellId,
       Value<double>? offsetDx,
       Value<double>? offsetDy,
-      Value<double>? width,
+      Value<double?>? width,
+      Value<double?>? preferredWidth,
       Value<double?>? height,
       Value<double?>? preferredHeight,
       Value<int>? layer,
@@ -685,6 +725,7 @@ class BrainstormingCellItemCompanion
       offsetDx: offsetDx ?? this.offsetDx,
       offsetDy: offsetDy ?? this.offsetDy,
       width: width ?? this.width,
+      preferredWidth: preferredWidth ?? this.preferredWidth,
       height: height ?? this.height,
       preferredHeight: preferredHeight ?? this.preferredHeight,
       layer: layer ?? this.layer,
@@ -718,6 +759,9 @@ class BrainstormingCellItemCompanion
     }
     if (width.present) {
       map['width'] = Variable<double>(width.value);
+    }
+    if (preferredWidth.present) {
+      map['preferred_width'] = Variable<double>(preferredWidth.value);
     }
     if (height.present) {
       map['height'] = Variable<double>(height.value);
@@ -761,6 +805,7 @@ class BrainstormingCellItemCompanion
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -817,8 +862,14 @@ class $EditableCellItemTable extends EditableCellItem
   static const VerificationMeta _widthMeta = const VerificationMeta('width');
   @override
   late final GeneratedColumn<double> width = GeneratedColumn<double>(
-      'width', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      'width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredWidthMeta =
+      const VerificationMeta('preferredWidth');
+  @override
+  late final GeneratedColumn<double> preferredWidth = GeneratedColumn<double>(
+      'preferred_width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
   late final GeneratedColumn<double> height = GeneratedColumn<double>(
@@ -889,6 +940,7 @@ class $EditableCellItemTable extends EditableCellItem
         offsetDx,
         offsetDy,
         width,
+        preferredWidth,
         height,
         preferredHeight,
         layer,
@@ -943,8 +995,12 @@ class $EditableCellItemTable extends EditableCellItem
     if (data.containsKey('width')) {
       context.handle(
           _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
-    } else if (isInserting) {
-      context.missing(_widthMeta);
+    }
+    if (data.containsKey('preferred_width')) {
+      context.handle(
+          _preferredWidthMeta,
+          preferredWidth.isAcceptableOrUnknown(
+              data['preferred_width']!, _preferredWidthMeta));
     }
     if (data.containsKey('height')) {
       context.handle(_heightMeta,
@@ -1026,7 +1082,9 @@ class $EditableCellItemTable extends EditableCellItem
       offsetDy: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
       width: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}width'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}width']),
+      preferredWidth: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}preferred_width']),
       height: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}height']),
       preferredHeight: attachedDatabase.typeMapping.read(
@@ -1067,7 +1125,8 @@ class EditableCellItemData extends DataClass
   /// Position related
   final double offsetDx;
   final double offsetDy;
-  final double width;
+  final double? width;
+  final double? preferredWidth;
   final double? height;
   final double? preferredHeight;
 
@@ -1086,7 +1145,8 @@ class EditableCellItemData extends DataClass
       required this.cellId,
       required this.offsetDx,
       required this.offsetDy,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       required this.layer,
@@ -1105,7 +1165,12 @@ class EditableCellItemData extends DataClass
     map['cell_id'] = Variable<String>(cellId);
     map['offset_dx'] = Variable<double>(offsetDx);
     map['offset_dy'] = Variable<double>(offsetDy);
-    map['width'] = Variable<double>(width);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<double>(width);
+    }
+    if (!nullToAbsent || preferredWidth != null) {
+      map['preferred_width'] = Variable<double>(preferredWidth);
+    }
     if (!nullToAbsent || height != null) {
       map['height'] = Variable<double>(height);
     }
@@ -1132,7 +1197,11 @@ class EditableCellItemData extends DataClass
       cellId: Value(cellId),
       offsetDx: Value(offsetDx),
       offsetDy: Value(offsetDy),
-      width: Value(width),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      preferredWidth: preferredWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredWidth),
       height:
           height == null && nullToAbsent ? const Value.absent() : Value(height),
       preferredHeight: preferredHeight == null && nullToAbsent
@@ -1160,7 +1229,8 @@ class EditableCellItemData extends DataClass
       cellId: serializer.fromJson<String>(json['cellId']),
       offsetDx: serializer.fromJson<double>(json['offsetDx']),
       offsetDy: serializer.fromJson<double>(json['offsetDy']),
-      width: serializer.fromJson<double>(json['width']),
+      width: serializer.fromJson<double?>(json['width']),
+      preferredWidth: serializer.fromJson<double?>(json['preferredWidth']),
       height: serializer.fromJson<double?>(json['height']),
       preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
       layer: serializer.fromJson<int>(json['layer']),
@@ -1182,7 +1252,8 @@ class EditableCellItemData extends DataClass
       'cellId': serializer.toJson<String>(cellId),
       'offsetDx': serializer.toJson<double>(offsetDx),
       'offsetDy': serializer.toJson<double>(offsetDy),
-      'width': serializer.toJson<double>(width),
+      'width': serializer.toJson<double?>(width),
+      'preferredWidth': serializer.toJson<double?>(preferredWidth),
       'height': serializer.toJson<double?>(height),
       'preferredHeight': serializer.toJson<double?>(preferredHeight),
       'layer': serializer.toJson<int>(layer),
@@ -1202,7 +1273,8 @@ class EditableCellItemData extends DataClass
           String? cellId,
           double? offsetDx,
           double? offsetDy,
-          double? width,
+          Value<double?> width = const Value.absent(),
+          Value<double?> preferredWidth = const Value.absent(),
           Value<double?> height = const Value.absent(),
           Value<double?> preferredHeight = const Value.absent(),
           int? layer,
@@ -1219,7 +1291,9 @@ class EditableCellItemData extends DataClass
         cellId: cellId ?? this.cellId,
         offsetDx: offsetDx ?? this.offsetDx,
         offsetDy: offsetDy ?? this.offsetDy,
-        width: width ?? this.width,
+        width: width.present ? width.value : this.width,
+        preferredWidth:
+            preferredWidth.present ? preferredWidth.value : this.preferredWidth,
         height: height.present ? height.value : this.height,
         preferredHeight: preferredHeight.present
             ? preferredHeight.value
@@ -1243,6 +1317,9 @@ class EditableCellItemData extends DataClass
       offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
       offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
       width: data.width.present ? data.width.value : this.width,
+      preferredWidth: data.preferredWidth.present
+          ? data.preferredWidth.value
+          : this.preferredWidth,
       height: data.height.present ? data.height.value : this.height,
       preferredHeight: data.preferredHeight.present
           ? data.preferredHeight.value
@@ -1269,6 +1346,7 @@ class EditableCellItemData extends DataClass
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -1291,6 +1369,7 @@ class EditableCellItemData extends DataClass
       offsetDx,
       offsetDy,
       width,
+      preferredWidth,
       height,
       preferredHeight,
       layer,
@@ -1311,6 +1390,7 @@ class EditableCellItemData extends DataClass
           other.offsetDx == this.offsetDx &&
           other.offsetDy == this.offsetDy &&
           other.width == this.width &&
+          other.preferredWidth == this.preferredWidth &&
           other.height == this.height &&
           other.preferredHeight == this.preferredHeight &&
           other.layer == this.layer &&
@@ -1329,7 +1409,8 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
   final Value<String> cellId;
   final Value<double> offsetDx;
   final Value<double> offsetDy;
-  final Value<double> width;
+  final Value<double?> width;
+  final Value<double?> preferredWidth;
   final Value<double?> height;
   final Value<double?> preferredHeight;
   final Value<int> layer;
@@ -1347,6 +1428,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     this.offsetDx = const Value.absent(),
     this.offsetDy = const Value.absent(),
     this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     this.layer = const Value.absent(),
@@ -1364,7 +1446,8 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     required String cellId,
     required double offsetDx,
     required double offsetDy,
-    required double width,
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     required int layer,
@@ -1379,7 +1462,6 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
         cellId = Value(cellId),
         offsetDx = Value(offsetDx),
         offsetDy = Value(offsetDy),
-        width = Value(width),
         layer = Value(layer),
         selected = Value(selected),
         color = Value(color),
@@ -1394,6 +1476,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     Expression<double>? offsetDx,
     Expression<double>? offsetDy,
     Expression<double>? width,
+    Expression<double>? preferredWidth,
     Expression<double>? height,
     Expression<double>? preferredHeight,
     Expression<int>? layer,
@@ -1412,6 +1495,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
       if (offsetDx != null) 'offset_dx': offsetDx,
       if (offsetDy != null) 'offset_dy': offsetDy,
       if (width != null) 'width': width,
+      if (preferredWidth != null) 'preferred_width': preferredWidth,
       if (height != null) 'height': height,
       if (preferredHeight != null) 'preferred_height': preferredHeight,
       if (layer != null) 'layer': layer,
@@ -1431,7 +1515,8 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
       Value<String>? cellId,
       Value<double>? offsetDx,
       Value<double>? offsetDy,
-      Value<double>? width,
+      Value<double?>? width,
+      Value<double?>? preferredWidth,
       Value<double?>? height,
       Value<double?>? preferredHeight,
       Value<int>? layer,
@@ -1449,6 +1534,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
       offsetDx: offsetDx ?? this.offsetDx,
       offsetDy: offsetDy ?? this.offsetDy,
       width: width ?? this.width,
+      preferredWidth: preferredWidth ?? this.preferredWidth,
       height: height ?? this.height,
       preferredHeight: preferredHeight ?? this.preferredHeight,
       layer: layer ?? this.layer,
@@ -1482,6 +1568,9 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
     }
     if (width.present) {
       map['width'] = Variable<double>(width.value);
+    }
+    if (preferredWidth.present) {
+      map['preferred_width'] = Variable<double>(preferredWidth.value);
     }
     if (height.present) {
       map['height'] = Variable<double>(height.value);
@@ -1525,6 +1614,7 @@ class EditableCellItemCompanion extends UpdateCompanion<EditableCellItemData> {
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -1581,8 +1671,14 @@ class $ImageCellItemTable extends ImageCellItem
   static const VerificationMeta _widthMeta = const VerificationMeta('width');
   @override
   late final GeneratedColumn<double> width = GeneratedColumn<double>(
-      'width', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      'width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredWidthMeta =
+      const VerificationMeta('preferredWidth');
+  @override
+  late final GeneratedColumn<double> preferredWidth = GeneratedColumn<double>(
+      'preferred_width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
   late final GeneratedColumn<double> height = GeneratedColumn<double>(
@@ -1647,6 +1743,7 @@ class $ImageCellItemTable extends ImageCellItem
         offsetDx,
         offsetDy,
         width,
+        preferredWidth,
         height,
         preferredHeight,
         layer,
@@ -1699,8 +1796,12 @@ class $ImageCellItemTable extends ImageCellItem
     if (data.containsKey('width')) {
       context.handle(
           _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
-    } else if (isInserting) {
-      context.missing(_widthMeta);
+    }
+    if (data.containsKey('preferred_width')) {
+      context.handle(
+          _preferredWidthMeta,
+          preferredWidth.isAcceptableOrUnknown(
+              data['preferred_width']!, _preferredWidthMeta));
     }
     if (data.containsKey('height')) {
       context.handle(_heightMeta,
@@ -1776,7 +1877,9 @@ class $ImageCellItemTable extends ImageCellItem
       offsetDy: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
       width: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}width'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}width']),
+      preferredWidth: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}preferred_width']),
       height: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}height']),
       preferredHeight: attachedDatabase.typeMapping.read(
@@ -1815,7 +1918,8 @@ class ImageCellItemData extends DataClass
   /// Position related
   final double offsetDx;
   final double offsetDy;
-  final double width;
+  final double? width;
+  final double? preferredWidth;
   final double? height;
   final double? preferredHeight;
 
@@ -1833,7 +1937,8 @@ class ImageCellItemData extends DataClass
       required this.cellId,
       required this.offsetDx,
       required this.offsetDy,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       required this.layer,
@@ -1851,7 +1956,12 @@ class ImageCellItemData extends DataClass
     map['cell_id'] = Variable<String>(cellId);
     map['offset_dx'] = Variable<double>(offsetDx);
     map['offset_dy'] = Variable<double>(offsetDy);
-    map['width'] = Variable<double>(width);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<double>(width);
+    }
+    if (!nullToAbsent || preferredWidth != null) {
+      map['preferred_width'] = Variable<double>(preferredWidth);
+    }
     if (!nullToAbsent || height != null) {
       map['height'] = Variable<double>(height);
     }
@@ -1877,7 +1987,11 @@ class ImageCellItemData extends DataClass
       cellId: Value(cellId),
       offsetDx: Value(offsetDx),
       offsetDy: Value(offsetDy),
-      width: Value(width),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      preferredWidth: preferredWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredWidth),
       height:
           height == null && nullToAbsent ? const Value.absent() : Value(height),
       preferredHeight: preferredHeight == null && nullToAbsent
@@ -1904,7 +2018,8 @@ class ImageCellItemData extends DataClass
       cellId: serializer.fromJson<String>(json['cellId']),
       offsetDx: serializer.fromJson<double>(json['offsetDx']),
       offsetDy: serializer.fromJson<double>(json['offsetDy']),
-      width: serializer.fromJson<double>(json['width']),
+      width: serializer.fromJson<double?>(json['width']),
+      preferredWidth: serializer.fromJson<double?>(json['preferredWidth']),
       height: serializer.fromJson<double?>(json['height']),
       preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
       layer: serializer.fromJson<int>(json['layer']),
@@ -1925,7 +2040,8 @@ class ImageCellItemData extends DataClass
       'cellId': serializer.toJson<String>(cellId),
       'offsetDx': serializer.toJson<double>(offsetDx),
       'offsetDy': serializer.toJson<double>(offsetDy),
-      'width': serializer.toJson<double>(width),
+      'width': serializer.toJson<double?>(width),
+      'preferredWidth': serializer.toJson<double?>(preferredWidth),
       'height': serializer.toJson<double?>(height),
       'preferredHeight': serializer.toJson<double?>(preferredHeight),
       'layer': serializer.toJson<int>(layer),
@@ -1944,7 +2060,8 @@ class ImageCellItemData extends DataClass
           String? cellId,
           double? offsetDx,
           double? offsetDy,
-          double? width,
+          Value<double?> width = const Value.absent(),
+          Value<double?> preferredWidth = const Value.absent(),
           Value<double?> height = const Value.absent(),
           Value<double?> preferredHeight = const Value.absent(),
           int? layer,
@@ -1960,7 +2077,9 @@ class ImageCellItemData extends DataClass
         cellId: cellId ?? this.cellId,
         offsetDx: offsetDx ?? this.offsetDx,
         offsetDy: offsetDy ?? this.offsetDy,
-        width: width ?? this.width,
+        width: width.present ? width.value : this.width,
+        preferredWidth:
+            preferredWidth.present ? preferredWidth.value : this.preferredWidth,
         height: height.present ? height.value : this.height,
         preferredHeight: preferredHeight.present
             ? preferredHeight.value
@@ -1983,6 +2102,9 @@ class ImageCellItemData extends DataClass
       offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
       offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
       width: data.width.present ? data.width.value : this.width,
+      preferredWidth: data.preferredWidth.present
+          ? data.preferredWidth.value
+          : this.preferredWidth,
       height: data.height.present ? data.height.value : this.height,
       preferredHeight: data.preferredHeight.present
           ? data.preferredHeight.value
@@ -2008,6 +2130,7 @@ class ImageCellItemData extends DataClass
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -2029,6 +2152,7 @@ class ImageCellItemData extends DataClass
       offsetDx,
       offsetDy,
       width,
+      preferredWidth,
       height,
       preferredHeight,
       layer,
@@ -2048,6 +2172,7 @@ class ImageCellItemData extends DataClass
           other.offsetDx == this.offsetDx &&
           other.offsetDy == this.offsetDy &&
           other.width == this.width &&
+          other.preferredWidth == this.preferredWidth &&
           other.height == this.height &&
           other.preferredHeight == this.preferredHeight &&
           other.layer == this.layer &&
@@ -2065,7 +2190,8 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
   final Value<String> cellId;
   final Value<double> offsetDx;
   final Value<double> offsetDy;
-  final Value<double> width;
+  final Value<double?> width;
+  final Value<double?> preferredWidth;
   final Value<double?> height;
   final Value<double?> preferredHeight;
   final Value<int> layer;
@@ -2082,6 +2208,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     this.offsetDx = const Value.absent(),
     this.offsetDy = const Value.absent(),
     this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     this.layer = const Value.absent(),
@@ -2098,7 +2225,8 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     required String cellId,
     required double offsetDx,
     required double offsetDy,
-    required double width,
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     required int layer,
@@ -2112,7 +2240,6 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
         cellId = Value(cellId),
         offsetDx = Value(offsetDx),
         offsetDy = Value(offsetDy),
-        width = Value(width),
         layer = Value(layer),
         selected = Value(selected),
         color = Value(color),
@@ -2126,6 +2253,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     Expression<double>? offsetDx,
     Expression<double>? offsetDy,
     Expression<double>? width,
+    Expression<double>? preferredWidth,
     Expression<double>? height,
     Expression<double>? preferredHeight,
     Expression<int>? layer,
@@ -2143,6 +2271,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
       if (offsetDx != null) 'offset_dx': offsetDx,
       if (offsetDy != null) 'offset_dy': offsetDy,
       if (width != null) 'width': width,
+      if (preferredWidth != null) 'preferred_width': preferredWidth,
       if (height != null) 'height': height,
       if (preferredHeight != null) 'preferred_height': preferredHeight,
       if (layer != null) 'layer': layer,
@@ -2161,7 +2290,8 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
       Value<String>? cellId,
       Value<double>? offsetDx,
       Value<double>? offsetDy,
-      Value<double>? width,
+      Value<double?>? width,
+      Value<double?>? preferredWidth,
       Value<double?>? height,
       Value<double?>? preferredHeight,
       Value<int>? layer,
@@ -2178,6 +2308,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
       offsetDx: offsetDx ?? this.offsetDx,
       offsetDy: offsetDy ?? this.offsetDy,
       width: width ?? this.width,
+      preferredWidth: preferredWidth ?? this.preferredWidth,
       height: height ?? this.height,
       preferredHeight: preferredHeight ?? this.preferredHeight,
       layer: layer ?? this.layer,
@@ -2210,6 +2341,9 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
     }
     if (width.present) {
       map['width'] = Variable<double>(width.value);
+    }
+    if (preferredWidth.present) {
+      map['preferred_width'] = Variable<double>(preferredWidth.value);
     }
     if (height.present) {
       map['height'] = Variable<double>(height.value);
@@ -2250,6 +2384,7 @@ class ImageCellItemCompanion extends UpdateCompanion<ImageCellItemData> {
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -2305,8 +2440,14 @@ class $ArticleCellItemTable extends ArticleCellItem
   static const VerificationMeta _widthMeta = const VerificationMeta('width');
   @override
   late final GeneratedColumn<double> width = GeneratedColumn<double>(
-      'width', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      'width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredWidthMeta =
+      const VerificationMeta('preferredWidth');
+  @override
+  late final GeneratedColumn<double> preferredWidth = GeneratedColumn<double>(
+      'preferred_width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
   late final GeneratedColumn<double> height = GeneratedColumn<double>(
@@ -2377,6 +2518,7 @@ class $ArticleCellItemTable extends ArticleCellItem
         offsetDx,
         offsetDy,
         width,
+        preferredWidth,
         height,
         preferredHeight,
         layer,
@@ -2431,8 +2573,12 @@ class $ArticleCellItemTable extends ArticleCellItem
     if (data.containsKey('width')) {
       context.handle(
           _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
-    } else if (isInserting) {
-      context.missing(_widthMeta);
+    }
+    if (data.containsKey('preferred_width')) {
+      context.handle(
+          _preferredWidthMeta,
+          preferredWidth.isAcceptableOrUnknown(
+              data['preferred_width']!, _preferredWidthMeta));
     }
     if (data.containsKey('height')) {
       context.handle(_heightMeta,
@@ -2514,7 +2660,9 @@ class $ArticleCellItemTable extends ArticleCellItem
       offsetDy: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
       width: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}width'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}width']),
+      preferredWidth: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}preferred_width']),
       height: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}height']),
       preferredHeight: attachedDatabase.typeMapping.read(
@@ -2555,7 +2703,8 @@ class ArticleCellItemData extends DataClass
   /// Position related
   final double offsetDx;
   final double offsetDy;
-  final double width;
+  final double? width;
+  final double? preferredWidth;
   final double? height;
   final double? preferredHeight;
 
@@ -2574,7 +2723,8 @@ class ArticleCellItemData extends DataClass
       required this.cellId,
       required this.offsetDx,
       required this.offsetDy,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       required this.layer,
@@ -2593,7 +2743,12 @@ class ArticleCellItemData extends DataClass
     map['cell_id'] = Variable<String>(cellId);
     map['offset_dx'] = Variable<double>(offsetDx);
     map['offset_dy'] = Variable<double>(offsetDy);
-    map['width'] = Variable<double>(width);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<double>(width);
+    }
+    if (!nullToAbsent || preferredWidth != null) {
+      map['preferred_width'] = Variable<double>(preferredWidth);
+    }
     if (!nullToAbsent || height != null) {
       map['height'] = Variable<double>(height);
     }
@@ -2620,7 +2775,11 @@ class ArticleCellItemData extends DataClass
       cellId: Value(cellId),
       offsetDx: Value(offsetDx),
       offsetDy: Value(offsetDy),
-      width: Value(width),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      preferredWidth: preferredWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredWidth),
       height:
           height == null && nullToAbsent ? const Value.absent() : Value(height),
       preferredHeight: preferredHeight == null && nullToAbsent
@@ -2648,7 +2807,8 @@ class ArticleCellItemData extends DataClass
       cellId: serializer.fromJson<String>(json['cellId']),
       offsetDx: serializer.fromJson<double>(json['offsetDx']),
       offsetDy: serializer.fromJson<double>(json['offsetDy']),
-      width: serializer.fromJson<double>(json['width']),
+      width: serializer.fromJson<double?>(json['width']),
+      preferredWidth: serializer.fromJson<double?>(json['preferredWidth']),
       height: serializer.fromJson<double?>(json['height']),
       preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
       layer: serializer.fromJson<int>(json['layer']),
@@ -2670,7 +2830,8 @@ class ArticleCellItemData extends DataClass
       'cellId': serializer.toJson<String>(cellId),
       'offsetDx': serializer.toJson<double>(offsetDx),
       'offsetDy': serializer.toJson<double>(offsetDy),
-      'width': serializer.toJson<double>(width),
+      'width': serializer.toJson<double?>(width),
+      'preferredWidth': serializer.toJson<double?>(preferredWidth),
       'height': serializer.toJson<double?>(height),
       'preferredHeight': serializer.toJson<double?>(preferredHeight),
       'layer': serializer.toJson<int>(layer),
@@ -2690,7 +2851,8 @@ class ArticleCellItemData extends DataClass
           String? cellId,
           double? offsetDx,
           double? offsetDy,
-          double? width,
+          Value<double?> width = const Value.absent(),
+          Value<double?> preferredWidth = const Value.absent(),
           Value<double?> height = const Value.absent(),
           Value<double?> preferredHeight = const Value.absent(),
           int? layer,
@@ -2707,7 +2869,9 @@ class ArticleCellItemData extends DataClass
         cellId: cellId ?? this.cellId,
         offsetDx: offsetDx ?? this.offsetDx,
         offsetDy: offsetDy ?? this.offsetDy,
-        width: width ?? this.width,
+        width: width.present ? width.value : this.width,
+        preferredWidth:
+            preferredWidth.present ? preferredWidth.value : this.preferredWidth,
         height: height.present ? height.value : this.height,
         preferredHeight: preferredHeight.present
             ? preferredHeight.value
@@ -2731,6 +2895,9 @@ class ArticleCellItemData extends DataClass
       offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
       offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
       width: data.width.present ? data.width.value : this.width,
+      preferredWidth: data.preferredWidth.present
+          ? data.preferredWidth.value
+          : this.preferredWidth,
       height: data.height.present ? data.height.value : this.height,
       preferredHeight: data.preferredHeight.present
           ? data.preferredHeight.value
@@ -2757,6 +2924,7 @@ class ArticleCellItemData extends DataClass
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -2779,6 +2947,7 @@ class ArticleCellItemData extends DataClass
       offsetDx,
       offsetDy,
       width,
+      preferredWidth,
       height,
       preferredHeight,
       layer,
@@ -2799,6 +2968,7 @@ class ArticleCellItemData extends DataClass
           other.offsetDx == this.offsetDx &&
           other.offsetDy == this.offsetDy &&
           other.width == this.width &&
+          other.preferredWidth == this.preferredWidth &&
           other.height == this.height &&
           other.preferredHeight == this.preferredHeight &&
           other.layer == this.layer &&
@@ -2817,7 +2987,8 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
   final Value<String> cellId;
   final Value<double> offsetDx;
   final Value<double> offsetDy;
-  final Value<double> width;
+  final Value<double?> width;
+  final Value<double?> preferredWidth;
   final Value<double?> height;
   final Value<double?> preferredHeight;
   final Value<int> layer;
@@ -2835,6 +3006,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     this.offsetDx = const Value.absent(),
     this.offsetDy = const Value.absent(),
     this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     this.layer = const Value.absent(),
@@ -2852,7 +3024,8 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     required String cellId,
     required double offsetDx,
     required double offsetDy,
-    required double width,
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     required int layer,
@@ -2867,7 +3040,6 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
         cellId = Value(cellId),
         offsetDx = Value(offsetDx),
         offsetDy = Value(offsetDy),
-        width = Value(width),
         layer = Value(layer),
         selected = Value(selected),
         color = Value(color),
@@ -2882,6 +3054,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     Expression<double>? offsetDx,
     Expression<double>? offsetDy,
     Expression<double>? width,
+    Expression<double>? preferredWidth,
     Expression<double>? height,
     Expression<double>? preferredHeight,
     Expression<int>? layer,
@@ -2900,6 +3073,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
       if (offsetDx != null) 'offset_dx': offsetDx,
       if (offsetDy != null) 'offset_dy': offsetDy,
       if (width != null) 'width': width,
+      if (preferredWidth != null) 'preferred_width': preferredWidth,
       if (height != null) 'height': height,
       if (preferredHeight != null) 'preferred_height': preferredHeight,
       if (layer != null) 'layer': layer,
@@ -2919,7 +3093,8 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
       Value<String>? cellId,
       Value<double>? offsetDx,
       Value<double>? offsetDy,
-      Value<double>? width,
+      Value<double?>? width,
+      Value<double?>? preferredWidth,
       Value<double?>? height,
       Value<double?>? preferredHeight,
       Value<int>? layer,
@@ -2937,6 +3112,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
       offsetDx: offsetDx ?? this.offsetDx,
       offsetDy: offsetDy ?? this.offsetDy,
       width: width ?? this.width,
+      preferredWidth: preferredWidth ?? this.preferredWidth,
       height: height ?? this.height,
       preferredHeight: preferredHeight ?? this.preferredHeight,
       layer: layer ?? this.layer,
@@ -2970,6 +3146,9 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
     }
     if (width.present) {
       map['width'] = Variable<double>(width.value);
+    }
+    if (preferredWidth.present) {
+      map['preferred_width'] = Variable<double>(preferredWidth.value);
     }
     if (height.present) {
       map['height'] = Variable<double>(height.value);
@@ -3013,6 +3192,7 @@ class ArticleCellItemCompanion extends UpdateCompanion<ArticleCellItemData> {
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -3069,8 +3249,14 @@ class $UrlCellItemTable extends UrlCellItem
   static const VerificationMeta _widthMeta = const VerificationMeta('width');
   @override
   late final GeneratedColumn<double> width = GeneratedColumn<double>(
-      'width', aliasedName, false,
-      type: DriftSqlType.double, requiredDuringInsert: true);
+      'width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredWidthMeta =
+      const VerificationMeta('preferredWidth');
+  @override
+  late final GeneratedColumn<double> preferredWidth = GeneratedColumn<double>(
+      'preferred_width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
   late final GeneratedColumn<double> height = GeneratedColumn<double>(
@@ -3135,6 +3321,7 @@ class $UrlCellItemTable extends UrlCellItem
         offsetDx,
         offsetDy,
         width,
+        preferredWidth,
         height,
         preferredHeight,
         layer,
@@ -3187,8 +3374,12 @@ class $UrlCellItemTable extends UrlCellItem
     if (data.containsKey('width')) {
       context.handle(
           _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
-    } else if (isInserting) {
-      context.missing(_widthMeta);
+    }
+    if (data.containsKey('preferred_width')) {
+      context.handle(
+          _preferredWidthMeta,
+          preferredWidth.isAcceptableOrUnknown(
+              data['preferred_width']!, _preferredWidthMeta));
     }
     if (data.containsKey('height')) {
       context.handle(_heightMeta,
@@ -3264,7 +3455,9 @@ class $UrlCellItemTable extends UrlCellItem
       offsetDy: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
       width: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}width'])!,
+          .read(DriftSqlType.double, data['${effectivePrefix}width']),
+      preferredWidth: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}preferred_width']),
       height: attachedDatabase.typeMapping
           .read(DriftSqlType.double, data['${effectivePrefix}height']),
       preferredHeight: attachedDatabase.typeMapping.read(
@@ -3302,7 +3495,8 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
   /// Position related
   final double offsetDx;
   final double offsetDy;
-  final double width;
+  final double? width;
+  final double? preferredWidth;
   final double? height;
   final double? preferredHeight;
 
@@ -3320,7 +3514,8 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       required this.cellId,
       required this.offsetDx,
       required this.offsetDy,
-      required this.width,
+      this.width,
+      this.preferredWidth,
       this.height,
       this.preferredHeight,
       required this.layer,
@@ -3338,7 +3533,12 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
     map['cell_id'] = Variable<String>(cellId);
     map['offset_dx'] = Variable<double>(offsetDx);
     map['offset_dy'] = Variable<double>(offsetDy);
-    map['width'] = Variable<double>(width);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<double>(width);
+    }
+    if (!nullToAbsent || preferredWidth != null) {
+      map['preferred_width'] = Variable<double>(preferredWidth);
+    }
     if (!nullToAbsent || height != null) {
       map['height'] = Variable<double>(height);
     }
@@ -3364,7 +3564,11 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       cellId: Value(cellId),
       offsetDx: Value(offsetDx),
       offsetDy: Value(offsetDy),
-      width: Value(width),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      preferredWidth: preferredWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredWidth),
       height:
           height == null && nullToAbsent ? const Value.absent() : Value(height),
       preferredHeight: preferredHeight == null && nullToAbsent
@@ -3391,7 +3595,8 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       cellId: serializer.fromJson<String>(json['cellId']),
       offsetDx: serializer.fromJson<double>(json['offsetDx']),
       offsetDy: serializer.fromJson<double>(json['offsetDy']),
-      width: serializer.fromJson<double>(json['width']),
+      width: serializer.fromJson<double?>(json['width']),
+      preferredWidth: serializer.fromJson<double?>(json['preferredWidth']),
       height: serializer.fromJson<double?>(json['height']),
       preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
       layer: serializer.fromJson<int>(json['layer']),
@@ -3412,7 +3617,8 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       'cellId': serializer.toJson<String>(cellId),
       'offsetDx': serializer.toJson<double>(offsetDx),
       'offsetDy': serializer.toJson<double>(offsetDy),
-      'width': serializer.toJson<double>(width),
+      'width': serializer.toJson<double?>(width),
+      'preferredWidth': serializer.toJson<double?>(preferredWidth),
       'height': serializer.toJson<double?>(height),
       'preferredHeight': serializer.toJson<double?>(preferredHeight),
       'layer': serializer.toJson<int>(layer),
@@ -3431,7 +3637,8 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
           String? cellId,
           double? offsetDx,
           double? offsetDy,
-          double? width,
+          Value<double?> width = const Value.absent(),
+          Value<double?> preferredWidth = const Value.absent(),
           Value<double?> height = const Value.absent(),
           Value<double?> preferredHeight = const Value.absent(),
           int? layer,
@@ -3447,7 +3654,9 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
         cellId: cellId ?? this.cellId,
         offsetDx: offsetDx ?? this.offsetDx,
         offsetDy: offsetDy ?? this.offsetDy,
-        width: width ?? this.width,
+        width: width.present ? width.value : this.width,
+        preferredWidth:
+            preferredWidth.present ? preferredWidth.value : this.preferredWidth,
         height: height.present ? height.value : this.height,
         preferredHeight: preferredHeight.present
             ? preferredHeight.value
@@ -3470,6 +3679,9 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
       offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
       width: data.width.present ? data.width.value : this.width,
+      preferredWidth: data.preferredWidth.present
+          ? data.preferredWidth.value
+          : this.preferredWidth,
       height: data.height.present ? data.height.value : this.height,
       preferredHeight: data.preferredHeight.present
           ? data.preferredHeight.value
@@ -3495,6 +3707,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -3516,6 +3729,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
       offsetDx,
       offsetDy,
       width,
+      preferredWidth,
       height,
       preferredHeight,
       layer,
@@ -3535,6 +3749,7 @@ class UrlCellItemData extends DataClass implements Insertable<UrlCellItemData> {
           other.offsetDx == this.offsetDx &&
           other.offsetDy == this.offsetDy &&
           other.width == this.width &&
+          other.preferredWidth == this.preferredWidth &&
           other.height == this.height &&
           other.preferredHeight == this.preferredHeight &&
           other.layer == this.layer &&
@@ -3552,7 +3767,8 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
   final Value<String> cellId;
   final Value<double> offsetDx;
   final Value<double> offsetDy;
-  final Value<double> width;
+  final Value<double?> width;
+  final Value<double?> preferredWidth;
   final Value<double?> height;
   final Value<double?> preferredHeight;
   final Value<int> layer;
@@ -3569,6 +3785,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     this.offsetDx = const Value.absent(),
     this.offsetDy = const Value.absent(),
     this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     this.layer = const Value.absent(),
@@ -3585,7 +3802,8 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     required String cellId,
     required double offsetDx,
     required double offsetDy,
-    required double width,
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
     this.height = const Value.absent(),
     this.preferredHeight = const Value.absent(),
     required int layer,
@@ -3599,7 +3817,6 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
         cellId = Value(cellId),
         offsetDx = Value(offsetDx),
         offsetDy = Value(offsetDy),
-        width = Value(width),
         layer = Value(layer),
         selected = Value(selected),
         color = Value(color),
@@ -3613,6 +3830,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     Expression<double>? offsetDx,
     Expression<double>? offsetDy,
     Expression<double>? width,
+    Expression<double>? preferredWidth,
     Expression<double>? height,
     Expression<double>? preferredHeight,
     Expression<int>? layer,
@@ -3630,6 +3848,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
       if (offsetDx != null) 'offset_dx': offsetDx,
       if (offsetDy != null) 'offset_dy': offsetDy,
       if (width != null) 'width': width,
+      if (preferredWidth != null) 'preferred_width': preferredWidth,
       if (height != null) 'height': height,
       if (preferredHeight != null) 'preferred_height': preferredHeight,
       if (layer != null) 'layer': layer,
@@ -3648,7 +3867,8 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
       Value<String>? cellId,
       Value<double>? offsetDx,
       Value<double>? offsetDy,
-      Value<double>? width,
+      Value<double?>? width,
+      Value<double?>? preferredWidth,
       Value<double?>? height,
       Value<double?>? preferredHeight,
       Value<int>? layer,
@@ -3665,6 +3885,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
       offsetDx: offsetDx ?? this.offsetDx,
       offsetDy: offsetDy ?? this.offsetDy,
       width: width ?? this.width,
+      preferredWidth: preferredWidth ?? this.preferredWidth,
       height: height ?? this.height,
       preferredHeight: preferredHeight ?? this.preferredHeight,
       layer: layer ?? this.layer,
@@ -3697,6 +3918,9 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
     }
     if (width.present) {
       map['width'] = Variable<double>(width.value);
+    }
+    if (preferredWidth.present) {
+      map['preferred_width'] = Variable<double>(preferredWidth.value);
     }
     if (height.present) {
       map['height'] = Variable<double>(height.value);
@@ -3737,6 +3961,7 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
           ..write('offsetDx: $offsetDx, ')
           ..write('offsetDy: $offsetDy, ')
           ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
           ..write('height: $height, ')
           ..write('preferredHeight: $preferredHeight, ')
           ..write('layer: $layer, ')
@@ -3746,6 +3971,775 @@ class UrlCellItemCompanion extends UpdateCompanion<UrlCellItemData> {
           ..write('constraints: $constraints, ')
           ..write('preContext: $preContext, ')
           ..write('url: $url')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $HeaderCellItemTable extends HeaderCellItem
+    with TableInfo<$HeaderCellItemTable, HeaderCellItemData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $HeaderCellItemTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _whiteboardIdMeta =
+      const VerificationMeta('whiteboardId');
+  @override
+  late final GeneratedColumn<String> whiteboardId = GeneratedColumn<String>(
+      'whiteboard_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cellIdMeta = const VerificationMeta('cellId');
+  @override
+  late final GeneratedColumn<String> cellId = GeneratedColumn<String>(
+      'cell_id', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _offsetDxMeta =
+      const VerificationMeta('offsetDx');
+  @override
+  late final GeneratedColumn<double> offsetDx = GeneratedColumn<double>(
+      'offset_dx', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _offsetDyMeta =
+      const VerificationMeta('offsetDy');
+  @override
+  late final GeneratedColumn<double> offsetDy = GeneratedColumn<double>(
+      'offset_dy', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  static const VerificationMeta _widthMeta = const VerificationMeta('width');
+  @override
+  late final GeneratedColumn<double> width = GeneratedColumn<double>(
+      'width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredWidthMeta =
+      const VerificationMeta('preferredWidth');
+  @override
+  late final GeneratedColumn<double> preferredWidth = GeneratedColumn<double>(
+      'preferred_width', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _heightMeta = const VerificationMeta('height');
+  @override
+  late final GeneratedColumn<double> height = GeneratedColumn<double>(
+      'height', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _preferredHeightMeta =
+      const VerificationMeta('preferredHeight');
+  @override
+  late final GeneratedColumn<double> preferredHeight = GeneratedColumn<double>(
+      'preferred_height', aliasedName, true,
+      type: DriftSqlType.double, requiredDuringInsert: false);
+  static const VerificationMeta _layerMeta = const VerificationMeta('layer');
+  @override
+  late final GeneratedColumn<int> layer = GeneratedColumn<int>(
+      'layer', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _selectedMeta =
+      const VerificationMeta('selected');
+  @override
+  late final GeneratedColumn<bool> selected = GeneratedColumn<bool>(
+      'selected', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("selected" IN (0, 1))'));
+  static const VerificationMeta _colorMeta = const VerificationMeta('color');
+  @override
+  late final GeneratedColumn<String> color = GeneratedColumn<String>(
+      'color', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _cardKindMeta =
+      const VerificationMeta('cardKind');
+  @override
+  late final GeneratedColumn<String> cardKind = GeneratedColumn<String>(
+      'card_kind', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _constraintsMeta =
+      const VerificationMeta('constraints');
+  @override
+  late final GeneratedColumn<bool> constraints = GeneratedColumn<bool>(
+      'constraints', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways(
+          'CHECK ("constraints" IN (0, 1))'));
+  static const VerificationMeta _preContextMeta =
+      const VerificationMeta('preContext');
+  @override
+  late final GeneratedColumn<String> preContext = GeneratedColumn<String>(
+      'pre_context', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _titleMeta = const VerificationMeta('title');
+  @override
+  late final GeneratedColumn<String> title = GeneratedColumn<String>(
+      'title', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        whiteboardId,
+        cellId,
+        offsetDx,
+        offsetDy,
+        width,
+        preferredWidth,
+        height,
+        preferredHeight,
+        layer,
+        selected,
+        color,
+        cardKind,
+        constraints,
+        preContext,
+        title
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'header_cell_item';
+  @override
+  VerificationContext validateIntegrity(Insertable<HeaderCellItemData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('whiteboard_id')) {
+      context.handle(
+          _whiteboardIdMeta,
+          whiteboardId.isAcceptableOrUnknown(
+              data['whiteboard_id']!, _whiteboardIdMeta));
+    } else if (isInserting) {
+      context.missing(_whiteboardIdMeta);
+    }
+    if (data.containsKey('cell_id')) {
+      context.handle(_cellIdMeta,
+          cellId.isAcceptableOrUnknown(data['cell_id']!, _cellIdMeta));
+    } else if (isInserting) {
+      context.missing(_cellIdMeta);
+    }
+    if (data.containsKey('offset_dx')) {
+      context.handle(_offsetDxMeta,
+          offsetDx.isAcceptableOrUnknown(data['offset_dx']!, _offsetDxMeta));
+    } else if (isInserting) {
+      context.missing(_offsetDxMeta);
+    }
+    if (data.containsKey('offset_dy')) {
+      context.handle(_offsetDyMeta,
+          offsetDy.isAcceptableOrUnknown(data['offset_dy']!, _offsetDyMeta));
+    } else if (isInserting) {
+      context.missing(_offsetDyMeta);
+    }
+    if (data.containsKey('width')) {
+      context.handle(
+          _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
+    }
+    if (data.containsKey('preferred_width')) {
+      context.handle(
+          _preferredWidthMeta,
+          preferredWidth.isAcceptableOrUnknown(
+              data['preferred_width']!, _preferredWidthMeta));
+    }
+    if (data.containsKey('height')) {
+      context.handle(_heightMeta,
+          height.isAcceptableOrUnknown(data['height']!, _heightMeta));
+    }
+    if (data.containsKey('preferred_height')) {
+      context.handle(
+          _preferredHeightMeta,
+          preferredHeight.isAcceptableOrUnknown(
+              data['preferred_height']!, _preferredHeightMeta));
+    }
+    if (data.containsKey('layer')) {
+      context.handle(
+          _layerMeta, layer.isAcceptableOrUnknown(data['layer']!, _layerMeta));
+    } else if (isInserting) {
+      context.missing(_layerMeta);
+    }
+    if (data.containsKey('selected')) {
+      context.handle(_selectedMeta,
+          selected.isAcceptableOrUnknown(data['selected']!, _selectedMeta));
+    } else if (isInserting) {
+      context.missing(_selectedMeta);
+    }
+    if (data.containsKey('color')) {
+      context.handle(
+          _colorMeta, color.isAcceptableOrUnknown(data['color']!, _colorMeta));
+    } else if (isInserting) {
+      context.missing(_colorMeta);
+    }
+    if (data.containsKey('card_kind')) {
+      context.handle(_cardKindMeta,
+          cardKind.isAcceptableOrUnknown(data['card_kind']!, _cardKindMeta));
+    } else if (isInserting) {
+      context.missing(_cardKindMeta);
+    }
+    if (data.containsKey('constraints')) {
+      context.handle(
+          _constraintsMeta,
+          constraints.isAcceptableOrUnknown(
+              data['constraints']!, _constraintsMeta));
+    } else if (isInserting) {
+      context.missing(_constraintsMeta);
+    }
+    if (data.containsKey('pre_context')) {
+      context.handle(
+          _preContextMeta,
+          preContext.isAcceptableOrUnknown(
+              data['pre_context']!, _preContextMeta));
+    }
+    if (data.containsKey('title')) {
+      context.handle(
+          _titleMeta, title.isAcceptableOrUnknown(data['title']!, _titleMeta));
+    } else if (isInserting) {
+      context.missing(_titleMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  HeaderCellItemData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return HeaderCellItemData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      whiteboardId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}whiteboard_id'])!,
+      cellId: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}cell_id'])!,
+      offsetDx: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}offset_dx'])!,
+      offsetDy: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}offset_dy'])!,
+      width: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}width']),
+      preferredWidth: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}preferred_width']),
+      height: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}height']),
+      preferredHeight: attachedDatabase.typeMapping.read(
+          DriftSqlType.double, data['${effectivePrefix}preferred_height']),
+      layer: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}layer'])!,
+      selected: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}selected'])!,
+      color: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}color'])!,
+      cardKind: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}card_kind'])!,
+      constraints: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}constraints'])!,
+      preContext: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}pre_context']),
+      title: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}title'])!,
+    );
+  }
+
+  @override
+  $HeaderCellItemTable createAlias(String alias) {
+    return $HeaderCellItemTable(attachedDatabase, alias);
+  }
+}
+
+class HeaderCellItemData extends DataClass
+    implements Insertable<HeaderCellItemData> {
+  final int id;
+
+  /// Identity related
+  final String whiteboardId;
+  final String cellId;
+
+  /// Position related
+  final double offsetDx;
+  final double offsetDy;
+  final double? width;
+  final double? preferredWidth;
+  final double? height;
+  final double? preferredHeight;
+
+  /// Decoration related
+  final int layer;
+  final bool selected;
+  final String color;
+  final String cardKind;
+  final bool constraints;
+  final String? preContext;
+  final String title;
+  const HeaderCellItemData(
+      {required this.id,
+      required this.whiteboardId,
+      required this.cellId,
+      required this.offsetDx,
+      required this.offsetDy,
+      this.width,
+      this.preferredWidth,
+      this.height,
+      this.preferredHeight,
+      required this.layer,
+      required this.selected,
+      required this.color,
+      required this.cardKind,
+      required this.constraints,
+      this.preContext,
+      required this.title});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['whiteboard_id'] = Variable<String>(whiteboardId);
+    map['cell_id'] = Variable<String>(cellId);
+    map['offset_dx'] = Variable<double>(offsetDx);
+    map['offset_dy'] = Variable<double>(offsetDy);
+    if (!nullToAbsent || width != null) {
+      map['width'] = Variable<double>(width);
+    }
+    if (!nullToAbsent || preferredWidth != null) {
+      map['preferred_width'] = Variable<double>(preferredWidth);
+    }
+    if (!nullToAbsent || height != null) {
+      map['height'] = Variable<double>(height);
+    }
+    if (!nullToAbsent || preferredHeight != null) {
+      map['preferred_height'] = Variable<double>(preferredHeight);
+    }
+    map['layer'] = Variable<int>(layer);
+    map['selected'] = Variable<bool>(selected);
+    map['color'] = Variable<String>(color);
+    map['card_kind'] = Variable<String>(cardKind);
+    map['constraints'] = Variable<bool>(constraints);
+    if (!nullToAbsent || preContext != null) {
+      map['pre_context'] = Variable<String>(preContext);
+    }
+    map['title'] = Variable<String>(title);
+    return map;
+  }
+
+  HeaderCellItemCompanion toCompanion(bool nullToAbsent) {
+    return HeaderCellItemCompanion(
+      id: Value(id),
+      whiteboardId: Value(whiteboardId),
+      cellId: Value(cellId),
+      offsetDx: Value(offsetDx),
+      offsetDy: Value(offsetDy),
+      width:
+          width == null && nullToAbsent ? const Value.absent() : Value(width),
+      preferredWidth: preferredWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredWidth),
+      height:
+          height == null && nullToAbsent ? const Value.absent() : Value(height),
+      preferredHeight: preferredHeight == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preferredHeight),
+      layer: Value(layer),
+      selected: Value(selected),
+      color: Value(color),
+      cardKind: Value(cardKind),
+      constraints: Value(constraints),
+      preContext: preContext == null && nullToAbsent
+          ? const Value.absent()
+          : Value(preContext),
+      title: Value(title),
+    );
+  }
+
+  factory HeaderCellItemData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return HeaderCellItemData(
+      id: serializer.fromJson<int>(json['id']),
+      whiteboardId: serializer.fromJson<String>(json['whiteboardId']),
+      cellId: serializer.fromJson<String>(json['cellId']),
+      offsetDx: serializer.fromJson<double>(json['offsetDx']),
+      offsetDy: serializer.fromJson<double>(json['offsetDy']),
+      width: serializer.fromJson<double?>(json['width']),
+      preferredWidth: serializer.fromJson<double?>(json['preferredWidth']),
+      height: serializer.fromJson<double?>(json['height']),
+      preferredHeight: serializer.fromJson<double?>(json['preferredHeight']),
+      layer: serializer.fromJson<int>(json['layer']),
+      selected: serializer.fromJson<bool>(json['selected']),
+      color: serializer.fromJson<String>(json['color']),
+      cardKind: serializer.fromJson<String>(json['cardKind']),
+      constraints: serializer.fromJson<bool>(json['constraints']),
+      preContext: serializer.fromJson<String?>(json['preContext']),
+      title: serializer.fromJson<String>(json['title']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'whiteboardId': serializer.toJson<String>(whiteboardId),
+      'cellId': serializer.toJson<String>(cellId),
+      'offsetDx': serializer.toJson<double>(offsetDx),
+      'offsetDy': serializer.toJson<double>(offsetDy),
+      'width': serializer.toJson<double?>(width),
+      'preferredWidth': serializer.toJson<double?>(preferredWidth),
+      'height': serializer.toJson<double?>(height),
+      'preferredHeight': serializer.toJson<double?>(preferredHeight),
+      'layer': serializer.toJson<int>(layer),
+      'selected': serializer.toJson<bool>(selected),
+      'color': serializer.toJson<String>(color),
+      'cardKind': serializer.toJson<String>(cardKind),
+      'constraints': serializer.toJson<bool>(constraints),
+      'preContext': serializer.toJson<String?>(preContext),
+      'title': serializer.toJson<String>(title),
+    };
+  }
+
+  HeaderCellItemData copyWith(
+          {int? id,
+          String? whiteboardId,
+          String? cellId,
+          double? offsetDx,
+          double? offsetDy,
+          Value<double?> width = const Value.absent(),
+          Value<double?> preferredWidth = const Value.absent(),
+          Value<double?> height = const Value.absent(),
+          Value<double?> preferredHeight = const Value.absent(),
+          int? layer,
+          bool? selected,
+          String? color,
+          String? cardKind,
+          bool? constraints,
+          Value<String?> preContext = const Value.absent(),
+          String? title}) =>
+      HeaderCellItemData(
+        id: id ?? this.id,
+        whiteboardId: whiteboardId ?? this.whiteboardId,
+        cellId: cellId ?? this.cellId,
+        offsetDx: offsetDx ?? this.offsetDx,
+        offsetDy: offsetDy ?? this.offsetDy,
+        width: width.present ? width.value : this.width,
+        preferredWidth:
+            preferredWidth.present ? preferredWidth.value : this.preferredWidth,
+        height: height.present ? height.value : this.height,
+        preferredHeight: preferredHeight.present
+            ? preferredHeight.value
+            : this.preferredHeight,
+        layer: layer ?? this.layer,
+        selected: selected ?? this.selected,
+        color: color ?? this.color,
+        cardKind: cardKind ?? this.cardKind,
+        constraints: constraints ?? this.constraints,
+        preContext: preContext.present ? preContext.value : this.preContext,
+        title: title ?? this.title,
+      );
+  HeaderCellItemData copyWithCompanion(HeaderCellItemCompanion data) {
+    return HeaderCellItemData(
+      id: data.id.present ? data.id.value : this.id,
+      whiteboardId: data.whiteboardId.present
+          ? data.whiteboardId.value
+          : this.whiteboardId,
+      cellId: data.cellId.present ? data.cellId.value : this.cellId,
+      offsetDx: data.offsetDx.present ? data.offsetDx.value : this.offsetDx,
+      offsetDy: data.offsetDy.present ? data.offsetDy.value : this.offsetDy,
+      width: data.width.present ? data.width.value : this.width,
+      preferredWidth: data.preferredWidth.present
+          ? data.preferredWidth.value
+          : this.preferredWidth,
+      height: data.height.present ? data.height.value : this.height,
+      preferredHeight: data.preferredHeight.present
+          ? data.preferredHeight.value
+          : this.preferredHeight,
+      layer: data.layer.present ? data.layer.value : this.layer,
+      selected: data.selected.present ? data.selected.value : this.selected,
+      color: data.color.present ? data.color.value : this.color,
+      cardKind: data.cardKind.present ? data.cardKind.value : this.cardKind,
+      constraints:
+          data.constraints.present ? data.constraints.value : this.constraints,
+      preContext:
+          data.preContext.present ? data.preContext.value : this.preContext,
+      title: data.title.present ? data.title.value : this.title,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HeaderCellItemData(')
+          ..write('id: $id, ')
+          ..write('whiteboardId: $whiteboardId, ')
+          ..write('cellId: $cellId, ')
+          ..write('offsetDx: $offsetDx, ')
+          ..write('offsetDy: $offsetDy, ')
+          ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
+          ..write('height: $height, ')
+          ..write('preferredHeight: $preferredHeight, ')
+          ..write('layer: $layer, ')
+          ..write('selected: $selected, ')
+          ..write('color: $color, ')
+          ..write('cardKind: $cardKind, ')
+          ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
+          ..write('title: $title')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      id,
+      whiteboardId,
+      cellId,
+      offsetDx,
+      offsetDy,
+      width,
+      preferredWidth,
+      height,
+      preferredHeight,
+      layer,
+      selected,
+      color,
+      cardKind,
+      constraints,
+      preContext,
+      title);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is HeaderCellItemData &&
+          other.id == this.id &&
+          other.whiteboardId == this.whiteboardId &&
+          other.cellId == this.cellId &&
+          other.offsetDx == this.offsetDx &&
+          other.offsetDy == this.offsetDy &&
+          other.width == this.width &&
+          other.preferredWidth == this.preferredWidth &&
+          other.height == this.height &&
+          other.preferredHeight == this.preferredHeight &&
+          other.layer == this.layer &&
+          other.selected == this.selected &&
+          other.color == this.color &&
+          other.cardKind == this.cardKind &&
+          other.constraints == this.constraints &&
+          other.preContext == this.preContext &&
+          other.title == this.title);
+}
+
+class HeaderCellItemCompanion extends UpdateCompanion<HeaderCellItemData> {
+  final Value<int> id;
+  final Value<String> whiteboardId;
+  final Value<String> cellId;
+  final Value<double> offsetDx;
+  final Value<double> offsetDy;
+  final Value<double?> width;
+  final Value<double?> preferredWidth;
+  final Value<double?> height;
+  final Value<double?> preferredHeight;
+  final Value<int> layer;
+  final Value<bool> selected;
+  final Value<String> color;
+  final Value<String> cardKind;
+  final Value<bool> constraints;
+  final Value<String?> preContext;
+  final Value<String> title;
+  const HeaderCellItemCompanion({
+    this.id = const Value.absent(),
+    this.whiteboardId = const Value.absent(),
+    this.cellId = const Value.absent(),
+    this.offsetDx = const Value.absent(),
+    this.offsetDy = const Value.absent(),
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
+    this.height = const Value.absent(),
+    this.preferredHeight = const Value.absent(),
+    this.layer = const Value.absent(),
+    this.selected = const Value.absent(),
+    this.color = const Value.absent(),
+    this.cardKind = const Value.absent(),
+    this.constraints = const Value.absent(),
+    this.preContext = const Value.absent(),
+    this.title = const Value.absent(),
+  });
+  HeaderCellItemCompanion.insert({
+    this.id = const Value.absent(),
+    required String whiteboardId,
+    required String cellId,
+    required double offsetDx,
+    required double offsetDy,
+    this.width = const Value.absent(),
+    this.preferredWidth = const Value.absent(),
+    this.height = const Value.absent(),
+    this.preferredHeight = const Value.absent(),
+    required int layer,
+    required bool selected,
+    required String color,
+    required String cardKind,
+    required bool constraints,
+    this.preContext = const Value.absent(),
+    required String title,
+  })  : whiteboardId = Value(whiteboardId),
+        cellId = Value(cellId),
+        offsetDx = Value(offsetDx),
+        offsetDy = Value(offsetDy),
+        layer = Value(layer),
+        selected = Value(selected),
+        color = Value(color),
+        cardKind = Value(cardKind),
+        constraints = Value(constraints),
+        title = Value(title);
+  static Insertable<HeaderCellItemData> custom({
+    Expression<int>? id,
+    Expression<String>? whiteboardId,
+    Expression<String>? cellId,
+    Expression<double>? offsetDx,
+    Expression<double>? offsetDy,
+    Expression<double>? width,
+    Expression<double>? preferredWidth,
+    Expression<double>? height,
+    Expression<double>? preferredHeight,
+    Expression<int>? layer,
+    Expression<bool>? selected,
+    Expression<String>? color,
+    Expression<String>? cardKind,
+    Expression<bool>? constraints,
+    Expression<String>? preContext,
+    Expression<String>? title,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (whiteboardId != null) 'whiteboard_id': whiteboardId,
+      if (cellId != null) 'cell_id': cellId,
+      if (offsetDx != null) 'offset_dx': offsetDx,
+      if (offsetDy != null) 'offset_dy': offsetDy,
+      if (width != null) 'width': width,
+      if (preferredWidth != null) 'preferred_width': preferredWidth,
+      if (height != null) 'height': height,
+      if (preferredHeight != null) 'preferred_height': preferredHeight,
+      if (layer != null) 'layer': layer,
+      if (selected != null) 'selected': selected,
+      if (color != null) 'color': color,
+      if (cardKind != null) 'card_kind': cardKind,
+      if (constraints != null) 'constraints': constraints,
+      if (preContext != null) 'pre_context': preContext,
+      if (title != null) 'title': title,
+    });
+  }
+
+  HeaderCellItemCompanion copyWith(
+      {Value<int>? id,
+      Value<String>? whiteboardId,
+      Value<String>? cellId,
+      Value<double>? offsetDx,
+      Value<double>? offsetDy,
+      Value<double?>? width,
+      Value<double?>? preferredWidth,
+      Value<double?>? height,
+      Value<double?>? preferredHeight,
+      Value<int>? layer,
+      Value<bool>? selected,
+      Value<String>? color,
+      Value<String>? cardKind,
+      Value<bool>? constraints,
+      Value<String?>? preContext,
+      Value<String>? title}) {
+    return HeaderCellItemCompanion(
+      id: id ?? this.id,
+      whiteboardId: whiteboardId ?? this.whiteboardId,
+      cellId: cellId ?? this.cellId,
+      offsetDx: offsetDx ?? this.offsetDx,
+      offsetDy: offsetDy ?? this.offsetDy,
+      width: width ?? this.width,
+      preferredWidth: preferredWidth ?? this.preferredWidth,
+      height: height ?? this.height,
+      preferredHeight: preferredHeight ?? this.preferredHeight,
+      layer: layer ?? this.layer,
+      selected: selected ?? this.selected,
+      color: color ?? this.color,
+      cardKind: cardKind ?? this.cardKind,
+      constraints: constraints ?? this.constraints,
+      preContext: preContext ?? this.preContext,
+      title: title ?? this.title,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (whiteboardId.present) {
+      map['whiteboard_id'] = Variable<String>(whiteboardId.value);
+    }
+    if (cellId.present) {
+      map['cell_id'] = Variable<String>(cellId.value);
+    }
+    if (offsetDx.present) {
+      map['offset_dx'] = Variable<double>(offsetDx.value);
+    }
+    if (offsetDy.present) {
+      map['offset_dy'] = Variable<double>(offsetDy.value);
+    }
+    if (width.present) {
+      map['width'] = Variable<double>(width.value);
+    }
+    if (preferredWidth.present) {
+      map['preferred_width'] = Variable<double>(preferredWidth.value);
+    }
+    if (height.present) {
+      map['height'] = Variable<double>(height.value);
+    }
+    if (preferredHeight.present) {
+      map['preferred_height'] = Variable<double>(preferredHeight.value);
+    }
+    if (layer.present) {
+      map['layer'] = Variable<int>(layer.value);
+    }
+    if (selected.present) {
+      map['selected'] = Variable<bool>(selected.value);
+    }
+    if (color.present) {
+      map['color'] = Variable<String>(color.value);
+    }
+    if (cardKind.present) {
+      map['card_kind'] = Variable<String>(cardKind.value);
+    }
+    if (constraints.present) {
+      map['constraints'] = Variable<bool>(constraints.value);
+    }
+    if (preContext.present) {
+      map['pre_context'] = Variable<String>(preContext.value);
+    }
+    if (title.present) {
+      map['title'] = Variable<String>(title.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('HeaderCellItemCompanion(')
+          ..write('id: $id, ')
+          ..write('whiteboardId: $whiteboardId, ')
+          ..write('cellId: $cellId, ')
+          ..write('offsetDx: $offsetDx, ')
+          ..write('offsetDy: $offsetDy, ')
+          ..write('width: $width, ')
+          ..write('preferredWidth: $preferredWidth, ')
+          ..write('height: $height, ')
+          ..write('preferredHeight: $preferredHeight, ')
+          ..write('layer: $layer, ')
+          ..write('selected: $selected, ')
+          ..write('color: $color, ')
+          ..write('cardKind: $cardKind, ')
+          ..write('constraints: $constraints, ')
+          ..write('preContext: $preContext, ')
+          ..write('title: $title')
           ..write(')'))
         .toString();
   }
@@ -3762,6 +4756,7 @@ abstract class _$CellDatabase extends GeneratedDatabase {
   late final $ArticleCellItemTable articleCellItem =
       $ArticleCellItemTable(this);
   late final $UrlCellItemTable urlCellItem = $UrlCellItemTable(this);
+  late final $HeaderCellItemTable headerCellItem = $HeaderCellItemTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -3771,7 +4766,8 @@ abstract class _$CellDatabase extends GeneratedDatabase {
         editableCellItem,
         imageCellItem,
         articleCellItem,
-        urlCellItem
+        urlCellItem,
+        headerCellItem
       ];
 }
 
@@ -3782,7 +4778,8 @@ typedef $$BrainstormingCellItemTableCreateCompanionBuilder
   required String cellId,
   required double offsetDx,
   required double offsetDy,
-  required double width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   required int layer,
@@ -3801,7 +4798,8 @@ typedef $$BrainstormingCellItemTableUpdateCompanionBuilder
   Value<String> cellId,
   Value<double> offsetDx,
   Value<double> offsetDy,
-  Value<double> width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   Value<int> layer,
@@ -3837,7 +4835,8 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             Value<String> cellId = const Value.absent(),
             Value<double> offsetDx = const Value.absent(),
             Value<double> offsetDy = const Value.absent(),
-            Value<double> width = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             Value<int> layer = const Value.absent(),
@@ -3856,6 +4855,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -3873,7 +4873,8 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             required String cellId,
             required double offsetDx,
             required double offsetDy,
-            required double width,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             required int layer,
@@ -3892,6 +4893,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -3936,6 +4938,11 @@ class $$BrainstormingCellItemTableFilterComposer
 
   ColumnFilters<double> get width => $state.composableBuilder(
       column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4023,6 +5030,11 @@ class $$BrainstormingCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<double> get height => $state.composableBuilder(
       column: $state.table.height,
       builder: (column, joinBuilders) =>
@@ -4081,7 +5093,8 @@ typedef $$EditableCellItemTableCreateCompanionBuilder
   required String cellId,
   required double offsetDx,
   required double offsetDy,
-  required double width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   required int layer,
@@ -4100,7 +5113,8 @@ typedef $$EditableCellItemTableUpdateCompanionBuilder
   Value<String> cellId,
   Value<double> offsetDx,
   Value<double> offsetDy,
-  Value<double> width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   Value<int> layer,
@@ -4136,7 +5150,8 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             Value<String> cellId = const Value.absent(),
             Value<double> offsetDx = const Value.absent(),
             Value<double> offsetDy = const Value.absent(),
-            Value<double> width = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             Value<int> layer = const Value.absent(),
@@ -4155,6 +5170,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -4172,7 +5188,8 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             required String cellId,
             required double offsetDx,
             required double offsetDy,
-            required double width,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             required int layer,
@@ -4191,6 +5208,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -4235,6 +5253,11 @@ class $$EditableCellItemTableFilterComposer
 
   ColumnFilters<double> get width => $state.composableBuilder(
       column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4322,6 +5345,11 @@ class $$EditableCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<double> get height => $state.composableBuilder(
       column: $state.table.height,
       builder: (column, joinBuilders) =>
@@ -4380,7 +5408,8 @@ typedef $$ImageCellItemTableCreateCompanionBuilder = ImageCellItemCompanion
   required String cellId,
   required double offsetDx,
   required double offsetDy,
-  required double width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   required int layer,
@@ -4398,7 +5427,8 @@ typedef $$ImageCellItemTableUpdateCompanionBuilder = ImageCellItemCompanion
   Value<String> cellId,
   Value<double> offsetDx,
   Value<double> offsetDy,
-  Value<double> width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   Value<int> layer,
@@ -4432,7 +5462,8 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             Value<String> cellId = const Value.absent(),
             Value<double> offsetDx = const Value.absent(),
             Value<double> offsetDy = const Value.absent(),
-            Value<double> width = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             Value<int> layer = const Value.absent(),
@@ -4450,6 +5481,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -4466,7 +5498,8 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             required String cellId,
             required double offsetDx,
             required double offsetDy,
-            required double width,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             required int layer,
@@ -4484,6 +5517,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -4527,6 +5561,11 @@ class $$ImageCellItemTableFilterComposer
 
   ColumnFilters<double> get width => $state.composableBuilder(
       column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4609,6 +5648,11 @@ class $$ImageCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<double> get height => $state.composableBuilder(
       column: $state.table.height,
       builder: (column, joinBuilders) =>
@@ -4662,7 +5706,8 @@ typedef $$ArticleCellItemTableCreateCompanionBuilder = ArticleCellItemCompanion
   required String cellId,
   required double offsetDx,
   required double offsetDy,
-  required double width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   required int layer,
@@ -4681,7 +5726,8 @@ typedef $$ArticleCellItemTableUpdateCompanionBuilder = ArticleCellItemCompanion
   Value<String> cellId,
   Value<double> offsetDx,
   Value<double> offsetDy,
-  Value<double> width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   Value<int> layer,
@@ -4717,7 +5763,8 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             Value<String> cellId = const Value.absent(),
             Value<double> offsetDx = const Value.absent(),
             Value<double> offsetDy = const Value.absent(),
-            Value<double> width = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             Value<int> layer = const Value.absent(),
@@ -4736,6 +5783,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -4753,7 +5801,8 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             required String cellId,
             required double offsetDx,
             required double offsetDy,
-            required double width,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             required int layer,
@@ -4772,6 +5821,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -4816,6 +5866,11 @@ class $$ArticleCellItemTableFilterComposer
 
   ColumnFilters<double> get width => $state.composableBuilder(
       column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -4903,6 +5958,11 @@ class $$ArticleCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<double> get height => $state.composableBuilder(
       column: $state.table.height,
       builder: (column, joinBuilders) =>
@@ -4961,7 +6021,8 @@ typedef $$UrlCellItemTableCreateCompanionBuilder = UrlCellItemCompanion
   required String cellId,
   required double offsetDx,
   required double offsetDy,
-  required double width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   required int layer,
@@ -4979,7 +6040,8 @@ typedef $$UrlCellItemTableUpdateCompanionBuilder = UrlCellItemCompanion
   Value<String> cellId,
   Value<double> offsetDx,
   Value<double> offsetDy,
-  Value<double> width,
+  Value<double?> width,
+  Value<double?> preferredWidth,
   Value<double?> height,
   Value<double?> preferredHeight,
   Value<int> layer,
@@ -5013,7 +6075,8 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             Value<String> cellId = const Value.absent(),
             Value<double> offsetDx = const Value.absent(),
             Value<double> offsetDy = const Value.absent(),
-            Value<double> width = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             Value<int> layer = const Value.absent(),
@@ -5031,6 +6094,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -5047,7 +6111,8 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             required String cellId,
             required double offsetDx,
             required double offsetDy,
-            required double width,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
             Value<double?> height = const Value.absent(),
             Value<double?> preferredHeight = const Value.absent(),
             required int layer,
@@ -5065,6 +6130,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
             offsetDx: offsetDx,
             offsetDy: offsetDy,
             width: width,
+            preferredWidth: preferredWidth,
             height: height,
             preferredHeight: preferredHeight,
             layer: layer,
@@ -5108,6 +6174,11 @@ class $$UrlCellItemTableFilterComposer
 
   ColumnFilters<double> get width => $state.composableBuilder(
       column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
       builder: (column, joinBuilders) =>
           ColumnFilters(column, joinBuilders: joinBuilders));
 
@@ -5190,6 +6261,11 @@ class $$UrlCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 
+  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
   ColumnOrderings<double> get height => $state.composableBuilder(
       column: $state.table.height,
       builder: (column, joinBuilders) =>
@@ -5236,6 +6312,305 @@ class $$UrlCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+typedef $$HeaderCellItemTableCreateCompanionBuilder = HeaderCellItemCompanion
+    Function({
+  Value<int> id,
+  required String whiteboardId,
+  required String cellId,
+  required double offsetDx,
+  required double offsetDy,
+  Value<double?> width,
+  Value<double?> preferredWidth,
+  Value<double?> height,
+  Value<double?> preferredHeight,
+  required int layer,
+  required bool selected,
+  required String color,
+  required String cardKind,
+  required bool constraints,
+  Value<String?> preContext,
+  required String title,
+});
+typedef $$HeaderCellItemTableUpdateCompanionBuilder = HeaderCellItemCompanion
+    Function({
+  Value<int> id,
+  Value<String> whiteboardId,
+  Value<String> cellId,
+  Value<double> offsetDx,
+  Value<double> offsetDy,
+  Value<double?> width,
+  Value<double?> preferredWidth,
+  Value<double?> height,
+  Value<double?> preferredHeight,
+  Value<int> layer,
+  Value<bool> selected,
+  Value<String> color,
+  Value<String> cardKind,
+  Value<bool> constraints,
+  Value<String?> preContext,
+  Value<String> title,
+});
+
+class $$HeaderCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $HeaderCellItemTable,
+    HeaderCellItemData,
+    $$HeaderCellItemTableFilterComposer,
+    $$HeaderCellItemTableOrderingComposer,
+    $$HeaderCellItemTableCreateCompanionBuilder,
+    $$HeaderCellItemTableUpdateCompanionBuilder> {
+  $$HeaderCellItemTableTableManager(
+      _$CellDatabase db, $HeaderCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$HeaderCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$HeaderCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String> title = const Value.absent(),
+          }) =>
+              HeaderCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            required String title,
+          }) =>
+              HeaderCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+          ),
+        ));
+}
+
+class $$HeaderCellItemTableFilterComposer
+    extends FilterComposer<_$CellDatabase, $HeaderCellItemTable> {
+  $$HeaderCellItemTableFilterComposer(super.$state);
+  ColumnFilters<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
+      column: $state.table.whiteboardId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get cellId => $state.composableBuilder(
+      column: $state.table.cellId,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get offsetDx => $state.composableBuilder(
+      column: $state.table.offsetDx,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get offsetDy => $state.composableBuilder(
+      column: $state.table.offsetDy,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get width => $state.composableBuilder(
+      column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get height => $state.composableBuilder(
+      column: $state.table.height,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
+      column: $state.table.preferredHeight,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<int> get layer => $state.composableBuilder(
+      column: $state.table.layer,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get selected => $state.composableBuilder(
+      column: $state.table.selected,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get cardKind => $state.composableBuilder(
+      column: $state.table.cardKind,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<bool> get constraints => $state.composableBuilder(
+      column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+
+  ColumnFilters<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnFilters(column, joinBuilders: joinBuilders));
+}
+
+class $$HeaderCellItemTableOrderingComposer
+    extends OrderingComposer<_$CellDatabase, $HeaderCellItemTable> {
+  $$HeaderCellItemTableOrderingComposer(super.$state);
+  ColumnOrderings<int> get id => $state.composableBuilder(
+      column: $state.table.id,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
+      column: $state.table.whiteboardId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get cellId => $state.composableBuilder(
+      column: $state.table.cellId,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
+      column: $state.table.offsetDx,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
+      column: $state.table.offsetDy,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get width => $state.composableBuilder(
+      column: $state.table.width,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
+      column: $state.table.preferredWidth,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get height => $state.composableBuilder(
+      column: $state.table.height,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
+      column: $state.table.preferredHeight,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<int> get layer => $state.composableBuilder(
+      column: $state.table.layer,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get selected => $state.composableBuilder(
+      column: $state.table.selected,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get color => $state.composableBuilder(
+      column: $state.table.color,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get cardKind => $state.composableBuilder(
+      column: $state.table.cardKind,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<bool> get constraints => $state.composableBuilder(
+      column: $state.table.constraints,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get preContext => $state.composableBuilder(
+      column: $state.table.preContext,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+
+  ColumnOrderings<String> get title => $state.composableBuilder(
+      column: $state.table.title,
+      builder: (column, joinBuilders) =>
+          ColumnOrderings(column, joinBuilders: joinBuilders));
+}
+
 class $CellDatabaseManager {
   final _$CellDatabase _db;
   $CellDatabaseManager(this._db);
@@ -5249,6 +6624,8 @@ class $CellDatabaseManager {
       $$ArticleCellItemTableTableManager(_db, _db.articleCellItem);
   $$UrlCellItemTableTableManager get urlCellItem =>
       $$UrlCellItemTableTableManager(_db, _db.urlCellItem);
+  $$HeaderCellItemTableTableManager get headerCellItem =>
+      $$HeaderCellItemTableTableManager(_db, _db.headerCellItem);
 }
 
 // **************************************************************************

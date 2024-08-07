@@ -7,7 +7,7 @@ part of 'generate_label_for_cells.dart';
 // **************************************************************************
 
 String _$generateLabelForCellsHash() =>
-    r'5469bb7439a36530f16e4e2d3f4c75afa41ef0ad';
+    r'c6c1fe3490f50ef5118bc4b4b68c628decff3499';
 
 /// Copied from Dart SDK
 class _SystemHash {

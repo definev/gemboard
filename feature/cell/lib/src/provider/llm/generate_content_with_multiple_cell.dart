@@ -56,25 +56,45 @@ extension type CellLLM(Cell cell) {
       },
       brainstorming: (value) async => switch (value.question) {
         null => null,
-        final question => Content.text(question),
+        final question => Content.text(
+            switch (value.preContext) {
+              null => '''QUESTION: $question''',
+              final context => '''CONTEXT: ${context}
+QUESTION: $question''',
+            },
+          ),
       },
       editable: (value) async {
         return switch (true) {
           _ when value.content.isEmpty => null,
-          _ => Content.text('''
-TITLE: ${value.title}
+          _ => () {
+              final content = '''TITLE: ${value.title}
 CONTENT: ${value.content}
-'''),
+''';
+              return Content.text(
+                switch (value.preContext) {
+                  null => content,
+                  final context => '''CONTEXT: ${context}\n${content}''',
+                },
+              );
+            }(),
         };
       },
       article: (value) async {
         return switch (true) {
           _ when value.title.isEmpty => null,
           _ when value.content.isEmpty => null,
-          _ => Content.text('''
-TITLE: ${value.title}
+          _ => () {
+              final content = '''TITLE: ${value.title}
 CONTENT: ${value.content}
-'''),
+''';
+              return Content.text(
+                switch (value.preContext) {
+                  null => content,
+                  final context => '''CONTEXT: ${context}\n${content}''',
+                },
+              );
+            }(),
         };
       },
       image: (value) async {
@@ -95,6 +115,7 @@ CONTENT: ${value.content}
         }
         return null;
       },
+      header: (value) async => Content.text(value.title),
     );
   }
 
@@ -151,6 +172,7 @@ CONTENT: ${value.content}
         }
         return null;
       },
+      header: (value) async => TextPart(value.title),
     );
   }
 

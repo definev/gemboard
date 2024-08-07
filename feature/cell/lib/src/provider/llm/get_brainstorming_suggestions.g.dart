@@ -7,7 +7,7 @@ part of 'get_brainstorming_suggestions.dart';
 // **************************************************************************
 
 String _$getBrainstormingSuggestionsHash() =>
-    r'94d4d0f7093e08f79204f2dac4e6717816a2ec8d';
+    r'1897c479b26dc447aa2d6835d349dd8f77049931';
 
 /// Copied from Dart SDK
 class _SystemHash {

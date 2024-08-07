@@ -1,7 +1,7 @@
 name: gemboard_app
 description: "gemboard mobile app"
 publish_to: "none"
-version: 0.0.3+3
+version: 0.0.6+6
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

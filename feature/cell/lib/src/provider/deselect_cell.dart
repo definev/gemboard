@@ -31,7 +31,7 @@ Future<void> deselectCell(
   for (final cell in cellList) {
     final cellRect = cell.offset &
         Size(
-          cell.width,
+          cell.width ?? cell.preferredWidth ?? 100,
           cell.height ?? cell.preferredHeight ?? 100,
         );
     final selected = selection.overlaps(cellRect);

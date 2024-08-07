@@ -249,19 +249,28 @@ class SelectionCellsView extends HookWidget {
                           topicOrQuestion: first.map(
                             brainstorming: (value) =>
                                 '${value.preContext}: ${value.question}',
-                            editable: (value) => '''
-                  CONTEXT: ${value.preContext ?? ''}
-                  TITLE: ${value.title}
-                  CONTENT: ${value.content}
-                  ''',
+                            editable: (value) {
+                              final content = '''TITLE: ${value.title}
+CONTENT: ${value.content}''';
+                              return switch (value.preContext) {
+                                null => content,
+                                final context =>
+                                  '''CONTEXT: ${context}\n${content}''',
+                              };
+                            },
+                            article: (value) {
+                              final content = '''TITLE: ${value.title}
+CONTENT: ${value.content}''';
+                              return switch (value.preContext) {
+                                null => content,
+                                final context =>
+                                  '''CONTEXT: ${context}\n${content}''',
+                              };
+                            },
                             image: (value) => '',
-                            article: (value) => '''
-                  CONTEXT: ${value.preContext ?? ''}
-                  TITLE: ${value.title}
-                  CONTENT: ${value.content}
-                  ''',
                             unknown: (_) => '',
                             url: (value) => '',
+                            header: (value) => value.title,
                           ),
                         ),
                         (previous, next) => suggestionsAsyncValue.value = next,
@@ -279,7 +288,7 @@ class SelectionCellsView extends HookWidget {
                               ),
                               children: [
                                 for (final idea in value.value
-                                    .sublist(0, min(5, value.value.length)))
+                                    .sublist(0, min(3, value.value.length)))
                                   Button(
                                     style: Style(
                                       $box.minHeight(
@@ -330,7 +339,14 @@ class SelectionCellsView extends HookWidget {
                           child: StyledIcon(IconlyLight.send),
                         ),
                       ),
-                      if (selectedCells.length == 1) suggestionsChat,
+                      if (selectedCells.length == 1)
+                        switch (selectedCells.first) {
+                          ImageCell() ||
+                          UnknownCell() ||
+                          UrlCell() =>
+                            SizedBox(),
+                          _ => suggestionsChat,
+                        },
                     ],
                   );
                   return PortalTarget(
@@ -342,7 +358,8 @@ class SelectionCellsView extends HookWidget {
                           Positioned(
                             left: viewportSelection.left +
                                 (viewportSelection.width - 400) / 2,
-                            top: viewportSelection.top + SpaceVariant.small.resolve(context),
+                            top: viewportSelection.top +
+                                SpaceVariant.small.resolve(context),
                             width: 400,
                             child: overlayChat,
                           ),
@@ -354,7 +371,7 @@ class SelectionCellsView extends HookWidget {
                       children: [
                         DSTooltip(
                           label: StyledText('Chat'),
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.topCenter,
                           child: DSToolbarItem(
                             onPressed: () => showChat.value = !showChat.value,
                             child: StyledIcon(IconlyLight.chat),
@@ -366,7 +383,7 @@ class SelectionCellsView extends HookWidget {
                               if (selectedCells.first is ImageCell)
                                 DSTooltip(
                                   label: StyledText('Describe image'),
-                                  alignment: Alignment.bottomCenter,
+                                  alignment: Alignment.topCenter,
                                   child: DSToolbarItem(
                                     onPressed: () => onCellSummarize(
                                       cellMaps[selectedCellIds.first]!.$2,
@@ -378,7 +395,7 @@ class SelectionCellsView extends HookWidget {
                               else
                                 DSTooltip(
                                   label: StyledText('Summarize'),
-                                  alignment: Alignment.bottomCenter,
+                                  alignment: Alignment.topCenter,
                                   child: DSToolbarItem(
                                     onPressed: () => onCellSummarize(
                                       cellMaps[selectedCellIds.first]!.$2,
@@ -390,7 +407,7 @@ class SelectionCellsView extends HookWidget {
                               if (selectedCells.first is ArticleCell)
                                 DSTooltip(
                                   label: StyledText('Turn into editable'),
-                                  alignment: Alignment.bottomCenter,
+                                  alignment: Alignment.topCenter,
                                   child: DSToolbarItem(
                                     onPressed: () => onTurnArticleIntoEditable(
                                       selectedCells.first as ArticleCell,
@@ -402,6 +419,7 @@ class SelectionCellsView extends HookWidget {
                         },
                         DSTooltip(
                           label: StyledText('Export to whiteboard'),
+                          alignment: Alignment.topCenter,
                           child: DSToolbarItem(
                             onPressed: () =>
                                 onMoveCellsToAnotherWhiteboard(selectedCellIds),
@@ -410,7 +428,7 @@ class SelectionCellsView extends HookWidget {
                         ),
                         DSTooltip(
                           label: StyledText('Delete'),
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.topCenter,
                           child: DSToolbarItem(
                             onPressed: () =>
                                 onSelectionsDelete(selectedCellIds),

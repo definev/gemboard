@@ -155,7 +155,7 @@ class BrainstormingCellView extends HookWidget {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             rand5Widths.value = [
               for (int i = 0; i < 5; i++)
-                (cell.width - 50 * scale) * rand.nextDouble() + 50 * scale,
+                (cell.width! - 50 * scale) * rand.nextDouble() + 50 * scale,
             ];
           });
         }

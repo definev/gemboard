@@ -38,9 +38,14 @@ Future<String> generateLabelForCells(
           TextPart(''''
 You will find a related label for the following source and target:
 Requirement for label:
-- The label is less than 150 characters
+- The label is less than 100 characters
 - The label is relevant to the source and target
 - If Cannot find a relevant label, return "Unknown"
+
+YOU MUST RETURN A JSON OBJECT WITH THE FOLLOWING FORMAT:
+{
+  "label": "Your generated label"
+}
 '''),
         ],
       ),
@@ -69,7 +74,11 @@ Requirement for label:
   }
 
   try {
-    final json = jsonDecode(response.text!);
+    final cleanText = response.text!.substring(
+      response.text!.indexOf('{'),
+      response.text!.indexOf('}') + 1,
+    );
+    final json = jsonDecode(cleanText);
     return json['label'] ?? '';
   } catch (_) {
     return '';

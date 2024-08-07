@@ -27,6 +27,8 @@ class NoteCellIntent extends Intent {}
 
 class ChatCellIntent extends Intent {}
 
+class HeaderCellIntent extends Intent {}
+
 class WhiteboardKeyboardShortcuts extends HookWidget {
   const WhiteboardKeyboardShortcuts({
     super.key,
@@ -36,6 +38,7 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
     required this.onLinkReceived,
     required this.onBrainstormingTriggered,
     required this.onNoteTriggered,
+    required this.onHeaderTriggered,
 
     /// Actions
     required this.onDeleteSelectedCell,
@@ -59,6 +62,7 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
   final VoidCallback onDeleteSelectedCell;
 
   final VoidCallback onBrainstormingTriggered;
+  final VoidCallback onHeaderTriggered;
   final VoidCallback onNoteTriggered;
   final VoidCallback onChatTriggered;
 
@@ -67,6 +71,7 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
   static String selectionToolShortcut = 'Cmd + K';
   static String handToolShortcut = 'Cmd + L';
   static String brainstormingShortcut = 'Cmd + Shift + B';
+  static String headerShortcut = 'Cmd + Shift + H';
   static String noteShortcut = 'Cmd + Shift + N';
   static String chatShortcut = 'Cmd + Shift + C';
 
@@ -86,6 +91,8 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
     SingleActivator(LogicalKeyboardKey.keyA, meta: true): SelectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.escape): DeselectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.backspace): DeleteSelectedCellIntent(),
+    SingleActivator(LogicalKeyboardKey.keyH, meta: true, shift: true):
+        HeaderCellIntent(),
   };
 
   static final windowsShortcuts = {
@@ -105,6 +112,8 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
         SelectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.escape): DeselectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.backspace): DeleteSelectedCellIntent(),
+    SingleActivator(LogicalKeyboardKey.keyH, control: true, shift: true):
+        HeaderCellIntent(),
   };
   static final linuxShortcuts = {
     SingleActivator(LogicalKeyboardKey.keyK, control: true):
@@ -123,6 +132,8 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
         SelectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.escape): DeselectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.backspace): DeleteSelectedCellIntent(),
+    SingleActivator(LogicalKeyboardKey.keyH, control: true, shift: true):
+        HeaderCellIntent(),
   };
   static final androidShortcuts = {
     SingleActivator(LogicalKeyboardKey.keyK, control: true):
@@ -141,6 +152,8 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
         SelectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.escape): DeselectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.backspace): DeleteSelectedCellIntent(),
+    SingleActivator(LogicalKeyboardKey.keyH, control: true, shift: true):
+        HeaderCellIntent(),
   };
   static final iosShortcuts = {
     SingleActivator(LogicalKeyboardKey.keyK, meta: true):
@@ -158,13 +171,13 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
     SingleActivator(LogicalKeyboardKey.keyA, meta: true): SelectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.escape): DeselectAllCellIntent(),
     SingleActivator(LogicalKeyboardKey.backspace): DeleteSelectedCellIntent(),
+    SingleActivator(LogicalKeyboardKey.keyH, meta: true, shift: true):
+        HeaderCellIntent(),
   };
 
   @override
   Widget build(BuildContext context) {
     final focusNode = useFocusNode();
-
-    WidgetsApp.defaultShortcuts;
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -307,6 +320,13 @@ class WhiteboardKeyboardShortcuts extends HookWidget {
                   return null;
                 },
               ),
+              // HeaderCellIntent: CallbackAction<HeaderCellIntent>(
+              //   onInvoke: (intent) {
+              //     debugPrint('HeaderCellIntent | onInvoke');
+              //     onHeaderTriggered();
+              //     return null;
+              //   },
+              // ),
             },
             child: Focus(
               focusNode: focusNode,

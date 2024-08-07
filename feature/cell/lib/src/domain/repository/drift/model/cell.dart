@@ -19,7 +19,8 @@ class BaseCellItem extends Table {
   /// Position related
   RealColumn get offsetDx => real()();
   RealColumn get offsetDy => real()();
-  RealColumn get width => real()();
+  RealColumn get width => real().nullable()();
+  RealColumn get preferredWidth => real().nullable()();
   RealColumn get height => real().nullable()();
   RealColumn get preferredHeight => real().nullable()();
 
@@ -55,6 +56,10 @@ class UrlCellItem extends BaseCellItem {
   TextColumn get url => text()();
 }
 
+class HeaderCellItem extends BaseCellItem {
+  TextColumn get title => text()();
+}
+
 @DriftDatabase(
   tables: [
     BrainstormingCellItem,
@@ -62,6 +67,7 @@ class UrlCellItem extends BaseCellItem {
     ImageCellItem,
     ArticleCellItem,
     UrlCellItem,
+    HeaderCellItem,
   ],
 )
 class CellDatabase extends _$CellDatabase {
@@ -79,7 +85,7 @@ class CellDatabase extends _$CellDatabase {
     );
   }
 
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -106,6 +112,10 @@ class CellDatabase extends _$CellDatabase {
             final urlCellItemTable = $UrlCellItemTable(attachedDatabase);
             await m.addColumn(urlCellItemTable, urlCellItemTable.preContext);
           }
+          if (from < 4) {
+            final headerCellItemTable = $HeaderCellItemTable(attachedDatabase);
+            await m.createTable(headerCellItemTable);
+          }
         },
       );
 }
@@ -123,7 +133,9 @@ extension type BrainstormingCellItemDataParser(BrainstormingCellItemData cell) {
         id: cell.cellId,
         parentId: CellParentId(whiteboardId: cell.whiteboardId),
       ),
+      preContext: cell.preContext,
       width: cell.width,
+      preferredWidth: cell.preferredWidth,
       height: cell.height,
       preferredHeight: cell.preferredHeight,
       layer: cell.layer,
@@ -150,7 +162,9 @@ extension type EditableCellItemDataParser(EditableCellItemData cell) {
         id: cell.cellId,
         parentId: CellParentId(whiteboardId: cell.whiteboardId),
       ),
+      preContext: cell.preContext,
       width: cell.width,
+      preferredWidth: cell.preferredWidth,
       height: cell.height,
       preferredHeight: cell.preferredHeight,
       layer: cell.layer,
@@ -174,7 +188,9 @@ extension type ImageCellItemDataParser(ImageCellItemData cell) {
         id: cell.cellId,
         parentId: CellParentId(whiteboardId: cell.whiteboardId),
       ),
+      preContext: cell.preContext,
       width: cell.width,
+      preferredWidth: cell.preferredWidth,
       height: cell.height,
       preferredHeight: cell.preferredHeight,
       layer: cell.layer,
@@ -197,7 +213,9 @@ extension type ArticleCellItemDataParser(ArticleCellItemData cell) {
         id: cell.cellId,
         parentId: CellParentId(whiteboardId: cell.whiteboardId),
       ),
+      preContext: cell.preContext,
       width: cell.width,
+      preferredWidth: cell.preferredWidth,
       height: cell.height,
       preferredHeight: cell.preferredHeight,
       layer: cell.layer,
@@ -221,7 +239,9 @@ extension type UrlCellItemDataParser(UrlCellItemData cell) {
         id: cell.cellId,
         parentId: CellParentId(whiteboardId: cell.whiteboardId),
       ),
+      preContext: cell.preContext,
       width: cell.width,
+      preferredWidth: cell.preferredWidth,
       height: cell.height,
       preferredHeight: cell.preferredHeight,
       layer: cell.layer,
@@ -236,6 +256,31 @@ extension type UrlCellItemDataParser(UrlCellItemData cell) {
   }
 }
 
+extension type HeaderCellItemDataParser(HeaderCellItemData cell) {
+  Cell get asCell {
+    return Cell.header(
+      offset: Offset(cell.offsetDx, cell.offsetDy),
+      id: CellId(
+        id: cell.cellId,
+        parentId: CellParentId(whiteboardId: cell.whiteboardId),
+      ),
+      preContext: cell.preContext,
+      width: cell.width,
+      preferredWidth: cell.preferredWidth,
+      height: cell.height,
+      preferredHeight: cell.preferredHeight,
+      layer: cell.layer,
+      selected: cell.selected,
+      decoration: CellDecoration(
+        color: cell.color,
+        cardKind: CellCardKind.values.asNameMap()[cell.cardKind]!,
+        constraints: cell.constraints,
+      ),
+      title: cell.title,
+    );
+  }
+}
+
 extension type BrainstormingCellTransformer(BrainstormingCell value) {
   BrainstormingCellItemCompanion get asCompanion {
     return BrainstormingCellItemCompanion.insert(
@@ -243,10 +288,14 @@ extension type BrainstormingCellTransformer(BrainstormingCell value) {
       whiteboardId: value.id.parentId.whiteboardId,
       cellId: value.id.id,
 
+      /// Context related
+      preContext: Value(value.preContext),
+
       /// Position related
       offsetDx: value.offset.dx,
       offsetDy: value.offset.dy,
-      width: value.width,
+      width: Value(value.width),
+      preferredWidth: Value(value.preferredWidth),
       height: Value(value.height),
       preferredHeight: Value(value.preferredHeight),
 
@@ -271,10 +320,14 @@ extension type EditableCellTransformer(EditableCell value) {
       whiteboardId: value.id.parentId.whiteboardId,
       cellId: value.id.id,
 
+      /// Context related
+      preContext: Value(value.preContext),
+
       /// Position related
       offsetDx: value.offset.dx,
       offsetDy: value.offset.dy,
-      width: value.width,
+      width: Value(value.width),
+      preferredWidth: Value(value.preferredWidth),
       height: Value(value.height),
       preferredHeight: Value(value.preferredHeight),
 
@@ -299,10 +352,14 @@ extension type ImageCellTransformer(ImageCell value) {
       whiteboardId: value.id.parentId.whiteboardId,
       cellId: value.id.id,
 
+      /// Context related
+      preContext: Value(value.preContext),
+
       /// Position related
       offsetDx: value.offset.dx,
       offsetDy: value.offset.dy,
-      width: value.width,
+      width: Value(value.width),
+      preferredWidth: Value(value.preferredWidth),
       height: Value(value.height),
       preferredHeight: Value(value.preferredHeight),
 
@@ -326,10 +383,14 @@ extension type ArticleCellTransformer(ArticleCell value) {
       whiteboardId: value.id.parentId.whiteboardId,
       cellId: value.id.id,
 
+      /// Context related
+      preContext: Value(value.preContext),
+
       /// Position related
       offsetDx: value.offset.dx,
       offsetDy: value.offset.dy,
-      width: value.width,
+      width: Value(value.width),
+      preferredWidth: Value(value.preferredWidth),
       height: Value(value.height),
       preferredHeight: Value(value.preferredHeight),
 
@@ -354,10 +415,14 @@ extension type UrlCellTransformer(UrlCell value) {
       whiteboardId: value.id.parentId.whiteboardId,
       cellId: value.id.id,
 
+      /// Context related
+      preContext: Value(value.preContext),
+
       /// Position related
       offsetDx: value.offset.dx,
       offsetDy: value.offset.dy,
-      width: value.width,
+      width: Value(value.width),
+      preferredWidth: Value(value.preferredWidth),
       height: Value(value.height),
       preferredHeight: Value(value.preferredHeight),
 
@@ -370,6 +435,37 @@ extension type UrlCellTransformer(UrlCell value) {
 
       /// Url related
       url: value.url.toString(),
+    );
+  }
+}
+
+extension type HeaderCellTransformer(HeaderCell value) {
+  HeaderCellItemCompanion get asCompanion {
+    return HeaderCellItemCompanion.insert(
+      /// Identity related
+      whiteboardId: value.id.parentId.whiteboardId,
+      cellId: value.id.id,
+
+      /// Context related
+      preContext: Value(value.preContext),
+
+      /// Position related
+      offsetDx: value.offset.dx,
+      offsetDy: value.offset.dy,
+      width: Value(value.width),
+      preferredWidth: Value(value.preferredWidth),
+      height: Value(value.height),
+      preferredHeight: Value(value.preferredHeight),
+
+      /// Decoration related
+      layer: value.layer,
+      selected: value.selected,
+      color: value.decoration.color,
+      cardKind: value.decoration.cardKind.name,
+      constraints: value.decoration.constraints,
+
+      /// Header related
+      title: value.title,
     );
   }
 }

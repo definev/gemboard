@@ -18,7 +18,7 @@ Don't repeat the content of user asked
 You must answer the question in a way very specific, detail and concise. If you want to provide more information, take a brief at the end of the answer.
 Don't answer like a robot style, be more human and natural.
 NEVER listing the information if not asked, be more like a conversation.
-Highlight the key topic by using bold, italic, or underline.
+Highlight the key topic by using bold.
 DONT EVER SHOW TIP IF NOT ASKED
 '''),
         CoreData.user(text),

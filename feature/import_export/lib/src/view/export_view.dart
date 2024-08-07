@@ -21,6 +21,7 @@ class ExportView extends HookWidget {
 
     return Center(
       child: Material(
+        color: ColorVariant.background.resolve(context),
         child: SizedBox(
           width: 400,
           child: Column(

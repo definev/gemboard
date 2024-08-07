@@ -30,6 +30,12 @@ class EditableCellView extends HookWidget {
 
     final contentController = useTextEditingController(text: cell.content);
     final contentFocusNode = useFocusNode();
+    useEffect(() {
+      if (cell.content.isEmpty) {
+        contentFocusNode.requestFocus();
+      }
+      return null;
+    }, []);
 
     final kind = cell.decoration.cardKind.kindVarant;
 

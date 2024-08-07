@@ -7,7 +7,7 @@ part of 'generate_question.dart';
 // **************************************************************************
 
 String _$generateFromSuggestionHash() =>
-    r'9403b548060e44648bbace453fdbf8be95651b32';
+    r'fe75ac07a16f0dc51d257601f99debe874912a81';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -288,7 +288,7 @@ class _GenerateQuestionProviderElement
   String get text => (origin as GenerateQuestionProvider).text;
 }
 
-String _$summarizeCellHash() => r'ec61b95ffad699ccead6c29581333f9914619c45';
+String _$summarizeCellHash() => r'b486ce2e37be6b9e8e22005139732582bc3e43b9';
 
 /// See also [summarizeCell].
 @ProviderFor(summarizeCell)
@@ -571,7 +571,7 @@ class _GetRelatedQuestionsOrTopicsProviderElement
 }
 
 String _$summarizeImageCellHash() =>
-    r'2b6adab3cb0221202550deaee19c8913fe0225d5';
+    r'3e16bc5ad0dfd9cb3a4bbeab18efbb889cc552b1';
 
 /// See also [summarizeImageCell].
 @ProviderFor(summarizeImageCell)

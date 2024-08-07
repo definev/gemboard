@@ -84,7 +84,7 @@ class EdgeView extends HookWidget {
 
   final void Function(Edge data) onEdgeDeleted;
   final void Function(String label) onEdgeLabelChanged;
-  final void Function(Edge data) onAutoLabel;
+  final VoidCallback onAutoLabel;
 
   (
     Offset shortestPointFromSource,
@@ -448,8 +448,9 @@ class EdgeView extends HookWidget {
     final labelTextFocusNode = useFocusNode();
 
     final labelTextStyle = TextStyleVariant.medium.resolve(context).copyWith(
-        fontSize: TextStyleVariant.h6.resolve(context).fontSize,
-        color: ColorVariant.onSurface.resolve(context));
+          fontSize: TextStyleVariant.h6.resolve(context).fontSize,
+          color: ColorVariant.blue.resolve(context),
+        );
     return LayoutBuilder(
       builder: (context, constraints) {
         Widget child = IgnorePointer(
@@ -487,7 +488,10 @@ class EdgeView extends HookWidget {
                                 style: Style(
                                   $box.height(40 * scale),
                                 ),
-                                onPressed: () => onAutoLabel(data),
+                                onPressed: () {
+                                  onAutoLabel();
+                                  showOptions.value = false;
+                                },
                                 child: HBox(
                                   inherit: true,
                                   style: Style(
@@ -518,7 +522,7 @@ class EdgeView extends HookWidget {
                             controller: labelTextController,
                             focusNode: labelTextFocusNode,
                             kind: DSTextboxKind.boundless,
-                            maxLength: 50,
+                            maxLength: 100,
                             textStyle: labelTextStyle,
                             hintText: '.',
                             onChanged: (value) => onEdgeLabelChanged(value),

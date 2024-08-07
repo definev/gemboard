@@ -42,7 +42,7 @@ class EdgeBuilder extends StatefulWidget {
   ///
   final void Function(Edge edge) onEdgeDeleted;
   final void Function(String label) onEdgeLabelChanged;
-  final void Function(Edge data) onAutoLabel;
+  final VoidCallback onAutoLabel;
 
   @override
   State<StatefulWidget> createState() => _EdgeBuilderState();
@@ -65,7 +65,7 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
     final cellRect = Rect.fromLTWH(
       sourceCell.offset.dx,
       sourceCell.offset.dy,
-      sourceCell.width,
+      sourceCell.width ?? sourceCell.preferredWidth ?? 100,
       sourceCell.height ?? sourceCell.preferredHeight ?? 100,
     );
 
@@ -90,7 +90,11 @@ class _EdgeBuilderState extends State<EdgeBuilder> {
     return Rect.fromLTWH(
       position.offset.dx,
       position.offset.dy,
-      position.width ?? position.preferredWidth ?? cell.width,
+      position.width ??
+          cell.width ??
+          position.preferredWidth ??
+          cell.preferredWidth ??
+          0,
       position.height ??
           cell.height ??
           position.preferredHeight ??

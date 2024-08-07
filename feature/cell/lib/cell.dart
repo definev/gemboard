@@ -17,5 +17,6 @@ export 'src/provider/update_cell.dart';
 export 'src/view/article_cell_view.dart';
 export 'src/view/brainstorming_cell_view.dart';
 export 'src/view/editable_cell_view.dart';
+export 'src/view/header_cell_view.dart';
 export 'src/view/image_cell_view.dart';
 export 'src/view/url_cell_view.dart';

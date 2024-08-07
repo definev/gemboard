@@ -70,7 +70,8 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(CellId(parentId: CellParentId(whiteboardId: ''), id: ''))
     @CellIdConverter()
     CellId id,
-    @Default(100) double width,
+    double? width,
+    double? preferredWidth,
     double? height,
 
     /// A lazy height that will be calculated when the cell is rendered.
@@ -86,7 +87,8 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(9) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
-    required double width,
+    double? width,
+    double? preferredWidth,
     double? height,
 
     /// A lazy height that will be calculated when the cell is rendered.
@@ -104,7 +106,8 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
-    required double width,
+    double? width,
+    double? preferredWidth,
     double? height,
 
     /// A lazy height that will be calculated when the cell is rendered.
@@ -122,7 +125,8 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
-    required double width,
+    double? width,
+    double? preferredWidth,
     double? height,
 
     /// A lazy height that will be calculated when the cell is rendered.
@@ -139,7 +143,8 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
-    required double width,
+    double? width,
+    double? preferredWidth,
     double? height,
 
     /// A lazy height that will be calculated when the cell is rendered.
@@ -157,7 +162,8 @@ class Cell with _$Cell, HasId<CellId> {
     @Default(10) int layer,
     @OffsetConverter() required Offset offset,
     @CellIdConverter() required CellId id,
-    required double width,
+    double? width,
+    double? preferredWidth,
     double? height,
 
     /// A lazy height that will be calculated when the cell is rendered.
@@ -170,6 +176,24 @@ class Cell with _$Cell, HasId<CellId> {
     @UriConverter() required Uri url,
   }) = UrlCell;
 
+  const factory Cell.header({
+    @Default(10) int layer,
+    @OffsetConverter() required Offset offset,
+    @CellIdConverter() required CellId id,
+    double? width,
+    double? preferredWidth,
+    double? height,
+
+    /// A lazy height that will be calculated when the cell is rendered.
+    double? preferredHeight,
+    @CellDecorationConverter() required CellDecoration decoration,
+    @Default(false) bool selected,
+    String? preContext,
+
+    ///
+    required String title,
+  }) = HeaderCell;
+
   factory Cell.fromJson(Map<String, dynamic> json) => _$CellFromJson(json);
 }
 
@@ -177,7 +201,7 @@ extension type CellAppearance(Cell cell) {
   Rect get rect => Rect.fromLTWH(
         cell.offset.dx,
         cell.offset.dy,
-        cell.width,
+        cell.width ?? cell.preferredWidth ?? 0,
         cell.height ?? cell.preferredHeight ?? 0,
       );
 }

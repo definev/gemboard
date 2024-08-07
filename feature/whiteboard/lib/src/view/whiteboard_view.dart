@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -31,6 +30,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
     required this.onEdgeUpdated,
     required this.onEdgesUpdated,
     required this.onEdgeCreated,
+    required this.onEdgesCreated,
     required this.onEdgesDeleted,
     required this.onMoveCellsToAnotherWhiteboard,
 
@@ -80,6 +80,7 @@ class WhiteboardView extends ConsumerStatefulWidget {
   final void Function(Edge oldValue, Edge newValue) onEdgeUpdated;
   final void Function(List<Edge> edges) onEdgesUpdated;
   final Future<void> Function(Edge value) onEdgeCreated;
+  final Future<void> Function(List<Edge> value) onEdgesCreated;
   final Future<void> Function(List<String> edgeIds) onEdgesDeleted;
 
   /// Whiteboard infinite scrollable configuration
@@ -165,6 +166,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         previousCells.remove(cell.id.id);
         final oldCellKey = cellKeys[cell.id.id]!;
         cellKeys[cell.id.id] = (oldCellKey.$1, cell);
+        setState(() {});
       }
 
       if (cellKeys[cell.id.id] == null) {
@@ -287,7 +289,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     final curve = Curves.easeInOut;
     final size = context.size ?? Size.zero;
     final sizeWidth = size.width;
-    final cellWidth = cell.width;
+    final cellWidth = cell.width ?? cell.preferredWidth ?? 0;
     final space = (sizeWidth - cellWidth) / 2 //
         +
         (1 - scaleFactor.value) * cellWidth / 2;
@@ -406,9 +408,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Widget build(BuildContext context) {
     ref.listen(widget.cellsStreamProvider, updateCellKeys);
     ref.listen(widget.edgesStreamProvider, updateEdgeKeys);
-    ref.watch(widget.cellsStreamProvider);
-    ref.watch(widget.edgesStreamProvider);
-    ref.watch(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
 
     Widget child = ListenableBuilder(
       listenable: scaleFactor,
@@ -423,58 +422,95 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         onScaleEnd: widget.onScaleEnd,
         onScaleFactorChanged: (value) => scaleFactor.value = value,
         stack: (key, scaleFactor) {
-          Queue<StackPosition> stackPositions = Queue.from([]);
+          List<StackPosition> stackPositions = [];
           Offset? selectionStart;
           Offset? selectionEnd;
           Cell? selectionStartDxCell;
           Cell? selectionStartDyCell;
           Cell? selectionEndDxCell;
           Cell? selectionEndDyCell;
+          void checkSelectedCell(Cell cell) {
+            final cellRect = CellAppearance(cell).rect;
+            if (selectionStart == null && selectionEnd == null) {
+              selectionStart = cell.offset;
+              selectionStartDxCell = cell;
+              selectionStartDyCell = cell;
+              selectionEnd = cell.offset +
+                  Offset(
+                    cell.width ?? cell.preferredWidth ?? 0,
+                    cell.height ?? cell.preferredHeight ?? 0,
+                  );
+              selectionEndDxCell = cell;
+              selectionEndDyCell = cell;
+            }
+
+            if (cell.offset.dx < selectionStart!.dx) {
+              selectionStart = Offset(cell.offset.dx, selectionStart!.dy);
+              selectionStartDxCell = cell;
+            }
+            if (cell.offset.dy < selectionStart!.dy) {
+              selectionStart = Offset(selectionStart!.dx, cell.offset.dy);
+              selectionStartDyCell = cell;
+            }
+
+            if (selectionEnd!.dx < cell.offset.dx + cellRect.width) {
+              selectionEnd =
+                  Offset(cell.offset.dx + cellRect.width, selectionEnd!.dy);
+              selectionEndDxCell = cell;
+            }
+
+            if (cell.offset.dy + cellRect.height > selectionEnd!.dy) {
+              selectionEnd = Offset(
+                selectionEnd!.dx,
+                cell.offset.dy + cellRect.height,
+              );
+              selectionEndDyCell = cell;
+            }
+          }
 
           List<Cell> selectedCells = [];
+
+          for (final (key, edge) in edgeKeys.values) {
+            final source = cellKeys[edge.source];
+            final target = cellKeys[edge.target];
+            if (source == null || target == null) continue;
+            final (_, _, edgeRect) =
+                EdgeBuilder.computeEdgeBounds(source, target);
+
+            stackPositions.add(
+              StackPosition(
+                key: key,
+                scaleFactor: scaleFactor,
+                data: StackPositionData(
+                  id: edge.id.id,
+                  layer: edge.layer,
+
+                  /// Compute offset and size for edge based on source and target cell
+                  offset: edgeRect.topLeft,
+                  height: edgeRect.height,
+                  width: edgeRect.width,
+                ),
+                builder: (context, notifier, child) => EdgeBuilder(
+                  notifier: notifier,
+                  cellKeys: cellKeys,
+                  stackPositionDataMap: stackPositionDataMap,
+                  edge: edge,
+                  onEdgeDeleted: (edge) => widget.onEdgesDeleted([edge.id.id]),
+                  onAutoLabel: () => edge_onAutoLabel(edge),
+                  onEdgeLabelChanged: (label) =>
+                      edge_onEdgeLabelChanged(edge, label),
+                ),
+              ),
+            );
+          }
 
           for (final (key, cell) in cellKeys.values) {
             if (cell.selected) {
               selectedCells.add(cell);
-
-              if (selectionStart == null && selectionEnd == null) {
-                selectionStart = cell.offset;
-                selectionStartDxCell = cell;
-                selectionStartDyCell = cell;
-                selectionEnd = cell.offset +
-                    Offset(
-                      cell.width,
-                      cell.height ?? cell.preferredHeight ?? 0,
-                    );
-                selectionEndDxCell = cell;
-                selectionEndDyCell = cell;
-              }
-
-              if (cell.offset.dx < selectionStart!.dx) {
-                selectionStart = Offset(cell.offset.dx, selectionStart.dy);
-                selectionStartDxCell = cell;
-              }
-              if (cell.offset.dy < selectionStart.dy) {
-                selectionStart = Offset(selectionStart.dx, cell.offset.dy);
-                selectionStartDyCell = cell;
-              }
-
-              if (selectionEnd!.dx < cell.offset.dx + cell.width) {
-                selectionEnd =
-                    Offset(cell.offset.dx + cell.width, selectionEnd.dy);
-                selectionEndDxCell = cell;
-              }
-
-              if (cell.offset.dy + CellAppearance(cell).rect.height >
-                  selectionEnd.dy) {
-                selectionEnd = Offset(
-                  selectionEnd.dx,
-                  cell.offset.dy + CellAppearance(cell).rect.height,
-                );
-                selectionEndDyCell = cell;
-              }
+              checkSelectedCell(cell);
             }
-            stackPositions.addLast(
+
+            stackPositions.add(
               StackPosition(
                 key: key,
                 scaleFactor: scaleFactor,
@@ -484,6 +520,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                   height: cell.height,
                   preferredHeight: cell.preferredHeight,
                   width: cell.width,
+                  preferredWidth: cell.preferredWidth,
                   offset: cell.offset,
                   keepAlive: cell.selected,
                 ),
@@ -556,39 +593,6 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
             );
           }
 
-          for (final (key, edge) in edgeKeys.values) {
-            final source = cellKeys[edge.source];
-            final target = cellKeys[edge.target];
-            if (source == null || target == null) continue;
-            final (_, _, edgeRect) =
-                EdgeBuilder.computeEdgeBounds(source, target);
-
-            stackPositions.addFirst(
-              StackPosition(
-                key: key,
-                scaleFactor: scaleFactor,
-                data: StackPositionData(
-                  id: edge.id.id,
-                  layer: edge.layer,
-
-                  /// Compute offset and size for edge based on source and target cell
-                  offset: edgeRect.topLeft,
-                  height: edgeRect.height,
-                  width: edgeRect.width,
-                ),
-                builder: (context, notifier, child) => EdgeBuilder(
-                  notifier: notifier,
-                  cellKeys: cellKeys,
-                  stackPositionDataMap: stackPositionDataMap,
-                  edge: edge,
-                  onEdgeDeleted: (edge) => widget.onEdgesDeleted([edge.id.id]),
-                  onAutoLabel: (data) {},
-                  onEdgeLabelChanged: (label) {},
-                ),
-              ),
-            );
-          }
-
           return BoundlessStack(
             horizontalDetails: horizontalDetails,
             verticalDetails: verticalDetails,
@@ -637,24 +641,35 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     final scale = DesignSystemTheme.of(context).scale;
 
     final offset = rect.topLeft;
-    final random = math.Random();
 
     double radius;
     final minRadius = 500 * scale;
     radius = minRadius;
 
-    switch (random.nextBool()) {
-      case true:
-        return Offset(
+    final alignment = [
+      Alignment.centerLeft,
+      Alignment.centerRight,
+      Alignment.bottomCenter,
+    ][random.nextInt(3)];
+
+    return switch (alignment) {
+      Alignment.centerLeft => Offset(
+          offset.dx + radius + rect.width,
+          offset.dy,
+        ),
+      Alignment.bottomCenter => Offset(
+          offset.dx,
+          offset.dy + radius + rect.height,
+        ),
+      Alignment.centerRight => Offset(
+          offset.dx - rect.width - radius,
+          offset.dy,
+        ),
+      _ => Offset(
           radius + offset.dx + rect.width,
           offset.dy,
-        );
-      case false:
-        return Offset(
-          offset.dx,
-          radius + offset.dy + rect.height,
-        );
-    }
+        ),
+    };
   }
 
   void editableCell_OnContentChanged(
@@ -857,6 +872,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     widget.onCellCreated(cell);
   }
 
+  Future<void> cell_onDeleted(Cell cell) async {
+    cellKeys.remove(cell.id.id);
+    setState(() {});
+    await widget.onCellsDeleted([cell.id.id]);
+  }
+
   Future<void> cell_OnCellLinked(
     Cell source,
     Cell target, {
@@ -1041,6 +1062,14 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     return edges;
   }
 
+  List<Edge> edge_getRelatedEdges(Cell cell) {
+    return edgeKeys.values
+        .where((edge) =>
+            edge.$2.source == cell.id.id || edge.$2.target == cell.id.id)
+        .map((edge) => edge.$2)
+        .toList();
+  }
+
   void objectStack_onCellsCut(List<Cell> cells) async {
     final stack = ref
         .read(whiteboardObjectStackProvider(whiteboardId: widget.data.id.id));
@@ -1146,23 +1175,57 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     data = data.copyWith(cells: newCells);
   }
 
-  void selection_articleCell_onTurnArticleIntoEditable(ArticleCell cell) {
+  void edge_onUpdateEdges(List<Edge> oldEdges, List<Edge> newEdges) async {
+    for (final edge in oldEdges) {
+      edgeKeys.remove(edge.id.id);
+    }
+    await widget.onEdgesDeleted(oldEdges.map((e) => e.id.id).toList());
+
+    for (final edge in newEdges) {
+      edgeKeys[edge.id.id] = (
+        GlobalKey(debugLabel: 'WhiteboardView.edge | ${edge.id.id}'),
+        edge,
+      );
+    }
+    setState(() {});
+    widget.onEdgesUpdated(newEdges);
+  }
+
+  void selection_articleCell_onTurnArticleIntoEditable(ArticleCell cell) async {
     final (_, articleCell) = cellKeys[cell.id.id]!;
     if (articleCell is! ArticleCell) return;
+    final oldEdges = edge_getRelatedEdges(articleCell);
+    await cell_onDeleted(articleCell);
 
     final editableCell = Cell.editable(
       id: CellId(
         parentId: CellParentId(whiteboardId: widget.data.id.id),
         id: Helper.createId(),
       ),
+      layer: articleCell.layer,
       title: articleCell.title,
       content: articleCell.content,
-      offset: randomOffsetAroundRect(context, CellAppearance(articleCell).rect),
+      offset: articleCell.offset,
       width: articleCell.width,
+      preContext: articleCell.preContext,
+      height: articleCell.height,
+      preferredHeight: articleCell.preferredHeight,
       decoration: articleCell.decoration,
     );
 
-    cell_moveViewportToCenterOfCell(editableCell);
+    final newEdges = oldEdges.map((edge) {
+      final source =
+          edge.source == articleCell.id.id ? editableCell.id.id : edge.source;
+      final target =
+          edge.target == articleCell.id.id ? editableCell.id.id : edge.target;
+      return edge.copyWith(
+        id: edge.id.copyWith(id: EdgeId.genId(source, target)),
+        source: source,
+        target: target,
+      );
+    }).toList();
+
+    await widget.onEdgesCreated(newEdges);
 
     cellKeys[editableCell.id.id] = (
       GlobalKey(
@@ -1453,7 +1516,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
-  void selection_cell_onDeselctAll(List<String> selectedCellIds) {
+  void selection_cell_onDeselectAll(List<String> selectedCellIds) {
     final newCells = <Cell>[];
     for (final id in selectedCellIds) {
       final (key, cell) = cellKeys[id]!;
@@ -1510,7 +1573,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     }
 
     cell_moveViewportToCenterOfCell(responseCell);
-    selection_cell_onDeselctAll(selectedCellIds);
+    selection_cell_onDeselectAll(selectedCellIds);
 
     late StreamSubscription subscription;
     void cancelSubscription() {
@@ -1520,9 +1583,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       }..remove('chat');
     }
 
+    final selectedCells =
+        selectedCellIds.map((id) => cellKeys[id]!.$2).toList();
+
     final stream = ref.read(
       generateContentWithMultipleCellProvider(
-        cells: selectedCellIds.map((id) => cellKeys[id]!.$2).toList(),
+        cells: selectedCells,
         text: text,
       ),
     );
@@ -1541,6 +1607,37 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       onDone: () {
         debugPrint('Done chat with selected cells');
         cancelSubscription();
+        if (selectedCells.length > 1) return;
+        final (latestKey, latestCell) = cellKeys[responseCell.id.id]!;
+        if (latestCell is! ArticleCell) return;
+        final newCell = latestCell.copyWith(
+          preContext: selectedCells.first.maybeMap(
+            orElse: () => null,
+            brainstorming: (cell) => cell.question ?? '',
+            editable: (cell) =>
+                switch (cell.title.isEmpty && cell.content.isEmpty) {
+              true => null,
+              false => '''
+TITLE: ${cell.title}
+CONTENT: ${cell.content}''',
+            },
+            header: (cell) => switch (cell.title.isEmpty) {
+              true => null,
+              false => 'TITLE: ${cell.title}',
+            },
+            article: (cell) =>
+                switch (cell.title.isEmpty && cell.content.isEmpty) {
+              true => null,
+              false => '''
+TITLE: ${cell.title}
+CONTENT: ${cell.content}''',
+            },
+          ),
+        );
+
+        cellKeys[responseCell.id.id] = (latestKey, newCell);
+        setState(() {});
+        widget.onCellUpdated(latestCell, newCell);
       },
       onError: (error) {
         cancelSubscription();
@@ -1668,5 +1765,65 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
         ),
       ),
     );
+  }
+
+  void edge_onEdgeLabelChanged(Edge edge, String label) {
+    final (key, latestEdge) = edgeKeys[edge.id.id]!;
+    final newEdge = latestEdge.copyWith(
+      decoration: latestEdge.decoration.copyWith(label: label),
+    );
+    edgeKeys[edge.id.id] = (key, newEdge);
+    setState(() {});
+    widget.onEdgeUpdated(latestEdge, newEdge);
+  }
+
+  void edge_onAutoLabel(Edge edge) {
+    final sourceCell = cellKeys[edge.source]!.$2;
+    final targetCell = cellKeys[edge.target]!.$2;
+
+    final stream = ref
+        .read(generateLabelForCellsProvider(
+                source: sourceCell, target: targetCell)
+            .future)
+        .asStream();
+    late StreamSubscription subscription;
+    void cancelSubscription() {
+      subscription.cancel();
+      _cellProcessors[edge.id.id] = {
+        ..._cellProcessors[edge.id.id] ?? {},
+      }..remove('label');
+    }
+
+    subscription = stream.listen(
+      (label) {
+        final latestEdgeKey = edgeKeys[edge.id.id];
+        if (latestEdgeKey == null) {
+          cancelSubscription();
+          return;
+        }
+        final (latestKey, latestEdge) = latestEdgeKey;
+        final newEdge = latestEdge.copyWith(
+          decoration: latestEdge.decoration.copyWith(label: label),
+        );
+        edgeKeys[edge.id.id] = (latestKey, newEdge);
+        setState(() {});
+
+        widget.onEdgeUpdated(latestEdge, newEdge);
+      },
+      onDone: () => cancelSubscription(),
+      onError: (error) {
+        cancelSubscription();
+        DSToast.error(
+          context: context,
+          title: error.toString(),
+        );
+        debugPrint(error.toString());
+      },
+    );
+
+    _cellProcessors[edge.id.id] = {
+      ..._cellProcessors[edge.id.id] ?? {},
+      'label': subscription,
+    };
   }
 }

@@ -143,15 +143,15 @@ class _CellBuilderState extends State<CellBuilder> {
         topLeft.dy + cellAppearance.rect.height * widget.scaleFactor / 2,
       );
   Offset get centerRight => Offset(
-        topLeft.dx + widget.cell.width * widget.scaleFactor,
+        topLeft.dx + cellAppearance.rect.width * widget.scaleFactor,
         topLeft.dy + cellAppearance.rect.height * widget.scaleFactor / 2,
       );
   Offset get bottomCenter => Offset(
-        topLeft.dx + widget.cell.width * widget.scaleFactor / 2,
+        topLeft.dx + cellAppearance.rect.width * widget.scaleFactor / 2,
         topLeft.dy + cellAppearance.rect.height * widget.scaleFactor,
       );
   Offset get topCenter => Offset(
-        topLeft.dx + widget.cell.width * widget.scaleFactor / 2,
+        topLeft.dx + cellAppearance.rect.width * widget.scaleFactor / 2,
         topLeft.dy,
       );
 
@@ -254,7 +254,7 @@ class _CellBuilderState extends State<CellBuilder> {
         builder: (context, value, child) {
           final animatedKnobHeight = knobHeight * (value + (1.5 * (value - 1)));
           final animatedKnobWidth = knobWidth * value;
-          var knobHeightMargin = animatedKnobHeight * 2;
+          var knobHeightMargin = animatedKnobHeight + knobHeight;
           var knobWidthMargin = animatedKnobWidth / 2;
 
           return builder(
@@ -439,49 +439,16 @@ class _CellBuilderState extends State<CellBuilder> {
         cell: cell,
         onConstraintChanged: () => widget.onConstraintChanged(cell),
       ),
+      header: (cell) => HeaderCellView(cell: cell),
       unknown: (_) => SizedBox(),
     );
 
-    child = buildEdgeWire(
-      cell: widget.cell,
-      child: child,
-    );
+    if (widget.cell is! UnknownCell && widget.cell is! HeaderCell)
+      child = buildEdgeWire(
+        cell: widget.cell,
+        child: child,
+      );
 
     return child;
-  }
-
-  Widget buildChatCell(Offset topCenter, DSCard placeholder) {
-    return Positioned(
-      left: topCenter.dx,
-      top: topCenter.dy,
-      child: Transform.scale(
-        alignment: Alignment.topLeft,
-        scale: widget.scaleFactor,
-        child: HookBuilder(
-          builder: (context) {
-            final showChat = useState(false);
-
-            return MouseRegion(
-              onHover: (_) => setState(() => onHover = true),
-              onExit: (_) => setState(() => onHover = false),
-              child: PortalTarget(
-                anchor: Aligned(
-                  follower: Alignment.bottomCenter,
-                  target: Alignment.topCenter,
-                ),
-                portalFollower: switch (showChat.value) {
-                  true => Text('Chat'),
-                  false => SizedBox(),
-                },
-                child: GestureDetector(
-                  onTapDown: (_) => showChat.value = true,
-                  child: placeholder,
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
   }
 }
