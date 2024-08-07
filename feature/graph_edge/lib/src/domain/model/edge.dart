@@ -17,7 +17,7 @@ class EdgeParentId with _$EdgeParentId, HasIdentity {
       _$EdgeParentIdFromJson(json);
 
   @override
-  String get id => '';
+  String get id => whiteboardId;
 }
 
 @freezed

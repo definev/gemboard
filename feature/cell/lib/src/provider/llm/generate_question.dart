@@ -13,6 +13,14 @@ Raw<Stream<String>> generateFromSuggestion(
     generateTextFromCoreDataProvider(
       coreDataList: [
         CoreData.model(systemPrompt),
+        CoreData.model('''SIDENOTE:
+Don't repeat the content of user asked
+You must answer the question in a way very specific, detail and concise. If you want to provide more information, take a brief at the end of the answer.
+Don't answer like a robot style, be more human and natural.
+NEVER listing the information if not asked, be more like a conversation.
+Highlight the key topic by using bold, italic, or underline.
+DONT EVER SHOW TIP IF NOT ASKED
+'''),
         CoreData.user(text),
       ],
     ),
@@ -44,7 +52,9 @@ Raw<Stream<String>> summarizeCell(
     generateTextFromCoreDataProvider(
       coreDataList: [
         CoreData.model(systemPrompt),
-        CoreData.user(content),
+        CoreData.user('''
+Summarize the following content, be concise and clear, and make sure include all the key points.
+$content'''),
       ],
     ),
   );
@@ -77,7 +87,7 @@ Raw<Stream<String>> summarizeImageCell(
       coreDataList: [
         CoreData.model(systemPrompt),
         CoreData.model('''
-Find insights from the image below
+You are masterful at summarizing images. You find every detail and insight in the image, the things that are hidden and only you can see and reasoning about it.
 '''),
         CoreData.imageMemory(bytes),
       ],

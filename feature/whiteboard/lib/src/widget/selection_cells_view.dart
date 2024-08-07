@@ -250,16 +250,16 @@ class SelectionCellsView extends HookWidget {
                             brainstorming: (value) =>
                                 '${value.preContext}: ${value.question}',
                             editable: (value) => '''
-CONTEXT: ${value.preContext ?? ''}
-TITLE: ${value.title}
-CONTENT: ${value.content}
-''',
+                  CONTEXT: ${value.preContext ?? ''}
+                  TITLE: ${value.title}
+                  CONTENT: ${value.content}
+                  ''',
                             image: (value) => '',
                             article: (value) => '''
-CONTEXT: ${value.preContext ?? ''}
-TITLE: ${value.title}
-CONTENT: ${value.content}
-''',
+                  CONTEXT: ${value.preContext ?? ''}
+                  TITLE: ${value.title}
+                  CONTENT: ${value.content}
+                  ''',
                             unknown: (_) => '',
                             url: (value) => '',
                           ),
@@ -272,7 +272,11 @@ CONTENT: ${value.content}
                         builder: (context, child) {
                           if (chatController.text.isNotEmpty) return SizedBox();
                           return suggestionsAsyncValue.value.map(
-                            data: (value) => Column(
+                            data: (value) => VBox(
+                              style: Style(
+                                $flex.gap.ref(SpaceVariant.gap),
+                                $box.color.ref(ColorVariant.background),
+                              ),
                               children: [
                                 for (final idea in value.value
                                     .sublist(0, min(5, value.value.length)))
@@ -285,7 +289,10 @@ CONTENT: ${value.content}
                                       $text.textAlign.center(),
                                       $box.alignment.center(),
                                     ),
-                                    background: CellDecorationExtension(first.decoration).colorVariant ?? ColorVariant.blue,
+                                    background: CellDecorationExtension(
+                                                first.decoration)
+                                            .colorVariant ??
+                                        ColorVariant.blue,
                                     onPressed: () {
                                       suggestionsAsyncValue.value = AsyncData(
                                         value.value
@@ -311,7 +318,6 @@ CONTENT: ${value.content}
                     separatorBuilder: () =>
                         SizedBox(height: SpaceVariant.small.resolve(context)),
                     children: [
-                      if (selectedCells.length == 1) suggestionsChat,
                       DSTextbox(
                         controller: chatController,
                         focusNode: chatFocusNode,
@@ -324,23 +330,24 @@ CONTENT: ${value.content}
                           child: StyledIcon(IconlyLight.send),
                         ),
                       ),
+                      if (selectedCells.length == 1) suggestionsChat,
                     ],
                   );
                   return PortalTarget(
                     visible: showChat.value,
-                    portalFollower: Stack(
-                      children: [
-                        Positioned(
-                          left: viewportSelection.left +
-                              (viewportSelection.width - 400) / 2,
-                          bottom: noKeyboardConstraints.value.maxHeight -
-                              (viewportSelection.top -
-                                  toolbarHeight -
-                                  SpaceVariant.small.resolve(context)),
-                          width: 400,
-                          child: overlayChat,
-                        ),
-                      ],
+                    portalFollower: ListenableBuilder(
+                      listenable: chatController,
+                      builder: (context, child) => Stack(
+                        children: [
+                          Positioned(
+                            left: viewportSelection.left +
+                                (viewportSelection.width - 400) / 2,
+                            top: viewportSelection.top + SpaceVariant.small.resolve(context),
+                            width: 400,
+                            child: overlayChat,
+                          ),
+                        ],
+                      ),
                     ),
                     child: DSToolbar(
                       direction: Axis.horizontal,

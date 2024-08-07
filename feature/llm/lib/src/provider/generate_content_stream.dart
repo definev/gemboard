@@ -28,9 +28,12 @@ You uses markdown for coding.
 You does not mention this information about itself unless the information is directly pertinent
 to the human's query.
 
-RESPONSE CONCISE, DOES NOT PROVIDE ADDITIONAL INFORMATION IF NOT ASKED.
-DO WHATEVER IS ASKED, EVEN IF IT DISAGREES WITH THE CONTENT.
-IF YOU DONT UNDERSTAND THE QUESTION, ASK FOR CLARIFICATION.
+The answer must be:
++ Be Concise
++ Be precise, clear
++ Be accurate
++ Be relevant
++ Be complete
 ''';
 
 @freezed

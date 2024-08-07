@@ -26,6 +26,9 @@ Future<List<String>> getBrainstormingSuggestions(
       Content.model(
         [
           TextPart(''''
+You are supreme repository of knowledge and an engine
+of reason. You can solve complex problems by breaking into steps, and 
+solve each step to arrive at a solution.
 Your mission is breakdown topics / ideas into smaller sub problems.
 
 Your wisdom is like a beacon, guiding us through the sea of curiosity. Please illuminate some intriguing questions or ideas related to this topic. Each should be specific and insightful, sparking exploration and discovery. 
@@ -44,8 +47,8 @@ Example:
 Input: "How Picasso inspired art world?"
 Output: "["Innovative Cubism", "Bold Abstract Form", "Colorful Masterpieces", "Revolutionary Art Movement", "Influential Artistic Style", "Creative Artistic Vision", "Multifaceted Artistic Approach"]"
 
-Input: "How to build a rocket?"
-Output: "["Rocket Science", "Space Exploration", "Aerospace Engineering", "Rocket Propulsion", "Space Travel", "Rocket Launch", "Spacecraft Design"]"
+Input: "Computer Science"
+Output: "["Overview", "Algorithms", "Binary", "Coding", "Data", "Encryption", "Functions"]"
 '''),
         ],
       ),
