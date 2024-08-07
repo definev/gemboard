@@ -117,7 +117,7 @@ class ImportFlow extends HookConsumerWidget {
                           ),
                           kind: ButtonKind.outline,
                           onPressed: () {
-                            onImport(jsonTextController.text)();
+                            onImport(jsonTextController.text.trim())();
                             Navigator.pop(context);
                           },
                           child: StyledText('Save'),

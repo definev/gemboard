@@ -690,8 +690,11 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     setState(() {});
 
     late StreamSubscription subscription;
-    final stream = ref.read(generateQuestionProvider(
-        text: 'CONTEXT: ${parentCell.question} | $suggestion'));
+    final stream = ref.read(
+      generateFromSuggestionProvider(
+        text: 'CONTEXT: ${parentCell.question} | $suggestion',
+      ),
+    );
     subscription = stream.listen(
       (data) {
         void defer() {
@@ -1450,6 +1453,19 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     );
   }
 
+  void selection_cell_onDeselctAll(List<String> selectedCellIds) {
+    final newCells = <Cell>[];
+    for (final id in selectedCellIds) {
+      final (key, cell) = cellKeys[id]!;
+      final newCell = cell.copyWith(selected: false);
+      cellKeys[id] = (key, newCell);
+      newCells.add(newCell);
+    }
+
+    setState(() {});
+    widget.onCellsUpdated(newCells);
+  }
+
   void selection_cell_onChatWithSelectedCells(
     List<String> selectedCellIds,
     String text, {
@@ -1494,6 +1510,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
     }
 
     cell_moveViewportToCenterOfCell(responseCell);
+    selection_cell_onDeselctAll(selectedCellIds);
 
     late StreamSubscription subscription;
     void cancelSubscription() {

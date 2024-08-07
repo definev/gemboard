@@ -10,6 +10,7 @@ import 'package:markdown/markdown.dart' as md;
 import 'package:mix/mix.dart';
 import 'package:super_drag_and_drop/super_drag_and_drop.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class DSMarkdownBody extends StatelessWidget {
   const DSMarkdownBody({
@@ -76,9 +77,10 @@ class DSMarkdownBody extends StatelessWidget {
       p: p,
       listBullet: p.copyWith(color: textSpec.style?.color),
       blockSpacing: SpaceVariant.gap.resolve(context),
-      listBulletPadding: EdgeInsets.symmetric(
-        horizontal: SpaceVariant.small.resolve(context),
+      listBulletPadding: EdgeInsets.only(
+        right: SpaceVariant.small.resolve(context),
       ),
+      listIndent: SpaceVariant.large.resolve(context),
       tableHead: medium.copyWith(
         fontSize: p2.fontSize,
         height: p2.height,
@@ -299,11 +301,14 @@ class LinkElementBuilder extends MarkdownElementBuilder {
           // DraggableWidget represents the actual draggable area. It looks
           // for parent DragItemWidget in widget hierarchy to provide the DragItem.
           child: DraggableWidget(
-            child: Text(
-              text,
-              style: TextStyleVariant.medium
-                  .resolve(context)
-                  .merge(preferredStyle),
+            child: GestureDetector(
+              onTap: () => launchUrlString(href!),
+              child: Text(
+                text,
+                style: TextStyleVariant.medium
+                    .resolve(context)
+                    .merge(preferredStyle),
+              ),
             ),
           ),
         ),

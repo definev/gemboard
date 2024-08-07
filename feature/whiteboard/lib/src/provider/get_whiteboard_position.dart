@@ -8,7 +8,11 @@ Future<WhiteboardPosition> getWhiteboardPosition(
   GetWhiteboardPositionRef ref, {
   required WhiteboardId id,
 }) async {
-  final repository = ref.watch(whiteboardRepositoryProvider);
-  return await repository.getWhiteboardPosition(id: id) ??
-      WhiteboardPosition.defaultWhiteboardPosition(id.id);
+  try {
+    final repository = ref.watch(whiteboardRepositoryProvider);
+    return await repository.getWhiteboardPosition(id: id) ??
+        WhiteboardPosition.defaultWhiteboardPosition(id.id);
+  } catch (_) {
+    return WhiteboardPosition.defaultWhiteboardPosition(id.id);
+  }
 }

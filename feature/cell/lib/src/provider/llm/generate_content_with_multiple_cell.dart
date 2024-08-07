@@ -25,6 +25,7 @@ Raw<Stream<String>> generateContentWithMultipleCell(
   );
   final stream = model.generateContentStream(
     [
+      Content.model([TextPart(systemPrompt)]),
       ...[
         for (final cell in cells) await CellLLM(cell).getContent(),
       ].whereType<Content>(),

@@ -60,6 +60,12 @@ class BrainstormingCellView extends HookWidget {
     final askForSuggestionFocusNode = useFocusNode(
       onKey: handleEnterKey(onSubmit: onSubmit),
     );
+    useEffect(() {
+      if (cell.question == null) {
+        askForSuggestionFocusNode.requestFocus();
+      }
+      return null;
+    }, []);
 
     AsyncSnapshot onAskForSuggestionAsyncValue = useFuture(
       onAskForSuggestionSubscription?.asFuture(),

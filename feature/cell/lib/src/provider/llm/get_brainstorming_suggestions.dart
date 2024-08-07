@@ -26,15 +26,26 @@ Future<List<String>> getBrainstormingSuggestions(
       Content.model(
         [
           TextPart(''''
-You are wise and knowledgeable. Please provide me with some ideas for the following question
-You will return an array of string mix of the following:
-- following question  
-- topic related
-- ideas to explore
+Your mission is breakdown topics / ideas into smaller sub problems.
 
-And it should be ranked by relevance
-You must not return anything else and follow the format
-The out put should less or equal to 10 items
+Your wisdom is like a beacon, guiding us through the sea of curiosity. Please illuminate some intriguing questions or ideas related to this topic. Each should be specific and insightful, sparking exploration and discovery. 
+
+Deliver a collection of up to six thought-provoking prompts, ranked by relevance, including:
+
+- Topic-centric inquiries
+- Ideas ripe for exploration
+
+Each string must less than 200 characters.
+
+Return an array list and no comments or feedback.
+
+Example:
+
+Input: "How Picasso inspired art world?"
+Output: "["Innovative Cubism", "Bold Abstract Form", "Colorful Masterpieces", "Revolutionary Art Movement", "Influential Artistic Style", "Creative Artistic Vision", "Multifaceted Artistic Approach"]"
+
+Input: "How to build a rocket?"
+Output: "["Rocket Science", "Space Exploration", "Aerospace Engineering", "Rocket Propulsion", "Space Travel", "Rocket Launch", "Spacecraft Design"]"
 '''),
         ],
       ),

@@ -6,7 +6,8 @@ part of 'generate_question.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$generateQuestionHash() => r'e6b84cf75c6af6e22adaf5be3f10f59844c3f44e';
+String _$generateFromSuggestionHash() =>
+    r'9403b548060e44648bbace453fdbf8be95651b32';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -28,6 +29,136 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [generateFromSuggestion].
+@ProviderFor(generateFromSuggestion)
+const generateFromSuggestionProvider = GenerateFromSuggestionFamily();
+
+/// See also [generateFromSuggestion].
+class GenerateFromSuggestionFamily extends Family<Raw<Stream<String>>> {
+  /// See also [generateFromSuggestion].
+  const GenerateFromSuggestionFamily();
+
+  /// See also [generateFromSuggestion].
+  GenerateFromSuggestionProvider call({
+    required String text,
+  }) {
+    return GenerateFromSuggestionProvider(
+      text: text,
+    );
+  }
+
+  @override
+  GenerateFromSuggestionProvider getProviderOverride(
+    covariant GenerateFromSuggestionProvider provider,
+  ) {
+    return call(
+      text: provider.text,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'generateFromSuggestionProvider';
+}
+
+/// See also [generateFromSuggestion].
+class GenerateFromSuggestionProvider
+    extends AutoDisposeProvider<Raw<Stream<String>>> {
+  /// See also [generateFromSuggestion].
+  GenerateFromSuggestionProvider({
+    required String text,
+  }) : this._internal(
+          (ref) => generateFromSuggestion(
+            ref as GenerateFromSuggestionRef,
+            text: text,
+          ),
+          from: generateFromSuggestionProvider,
+          name: r'generateFromSuggestionProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$generateFromSuggestionHash,
+          dependencies: GenerateFromSuggestionFamily._dependencies,
+          allTransitiveDependencies:
+              GenerateFromSuggestionFamily._allTransitiveDependencies,
+          text: text,
+        );
+
+  GenerateFromSuggestionProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.text,
+  }) : super.internal();
+
+  final String text;
+
+  @override
+  Override overrideWith(
+    Raw<Stream<String>> Function(GenerateFromSuggestionRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GenerateFromSuggestionProvider._internal(
+        (ref) => create(ref as GenerateFromSuggestionRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        text: text,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<Raw<Stream<String>>> createElement() {
+    return _GenerateFromSuggestionProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GenerateFromSuggestionProvider && other.text == text;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, text.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GenerateFromSuggestionRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
+  /// The parameter `text` of this provider.
+  String get text;
+}
+
+class _GenerateFromSuggestionProviderElement
+    extends AutoDisposeProviderElement<Raw<Stream<String>>>
+    with GenerateFromSuggestionRef {
+  _GenerateFromSuggestionProviderElement(super.provider);
+
+  @override
+  String get text => (origin as GenerateFromSuggestionProvider).text;
+}
+
+String _$generateQuestionHash() => r'5ad3e1401d94e506b5da0f8d2a2b951aaf0d1a00';
 
 /// See also [generateQuestion].
 @ProviderFor(generateQuestion)
@@ -157,7 +288,7 @@ class _GenerateQuestionProviderElement
   String get text => (origin as GenerateQuestionProvider).text;
 }
 
-String _$summarizeCellHash() => r'f85d203c8b391b28cadeb870773262827466f4e9';
+String _$summarizeCellHash() => r'ec61b95ffad699ccead6c29581333f9914619c45';
 
 /// See also [summarizeCell].
 @ProviderFor(summarizeCell)
@@ -303,8 +434,144 @@ class _SummarizeCellProviderElement
   String get content => (origin as SummarizeCellProvider).content;
 }
 
+String _$getRelatedQuestionsOrTopicsHash() =>
+    r'fc9590a66c4c141865b95fbf7fa0798161a431e4';
+
+/// See also [getRelatedQuestionsOrTopics].
+@ProviderFor(getRelatedQuestionsOrTopics)
+const getRelatedQuestionsOrTopicsProvider = GetRelatedQuestionsOrTopicsFamily();
+
+/// See also [getRelatedQuestionsOrTopics].
+class GetRelatedQuestionsOrTopicsFamily
+    extends Family<AsyncValue<List<String>>> {
+  /// See also [getRelatedQuestionsOrTopics].
+  const GetRelatedQuestionsOrTopicsFamily();
+
+  /// See also [getRelatedQuestionsOrTopics].
+  GetRelatedQuestionsOrTopicsProvider call({
+    required String topicOrQuestion,
+  }) {
+    return GetRelatedQuestionsOrTopicsProvider(
+      topicOrQuestion: topicOrQuestion,
+    );
+  }
+
+  @override
+  GetRelatedQuestionsOrTopicsProvider getProviderOverride(
+    covariant GetRelatedQuestionsOrTopicsProvider provider,
+  ) {
+    return call(
+      topicOrQuestion: provider.topicOrQuestion,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'getRelatedQuestionsOrTopicsProvider';
+}
+
+/// See also [getRelatedQuestionsOrTopics].
+class GetRelatedQuestionsOrTopicsProvider
+    extends AutoDisposeFutureProvider<List<String>> {
+  /// See also [getRelatedQuestionsOrTopics].
+  GetRelatedQuestionsOrTopicsProvider({
+    required String topicOrQuestion,
+  }) : this._internal(
+          (ref) => getRelatedQuestionsOrTopics(
+            ref as GetRelatedQuestionsOrTopicsRef,
+            topicOrQuestion: topicOrQuestion,
+          ),
+          from: getRelatedQuestionsOrTopicsProvider,
+          name: r'getRelatedQuestionsOrTopicsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$getRelatedQuestionsOrTopicsHash,
+          dependencies: GetRelatedQuestionsOrTopicsFamily._dependencies,
+          allTransitiveDependencies:
+              GetRelatedQuestionsOrTopicsFamily._allTransitiveDependencies,
+          topicOrQuestion: topicOrQuestion,
+        );
+
+  GetRelatedQuestionsOrTopicsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.topicOrQuestion,
+  }) : super.internal();
+
+  final String topicOrQuestion;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<String>> Function(GetRelatedQuestionsOrTopicsRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: GetRelatedQuestionsOrTopicsProvider._internal(
+        (ref) => create(ref as GetRelatedQuestionsOrTopicsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        topicOrQuestion: topicOrQuestion,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<String>> createElement() {
+    return _GetRelatedQuestionsOrTopicsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is GetRelatedQuestionsOrTopicsProvider &&
+        other.topicOrQuestion == topicOrQuestion;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, topicOrQuestion.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin GetRelatedQuestionsOrTopicsRef
+    on AutoDisposeFutureProviderRef<List<String>> {
+  /// The parameter `topicOrQuestion` of this provider.
+  String get topicOrQuestion;
+}
+
+class _GetRelatedQuestionsOrTopicsProviderElement
+    extends AutoDisposeFutureProviderElement<List<String>>
+    with GetRelatedQuestionsOrTopicsRef {
+  _GetRelatedQuestionsOrTopicsProviderElement(super.provider);
+
+  @override
+  String get topicOrQuestion =>
+      (origin as GetRelatedQuestionsOrTopicsProvider).topicOrQuestion;
+}
+
 String _$summarizeImageCellHash() =>
-    r'b11a5ae997cb074dab04e2698466b290cecd183f';
+    r'2b6adab3cb0221202550deaee19c8913fe0225d5';
 
 /// See also [summarizeImageCell].
 @ProviderFor(summarizeImageCell)

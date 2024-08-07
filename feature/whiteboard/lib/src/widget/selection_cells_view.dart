@@ -1,13 +1,16 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
 import 'package:design_system/design_system.dart';
+import 'package:flextras/flextras.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:iconly/iconly.dart';
 import 'package:mix/mix.dart';
 import 'package:utils/utils.dart';
@@ -234,6 +237,95 @@ class SelectionCellsView extends HookWidget {
                     },
                   );
 
+                  var suggestionsChat = HookConsumer(
+                    builder: (context, ref, child) {
+                      final first = selectedCells.first;
+                      final suggestionsAsyncValue =
+                          useState<AsyncValue<List<String>>>(
+                        AsyncValue.loading(),
+                      );
+                      ref.listen(
+                        getRelatedQuestionsOrTopicsProvider(
+                          topicOrQuestion: first.map(
+                            brainstorming: (value) =>
+                                '${value.preContext}: ${value.question}',
+                            editable: (value) => '''
+CONTEXT: ${value.preContext ?? ''}
+TITLE: ${value.title}
+CONTENT: ${value.content}
+''',
+                            image: (value) => '',
+                            article: (value) => '''
+CONTEXT: ${value.preContext ?? ''}
+TITLE: ${value.title}
+CONTENT: ${value.content}
+''',
+                            unknown: (_) => '',
+                            url: (value) => '',
+                          ),
+                        ),
+                        (previous, next) => suggestionsAsyncValue.value = next,
+                      );
+
+                      return ListenableBuilder(
+                        listenable: chatController,
+                        builder: (context, child) {
+                          if (chatController.text.isNotEmpty) return SizedBox();
+                          return suggestionsAsyncValue.value.map(
+                            data: (value) => Column(
+                              children: [
+                                for (final idea in value.value
+                                    .sublist(0, min(5, value.value.length)))
+                                  Button(
+                                    style: Style(
+                                      $box.minHeight(
+                                          SpaceVariant.large.resolve(context) *
+                                              2),
+                                      $text.style.ref(TextStyleVariant.p3),
+                                      $text.textAlign.center(),
+                                      $box.alignment.center(),
+                                    ),
+                                    background: CellDecorationExtension(first.decoration).colorVariant ?? ColorVariant.blue,
+                                    onPressed: () {
+                                      suggestionsAsyncValue.value = AsyncData(
+                                        value.value
+                                            .where((element) => element != idea)
+                                            .toList(),
+                                      );
+
+                                      chatController.text = idea;
+                                      chatFocusNode.requestFocus();
+                                    },
+                                    child: StyledText(idea),
+                                  ),
+                              ],
+                            ),
+                            error: (_) => SizedBox(),
+                            loading: (_) => SizedBox(),
+                          );
+                        },
+                      );
+                    },
+                  );
+                  var overlayChat = SeparatedColumn(
+                    separatorBuilder: () =>
+                        SizedBox(height: SpaceVariant.small.resolve(context)),
+                    children: [
+                      if (selectedCells.length == 1) suggestionsChat,
+                      DSTextbox(
+                        controller: chatController,
+                        focusNode: chatFocusNode,
+                        autofocus: true,
+                        minLines: 1,
+                        maxLines: 4,
+                        hintText: 'Type a message...',
+                        trailing: Button(
+                          onPressed: onSubmit,
+                          child: StyledIcon(IconlyLight.send),
+                        ),
+                      ),
+                    ],
+                  );
                   return PortalTarget(
                     visible: showChat.value,
                     portalFollower: Stack(
@@ -246,18 +338,7 @@ class SelectionCellsView extends HookWidget {
                                   toolbarHeight -
                                   SpaceVariant.small.resolve(context)),
                           width: 400,
-                          child: DSTextbox(
-                            controller: chatController,
-                            focusNode: chatFocusNode,
-                            autofocus: true,
-                            minLines: 1,
-                            maxLines: 4,
-                            hintText: 'Type a message...',
-                            trailing: Button(
-                              onPressed: onSubmit,
-                              child: StyledIcon(IconlyLight.send),
-                            ),
-                          ),
+                          child: overlayChat,
                         ),
                       ],
                     ),

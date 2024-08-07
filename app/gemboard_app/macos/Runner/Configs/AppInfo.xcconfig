@@ -11,4 +11,4 @@ PRODUCT_NAME = Gemboard
 PRODUCT_BUNDLE_IDENTIFIER = com.zennn.gemboard
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2024 com.definev.gemboard. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2024 com.zennn.gemboard. All rights reserved.

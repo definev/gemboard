@@ -4,8 +4,6 @@ import 'package:cell/cell.dart';
 import 'package:graph_edge/graph_edge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
-import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
-import 'package:whiteboard/src/provider/set_whiteboard_position.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 part 'move_cells_and_edges_to_another_whiteboard.g.dart';
@@ -75,6 +73,7 @@ Future<void> moveCellsAndEdgesToAnotherWhiteboard(
     createCellsProvider(
       parentId: newCells.first.id.parentId,
       data: newCells.toList(),
+      silent: true,
     ).future,
   );
   if (newEdges.isNotEmpty) {
@@ -82,6 +81,7 @@ Future<void> moveCellsAndEdgesToAnotherWhiteboard(
       createEdgesProvider(
         parentId: newEdges.first.id.parentId,
         data: newEdges.toList(),
+        silent: true,
       ).future,
     );
   }

@@ -44,29 +44,38 @@ class GemboardApp extends StatelessWidget {
       routeInformationProvider: nav.routeInformationProvider,
       routeInformationParser: nav.routeInformationParser,
       routerDelegate: nav.routerDelegate,
-      builder: (context, child) {
+      builder: (BuildContext context, Widget? child) {
         final md = MediaQuery.of(context);
-        return WindowMover(
-          child: MediaQuery(
-            data: md.copyWith(
-              padding: md.padding.copyWith(
-                top: md.padding.top +
-                    switch (defaultTargetPlatform) {
-                      TargetPlatform.macOS => titlebarHeight,
-                      // TargetPlatform.windows => titlebarHeight,
-                      _ => 0,
-                    },
-              ),
+        child = MediaQuery(
+          data: md.copyWith(
+            padding: md.padding.copyWith(
+              top: md.padding.top +
+                  switch (defaultTargetPlatform) {
+                    TargetPlatform.macOS => titlebarHeight,
+                    // TargetPlatform.windows => titlebarHeight,
+                    _ => 0,
+                  },
             ),
-            child: MixTheme(
-              data: mixTheme,
-              child: DesignSystemTheme(
-                data: designSystemThemeData,
-                child: child!,
-              ),
+          ),
+          child: MixTheme(
+            data: mixTheme,
+            child: DesignSystemTheme(
+              data: designSystemThemeData,
+              child: child!,
             ),
           ),
         );
+        if (defaultTargetPlatform == TargetPlatform.macOS) {
+          child = WindowMover(
+            child: child,
+          );
+        }
+        if (defaultTargetPlatform == TargetPlatform.windows) {
+          child = WindowMover(
+            child: child,
+          );
+        }
+        return child;
       },
     );
   }

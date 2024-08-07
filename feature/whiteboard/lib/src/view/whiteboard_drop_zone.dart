@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' as io;
 
 import 'package:cell/cell.dart';
@@ -202,6 +203,25 @@ class WhiteboardDropZone extends StatelessWidget {
                       moveToNewCell: true,
                     );
                   }
+                } else {
+                  reader.getValue<String>(Formats.plainText, (value) {
+                    if (value != null) {
+                      // You can access values through the `value` property.
+                      debugPrint('Dropped text: $value');
+                      final uri = Uri.tryParse(value);
+                      if (uri != null && uri.scheme.isNotEmpty) {
+                        onLinkReceived(
+                          event.position.local,
+                          uri,
+                          moveToNewCell: true,
+                        );
+                      } else {
+                        onTextReceived(event.position.local, value);
+                      }
+                    }
+                  }, onError: (error) {
+                    debugPrint('Error reading value $error');
+                  });
                 }
               },
               onError: (error) {
@@ -227,6 +247,24 @@ class WhiteboardDropZone extends StatelessWidget {
             }, onError: (error) {
               debugPrint('Error reading value $error');
             });
+          } else if (reader.canProvide(Formats.plainTextFile)) {
+            reader.getFile(
+              Formats.plainTextFile,
+              (reader) async {
+                final value = utf8.decode(await reader.readAll());
+                debugPrint('Dropped text: $value');
+                final uri = Uri.tryParse(value);
+                if (uri != null && uri.scheme.isNotEmpty) {
+                  onLinkReceived(
+                    event.position.local,
+                    uri,
+                    moveToNewCell: true,
+                  );
+                } else {
+                  onTextReceived(event.position.local, value);
+                }
+              },
+            );
           }
         }
       },
