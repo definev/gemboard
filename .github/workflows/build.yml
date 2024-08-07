@@ -1,7 +1,7 @@
 name: Build
 on:
   push:
-    branches: ["release"]
+    branches: ["main"]
     tags:
       - 'v*.*.*'
 
@@ -30,6 +30,26 @@ jobs:
           files: |
             app/gemboard_app/build/ios/iphoneos/Runner.app
             app/gemboard_app/build/app/outputs/apk/release/app-release.apk
+  
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: melos exec --scope="*app*" -- flutter build apk --split-per-abi
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/gemboard_app/build/app/outputs/
+
 
   build_web:
     runs-on: ubuntu-latest
