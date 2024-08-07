@@ -3,9 +3,7 @@ on:
   push:
     branches: ["release"]
     tags:
-      - '*'
-  pull_request:
-    branches: ["release"]
+      - 'v*.*.*'
 
 permissions:
   contents: write
@@ -26,16 +24,12 @@ jobs:
           run-bootstrap: true
       - run: melos exec --scope="*app*" -- flutter build ios --release --no-codesign
       - run: melos exec --scope="*app*" -- flutter build apk
-      - name: '📦 Package Android & iOS'
-        run: |
-          cd ${{github.workspace}}
-          zip -r ios.zip app/gemboard_app/build/ios/iphoneos/Runner.app
-          gh release upload ${{github.event.release.tag_name}} ios.zip
-          zip -r android.zip app/gemboard_app/build/app/outputs/flutter-apk/app-release.apk
-          gh release upload ${{github.event.release.tag_name}} android.zip
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
-        shell: bash
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app/gemboard_app/build/ios/iphoneos/Runner.app
+            app/gemboard_app/build/app/outputs/apk/release/app-release.apk
 
   build_web:
     runs-on: ubuntu-latest
@@ -51,14 +45,11 @@ jobs:
         with:
           run-bootstrap: true
       - run: melos exec --scope="*app*" -- flutter build web --web-renderer=canvaskit
-      - name: '📦 Package Web'
-        run: |
-          cd ${{github.workspace}}
-          zip -r web.zip app/gemboard_app/build/web
-          gh release upload ${{github.event.release.tag_name}} web.zip
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
-        shell: bash
+      - run: zip -r web.zip app/gemboard_app/build/web
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: web.zip
   build_web_wasm:
     runs-on: ubuntu-latest
     steps:
@@ -81,6 +72,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.TOKEN }}
         shell: bash
+      - run: zip -r web.zip app/gemboard_app/build/web
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: web.zip
   build_windows:
     runs-on: windows-latest
     steps:
@@ -95,14 +91,33 @@ jobs:
         with:
           run-bootstrap: true
       - run: melos exec --scope="*app*" -- flutter build windows
-      - name: '📦 Package Windows'
-        run: |
-          cd ${{github.workspace}}
-          zip -r windows.zip app/gemboard_app/build/windows
-          gh release upload ${{github.event.release.tag_name}} windows.zip
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
         shell: bash
+      - run: zip -r windows.zip app/gemboard_app/build/windows
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: windows.zip
+    
+  build_macos:
+    runs-on: macos-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: melos exec --scope="*app*" -- flutter build macos
+      - run: zip -r gemboard_macos.zip app/gemboard_app/build/macos/Build/Products/Release/Gemboard.app
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gemboard_macos.zip
+
   build_linux:
     runs-on: ubuntu-latest
     steps:
@@ -120,11 +135,8 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y ninja-build libgtk-3-dev
       - run: melos exec --scope="*app*" -- flutter build linux
-      - name: '📦 Package Linux'
-        run: |
-          cd ${{github.workspace}}
-          zip -r linux.zip app/gemboard_app/build/linux
-          gh release upload ${{github.event.release.tag_name}} linux.zip
-        env:
-          GITHUB_TOKEN: ${{ github.TOKEN }}
-        shell: bash
+      - run: zip -r linux.zip app/gemboard_app/build/linux
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: linux.zip
