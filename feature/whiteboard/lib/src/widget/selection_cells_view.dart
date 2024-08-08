@@ -310,7 +310,7 @@ CONTENT: ${value.content}''';
                                       );
 
                                       chatController.text = idea;
-                                      chatFocusNode.requestFocus();
+                                      onSubmit();
                                     },
                                     child: StyledText(idea),
                                   ),
