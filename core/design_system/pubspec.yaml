@@ -22,6 +22,8 @@ dependencies:
   flutter_animate:
 
   flutter_markdown:
+  flutter_markdown_latex:
+    git: https://github.com/definev/flutter_markdown_latex.git
   flutter_highlighter:
 
   url_launcher: 
@@ -48,6 +50,12 @@ dependencies:
   super_drag_and_drop: ^0.8.19
 
   go_router: ^14.2.1
+
+dependency_overrides: 
+  flutter_math_fork:
+    git:
+      url: https://github.com/dessangithub/flutter_math_fork.git
+      ref: fix_hashValues-to-Object.hash
 
 dev_dependencies:
   copy_with_extension_gen: 

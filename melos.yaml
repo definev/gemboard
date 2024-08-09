@@ -45,6 +45,9 @@ command:
       drift_flutter: ^0.1.0
       super_drag_and_drop: ^0.8.19
       super_clipboard: ^0.8.19
+      flutter_markdown_latex:
+        git: https://github.com/definev/flutter_markdown_latex.git
+        ref: main
     
     dev_dependencies:
       flutter_lints: ^4.0.0

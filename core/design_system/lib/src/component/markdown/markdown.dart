@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_highlighter/flutter_highlighter.dart';
 import 'package:flutter_highlighter/themes/atom-one-light.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:flutter_markdown_latex/flutter_markdown_latex.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:markdown/markdown.dart' as md;
 import 'package:mix/mix.dart';
@@ -30,7 +31,19 @@ class DSMarkdownBody extends StatelessWidget {
     var builders = {
       'code': CodeElementBuilder(),
       'a': LinkElementBuilder(),
+      'latex': LatexElementBuilder(
+        textStyle: TextStyleVariant.h5.resolve(context),
+      ),
     };
+    final extensionSet = md.ExtensionSet(
+      [
+        LatexBlockSyntax(),
+        ...md.ExtensionSet.gitHubFlavored.blockSyntaxes,
+      ],
+      [
+        LatexInlineSyntax(),
+      ],
+    );
 
     final h4 = TextStyleVariant.h5
         .resolve(context)
@@ -118,11 +131,13 @@ class DSMarkdownBody extends StatelessWidget {
           data: data,
           builders: builders,
           styleSheet: markdownStyleSheet,
+          extensionSet: extensionSet,
         ),
       true => SuperListMarkdown(
           data: data,
           builders: builders,
           styleSheet: markdownStyleSheet,
+          extensionSet: extensionSet,
         ),
     };
   }
