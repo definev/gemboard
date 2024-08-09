@@ -29,7 +29,7 @@ dependencies:
   atreeon_get_child_size:
 
   # Native
-  super_drag_and_drop: ^0.8.17
+  super_drag_and_drop: ^0.8.19
 
   # design system
   design_system:
@@ -57,7 +57,7 @@ dependencies:
   
   sliver_tools: ^0.2.12
   
-  super_clipboard: ^0.8.18
+  super_clipboard: ^0.8.19
 
   boundless_stack:
     git:
