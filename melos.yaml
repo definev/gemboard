@@ -43,6 +43,8 @@ command:
           ref: master
       drift: ^2.19.1+1
       drift_flutter: ^0.1.0
+      super_drag_and_drop: ^0.8.19
+      super_clipboard: ^0.8.19
     
     dev_dependencies:
       flutter_lints: ^4.0.0
