@@ -1,7 +1,7 @@
 name: gemboard_app
 description: "gemboard mobile app"
 publish_to: "none"
-version: 0.0.6+6
+version: 0.0.10+10
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -55,6 +55,7 @@ dev_dependencies:
   flutter_lints: ^4.0.0
   icons_launcher: ^2.1.7
   msix: ^3.16.7
+  inno_bundle: ^0.6.0
 
 dependency_overrides:
   flutter_keyboard_visibility_web:
@@ -84,9 +85,7 @@ icons_launcher:
 flutter:
   uses-material-design: true
 
-msix_config:
-  display_name: Gemboard
-  install_certificate: true
-  build_windows: false
-  publisher: CN=zennn.mind
-  capabilities: internetClient
+inno_bundle:
+  id: 52cb865d-154d-5f6e-95a9-b1ec55455064
+  publisher: zennn.mind # Optional, but recommended.
+  name: Gemboard # Also optional, but recommended.

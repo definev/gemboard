@@ -649,6 +649,14 @@ packages:
       relative: true
     source: path
     version: "0.0.0"
+  inno_bundle:
+    dependency: "direct dev"
+    description:
+      name: inno_bundle
+      sha256: d103eed7e789a898ee9961c3098d43f9ce9325db2d416a0e183eb4fdd3c107d1
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.0"
   intl:
     dependency: transitive
     description:
