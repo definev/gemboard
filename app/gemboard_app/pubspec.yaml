@@ -86,5 +86,7 @@ flutter:
 
 msix_config:
   display_name: Gemboard
-  install_certificate: false
+  install_certificate: true
+  build_windows: false
+  publisher: CN=zennn.mind
   capabilities: internetClient
