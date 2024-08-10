@@ -87,3 +87,4 @@ flutter:
 msix_config:
   display_name: Gemboard
   install_certificate: false
+  capabilities: internetClient
