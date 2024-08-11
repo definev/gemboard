@@ -612,6 +612,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                 ),
             },
             delegate: BoundlessStackListDelegate(
+              layerSorted: true,
               children: stackPositions,
             ),
             scaleFactor: scaleFactor,
