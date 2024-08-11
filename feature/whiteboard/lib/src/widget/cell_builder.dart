@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:boundless_stack/boundless_stack.dart';
 import 'package:cell/cell.dart';
@@ -159,11 +160,16 @@ class _CellBuilderState extends State<CellBuilder> {
   GlobalKey edgeWirePortalKey = GlobalKey();
 
   Widget buildEdgeWire({required Cell cell, required Widget child}) {
-    var knobHeight = SpaceVariant.gap.resolve(context) * widget.scaleFactor;
+    var knobHeight =
+        SpaceVariant.gap.resolve(context) * max(widget.scaleFactor, 0.4);
     var knobWidth =
         SpaceVariant.large.resolve(context) * widget.scaleFactor * 2;
 
-    final knobColor = ColorVariant.outline.resolve(context);
+    final knobColor = Color.lerp(
+      ColorVariant.outline.resolve(context),
+      ColorVariant.background.resolve(context),
+      0.4,
+    )!;
 
     Widget buildEdgeKnob({
       required Offset startOffset,
@@ -225,6 +231,7 @@ class _CellBuilderState extends State<CellBuilder> {
     Style knobStyle = Style(
       $box.color(knobColor),
       $box.shape.stadium(),
+      $box.color(knobColor),
     ).animate();
 
     Widget buildTween({
@@ -254,7 +261,8 @@ class _CellBuilderState extends State<CellBuilder> {
         builder: (context, value, child) {
           final animatedKnobHeight = knobHeight * (value + (1.5 * (value - 1)));
           final animatedKnobWidth = knobWidth * value;
-          var knobHeightMargin = animatedKnobHeight + knobHeight;
+          var knobHeightMargin =
+              animatedKnobHeight + knobHeight * widget.scaleFactor;
           var knobWidthMargin = animatedKnobWidth / 2;
 
           return builder(
@@ -383,6 +391,7 @@ class _CellBuilderState extends State<CellBuilder> {
                     start: start,
                     end: end,
                     scaleFactor: widget.scaleFactor,
+                    color: knobColor,
                   ),
                 ),
               ),

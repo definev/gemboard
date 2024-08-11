@@ -621,6 +621,7 @@ class EdgeTempVisual extends CustomPainter {
     required this.start,
     required this.end,
     required this.scaleFactor,
+    required this.color,
   });
 
   final BuildContext context;
@@ -629,6 +630,8 @@ class EdgeTempVisual extends CustomPainter {
 
   final Offset start;
   final Offset end;
+
+  final Color color;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -647,7 +650,7 @@ class EdgeTempVisual extends CustomPainter {
           end.dy,
         ),
       Paint()
-        ..color = ColorVariant.outline.resolve(context)
+        ..color = color
         ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke,
     );
