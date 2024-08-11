@@ -16,8 +16,6 @@ class HomeShell extends ShellRouteData {
         child: ResizableFlex(
           controller: HomeShell.resizableController,
           direction: Axis.horizontal,
-          initialSize: 300,
-          minSize: 85,
           firstChild: GemboardLeadSidebar(
             resizableController: HomeShell.resizableController,
           ),
