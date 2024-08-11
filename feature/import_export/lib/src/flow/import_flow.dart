@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:design_system/design_system.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flextras/flextras.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:folder/folder.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,7 +33,10 @@ class ImportFlow extends HookConsumerWidget {
     Future<void> Function() onImport(String raw) {
       return () async {
         try {
-          final json = jsonDecode(raw);
+          final json = await compute((raw) => jsonDecode(raw), raw);
+          if (json is! Map<String, dynamic>) {
+            throw 'Invalid JSON';
+          }
           final data = await ref.read(
             decompressWhiteboardDataProvider(data: json).future,
           );
@@ -78,7 +83,28 @@ class ImportFlow extends HookConsumerWidget {
                     hintText: 'Enter the gemboard JSON',
                     maxLines: 5,
                   ),
-                  SizedBox(height: SpaceVariant.medium.resolve(context)),
+                  SizedBox(height: SpaceVariant.small.resolve(context)),
+                  Button(
+                    style: Style(
+                      $box.alignment.center(),
+                      $box.height(40),
+                    ),
+                    kind: ButtonKind.filled,
+                    onPressed: () async {
+                      final text =
+                          (await Clipboard.getData(Clipboard.kTextPlain))?.text;
+                      if (text == null || text.isEmpty) {
+                        DSToast.error(
+                          context: context,
+                          title: 'Clipboard is empty',
+                        );
+                        return;
+                      }
+                      onImport(text)();
+                    },
+                    child: StyledText('Import from clipboard'),
+                  ),
+                  SizedBox(height: SpaceVariant.small.resolve(context)),
                   Row(
                     children: [
                       Expanded(
@@ -117,7 +143,7 @@ class ImportFlow extends HookConsumerWidget {
                           ),
                           kind: ButtonKind.outline,
                           onPressed: () {
-                            onImport(jsonTextController.text.trim())();
+                            onImport(jsonTextController.text)();
                             Navigator.pop(context);
                           },
                           child: StyledText('Save'),
