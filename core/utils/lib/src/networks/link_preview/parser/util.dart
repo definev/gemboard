@@ -12,8 +12,8 @@ extension GetMethod on Map {
   }
 }
 
-String? getDomain(String url) {
-  return Uri.parse(url).host.toString().split('.')[0];
+String? getDomain(Uri uri) {
+  return uri.host.toString().split('.')[0];
 }
 
 String? getProperty(

@@ -3,7 +3,7 @@
 import 'package:http/http.dart' as http;
 
 Future<http.Response> fetchWithRedirects(
-  String url, {
+  Uri uri, {
   int maxRedirects = 7,
   Map<String, String> headers = const {},
   String? userAgent,
@@ -14,7 +14,7 @@ Future<http.Response> fetchWithRedirects(
     ...headers,
     'User-Agent': userAgent ?? userAgentFallback
   };
-  var response = await http.get(Uri.parse(url), headers: allHeaders);
+  var response = await http.get(uri, headers: allHeaders);
   int redirectCount = 0;
 
   // debugPrint(_isRedirect(response));

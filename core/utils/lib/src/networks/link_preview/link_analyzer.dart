@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
-import 'package:string_validator/string_validator.dart';
 
 import 'helpers/cache_manager.dart';
 import 'parser/base.dart';
@@ -35,16 +34,16 @@ class LinkAnalyzer {
   }
 
   /// return [Metadata] from cache if available
-  static Future<Metadata?> getInfoFromCache(String url) async {
+  static Future<Metadata?> getInfoFromCache(Uri url) async {
     Metadata? info_;
     // debugPrint(url);
     try {
-      final infoJson = await CacheManager.getJson(key: url);
+      final infoJson = await CacheManager.getJson(key: url.toString());
       if (infoJson != null) {
         info_ = Metadata.fromJson(infoJson);
         var isEmpty_ = info_.title == null || info_.title == 'null';
         if (isEmpty_ || !info_.timeout.isAfter(DateTime.now())) {
-          async.unawaited(CacheManager.deleteKey(url));
+          async.unawaited(CacheManager.deleteKey(url.toString()));
         }
         if (isEmpty_) info_ = null;
       }
@@ -56,10 +55,10 @@ class LinkAnalyzer {
   }
 
   /// deletes [Metadata] from cache if available
-  static void _deleteFromCache(String url) {
+  static void _deleteFromCache(Uri url) {
     // debugPrint(url);
     try {
-      async.unawaited(CacheManager.deleteKey(url));
+      async.unawaited(CacheManager.deleteKey(url.toString()));
     } catch (e) {
       debugPrint('Error retrieving cache data => $e');
     }
@@ -69,7 +68,7 @@ class LinkAnalyzer {
   // So we use this hack to fetch server side rendered meta tags
   // This helps for URL's who follow client side meta tag generation technique
   static Future<Metadata?> getInfoClientSide(
-    String url, {
+    Uri url, {
     Duration? cache = const Duration(hours: 24),
     Map<String, String> headers = const {},
   }) =>
@@ -85,7 +84,7 @@ class LinkAnalyzer {
 
   /// Fetches a [url], validates it, and returns [Metadata].
   static Future<Metadata?> getInfo(
-    String url, {
+    Uri url, {
     Duration? cache = const Duration(hours: 24),
     Map<String, String> headers = const {},
     String? userAgent,
@@ -99,14 +98,13 @@ class LinkAnalyzer {
     if (info != null) return info;
 
     // info = await _getInfo(url, multimedia);
-    if (!isURL(url)) return null;
 
     /// Default values; Domain name as the [title],
     /// URL as the [description]
     info?.title = getDomain(url);
-    info?.desc = url;
+    info?.desc = url.toString();
     info?.siteName = getDomain(url);
-    info?.url = url;
+    info?.url = url.toString();
 
     try {
       // Make our network call
@@ -121,20 +119,20 @@ class LinkAnalyzer {
         info?.title = '';
         info?.desc = '';
         info?.siteName = '';
-        info?.image = url;
+        info?.image = url.toString();
         return info;
       }
 
       final document = responseToDocument(response);
       if (document == null) return info;
 
-      final data_ = _extractMetadata(document, url: url);
+      final data_ = _extractMetadata(document, url: url.toString());
 
       if (data_ == null) {
         return info;
       } else if (cache != null) {
         data_.timeout = DateTime.now().add(cache);
-        await CacheManager.setJson(key: url, value: data_.toJson());
+        await CacheManager.setJson(key: url.toString(), value: data_.toJson());
       }
 
       return data_;

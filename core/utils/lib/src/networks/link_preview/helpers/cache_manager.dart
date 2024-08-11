@@ -24,8 +24,10 @@ class CacheManager {
     await sharedPreferences.remove(key).whenComplete(() => takeAction);
   }
 
-  static Future setJson(
-      {required String key, required Map<dynamic, dynamic> value}) async {
+  static Future setJson({
+    required String key,
+    required Map<dynamic, dynamic> value,
+  }) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     var jsonMap = value;
     await sharedPreferences.setString(key, jsonEncode(jsonMap));

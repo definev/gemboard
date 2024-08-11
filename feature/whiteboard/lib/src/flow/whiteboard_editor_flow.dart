@@ -229,6 +229,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 DSTooltip(
+                  alignment: Alignment.bottomCenter,
                   label: StyledText('Export file'),
                   child: Button(
                     style: Style(
@@ -245,6 +246,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                   ),
                 ),
                 DSTooltip(
+                  alignment: Alignment.bottomCenter,
                   label: StyledText('Delete'),
                   child: Button(
                     style: Style(

@@ -1428,7 +1428,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   void _urlCell_generateTLDR(UrlCell cell) async {
     final linkPreview = await ref
         .read(UrlCellView.linkPreviewProvider(cell.url.toString()).future);
-    final content = await fetchWithRedirects(cell.url.toString());
+    final content = await fetchWithRedirects(cell.url);
 
     if (linkPreview == null) return;
     final tldrCell = Cell.article(

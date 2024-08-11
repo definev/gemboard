@@ -1,4 +1,5 @@
 import 'package:cell/src/domain/model/cell.dart';
+import 'package:cell/src/provider/url/get_youtube_metadata.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -17,7 +18,14 @@ class UrlCellView extends ConsumerWidget {
   final UrlCell cell;
 
   static final linkPreviewProvider = FutureProvider.family<Metadata?, String>(
-    (ref, url) async => LinkAnalyzer.getInfo(url),
+    (ref, url) async {
+      final uri = Uri.tryParse(url);
+      if (uri == null) return null;
+      if (uri.host == 'youtu.be' || uri.host == 'www.youtube.com') {
+        return ref.read(getYoutubeMetadataProvider(uri).future);
+      }
+      return LinkAnalyzer.getInfoClientSide(uri);
+    },
   );
 
   @override
@@ -154,7 +162,9 @@ class UrlCellView extends ConsumerWidget {
                         dimension: 34 * scale +
                             SpaceVariant.small.resolve(context) * 2,
                         child: ColoredBox(
-                          color: ColorVariant.yellow.resolve(context).withOpacity(0.2),
+                          color: ColorVariant.yellow
+                              .resolve(context)
+                              .withOpacity(0.2),
                           child: switch (imageProvider) {
                             _ when imageProvider.image != null => Image(
                                 image: imageProvider.image!,
