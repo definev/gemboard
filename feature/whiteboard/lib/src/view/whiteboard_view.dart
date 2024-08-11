@@ -120,11 +120,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
   Map<String, ValueNotifier<StackPositionData>> stackPositionDataMap = {};
   Map<String, Map<String, StreamSubscription>> _cellProcessors = {};
 
-  late void Function(
+  void updateEdgeKeys(
     AsyncValue<List<Edge>>? previous,
     AsyncValue<List<Edge>> next,
-  ) updateEdgeKeys =
-      (AsyncValue<List<Edge>>? previous, AsyncValue<List<Edge>> next) {
+  ) {
     final previousEdges = {...edgeKeys};
     final nextEdges = next.valueOrNull ?? <Edge>[];
 
@@ -151,13 +150,12 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       stackPositionDataMap[edge.id.id]?.dispose();
       stackPositionDataMap.remove(edge.id.id);
     }
-  };
+  }
 
-  late void Function(
+  void updateCellKeys(
     AsyncValue<List<Cell>>? previous,
     AsyncValue<List<Cell>> next,
-  ) updateCellKeys =
-      (AsyncValue<List<Cell>>? previous, AsyncValue<List<Cell>> next) {
+  ) {
     final previousCells = {...cellKeys};
     final nextCells = next.valueOrNull ?? <Cell>[];
 
@@ -196,7 +194,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
       }
       setState(() {});
     }
-  };
+  }
 
   ScrollableDetails get defaultVerticalDetails => ScrollableDetails.vertical(
         controller: ScrollController(
@@ -230,6 +228,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
   @override
   void dispose() {
+    scaleFactor.dispose();
     whiteboardFocusNode.dispose();
     cellKeys.clear();
     edgeKeys.clear();
@@ -411,7 +410,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
 
     Widget child = ListenableBuilder(
       listenable: scaleFactor,
-      builder: (context, child) => ZoomStackGestureDetector(
+      builder: (context, _) => ZoomStackGestureDetector(
         supportedDevices: {
           if (widget.enableMoveByMouse) PointerDeviceKind.mouse,
           if (widget.enableMoveByTouch) PointerDeviceKind.touch,
@@ -613,9 +612,10 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
                 ),
             },
             delegate: BoundlessStackListDelegate(
-              children: stackPositions.toList(),
+              children: stackPositions,
             ),
             scaleFactor: scaleFactor,
+            cacheExtent: 0,
           );
         },
       ),
