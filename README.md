@@ -5,6 +5,8 @@
 
 **Gemboard** is a powerful and flexible Flutter application designed to enhance brainstorming sessions and facilitate data mining by offering an infinite canvas. This application combines the intuitive nature of visual representations with the efficiency of large language models, allowing users to explore complex ideas and analyze information in a dynamic way.
 
+You can find the release build for each platform in the [releases](https://github.com/definev/gemboard_release/releases/latest) section.
+
 ### Features
 
 * **Infinite Canvas:**  Gemboard provides an infinite canvas where users can create and arrange cells to visualize ideas and relationships. 
