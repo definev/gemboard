@@ -1,5 +1,4 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/master",
   "search.exclude": {
     "packages/drift": true
   },
@@ -16,5 +15,6 @@
     "string_view": "cpp",
     "unordered_map": "cpp",
     "vector": "cpp"
-  }
+  },
+  "dart.flutterSdkPath": ".fvm/versions/master"
 }

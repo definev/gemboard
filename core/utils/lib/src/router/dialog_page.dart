@@ -6,8 +6,6 @@ class DialogPage<T> extends Page<T> {
     super.name,
     super.arguments,
     super.restorationId,
-    super.canPop,
-    super.onPopInvoked,
     required this.builder,
   });
 
