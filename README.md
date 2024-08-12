@@ -1,3 +1,6 @@
+[![Video Title](https://img.youtube.com/vi/rKH5gJIC64s/0.jpg)](https://www.youtube.com/watch?v=rKH5gJIC64s)
+
+
 ## Gemboard: Visualize Ideas, Unlock Insights. - A Infinite Canvas for Brainstorming and Data Mining
 
 **Gemboard** is a powerful and flexible Flutter application designed to enhance brainstorming sessions and facilitate data mining by offering an infinite canvas. This application combines the intuitive nature of visual representations with the efficiency of large language models, allowing users to explore complex ideas and analyze information in a dynamic way.
@@ -26,10 +29,65 @@
 
 **Note:** To fully utilize Gemboard's LLM integration, you will need to have a valid Gemini API Key. You can obtain one by signing up for the Gemini API program [here](https://aistudio.google.com/).
 
+### Building for Web
+
+A web version of Gemboard is available for testing and deployment. To build the web version, follow these steps:
+
+You need to move to the `app/gemboard_app` directory before running the following commands.
+
+1. **Build the web version:** `flutter build web`
+2. **Serve the web version:** `flutter run -d chrome`
+
+If you want to try the wasm version, you can use the following command:
+
+1. **Build the web version:** `flutter build web --wasm`
+
+#### Extension for Quick Actions
+
+![quick action extension](assets/extension.png)
+
+Gemboard also supports quick action extensions that allow users to perform specific actions quickly. These extensions can be accessed from the side menu and include the following options.
+
+To install the quick action extensions, follow these steps:
+- **Navigate to the extensions directory:** `cd app/gemboard_app/extensions`
+- **Open chrome extension manager:** `chrome://extensions/`
+- **Enable developer mode:** Toggle the switch in the top right corner.
+- **Load the extension:** Click on the "Load unpacked" button and select the `extensions` directory.
+
+### Build for Desktop
+
+Gemboard can also be built for desktop platforms. To build the desktop version, follow these steps:
+
+You need to move to the `app/gemboard_app` directory before running the following commands.
+
+#### Windows
+
+1. **Build the Windows version:** `flutter build windows`
+
+#### macOS
+
+1. **Build the macOS version:** `flutter build macos`
+2. **Install the .app for macOS:** `open build/macos/Build/Products/Release/gemboard.app`
+
+#### Linux
+
+1. **Build the Linux version:** `flutter build linux`
+
+### Build for Mobile
+
+#### Android
+
+1. **Build the Android version:** `flutter build apk`
+
+#### iOS
+
+1. **Build the iOS version:** `flutter build ios`
+
 ### Configuration
 
 **LLM Settings:**
 
+Gemboard need your Gemini API key to access the Luminous Language Model. You can provide your API key in the Settings screen of the app. (Open side menu -> Settings -> LLM API Key)
 
 **Database Storage:**
 
