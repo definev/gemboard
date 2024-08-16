@@ -7,7 +7,7 @@ part of 'move_cells_and_edges_to_another_whiteboard.dart';
 // **************************************************************************
 
 String _$moveCellsAndEdgesToAnotherWhiteboardHash() =>
-    r'cea1248565722005b130d71f95cfe9e8ac25b459';
+    r'28f109496d0e2b0bd3148b44583158f915903b1d';
 
 /// Copied from Dart SDK
 class _SystemHash {

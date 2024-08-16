@@ -7,7 +7,7 @@ part of 'save_whiteboard_data.dart';
 // **************************************************************************
 
 String _$saveWhiteboardDataHash() =>
-    r'f5e3bd5d25f49b1bb93c4d6d76525cb09ed99381';
+    r'be72d313eb81a7d4f3bc783a7912533183354fab';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -450,65 +450,6 @@ typedef $$EdgeItemTableUpdateCompanionBuilder = EdgeItemCompanion Function({
   Value<String?> color,
 });
 
-class $$EdgeItemTableTableManager extends RootTableManager<
-    _$EdgeDatabase,
-    $EdgeItemTable,
-    EdgeItemData,
-    $$EdgeItemTableFilterComposer,
-    $$EdgeItemTableOrderingComposer,
-    $$EdgeItemTableCreateCompanionBuilder,
-    $$EdgeItemTableUpdateCompanionBuilder> {
-  $$EdgeItemTableTableManager(_$EdgeDatabase db, $EdgeItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$EdgeItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$EdgeItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> parentWhiteboardId = const Value.absent(),
-            Value<String> edgeId = const Value.absent(),
-            Value<String> source = const Value.absent(),
-            Value<String> target = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<String?> label = const Value.absent(),
-            Value<String?> color = const Value.absent(),
-          }) =>
-              EdgeItemCompanion(
-            id: id,
-            parentWhiteboardId: parentWhiteboardId,
-            edgeId: edgeId,
-            source: source,
-            target: target,
-            layer: layer,
-            label: label,
-            color: color,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String parentWhiteboardId,
-            required String edgeId,
-            required String source,
-            required String target,
-            required int layer,
-            Value<String?> label = const Value.absent(),
-            Value<String?> color = const Value.absent(),
-          }) =>
-              EdgeItemCompanion.insert(
-            id: id,
-            parentWhiteboardId: parentWhiteboardId,
-            edgeId: edgeId,
-            source: source,
-            target: target,
-            layer: layer,
-            label: label,
-            color: color,
-          ),
-        ));
-}
-
 class $$EdgeItemTableFilterComposer
     extends FilterComposer<_$EdgeDatabase, $EdgeItemTable> {
   $$EdgeItemTableFilterComposer(super.$state);
@@ -596,6 +537,90 @@ class $$EdgeItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $$EdgeItemTableTableManager extends RootTableManager<
+    _$EdgeDatabase,
+    $EdgeItemTable,
+    EdgeItemData,
+    $$EdgeItemTableFilterComposer,
+    $$EdgeItemTableOrderingComposer,
+    $$EdgeItemTableCreateCompanionBuilder,
+    $$EdgeItemTableUpdateCompanionBuilder,
+    (
+      EdgeItemData,
+      BaseReferences<_$EdgeDatabase, $EdgeItemTable, EdgeItemData>
+    ),
+    EdgeItemData,
+    PrefetchHooks Function()> {
+  $$EdgeItemTableTableManager(_$EdgeDatabase db, $EdgeItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$EdgeItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$EdgeItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> parentWhiteboardId = const Value.absent(),
+            Value<String> edgeId = const Value.absent(),
+            Value<String> source = const Value.absent(),
+            Value<String> target = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<String?> label = const Value.absent(),
+            Value<String?> color = const Value.absent(),
+          }) =>
+              EdgeItemCompanion(
+            id: id,
+            parentWhiteboardId: parentWhiteboardId,
+            edgeId: edgeId,
+            source: source,
+            target: target,
+            layer: layer,
+            label: label,
+            color: color,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String parentWhiteboardId,
+            required String edgeId,
+            required String source,
+            required String target,
+            required int layer,
+            Value<String?> label = const Value.absent(),
+            Value<String?> color = const Value.absent(),
+          }) =>
+              EdgeItemCompanion.insert(
+            id: id,
+            parentWhiteboardId: parentWhiteboardId,
+            edgeId: edgeId,
+            source: source,
+            target: target,
+            layer: layer,
+            label: label,
+            color: color,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$EdgeItemTableProcessedTableManager = ProcessedTableManager<
+    _$EdgeDatabase,
+    $EdgeItemTable,
+    EdgeItemData,
+    $$EdgeItemTableFilterComposer,
+    $$EdgeItemTableOrderingComposer,
+    $$EdgeItemTableCreateCompanionBuilder,
+    $$EdgeItemTableUpdateCompanionBuilder,
+    (
+      EdgeItemData,
+      BaseReferences<_$EdgeDatabase, $EdgeItemTable, EdgeItemData>
+    ),
+    EdgeItemData,
+    PrefetchHooks Function()>;
 
 class $EdgeDatabaseManager {
   final _$EdgeDatabase _db;

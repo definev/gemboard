@@ -6,7 +6,7 @@ part of 'delete_whiteboard.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$deleteWhiteboardHash() => r'20c8d134504045381ef00d65e16275ee77542ed1';
+String _$deleteWhiteboardHash() => r'fa280e25330c58875b899f5a1cd2b2a4c4b5f784';
 
 /// Copied from Dart SDK
 class _SystemHash {

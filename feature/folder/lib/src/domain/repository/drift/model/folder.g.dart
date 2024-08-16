@@ -334,53 +334,6 @@ typedef $$FolderItemTableUpdateCompanionBuilder = FolderItemCompanion Function({
   Value<String> emoji,
 });
 
-class $$FolderItemTableTableManager extends RootTableManager<
-    _$FolderDatabase,
-    $FolderItemTable,
-    FolderItemData,
-    $$FolderItemTableFilterComposer,
-    $$FolderItemTableOrderingComposer,
-    $$FolderItemTableCreateCompanionBuilder,
-    $$FolderItemTableUpdateCompanionBuilder> {
-  $$FolderItemTableTableManager(_$FolderDatabase db, $FolderItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$FolderItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$FolderItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> parentFolderId = const Value.absent(),
-            Value<String> folderId = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> emoji = const Value.absent(),
-          }) =>
-              FolderItemCompanion(
-            id: id,
-            parentFolderId: parentFolderId,
-            folderId: folderId,
-            title: title,
-            emoji: emoji,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> parentFolderId = const Value.absent(),
-            required String folderId,
-            required String title,
-            required String emoji,
-          }) =>
-              FolderItemCompanion.insert(
-            id: id,
-            parentFolderId: parentFolderId,
-            folderId: folderId,
-            title: title,
-            emoji: emoji,
-          ),
-        ));
-}
-
 class $$FolderItemTableFilterComposer
     extends FilterComposer<_$FolderDatabase, $FolderItemTable> {
   $$FolderItemTableFilterComposer(super.$state);
@@ -438,6 +391,78 @@ class $$FolderItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $$FolderItemTableTableManager extends RootTableManager<
+    _$FolderDatabase,
+    $FolderItemTable,
+    FolderItemData,
+    $$FolderItemTableFilterComposer,
+    $$FolderItemTableOrderingComposer,
+    $$FolderItemTableCreateCompanionBuilder,
+    $$FolderItemTableUpdateCompanionBuilder,
+    (
+      FolderItemData,
+      BaseReferences<_$FolderDatabase, $FolderItemTable, FolderItemData>
+    ),
+    FolderItemData,
+    PrefetchHooks Function()> {
+  $$FolderItemTableTableManager(_$FolderDatabase db, $FolderItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$FolderItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$FolderItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> parentFolderId = const Value.absent(),
+            Value<String> folderId = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> emoji = const Value.absent(),
+          }) =>
+              FolderItemCompanion(
+            id: id,
+            parentFolderId: parentFolderId,
+            folderId: folderId,
+            title: title,
+            emoji: emoji,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> parentFolderId = const Value.absent(),
+            required String folderId,
+            required String title,
+            required String emoji,
+          }) =>
+              FolderItemCompanion.insert(
+            id: id,
+            parentFolderId: parentFolderId,
+            folderId: folderId,
+            title: title,
+            emoji: emoji,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$FolderItemTableProcessedTableManager = ProcessedTableManager<
+    _$FolderDatabase,
+    $FolderItemTable,
+    FolderItemData,
+    $$FolderItemTableFilterComposer,
+    $$FolderItemTableOrderingComposer,
+    $$FolderItemTableCreateCompanionBuilder,
+    $$FolderItemTableUpdateCompanionBuilder,
+    (
+      FolderItemData,
+      BaseReferences<_$FolderDatabase, $FolderItemTable, FolderItemData>
+    ),
+    FolderItemData,
+    PrefetchHooks Function()>;
 
 class $FolderDatabaseManager {
   final _$FolderDatabase _db;

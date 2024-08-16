@@ -63,6 +63,7 @@ dependency_overrides:
       url: https://github.com/definev/flutter_keyboard_visibility.git
       ref: master
       path: flutter_keyboard_visibility_web
+  web: ^1.0.0
 
 icons_launcher:
   image_path: "assets/logo.png"

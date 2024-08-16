@@ -41,8 +41,8 @@ command:
         git:
           url: https://github.com/definev/touchable.git
           ref: master
-      drift: ^2.19.1+1
-      drift_flutter: ^0.1.0
+      drift: ^2.20.0
+      drift_flutter: ^0.2.0
       super_drag_and_drop: ^0.8.19
       super_clipboard: ^0.8.19
       flutter_markdown_latex:
@@ -55,7 +55,7 @@ command:
       go_router_builder: ^2.7.0
       riverpod_generator: ^2.4.0
       json_serializable: ^6.8.0
-      drift_dev: ^2.19.1
+      drift_dev: ^2.20.0
 
 scripts:
   build:all:

@@ -7,7 +7,7 @@ part of 'compress_whiteboard_to_file.dart';
 // **************************************************************************
 
 String _$compressWhiteboardToJsonHash() =>
-    r'58152dd958349e3222e1c52c743b270cc9989e95';
+    r'd4546aee31cd689d9e12ca68d32261931b745e4e';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -649,54 +649,6 @@ typedef $$WhiteboardItemTableUpdateCompanionBuilder = WhiteboardItemCompanion
   Value<String> emoji,
 });
 
-class $$WhiteboardItemTableTableManager extends RootTableManager<
-    _$WhiteboardDatabase,
-    $WhiteboardItemTable,
-    WhiteboardItemData,
-    $$WhiteboardItemTableFilterComposer,
-    $$WhiteboardItemTableOrderingComposer,
-    $$WhiteboardItemTableCreateCompanionBuilder,
-    $$WhiteboardItemTableUpdateCompanionBuilder> {
-  $$WhiteboardItemTableTableManager(
-      _$WhiteboardDatabase db, $WhiteboardItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$WhiteboardItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$WhiteboardItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> parentFolderId = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> emoji = const Value.absent(),
-          }) =>
-              WhiteboardItemCompanion(
-            id: id,
-            parentFolderId: parentFolderId,
-            whiteboardId: whiteboardId,
-            title: title,
-            emoji: emoji,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String?> parentFolderId = const Value.absent(),
-            required String whiteboardId,
-            required String title,
-            required String emoji,
-          }) =>
-              WhiteboardItemCompanion.insert(
-            id: id,
-            parentFolderId: parentFolderId,
-            whiteboardId: whiteboardId,
-            title: title,
-            emoji: emoji,
-          ),
-        ));
-}
-
 class $$WhiteboardItemTableFilterComposer
     extends FilterComposer<_$WhiteboardDatabase, $WhiteboardItemTable> {
   $$WhiteboardItemTableFilterComposer(super.$state);
@@ -755,6 +707,80 @@ class $$WhiteboardItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$WhiteboardItemTableTableManager extends RootTableManager<
+    _$WhiteboardDatabase,
+    $WhiteboardItemTable,
+    WhiteboardItemData,
+    $$WhiteboardItemTableFilterComposer,
+    $$WhiteboardItemTableOrderingComposer,
+    $$WhiteboardItemTableCreateCompanionBuilder,
+    $$WhiteboardItemTableUpdateCompanionBuilder,
+    (
+      WhiteboardItemData,
+      BaseReferences<_$WhiteboardDatabase, $WhiteboardItemTable,
+          WhiteboardItemData>
+    ),
+    WhiteboardItemData,
+    PrefetchHooks Function()> {
+  $$WhiteboardItemTableTableManager(
+      _$WhiteboardDatabase db, $WhiteboardItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$WhiteboardItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$WhiteboardItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> parentFolderId = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> emoji = const Value.absent(),
+          }) =>
+              WhiteboardItemCompanion(
+            id: id,
+            parentFolderId: parentFolderId,
+            whiteboardId: whiteboardId,
+            title: title,
+            emoji: emoji,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String?> parentFolderId = const Value.absent(),
+            required String whiteboardId,
+            required String title,
+            required String emoji,
+          }) =>
+              WhiteboardItemCompanion.insert(
+            id: id,
+            parentFolderId: parentFolderId,
+            whiteboardId: whiteboardId,
+            title: title,
+            emoji: emoji,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$WhiteboardItemTableProcessedTableManager = ProcessedTableManager<
+    _$WhiteboardDatabase,
+    $WhiteboardItemTable,
+    WhiteboardItemData,
+    $$WhiteboardItemTableFilterComposer,
+    $$WhiteboardItemTableOrderingComposer,
+    $$WhiteboardItemTableCreateCompanionBuilder,
+    $$WhiteboardItemTableUpdateCompanionBuilder,
+    (
+      WhiteboardItemData,
+      BaseReferences<_$WhiteboardDatabase, $WhiteboardItemTable,
+          WhiteboardItemData>
+    ),
+    WhiteboardItemData,
+    PrefetchHooks Function()>;
 typedef $$WhiteboardPositionItemTableCreateCompanionBuilder
     = WhiteboardPositionItemCompanion Function({
   Value<int> id,
@@ -771,54 +797,6 @@ typedef $$WhiteboardPositionItemTableUpdateCompanionBuilder
   Value<double> offsetDy,
   Value<double> scale,
 });
-
-class $$WhiteboardPositionItemTableTableManager extends RootTableManager<
-    _$WhiteboardDatabase,
-    $WhiteboardPositionItemTable,
-    WhiteboardPositionItemData,
-    $$WhiteboardPositionItemTableFilterComposer,
-    $$WhiteboardPositionItemTableOrderingComposer,
-    $$WhiteboardPositionItemTableCreateCompanionBuilder,
-    $$WhiteboardPositionItemTableUpdateCompanionBuilder> {
-  $$WhiteboardPositionItemTableTableManager(
-      _$WhiteboardDatabase db, $WhiteboardPositionItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$WhiteboardPositionItemTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$WhiteboardPositionItemTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double> scale = const Value.absent(),
-          }) =>
-              WhiteboardPositionItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            scale: scale,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double> scale = const Value.absent(),
-          }) =>
-              WhiteboardPositionItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            scale: scale,
-          ),
-        ));
-}
 
 class $$WhiteboardPositionItemTableFilterComposer
     extends FilterComposer<_$WhiteboardDatabase, $WhiteboardPositionItemTable> {
@@ -877,6 +855,82 @@ class $$WhiteboardPositionItemTableOrderingComposer extends OrderingComposer<
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $$WhiteboardPositionItemTableTableManager extends RootTableManager<
+    _$WhiteboardDatabase,
+    $WhiteboardPositionItemTable,
+    WhiteboardPositionItemData,
+    $$WhiteboardPositionItemTableFilterComposer,
+    $$WhiteboardPositionItemTableOrderingComposer,
+    $$WhiteboardPositionItemTableCreateCompanionBuilder,
+    $$WhiteboardPositionItemTableUpdateCompanionBuilder,
+    (
+      WhiteboardPositionItemData,
+      BaseReferences<_$WhiteboardDatabase, $WhiteboardPositionItemTable,
+          WhiteboardPositionItemData>
+    ),
+    WhiteboardPositionItemData,
+    PrefetchHooks Function()> {
+  $$WhiteboardPositionItemTableTableManager(
+      _$WhiteboardDatabase db, $WhiteboardPositionItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$WhiteboardPositionItemTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$WhiteboardPositionItemTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double> scale = const Value.absent(),
+          }) =>
+              WhiteboardPositionItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            scale: scale,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double> scale = const Value.absent(),
+          }) =>
+              WhiteboardPositionItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            scale: scale,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$WhiteboardPositionItemTableProcessedTableManager
+    = ProcessedTableManager<
+        _$WhiteboardDatabase,
+        $WhiteboardPositionItemTable,
+        WhiteboardPositionItemData,
+        $$WhiteboardPositionItemTableFilterComposer,
+        $$WhiteboardPositionItemTableOrderingComposer,
+        $$WhiteboardPositionItemTableCreateCompanionBuilder,
+        $$WhiteboardPositionItemTableUpdateCompanionBuilder,
+        (
+          WhiteboardPositionItemData,
+          BaseReferences<_$WhiteboardDatabase, $WhiteboardPositionItemTable,
+              WhiteboardPositionItemData>
+        ),
+        WhiteboardPositionItemData,
+        PrefetchHooks Function()>;
 
 class $WhiteboardDatabaseManager {
   final _$WhiteboardDatabase _db;

@@ -7,7 +7,7 @@ part of 'decompress_whiteboard_data.dart';
 // **************************************************************************
 
 String _$decompressWhiteboardDataHash() =>
-    r'eb4412c294b7d84fa68b455b49107f280a92488c';
+    r'785a30220402e20150f19bfe0d0d71b556e1853c';
 
 /// Copied from Dart SDK
 class _SystemHash {

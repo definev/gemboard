@@ -4812,102 +4812,6 @@ typedef $$BrainstormingCellItemTableUpdateCompanionBuilder
   Value<String?> suggestions,
 });
 
-class $$BrainstormingCellItemTableTableManager extends RootTableManager<
-    _$CellDatabase,
-    $BrainstormingCellItemTable,
-    BrainstormingCellItemData,
-    $$BrainstormingCellItemTableFilterComposer,
-    $$BrainstormingCellItemTableOrderingComposer,
-    $$BrainstormingCellItemTableCreateCompanionBuilder,
-    $$BrainstormingCellItemTableUpdateCompanionBuilder> {
-  $$BrainstormingCellItemTableTableManager(
-      _$CellDatabase db, $BrainstormingCellItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer: $$BrainstormingCellItemTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$BrainstormingCellItemTableOrderingComposer(
-              ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> cellId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<bool> selected = const Value.absent(),
-            Value<String> color = const Value.absent(),
-            Value<String> cardKind = const Value.absent(),
-            Value<bool> constraints = const Value.absent(),
-            Value<String?> preContext = const Value.absent(),
-            Value<String?> question = const Value.absent(),
-            Value<String?> suggestions = const Value.absent(),
-          }) =>
-              BrainstormingCellItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            question: question,
-            suggestions: suggestions,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            required String cellId,
-            required double offsetDx,
-            required double offsetDy,
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            required int layer,
-            required bool selected,
-            required String color,
-            required String cardKind,
-            required bool constraints,
-            Value<String?> preContext = const Value.absent(),
-            Value<String?> question = const Value.absent(),
-            Value<String?> suggestions = const Value.absent(),
-          }) =>
-              BrainstormingCellItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            question: question,
-            suggestions: suggestions,
-          ),
-        ));
-}
-
 class $$BrainstormingCellItemTableFilterComposer
     extends FilterComposer<_$CellDatabase, $BrainstormingCellItemTable> {
   $$BrainstormingCellItemTableFilterComposer(super.$state);
@@ -5086,6 +4990,129 @@ class $$BrainstormingCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$BrainstormingCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $BrainstormingCellItemTable,
+    BrainstormingCellItemData,
+    $$BrainstormingCellItemTableFilterComposer,
+    $$BrainstormingCellItemTableOrderingComposer,
+    $$BrainstormingCellItemTableCreateCompanionBuilder,
+    $$BrainstormingCellItemTableUpdateCompanionBuilder,
+    (
+      BrainstormingCellItemData,
+      BaseReferences<_$CellDatabase, $BrainstormingCellItemTable,
+          BrainstormingCellItemData>
+    ),
+    BrainstormingCellItemData,
+    PrefetchHooks Function()> {
+  $$BrainstormingCellItemTableTableManager(
+      _$CellDatabase db, $BrainstormingCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer: $$BrainstormingCellItemTableFilterComposer(
+              ComposerState(db, table)),
+          orderingComposer: $$BrainstormingCellItemTableOrderingComposer(
+              ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String?> question = const Value.absent(),
+            Value<String?> suggestions = const Value.absent(),
+          }) =>
+              BrainstormingCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            question: question,
+            suggestions: suggestions,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            Value<String?> question = const Value.absent(),
+            Value<String?> suggestions = const Value.absent(),
+          }) =>
+              BrainstormingCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            question: question,
+            suggestions: suggestions,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$BrainstormingCellItemTableProcessedTableManager
+    = ProcessedTableManager<
+        _$CellDatabase,
+        $BrainstormingCellItemTable,
+        BrainstormingCellItemData,
+        $$BrainstormingCellItemTableFilterComposer,
+        $$BrainstormingCellItemTableOrderingComposer,
+        $$BrainstormingCellItemTableCreateCompanionBuilder,
+        $$BrainstormingCellItemTableUpdateCompanionBuilder,
+        (
+          BrainstormingCellItemData,
+          BaseReferences<_$CellDatabase, $BrainstormingCellItemTable,
+              BrainstormingCellItemData>
+        ),
+        BrainstormingCellItemData,
+        PrefetchHooks Function()>;
 typedef $$EditableCellItemTableCreateCompanionBuilder
     = EditableCellItemCompanion Function({
   Value<int> id,
@@ -5126,102 +5153,6 @@ typedef $$EditableCellItemTableUpdateCompanionBuilder
   Value<String> title,
   Value<String> content,
 });
-
-class $$EditableCellItemTableTableManager extends RootTableManager<
-    _$CellDatabase,
-    $EditableCellItemTable,
-    EditableCellItemData,
-    $$EditableCellItemTableFilterComposer,
-    $$EditableCellItemTableOrderingComposer,
-    $$EditableCellItemTableCreateCompanionBuilder,
-    $$EditableCellItemTableUpdateCompanionBuilder> {
-  $$EditableCellItemTableTableManager(
-      _$CellDatabase db, $EditableCellItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$EditableCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$EditableCellItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> cellId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<bool> selected = const Value.absent(),
-            Value<String> color = const Value.absent(),
-            Value<String> cardKind = const Value.absent(),
-            Value<bool> constraints = const Value.absent(),
-            Value<String?> preContext = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> content = const Value.absent(),
-          }) =>
-              EditableCellItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            title: title,
-            content: content,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            required String cellId,
-            required double offsetDx,
-            required double offsetDy,
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            required int layer,
-            required bool selected,
-            required String color,
-            required String cardKind,
-            required bool constraints,
-            Value<String?> preContext = const Value.absent(),
-            required String title,
-            required String content,
-          }) =>
-              EditableCellItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            title: title,
-            content: content,
-          ),
-        ));
-}
 
 class $$EditableCellItemTableFilterComposer
     extends FilterComposer<_$CellDatabase, $EditableCellItemTable> {
@@ -5401,6 +5332,128 @@ class $$EditableCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$EditableCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $EditableCellItemTable,
+    EditableCellItemData,
+    $$EditableCellItemTableFilterComposer,
+    $$EditableCellItemTableOrderingComposer,
+    $$EditableCellItemTableCreateCompanionBuilder,
+    $$EditableCellItemTableUpdateCompanionBuilder,
+    (
+      EditableCellItemData,
+      BaseReferences<_$CellDatabase, $EditableCellItemTable,
+          EditableCellItemData>
+    ),
+    EditableCellItemData,
+    PrefetchHooks Function()> {
+  $$EditableCellItemTableTableManager(
+      _$CellDatabase db, $EditableCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$EditableCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$EditableCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> content = const Value.absent(),
+          }) =>
+              EditableCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+            content: content,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            required String title,
+            required String content,
+          }) =>
+              EditableCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+            content: content,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$EditableCellItemTableProcessedTableManager = ProcessedTableManager<
+    _$CellDatabase,
+    $EditableCellItemTable,
+    EditableCellItemData,
+    $$EditableCellItemTableFilterComposer,
+    $$EditableCellItemTableOrderingComposer,
+    $$EditableCellItemTableCreateCompanionBuilder,
+    $$EditableCellItemTableUpdateCompanionBuilder,
+    (
+      EditableCellItemData,
+      BaseReferences<_$CellDatabase, $EditableCellItemTable,
+          EditableCellItemData>
+    ),
+    EditableCellItemData,
+    PrefetchHooks Function()>;
 typedef $$ImageCellItemTableCreateCompanionBuilder = ImageCellItemCompanion
     Function({
   Value<int> id,
@@ -5439,97 +5492,6 @@ typedef $$ImageCellItemTableUpdateCompanionBuilder = ImageCellItemCompanion
   Value<String?> preContext,
   Value<String> url,
 });
-
-class $$ImageCellItemTableTableManager extends RootTableManager<
-    _$CellDatabase,
-    $ImageCellItemTable,
-    ImageCellItemData,
-    $$ImageCellItemTableFilterComposer,
-    $$ImageCellItemTableOrderingComposer,
-    $$ImageCellItemTableCreateCompanionBuilder,
-    $$ImageCellItemTableUpdateCompanionBuilder> {
-  $$ImageCellItemTableTableManager(_$CellDatabase db, $ImageCellItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ImageCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ImageCellItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> cellId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<bool> selected = const Value.absent(),
-            Value<String> color = const Value.absent(),
-            Value<String> cardKind = const Value.absent(),
-            Value<bool> constraints = const Value.absent(),
-            Value<String?> preContext = const Value.absent(),
-            Value<String> url = const Value.absent(),
-          }) =>
-              ImageCellItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            url: url,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            required String cellId,
-            required double offsetDx,
-            required double offsetDy,
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            required int layer,
-            required bool selected,
-            required String color,
-            required String cardKind,
-            required bool constraints,
-            Value<String?> preContext = const Value.absent(),
-            required String url,
-          }) =>
-              ImageCellItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            url: url,
-          ),
-        ));
-}
 
 class $$ImageCellItemTableFilterComposer
     extends FilterComposer<_$CellDatabase, $ImageCellItemTable> {
@@ -5699,6 +5661,121 @@ class $$ImageCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$ImageCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $ImageCellItemTable,
+    ImageCellItemData,
+    $$ImageCellItemTableFilterComposer,
+    $$ImageCellItemTableOrderingComposer,
+    $$ImageCellItemTableCreateCompanionBuilder,
+    $$ImageCellItemTableUpdateCompanionBuilder,
+    (
+      ImageCellItemData,
+      BaseReferences<_$CellDatabase, $ImageCellItemTable, ImageCellItemData>
+    ),
+    ImageCellItemData,
+    PrefetchHooks Function()> {
+  $$ImageCellItemTableTableManager(_$CellDatabase db, $ImageCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ImageCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ImageCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String> url = const Value.absent(),
+          }) =>
+              ImageCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            url: url,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            required String url,
+          }) =>
+              ImageCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            url: url,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ImageCellItemTableProcessedTableManager = ProcessedTableManager<
+    _$CellDatabase,
+    $ImageCellItemTable,
+    ImageCellItemData,
+    $$ImageCellItemTableFilterComposer,
+    $$ImageCellItemTableOrderingComposer,
+    $$ImageCellItemTableCreateCompanionBuilder,
+    $$ImageCellItemTableUpdateCompanionBuilder,
+    (
+      ImageCellItemData,
+      BaseReferences<_$CellDatabase, $ImageCellItemTable, ImageCellItemData>
+    ),
+    ImageCellItemData,
+    PrefetchHooks Function()>;
 typedef $$ArticleCellItemTableCreateCompanionBuilder = ArticleCellItemCompanion
     Function({
   Value<int> id,
@@ -5739,102 +5816,6 @@ typedef $$ArticleCellItemTableUpdateCompanionBuilder = ArticleCellItemCompanion
   Value<String> title,
   Value<String> content,
 });
-
-class $$ArticleCellItemTableTableManager extends RootTableManager<
-    _$CellDatabase,
-    $ArticleCellItemTable,
-    ArticleCellItemData,
-    $$ArticleCellItemTableFilterComposer,
-    $$ArticleCellItemTableOrderingComposer,
-    $$ArticleCellItemTableCreateCompanionBuilder,
-    $$ArticleCellItemTableUpdateCompanionBuilder> {
-  $$ArticleCellItemTableTableManager(
-      _$CellDatabase db, $ArticleCellItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$ArticleCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ArticleCellItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> cellId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<bool> selected = const Value.absent(),
-            Value<String> color = const Value.absent(),
-            Value<String> cardKind = const Value.absent(),
-            Value<bool> constraints = const Value.absent(),
-            Value<String?> preContext = const Value.absent(),
-            Value<String> title = const Value.absent(),
-            Value<String> content = const Value.absent(),
-          }) =>
-              ArticleCellItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            title: title,
-            content: content,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            required String cellId,
-            required double offsetDx,
-            required double offsetDy,
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            required int layer,
-            required bool selected,
-            required String color,
-            required String cardKind,
-            required bool constraints,
-            Value<String?> preContext = const Value.absent(),
-            required String title,
-            required String content,
-          }) =>
-              ArticleCellItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            title: title,
-            content: content,
-          ),
-        ));
-}
 
 class $$ArticleCellItemTableFilterComposer
     extends FilterComposer<_$CellDatabase, $ArticleCellItemTable> {
@@ -6014,6 +5995,126 @@ class $$ArticleCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$ArticleCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $ArticleCellItemTable,
+    ArticleCellItemData,
+    $$ArticleCellItemTableFilterComposer,
+    $$ArticleCellItemTableOrderingComposer,
+    $$ArticleCellItemTableCreateCompanionBuilder,
+    $$ArticleCellItemTableUpdateCompanionBuilder,
+    (
+      ArticleCellItemData,
+      BaseReferences<_$CellDatabase, $ArticleCellItemTable, ArticleCellItemData>
+    ),
+    ArticleCellItemData,
+    PrefetchHooks Function()> {
+  $$ArticleCellItemTableTableManager(
+      _$CellDatabase db, $ArticleCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$ArticleCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$ArticleCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String> title = const Value.absent(),
+            Value<String> content = const Value.absent(),
+          }) =>
+              ArticleCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+            content: content,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            required String title,
+            required String content,
+          }) =>
+              ArticleCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+            content: content,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$ArticleCellItemTableProcessedTableManager = ProcessedTableManager<
+    _$CellDatabase,
+    $ArticleCellItemTable,
+    ArticleCellItemData,
+    $$ArticleCellItemTableFilterComposer,
+    $$ArticleCellItemTableOrderingComposer,
+    $$ArticleCellItemTableCreateCompanionBuilder,
+    $$ArticleCellItemTableUpdateCompanionBuilder,
+    (
+      ArticleCellItemData,
+      BaseReferences<_$CellDatabase, $ArticleCellItemTable, ArticleCellItemData>
+    ),
+    ArticleCellItemData,
+    PrefetchHooks Function()>;
 typedef $$UrlCellItemTableCreateCompanionBuilder = UrlCellItemCompanion
     Function({
   Value<int> id,
@@ -6052,97 +6153,6 @@ typedef $$UrlCellItemTableUpdateCompanionBuilder = UrlCellItemCompanion
   Value<String?> preContext,
   Value<String> url,
 });
-
-class $$UrlCellItemTableTableManager extends RootTableManager<
-    _$CellDatabase,
-    $UrlCellItemTable,
-    UrlCellItemData,
-    $$UrlCellItemTableFilterComposer,
-    $$UrlCellItemTableOrderingComposer,
-    $$UrlCellItemTableCreateCompanionBuilder,
-    $$UrlCellItemTableUpdateCompanionBuilder> {
-  $$UrlCellItemTableTableManager(_$CellDatabase db, $UrlCellItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$UrlCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$UrlCellItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> cellId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<bool> selected = const Value.absent(),
-            Value<String> color = const Value.absent(),
-            Value<String> cardKind = const Value.absent(),
-            Value<bool> constraints = const Value.absent(),
-            Value<String?> preContext = const Value.absent(),
-            Value<String> url = const Value.absent(),
-          }) =>
-              UrlCellItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            url: url,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            required String cellId,
-            required double offsetDx,
-            required double offsetDy,
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            required int layer,
-            required bool selected,
-            required String color,
-            required String cardKind,
-            required bool constraints,
-            Value<String?> preContext = const Value.absent(),
-            required String url,
-          }) =>
-              UrlCellItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            url: url,
-          ),
-        ));
-}
 
 class $$UrlCellItemTableFilterComposer
     extends FilterComposer<_$CellDatabase, $UrlCellItemTable> {
@@ -6312,6 +6322,121 @@ class $$UrlCellItemTableOrderingComposer
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
 
+class $$UrlCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $UrlCellItemTable,
+    UrlCellItemData,
+    $$UrlCellItemTableFilterComposer,
+    $$UrlCellItemTableOrderingComposer,
+    $$UrlCellItemTableCreateCompanionBuilder,
+    $$UrlCellItemTableUpdateCompanionBuilder,
+    (
+      UrlCellItemData,
+      BaseReferences<_$CellDatabase, $UrlCellItemTable, UrlCellItemData>
+    ),
+    UrlCellItemData,
+    PrefetchHooks Function()> {
+  $$UrlCellItemTableTableManager(_$CellDatabase db, $UrlCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$UrlCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$UrlCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String> url = const Value.absent(),
+          }) =>
+              UrlCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            url: url,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            required String url,
+          }) =>
+              UrlCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            url: url,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$UrlCellItemTableProcessedTableManager = ProcessedTableManager<
+    _$CellDatabase,
+    $UrlCellItemTable,
+    UrlCellItemData,
+    $$UrlCellItemTableFilterComposer,
+    $$UrlCellItemTableOrderingComposer,
+    $$UrlCellItemTableCreateCompanionBuilder,
+    $$UrlCellItemTableUpdateCompanionBuilder,
+    (
+      UrlCellItemData,
+      BaseReferences<_$CellDatabase, $UrlCellItemTable, UrlCellItemData>
+    ),
+    UrlCellItemData,
+    PrefetchHooks Function()>;
 typedef $$HeaderCellItemTableCreateCompanionBuilder = HeaderCellItemCompanion
     Function({
   Value<int> id,
@@ -6350,98 +6475,6 @@ typedef $$HeaderCellItemTableUpdateCompanionBuilder = HeaderCellItemCompanion
   Value<String?> preContext,
   Value<String> title,
 });
-
-class $$HeaderCellItemTableTableManager extends RootTableManager<
-    _$CellDatabase,
-    $HeaderCellItemTable,
-    HeaderCellItemData,
-    $$HeaderCellItemTableFilterComposer,
-    $$HeaderCellItemTableOrderingComposer,
-    $$HeaderCellItemTableCreateCompanionBuilder,
-    $$HeaderCellItemTableUpdateCompanionBuilder> {
-  $$HeaderCellItemTableTableManager(
-      _$CellDatabase db, $HeaderCellItemTable table)
-      : super(TableManagerState(
-          db: db,
-          table: table,
-          filteringComposer:
-              $$HeaderCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$HeaderCellItemTableOrderingComposer(ComposerState(db, table)),
-          updateCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            Value<String> whiteboardId = const Value.absent(),
-            Value<String> cellId = const Value.absent(),
-            Value<double> offsetDx = const Value.absent(),
-            Value<double> offsetDy = const Value.absent(),
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            Value<int> layer = const Value.absent(),
-            Value<bool> selected = const Value.absent(),
-            Value<String> color = const Value.absent(),
-            Value<String> cardKind = const Value.absent(),
-            Value<bool> constraints = const Value.absent(),
-            Value<String?> preContext = const Value.absent(),
-            Value<String> title = const Value.absent(),
-          }) =>
-              HeaderCellItemCompanion(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            title: title,
-          ),
-          createCompanionCallback: ({
-            Value<int> id = const Value.absent(),
-            required String whiteboardId,
-            required String cellId,
-            required double offsetDx,
-            required double offsetDy,
-            Value<double?> width = const Value.absent(),
-            Value<double?> preferredWidth = const Value.absent(),
-            Value<double?> height = const Value.absent(),
-            Value<double?> preferredHeight = const Value.absent(),
-            required int layer,
-            required bool selected,
-            required String color,
-            required String cardKind,
-            required bool constraints,
-            Value<String?> preContext = const Value.absent(),
-            required String title,
-          }) =>
-              HeaderCellItemCompanion.insert(
-            id: id,
-            whiteboardId: whiteboardId,
-            cellId: cellId,
-            offsetDx: offsetDx,
-            offsetDy: offsetDy,
-            width: width,
-            preferredWidth: preferredWidth,
-            height: height,
-            preferredHeight: preferredHeight,
-            layer: layer,
-            selected: selected,
-            color: color,
-            cardKind: cardKind,
-            constraints: constraints,
-            preContext: preContext,
-            title: title,
-          ),
-        ));
-}
 
 class $$HeaderCellItemTableFilterComposer
     extends FilterComposer<_$CellDatabase, $HeaderCellItemTable> {
@@ -6610,6 +6643,123 @@ class $$HeaderCellItemTableOrderingComposer
       builder: (column, joinBuilders) =>
           ColumnOrderings(column, joinBuilders: joinBuilders));
 }
+
+class $$HeaderCellItemTableTableManager extends RootTableManager<
+    _$CellDatabase,
+    $HeaderCellItemTable,
+    HeaderCellItemData,
+    $$HeaderCellItemTableFilterComposer,
+    $$HeaderCellItemTableOrderingComposer,
+    $$HeaderCellItemTableCreateCompanionBuilder,
+    $$HeaderCellItemTableUpdateCompanionBuilder,
+    (
+      HeaderCellItemData,
+      BaseReferences<_$CellDatabase, $HeaderCellItemTable, HeaderCellItemData>
+    ),
+    HeaderCellItemData,
+    PrefetchHooks Function()> {
+  $$HeaderCellItemTableTableManager(
+      _$CellDatabase db, $HeaderCellItemTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          filteringComposer:
+              $$HeaderCellItemTableFilterComposer(ComposerState(db, table)),
+          orderingComposer:
+              $$HeaderCellItemTableOrderingComposer(ComposerState(db, table)),
+          updateCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            Value<String> whiteboardId = const Value.absent(),
+            Value<String> cellId = const Value.absent(),
+            Value<double> offsetDx = const Value.absent(),
+            Value<double> offsetDy = const Value.absent(),
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            Value<int> layer = const Value.absent(),
+            Value<bool> selected = const Value.absent(),
+            Value<String> color = const Value.absent(),
+            Value<String> cardKind = const Value.absent(),
+            Value<bool> constraints = const Value.absent(),
+            Value<String?> preContext = const Value.absent(),
+            Value<String> title = const Value.absent(),
+          }) =>
+              HeaderCellItemCompanion(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+          ),
+          createCompanionCallback: ({
+            Value<int> id = const Value.absent(),
+            required String whiteboardId,
+            required String cellId,
+            required double offsetDx,
+            required double offsetDy,
+            Value<double?> width = const Value.absent(),
+            Value<double?> preferredWidth = const Value.absent(),
+            Value<double?> height = const Value.absent(),
+            Value<double?> preferredHeight = const Value.absent(),
+            required int layer,
+            required bool selected,
+            required String color,
+            required String cardKind,
+            required bool constraints,
+            Value<String?> preContext = const Value.absent(),
+            required String title,
+          }) =>
+              HeaderCellItemCompanion.insert(
+            id: id,
+            whiteboardId: whiteboardId,
+            cellId: cellId,
+            offsetDx: offsetDx,
+            offsetDy: offsetDy,
+            width: width,
+            preferredWidth: preferredWidth,
+            height: height,
+            preferredHeight: preferredHeight,
+            layer: layer,
+            selected: selected,
+            color: color,
+            cardKind: cardKind,
+            constraints: constraints,
+            preContext: preContext,
+            title: title,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$HeaderCellItemTableProcessedTableManager = ProcessedTableManager<
+    _$CellDatabase,
+    $HeaderCellItemTable,
+    HeaderCellItemData,
+    $$HeaderCellItemTableFilterComposer,
+    $$HeaderCellItemTableOrderingComposer,
+    $$HeaderCellItemTableCreateCompanionBuilder,
+    $$HeaderCellItemTableUpdateCompanionBuilder,
+    (
+      HeaderCellItemData,
+      BaseReferences<_$CellDatabase, $HeaderCellItemTable, HeaderCellItemData>
+    ),
+    HeaderCellItemData,
+    PrefetchHooks Function()>;
 
 class $CellDatabaseManager {
   final _$CellDatabase _db;
