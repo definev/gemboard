@@ -631,10 +631,10 @@ packages:
     dependency: transitive
     description:
       name: google_generative_ai
-      sha256: e2f4c0ac13f0898f670ce5ac0dc4501ebe09b96f9d59163724380d9aa82065be
+      sha256: eac2338da8f223af2930b83da11fc56dab5369653db172902031e4c54132a17a
       url: "https://pub.dev"
     source: hosted
-    version: "0.4.4"
+    version: "0.4.5"
   graph_edge:
     dependency: "direct overridden"
     description:

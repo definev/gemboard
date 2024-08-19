@@ -6,21 +6,22 @@ part of 'folder_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$folderRepositoryDriftHash() =>
-    r'5566f88b37658480a8f8912084610402622caca7';
+String _$folderRepositorySharedPreferencesHash() =>
+    r'802dd0155973dda21f81230d30fba217e133734a';
 
-/// See also [folderRepositoryDrift].
-@ProviderFor(folderRepositoryDrift)
-final folderRepositoryDriftProvider = Provider<FolderRepository>.internal(
-  folderRepositoryDrift,
-  name: r'folderRepositoryDriftProvider',
+/// See also [folderRepositorySharedPreferences].
+@ProviderFor(folderRepositorySharedPreferences)
+final folderRepositorySharedPreferencesProvider =
+    Provider<FolderRepository>.internal(
+  folderRepositorySharedPreferences,
+  name: r'folderRepositorySharedPreferencesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$folderRepositoryDriftHash,
+      : _$folderRepositorySharedPreferencesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef FolderRepositoryDriftRef = ProviderRef<FolderRepository>;
+typedef FolderRepositorySharedPreferencesRef = ProviderRef<FolderRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

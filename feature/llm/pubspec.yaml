@@ -27,7 +27,7 @@ dependencies:
   
   mix: ^1.4.0
   
-  shared_preferences: ^2.2.3
+  shared_preferences: ^2.3.2
   
   flextras:
   

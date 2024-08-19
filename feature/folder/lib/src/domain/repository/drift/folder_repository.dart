@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'folder_repository.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 FolderRepository folderRepositoryDrift(FolderRepositoryDriftRef ref) {
   return FolderRepositoryDrift(
     database: ref.read(folderDatabaseProvider),

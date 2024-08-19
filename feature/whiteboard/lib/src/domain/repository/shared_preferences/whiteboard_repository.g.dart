@@ -6,22 +6,23 @@ part of 'whiteboard_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$whiteboardRepositoryAdaptiveHash() =>
-    r'3de685a1561d5edf8dafa90dc24cab0a37ddb512';
+String _$whiteboardRepositorySharedPreferencesHash() =>
+    r'71b80dd4f10251e63d99f14516c7235aca5835cf';
 
-/// See also [whiteboardRepositoryAdaptive].
-@ProviderFor(whiteboardRepositoryAdaptive)
-final whiteboardRepositoryAdaptiveProvider =
+/// See also [whiteboardRepositorySharedPreferences].
+@ProviderFor(whiteboardRepositorySharedPreferences)
+final whiteboardRepositorySharedPreferencesProvider =
     Provider<WhiteboardRepository>.internal(
-  whiteboardRepositoryAdaptive,
-  name: r'whiteboardRepositoryAdaptiveProvider',
+  whiteboardRepositorySharedPreferences,
+  name: r'whiteboardRepositorySharedPreferencesProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$whiteboardRepositoryAdaptiveHash,
+      : _$whiteboardRepositorySharedPreferencesHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef WhiteboardRepositoryAdaptiveRef = ProviderRef<WhiteboardRepository>;
+typedef WhiteboardRepositorySharedPreferencesRef
+    = ProviderRef<WhiteboardRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

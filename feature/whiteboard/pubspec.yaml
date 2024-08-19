@@ -73,7 +73,7 @@ dependencies:
   flextras:
   # Database
   # This is unsure the best db
-  shared_preferences:
+  shared_preferences: ^2.3.2
   hive: ^2.2.3
   drift: ^2.20.0
   drift_flutter: ^0.2.0

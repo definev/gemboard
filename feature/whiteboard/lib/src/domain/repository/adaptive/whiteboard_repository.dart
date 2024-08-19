@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
+import 'package:whiteboard/src/domain/repository/shared_preferences/whiteboard_repository.dart';
 import 'package:whiteboard/whiteboard.dart';
 
 import '../drift/whiteboard_repository.dart';
@@ -10,9 +12,16 @@ part 'whiteboard_repository.g.dart';
 @Riverpod(keepAlive: true)
 WhiteboardRepository whiteboardRepositoryAdaptive(
     WhiteboardRepositoryAdaptiveRef ref) {
-  final drift = ref.watch(whiteboardRepositoryDriftProvider);
-  // final hive = ref.watch(whiteboardRepositoryHiveProvider);
   final memory = ref.watch(whiteboardRepositoryMemoryProvider);
+  if (kIsWasm) {
+    final sharedPreferences =
+        ref.watch(whiteboardRepositorySharedPreferencesProvider);
+    return WhiteboardRepositoryAdaptive(
+      local: sharedPreferences,
+      memory: memory,
+    );
+  }
+  final drift = ref.watch(whiteboardRepositoryDriftProvider);
 
   return WhiteboardRepositoryAdaptive(
     local: drift,
@@ -53,7 +62,7 @@ class WhiteboardRepositoryAdaptive extends WhiteboardRepository
     local.setWhiteboardPosition(id: id, position: position);
     return await memory.setWhiteboardPosition(id: id, position: position);
   }
-  
+
   @override
   Future<void> deleteWhiteboardPosition({required WhiteboardId id}) {
     local.deleteWhiteboardPosition(id: id);

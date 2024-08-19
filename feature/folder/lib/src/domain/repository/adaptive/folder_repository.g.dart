@@ -7,7 +7,7 @@ part of 'folder_repository.dart';
 // **************************************************************************
 
 String _$folderRepositoryAdaptiveHash() =>
-    r'de890e174804ca6ba4adf25447fa3ecb8aea89c7';
+    r'7c101be4fe2dbe3f7673172d8adea9013b1c1c35';
 
 /// See also [folderRepositoryAdaptive].
 @ProviderFor(folderRepositoryAdaptive)

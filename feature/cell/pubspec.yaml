@@ -53,6 +53,8 @@ dependencies:
   drift: ^2.20.0
   drift_flutter: ^0.2.0
 
+  shared_preferences: ^2.3.2
+
   rxdart: ^0.28.0
 
   url_launcher: ^6.3.0

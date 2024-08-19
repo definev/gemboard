@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:folder/src/domain/model/folder.dart';
 import 'package:folder/src/domain/repository/drift/folder_repository.dart';
 import 'package:folder/src/domain/repository/folder_repository.dart';
 import 'package:folder/src/domain/repository/memory/folder_repository.dart';
+import 'package:folder/src/domain/repository/shared_preferences/folder_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
 
@@ -9,10 +11,18 @@ part 'folder_repository.g.dart';
 
 @Riverpod(keepAlive: true)
 FolderRepository folderRepositoryAdaptive(FolderRepositoryAdaptiveRef ref) {
-  final drift = ref.read(folderRepositoryDriftProvider);
-  // final hive = ref.watch(folderRepositoryHiveProvider);
   final memory = ref.watch(folderRepositoryMemoryProvider);
+  if (kIsWasm) {
+    final sharedPReferences = ref.watch(
+      folderRepositorySharedPreferencesProvider,
+    );
+    return FolderRepositoryAdaptive(
+      local: sharedPReferences,
+      memory: memory,
+    );
+  }
 
+  final drift = ref.watch(folderRepositoryDriftProvider);
   return FolderRepositoryAdaptive(
     local: drift,
     memory: memory,

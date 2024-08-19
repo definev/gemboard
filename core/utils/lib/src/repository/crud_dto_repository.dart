@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:hive/hive.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../mixin/mixin.dart';
 
@@ -173,5 +174,65 @@ abstract mixin class CrudDtoRepositoryAdaptive<
   Future<void> update({required ID id, required Data data}) {
     storage.update(id: id, data: data);
     return interactive.update(id: id, data: data);
+  }
+}
+
+abstract mixin class CrudDtoRepositorySharedPreferences<
+    PID extends HasIdentity,
+    ID extends HasParentId<PID>,
+    Data extends HasId<ID>> implements CrudDTORepository<PID, ID, Data> {
+  String get boxName;
+
+  String getBoxPrefix(PID parentId) =>
+      '${boxName}_${switch (parentId.id) { '' => 'default', final id => id }}';
+
+  String getDataId(ID id) => '${getBoxPrefix(id.parentId)}_${id.id}';
+
+  final SharedPreferencesAsync instance = SharedPreferencesAsync();
+
+  Data fromJson(Map<String, dynamic> json);
+
+  @override
+  Future<void> add({required PID parentId, required Data data}) async {
+    await instance.setString(
+      getDataId(data.id),
+      jsonEncode(data.toJson()),
+    );
+  }
+
+  @override
+  Future<void> delete({required ID id}) async {
+    await instance.remove(getDataId(id));
+  }
+
+  @override
+  FutureOr<Data?> get({required ID id}) async {
+    final json = await instance.getString(getDataId(id));
+    if (json == null) return null;
+    return fromJson(jsonDecode(json));
+  }
+
+  @override
+  FutureOr<List<Data>> getList({
+    required PID parentId,
+    int page = 0,
+    int size = 10,
+  }) async {
+    final keys = (await instance.getKeys())
+        .where((key) => key.startsWith(getBoxPrefix(parentId)))
+        .toList();
+
+    return Future.wait(keys.map((key) async {
+      final json = await instance.getString(key);
+      return fromJson(jsonDecode(json!));
+    }));
+  }
+
+  @override
+  Future<void> update({required ID id, required Data data}) async {
+    await instance.setString(
+      getDataId(id),
+      jsonEncode(data.toJson()),
+    );
   }
 }
