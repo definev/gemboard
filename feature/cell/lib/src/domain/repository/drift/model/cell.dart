@@ -115,6 +115,27 @@ class CellDatabase extends _$CellDatabase {
           if (from < 4) {
             final headerCellItemTable = $HeaderCellItemTable(attachedDatabase);
             await m.createTable(headerCellItemTable);
+            final editableCellItemTable =
+                $EditableCellItemTable(attachedDatabase);
+            await m.addColumn(
+                editableCellItemTable, editableCellItemTable.preContext);
+            await m.addColumn(
+                editableCellItemTable, editableCellItemTable.preferredWidth);
+            final imageCellItemTable = $ImageCellItemTable(attachedDatabase);
+            await m.addColumn(
+                imageCellItemTable, imageCellItemTable.preContext);
+            await m.addColumn(
+                imageCellItemTable, imageCellItemTable.preferredWidth);
+            final articleCellItemTable =
+                $ArticleCellItemTable(attachedDatabase);
+            await m.addColumn(
+                articleCellItemTable, articleCellItemTable.preContext);
+            await m.addColumn(
+                articleCellItemTable, articleCellItemTable.preferredWidth);
+            final urlCellItemTable = $UrlCellItemTable(attachedDatabase);
+            await m.addColumn(urlCellItemTable, urlCellItemTable.preContext);
+            await m.addColumn(
+                urlCellItemTable, articleCellItemTable.preferredWidth);
           }
         },
       );
