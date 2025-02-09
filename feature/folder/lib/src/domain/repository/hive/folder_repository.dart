@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
 
@@ -7,7 +8,7 @@ import '../folder_repository.dart';
 part 'folder_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-FolderRepository folderRepositoryHive(FolderRepositoryHiveRef ref) {
+FolderRepository folderRepositoryHive(Ref ref) {
   return FolderRepositoryHive();
 }
 

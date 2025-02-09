@@ -905,7 +905,7 @@ class WhiteboardEditorFlowData extends HookConsumerWidget {
                                 switch (open.value) {
                                   true => $box.color(ColorVariant.onBackground
                                       .resolve(context)
-                                      .withOpacity(OpacityVariant.hightlight
+                                      .withValues(alpha:OpacityVariant.hightlight
                                           .resolve(context)
                                           .value)),
                                   false => $box.color.transparent(),

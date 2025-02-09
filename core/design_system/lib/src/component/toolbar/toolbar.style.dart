@@ -5,7 +5,7 @@ class DSToolbarStyle {
     final scale = DesignSystemTheme.of(context).scale;
     return Style(
       $box.color(
-        ColorVariant.surface.resolve(context).withOpacity(
+        ColorVariant.surface.resolve(context).withValues(alpha:
               OpacityVariant.blend.resolve(context).value,
             ),
       ),
@@ -14,7 +14,7 @@ class DSToolbarStyle {
         offset: Offset(0, 4 * scale),
         color: ColorVariant.onSurface
             .resolve(context)
-            .withOpacity(OpacityVariant.hightlight.resolve(context).value),
+            .withValues(alpha:OpacityVariant.hightlight.resolve(context).value),
       ),
       $box.padding.all.ref(SpaceVariant.small),
     );

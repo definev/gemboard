@@ -7,7 +7,7 @@ part of 'cell_repository.dart';
 // **************************************************************************
 
 String _$cellRepositoryDriftHash() =>
-    r'69f58adfa6d9e54c8e34e35de9e698f5ee9ec41b';
+    r'844af753721be87a8b97a96987766c5f51b0511a';
 
 /// See also [cellRepositoryDrift].
 @ProviderFor(cellRepositoryDrift)
@@ -21,6 +21,8 @@ final cellRepositoryDriftProvider = Provider<CellRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CellRepositoryDriftRef = ProviderRef<CellRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

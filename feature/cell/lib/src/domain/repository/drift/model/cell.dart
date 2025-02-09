@@ -5,6 +5,7 @@ import 'package:cell/cell.dart';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'cell.g.dart';
@@ -142,7 +143,7 @@ class CellDatabase extends _$CellDatabase {
 }
 
 @Riverpod(keepAlive: true)
-CellDatabase cellDatabase(CellDatabaseRef ref) {
+CellDatabase cellDatabase(Ref ref) {
   return CellDatabase();
 }
 

@@ -7,7 +7,7 @@ part of 'generate_content_stream.dart';
 // **************************************************************************
 
 String _$generateContentStreamHash() =>
-    r'74b10bb0747cee88ba3885dc7f3bff0a46ba2659';
+    r'177d225b795601a42eadb33a14e8888eed43a6f1';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -160,6 +160,8 @@ class GenerateContentStreamProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GenerateContentStreamRef
     on AutoDisposeProviderRef<Raw<Stream<GenerateContentResponse>>> {
   /// The parameter `configuration` of this provider.
@@ -183,7 +185,7 @@ class _GenerateContentStreamProviderElement
 }
 
 String _$generateTextFromCoreDataHash() =>
-    r'cdb4f39c27925766534241b900914f84c8d2e553';
+    r'904a64748c6dd4b470c282676e1b0f52bb40a807';
 
 /// See also [generateTextFromCoreData].
 @ProviderFor(generateTextFromCoreData)
@@ -311,6 +313,8 @@ class GenerateTextFromCoreDataProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GenerateTextFromCoreDataRef
     on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `configuration` of this provider.
@@ -333,4 +337,4 @@ class _GenerateTextFromCoreDataProviderElement
       (origin as GenerateTextFromCoreDataProvider).coreDataList;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

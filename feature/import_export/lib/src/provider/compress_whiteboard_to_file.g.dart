@@ -148,6 +148,8 @@ class CompressWhiteboardToJsonProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin CompressWhiteboardToJsonRef
     on AutoDisposeFutureProviderRef<Map<String, dynamic>> {
   /// The parameter `whiteboardId` of this provider.
@@ -303,6 +305,8 @@ class CompressWhiteboardToFileProvider extends AutoDisposeFutureProvider<File> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin CompressWhiteboardToFileRef on AutoDisposeFutureProviderRef<File> {
   /// The parameter `path` of this provider.
   String get path;
@@ -328,4 +332,4 @@ class _CompressWhiteboardToFileProviderElement
       (origin as CompressWhiteboardToFileProvider).whiteboardId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

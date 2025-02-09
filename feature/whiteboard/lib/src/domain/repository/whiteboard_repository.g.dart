@@ -7,7 +7,7 @@ part of 'whiteboard_repository.dart';
 // **************************************************************************
 
 String _$whiteboardRepositoryHash() =>
-    r'ecb14472bc41c96e5de8d1d4e38a68c07ce63887';
+    r'b5c01464a8079e05cfb86fc32b2a849ca30bcd58';
 
 /// See also [whiteboardRepository].
 @ProviderFor(whiteboardRepository)
@@ -21,6 +21,8 @@ final whiteboardRepositoryProvider = Provider<WhiteboardRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef WhiteboardRepositoryRef = ProviderRef<WhiteboardRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

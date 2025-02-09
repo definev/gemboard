@@ -6,7 +6,7 @@ part of 'get_folder_by_id.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getFolderByIdHash() => r'd611260c6ebddf31e133dc554ce9c81014892dbd';
+String _$getFolderByIdHash() => r'9939307a5e2967d19f2dac515444eb307d944ae3';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -142,6 +142,8 @@ class GetFolderByIdProvider extends AutoDisposeFutureProvider<Folder> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GetFolderByIdRef on AutoDisposeFutureProviderRef<Folder> {
   /// The parameter `id` of this provider.
   String get id;
@@ -155,4 +157,4 @@ class _GetFolderByIdProviderElement
   String get id => (origin as GetFolderByIdProvider).id;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

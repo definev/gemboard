@@ -335,61 +335,80 @@ typedef $$FolderItemTableUpdateCompanionBuilder = FolderItemCompanion Function({
 });
 
 class $$FolderItemTableFilterComposer
-    extends FilterComposer<_$FolderDatabase, $FolderItemTable> {
-  $$FolderItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$FolderDatabase, $FolderItemTable> {
+  $$FolderItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get parentFolderId => $state.composableBuilder(
-      column: $state.table.parentFolderId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get parentFolderId => $composableBuilder(
+      column: $table.parentFolderId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get folderId => $state.composableBuilder(
-      column: $state.table.folderId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get folderId => $composableBuilder(
+      column: $table.folderId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get emoji => $state.composableBuilder(
-      column: $state.table.emoji,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get emoji => $composableBuilder(
+      column: $table.emoji, builder: (column) => ColumnFilters(column));
 }
 
 class $$FolderItemTableOrderingComposer
-    extends OrderingComposer<_$FolderDatabase, $FolderItemTable> {
-  $$FolderItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$FolderDatabase, $FolderItemTable> {
+  $$FolderItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get parentFolderId => $state.composableBuilder(
-      column: $state.table.parentFolderId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get parentFolderId => $composableBuilder(
+      column: $table.parentFolderId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get folderId => $state.composableBuilder(
-      column: $state.table.folderId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get folderId => $composableBuilder(
+      column: $table.folderId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get emoji => $state.composableBuilder(
-      column: $state.table.emoji,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get emoji => $composableBuilder(
+      column: $table.emoji, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FolderItemTableAnnotationComposer
+    extends Composer<_$FolderDatabase, $FolderItemTable> {
+  $$FolderItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get parentFolderId => $composableBuilder(
+      column: $table.parentFolderId, builder: (column) => column);
+
+  GeneratedColumn<String> get folderId =>
+      $composableBuilder(column: $table.folderId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => column);
 }
 
 class $$FolderItemTableTableManager extends RootTableManager<
@@ -398,6 +417,7 @@ class $$FolderItemTableTableManager extends RootTableManager<
     FolderItemData,
     $$FolderItemTableFilterComposer,
     $$FolderItemTableOrderingComposer,
+    $$FolderItemTableAnnotationComposer,
     $$FolderItemTableCreateCompanionBuilder,
     $$FolderItemTableUpdateCompanionBuilder,
     (
@@ -410,10 +430,12 @@ class $$FolderItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$FolderItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$FolderItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$FolderItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FolderItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FolderItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String?> parentFolderId = const Value.absent(),
@@ -455,6 +477,7 @@ typedef $$FolderItemTableProcessedTableManager = ProcessedTableManager<
     FolderItemData,
     $$FolderItemTableFilterComposer,
     $$FolderItemTableOrderingComposer,
+    $$FolderItemTableAnnotationComposer,
     $$FolderItemTableCreateCompanionBuilder,
     $$FolderItemTableUpdateCompanionBuilder,
     (
@@ -475,7 +498,7 @@ class $FolderDatabaseManager {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$folderDatabaseHash() => r'babc305b1628b29d9a2e72e96a1cd757d6bb73fa';
+String _$folderDatabaseHash() => r'952bce1b3efc2ebde2bad8f1e9815fb9f7d25c2a';
 
 /// See also [folderDatabase].
 @ProviderFor(folderDatabase)
@@ -489,6 +512,8 @@ final folderDatabaseProvider = Provider<FolderDatabase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FolderDatabaseRef = ProviderRef<FolderDatabase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

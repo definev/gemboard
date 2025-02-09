@@ -181,7 +181,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                                 child: ColoredBox(
                                   color: ColorVariant.onBackground
                                       .resolve(context)
-                                      .withOpacity(OpacityVariant.hightlight
+                                      .withValues(alpha:OpacityVariant.hightlight
                                               .resolve(context)
                                               .value *
                                           value),
@@ -236,7 +236,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                                 child: ColoredBox(
                                   color: ColorVariant.onBackground
                                       .resolve(context)
-                                      .withOpacity(OpacityVariant.hightlight
+                                      .withValues(alpha:OpacityVariant.hightlight
                                               .resolve(context)
                                               .value *
                                           value),
@@ -287,7 +287,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
                               child: ColoredBox(
                                 color: ColorVariant.onBackground
                                     .resolve(context)
-                                    .withOpacity(OpacityVariant.hightlight
+                                    .withValues(alpha:OpacityVariant.hightlight
                                             .resolve(context)
                                             .value *
                                         value),
@@ -388,7 +388,7 @@ class _ResizableFlexState extends State<ResizableFlex> {
           //             child: ColoredBox(
           //               color: ColorVariant.outline
           //                   .resolve(context)
-          //                   .withOpacity(
+          //                   .withValues(alpha:
           //                     OpacityVariant.hightlight.resolve(context).value,
           //                   ),
           //               child: SizedBox.square(dimension: gapSize),

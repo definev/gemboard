@@ -16,5 +16,6 @@
     "unordered_map": "cpp",
     "vector": "cpp"
   },
-  "dart.flutterSdkPath": ".fvm/versions/master"
+  "dart.flutterSdkPath": ".fvm/versions/master",
+  "cmake.ignoreCMakeListsMissing": true
 }

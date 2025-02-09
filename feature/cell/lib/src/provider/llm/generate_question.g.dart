@@ -144,6 +144,8 @@ class GenerateFromSuggestionProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GenerateFromSuggestionRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `text` of this provider.
   String get text;
@@ -274,6 +276,8 @@ class GenerateQuestionProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GenerateQuestionRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `text` of this provider.
   String get text;
@@ -415,6 +419,8 @@ class SummarizeCellProvider extends AutoDisposeProvider<Raw<Stream<String>>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin SummarizeCellRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `title` of this provider.
   String get title;
@@ -554,6 +560,8 @@ class GetRelatedQuestionsOrTopicsProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GetRelatedQuestionsOrTopicsRef
     on AutoDisposeFutureProviderRef<List<String>> {
   /// The parameter `topicOrQuestion` of this provider.
@@ -687,6 +695,8 @@ class SummarizeImageCellProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin SummarizeImageCellRef on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `cell` of this provider.
   Cell get cell;
@@ -701,4 +711,4 @@ class _SummarizeImageCellProviderElement
   Cell get cell => (origin as SummarizeImageCellProvider).cell;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

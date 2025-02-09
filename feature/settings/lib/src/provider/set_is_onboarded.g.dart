@@ -6,7 +6,7 @@ part of 'set_is_onboarded.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$setIsOnboardedHash() => r'11833359002568de12a8a3937159ca63587dbd38';
+String _$setIsOnboardedHash() => r'4ea6e201bb57253b52a5f37756bca372879397d5';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -142,6 +142,8 @@ class SetIsOnboardedProvider extends AutoDisposeFutureProvider<bool> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin SetIsOnboardedRef on AutoDisposeFutureProviderRef<bool> {
   /// The parameter `value` of this provider.
   bool get value;
@@ -155,4 +157,4 @@ class _SetIsOnboardedProviderElement
   bool get value => (origin as SetIsOnboardedProvider).value;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

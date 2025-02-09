@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graph_edge/graph_edge.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -44,7 +45,7 @@ class EdgeDatabase extends _$EdgeDatabase {
 }
 
 @Riverpod(keepAlive: true)
-EdgeDatabase edgeDatabase(EdgeDatabaseRef ref) {
+EdgeDatabase edgeDatabase(Ref ref) {
   return EdgeDatabase();
 }
 

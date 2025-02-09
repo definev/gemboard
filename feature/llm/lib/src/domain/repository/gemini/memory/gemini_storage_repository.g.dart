@@ -7,7 +7,7 @@ part of 'gemini_storage_repository.dart';
 // **************************************************************************
 
 String _$geminiStorageRepositoryMemoryHash() =>
-    r'4a602d07922c31b9f50cfa59fbd1efbc3d3e1cfd';
+    r'9c4ac4caafb45f552f4f2faea5057d47ea4b5796';
 
 /// See also [geminiStorageRepositoryMemory].
 @ProviderFor(geminiStorageRepositoryMemory)
@@ -22,7 +22,9 @@ final geminiStorageRepositoryMemoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GeminiStorageRepositoryMemoryRef
     = AutoDisposeProviderRef<GeminiStorageRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -601,7 +601,7 @@ class EdgeVisual extends CustomPainter {
     canvas.drawPath(
       path,
       Paint() //
-        ..color = ColorVariant.outline.resolve(context).withOpacity(0.5)
+        ..color = ColorVariant.outline.resolve(context).withValues(alpha:0.5)
         ..strokeWidth = strokeWidth
         ..style = PaintingStyle.stroke,
     );

@@ -100,7 +100,7 @@ class GridBackgroundPainter extends CustomPainter {
     var dimension = this.dimension * scale;
 
     final paint = Paint()
-      ..color = Colors.grey.withOpacity(0.2)
+      ..color = Colors.grey.withValues(alpha:0.2)
       ..strokeWidth = 1;
 
     final width = size.width;

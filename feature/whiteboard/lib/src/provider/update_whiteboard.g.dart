@@ -6,7 +6,7 @@ part of 'update_whiteboard.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$updateWhiteboardHash() => r'a7620ae8711a2e7fb590cf824678669f094adf78';
+String _$updateWhiteboardHash() => r'6aedc059f39721366fcb91bbcd5b4087b7e4e943';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -154,6 +154,8 @@ class UpdateWhiteboardProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin UpdateWhiteboardRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `id` of this provider.
   WhiteboardId get id;
@@ -172,4 +174,4 @@ class _UpdateWhiteboardProviderElement
   Whiteboard get data => (origin as UpdateWhiteboardProvider).data;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

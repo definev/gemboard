@@ -35,7 +35,7 @@ class DSTextboxStyle {
             DSTextboxKind.outline(
               $box.border.all(
                 width: 1.5 * scale,
-                color: ColorVariant.onSurface.resolve(context).withOpacity(
+                color: ColorVariant.onSurface.resolve(context).withValues(alpha:
                       OpacityVariant.hightlight.resolve(context).value,
                     ),
                 strokeAlign: BorderSide.strokeAlignInside,

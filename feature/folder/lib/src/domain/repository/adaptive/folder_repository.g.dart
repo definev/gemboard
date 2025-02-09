@@ -7,7 +7,7 @@ part of 'folder_repository.dart';
 // **************************************************************************
 
 String _$folderRepositoryAdaptiveHash() =>
-    r'7c101be4fe2dbe3f7673172d8adea9013b1c1c35';
+    r'33cd776794faefc289d9bff196ea3b216fd18f2f';
 
 /// See also [folderRepositoryAdaptive].
 @ProviderFor(folderRepositoryAdaptive)
@@ -21,6 +21,8 @@ final folderRepositoryAdaptiveProvider = Provider<FolderRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FolderRepositoryAdaptiveRef = ProviderRef<FolderRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

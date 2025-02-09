@@ -35,7 +35,7 @@ class HeaderCellView extends HookWidget {
             hintText: 'Type your label',
             textStyle: TextStyleVariant.h3.resolve(context),
             hintTextStyle: TextStyleVariant.h3.resolve(context).copyWith(
-              color: ColorVariant.outline.resolve(context).withOpacity(0.5),
+              color: ColorVariant.outline.resolve(context).withValues(alpha:0.5),
             ),
             style: Style(
               $text.style.ref(TextStyleVariant.h3),

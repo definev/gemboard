@@ -451,91 +451,107 @@ typedef $$EdgeItemTableUpdateCompanionBuilder = EdgeItemCompanion Function({
 });
 
 class $$EdgeItemTableFilterComposer
-    extends FilterComposer<_$EdgeDatabase, $EdgeItemTable> {
-  $$EdgeItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$EdgeDatabase, $EdgeItemTable> {
+  $$EdgeItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get parentWhiteboardId => $state.composableBuilder(
-      column: $state.table.parentWhiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get parentWhiteboardId => $composableBuilder(
+      column: $table.parentWhiteboardId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get edgeId => $state.composableBuilder(
-      column: $state.table.edgeId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get edgeId => $composableBuilder(
+      column: $table.edgeId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get source => $state.composableBuilder(
-      column: $state.table.source,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get source => $composableBuilder(
+      column: $table.source, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get target => $state.composableBuilder(
-      column: $state.table.target,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get target => $composableBuilder(
+      column: $table.target, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get label => $state.composableBuilder(
-      column: $state.table.label,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get label => $composableBuilder(
+      column: $table.label, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 }
 
 class $$EdgeItemTableOrderingComposer
-    extends OrderingComposer<_$EdgeDatabase, $EdgeItemTable> {
-  $$EdgeItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$EdgeDatabase, $EdgeItemTable> {
+  $$EdgeItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get parentWhiteboardId => $state.composableBuilder(
-      column: $state.table.parentWhiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get parentWhiteboardId => $composableBuilder(
+      column: $table.parentWhiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get edgeId => $state.composableBuilder(
-      column: $state.table.edgeId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get edgeId => $composableBuilder(
+      column: $table.edgeId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get source => $state.composableBuilder(
-      column: $state.table.source,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get source => $composableBuilder(
+      column: $table.source, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get target => $state.composableBuilder(
-      column: $state.table.target,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get target => $composableBuilder(
+      column: $table.target, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get label => $state.composableBuilder(
-      column: $state.table.label,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get label => $composableBuilder(
+      column: $table.label, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
+}
+
+class $$EdgeItemTableAnnotationComposer
+    extends Composer<_$EdgeDatabase, $EdgeItemTable> {
+  $$EdgeItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get parentWhiteboardId => $composableBuilder(
+      column: $table.parentWhiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get edgeId =>
+      $composableBuilder(column: $table.edgeId, builder: (column) => column);
+
+  GeneratedColumn<String> get source =>
+      $composableBuilder(column: $table.source, builder: (column) => column);
+
+  GeneratedColumn<String> get target =>
+      $composableBuilder(column: $table.target, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
 }
 
 class $$EdgeItemTableTableManager extends RootTableManager<
@@ -544,6 +560,7 @@ class $$EdgeItemTableTableManager extends RootTableManager<
     EdgeItemData,
     $$EdgeItemTableFilterComposer,
     $$EdgeItemTableOrderingComposer,
+    $$EdgeItemTableAnnotationComposer,
     $$EdgeItemTableCreateCompanionBuilder,
     $$EdgeItemTableUpdateCompanionBuilder,
     (
@@ -556,10 +573,12 @@ class $$EdgeItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$EdgeItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$EdgeItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$EdgeItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EdgeItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EdgeItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> parentWhiteboardId = const Value.absent(),
@@ -613,6 +632,7 @@ typedef $$EdgeItemTableProcessedTableManager = ProcessedTableManager<
     EdgeItemData,
     $$EdgeItemTableFilterComposer,
     $$EdgeItemTableOrderingComposer,
+    $$EdgeItemTableAnnotationComposer,
     $$EdgeItemTableCreateCompanionBuilder,
     $$EdgeItemTableUpdateCompanionBuilder,
     (
@@ -633,7 +653,7 @@ class $EdgeDatabaseManager {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$edgeDatabaseHash() => r'3757f684cadd76ac0ee1de1204285552149a5ea0';
+String _$edgeDatabaseHash() => r'dc3cbce91f2ed59aa4e5eee5d9d4d113375358be';
 
 /// See also [edgeDatabase].
 @ProviderFor(edgeDatabase)
@@ -646,6 +666,8 @@ final edgeDatabaseProvider = Provider<EdgeDatabase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef EdgeDatabaseRef = ProviderRef<EdgeDatabase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

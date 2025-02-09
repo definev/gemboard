@@ -33,7 +33,7 @@ class DSCardStyle {
       DSCardKind.elevated(
         $box.shadow(
           blurRadius: 8 * scale,
-          color: background.resolve(context).withOpacity(0.1),
+          color: background.resolve(context).withValues(alpha:0.1),
           offset: Offset(0, 4 * scale),
         ),
         $text.style.color.ref(ColorVariant.onSurface),

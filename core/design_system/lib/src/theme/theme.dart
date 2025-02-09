@@ -27,7 +27,7 @@ ThemeData dsTheme = ThemeData(
   scaffoldBackgroundColor: colors[ColorVariant.background],
   textSelectionTheme: TextSelectionThemeData(
     cursorColor: colors[ColorVariant.onSurface],
-    selectionColor: colors[ColorVariant.onSurface]!.withOpacity(0.15),
+    selectionColor: colors[ColorVariant.onSurface]!.withValues(alpha:0.15),
     selectionHandleColor: colors[ColorVariant.onSurface],
   ),
 );

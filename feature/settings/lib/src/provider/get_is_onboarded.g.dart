@@ -6,7 +6,7 @@ part of 'get_is_onboarded.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getIsOnboardedHash() => r'6f3ab0f6a57db1dcf3fdd98eedfe8ffd1724c1a6';
+String _$getIsOnboardedHash() => r'3648ee7cc52dee2b85d60125b67d6123786d66d3';
 
 /// See also [getIsOnboarded].
 @ProviderFor(getIsOnboarded)
@@ -20,6 +20,8 @@ final getIsOnboardedProvider = AutoDisposeFutureProvider<bool>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef GetIsOnboardedRef = AutoDisposeFutureProviderRef<bool>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
 
@@ -7,7 +8,7 @@ import '../edge_repository.dart';
 part 'edge_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-EdgeRepository edgeRepositoryHive(EdgeRepositoryHiveRef ref) {
+EdgeRepository edgeRepositoryHive(Ref ref) {
   return EdgeRepositoryHive();
 }
 

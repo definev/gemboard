@@ -186,7 +186,7 @@ class SelectionCellsView extends HookWidget {
                 },
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: ColorVariant.yellow.resolve(context).withOpacity(
+                    color: ColorVariant.yellow.resolve(context).withValues(alpha:
                         OpacityVariant.hightlight.resolve(context).value),
                     border: Border.all(
                       color: ColorVariant.yellow.resolve(context),

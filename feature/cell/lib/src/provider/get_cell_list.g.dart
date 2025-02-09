@@ -148,6 +148,8 @@ class GetCellListStreamControllerProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GetCellListStreamControllerRef
     on AutoDisposeProviderRef<StreamController<List<Cell>>> {
   /// The parameter `parentId` of this provider.
@@ -279,6 +281,8 @@ class GetCellListProvider extends AutoDisposeStreamProvider<List<Cell>> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GetCellListRef on AutoDisposeStreamProviderRef<List<Cell>> {
   /// The parameter `parentId` of this provider.
   CellParentId get parentId;
@@ -292,4 +296,4 @@ class _GetCellListProviderElement
   CellParentId get parentId => (origin as GetCellListProvider).parentId;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

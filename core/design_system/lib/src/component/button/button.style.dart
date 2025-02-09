@@ -59,7 +59,7 @@ class ButtonStyle {
         $box.color.ref(ColorVariant.surface),
         $box.foregroundDecoration.border.all.color(background
             .resolve(context)
-            .withOpacity(OpacityVariant.blend.resolve(context).value)),
+            .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         $box.foregroundDecoration.border.all.width(2 * scale),
         HoverVariant.hover(
           $box.color(boxBackground),
@@ -87,32 +87,32 @@ class ButtonStyle {
         HoverVariant.hover(
           $box.color(background
               .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+              .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         ),
         PressVariant.press(
           $box.color(background
               .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+              .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         ),
         FocusVariant.focus(
           $box.color(background
               .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+              .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         ),
         ButtonHighlight.focus(
           $box.color(background
               .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+              .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         ),
         ButtonHighlight.hover(
           $box.color(background
               .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+              .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         ),
         ButtonHighlight.pressed(
           $box.color(background
               .resolve(context)
-              .withOpacity(OpacityVariant.blend.resolve(context).value)),
+              .withValues(alpha:OpacityVariant.blend.resolve(context).value)),
         ),
       ),
       $with.scale(1.0),

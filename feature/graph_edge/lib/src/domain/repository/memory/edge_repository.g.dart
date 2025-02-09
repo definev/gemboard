@@ -7,7 +7,7 @@ part of 'edge_repository.dart';
 // **************************************************************************
 
 String _$edgeRepositoryMemoryHash() =>
-    r'b3616c772b031c7f64f8d9547b43fe3746581ebf';
+    r'6e7fd449d8e3e2403ba8edbefae2145cbce7b3e8';
 
 /// See also [edgeRepositoryMemory].
 @ProviderFor(edgeRepositoryMemory)
@@ -21,6 +21,8 @@ final edgeRepositoryMemoryProvider = Provider<EdgeRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef EdgeRepositoryMemoryRef = ProviderRef<EdgeRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

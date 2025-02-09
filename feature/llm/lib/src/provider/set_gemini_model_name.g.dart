@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'set_gemini_api_key.dart';
+part of 'set_gemini_model_name.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$setGeminiApiKeyHash() => r'690e1a11424a8ba93cdf391cff8526ee3d27092c';
+String _$setGeminiModelNameHash() =>
+    r'e07459e7175ed7864e23abc3af26318f85ac9929';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -29,30 +30,30 @@ class _SystemHash {
   }
 }
 
-/// See also [setGeminiApiKey].
-@ProviderFor(setGeminiApiKey)
-const setGeminiApiKeyProvider = SetGeminiApiKeyFamily();
+/// See also [setGeminiModelName].
+@ProviderFor(setGeminiModelName)
+const setGeminiModelNameProvider = SetGeminiModelNameFamily();
 
-/// See also [setGeminiApiKey].
-class SetGeminiApiKeyFamily extends Family<AsyncValue<void>> {
-  /// See also [setGeminiApiKey].
-  const SetGeminiApiKeyFamily();
+/// See also [setGeminiModelName].
+class SetGeminiModelNameFamily extends Family<AsyncValue<void>> {
+  /// See also [setGeminiModelName].
+  const SetGeminiModelNameFamily();
 
-  /// See also [setGeminiApiKey].
-  SetGeminiApiKeyProvider call(
-    String apiKey,
+  /// See also [setGeminiModelName].
+  SetGeminiModelNameProvider call(
+    String modelName,
   ) {
-    return SetGeminiApiKeyProvider(
-      apiKey,
+    return SetGeminiModelNameProvider(
+      modelName,
     );
   }
 
   @override
-  SetGeminiApiKeyProvider getProviderOverride(
-    covariant SetGeminiApiKeyProvider provider,
+  SetGeminiModelNameProvider getProviderOverride(
+    covariant SetGeminiModelNameProvider provider,
   ) {
     return call(
-      provider.apiKey,
+      provider.modelName,
     );
   }
 
@@ -68,75 +69,75 @@ class SetGeminiApiKeyFamily extends Family<AsyncValue<void>> {
       _allTransitiveDependencies;
 
   @override
-  String? get name => r'setGeminiApiKeyProvider';
+  String? get name => r'setGeminiModelNameProvider';
 }
 
-/// See also [setGeminiApiKey].
-class SetGeminiApiKeyProvider extends AutoDisposeFutureProvider<void> {
-  /// See also [setGeminiApiKey].
-  SetGeminiApiKeyProvider(
-    String apiKey,
+/// See also [setGeminiModelName].
+class SetGeminiModelNameProvider extends AutoDisposeFutureProvider<void> {
+  /// See also [setGeminiModelName].
+  SetGeminiModelNameProvider(
+    String modelName,
   ) : this._internal(
-          (ref) => setGeminiApiKey(
-            ref as SetGeminiApiKeyRef,
-            apiKey,
+          (ref) => setGeminiModelName(
+            ref as SetGeminiModelNameRef,
+            modelName,
           ),
-          from: setGeminiApiKeyProvider,
-          name: r'setGeminiApiKeyProvider',
+          from: setGeminiModelNameProvider,
+          name: r'setGeminiModelNameProvider',
           debugGetCreateSourceHash:
               const bool.fromEnvironment('dart.vm.product')
                   ? null
-                  : _$setGeminiApiKeyHash,
-          dependencies: SetGeminiApiKeyFamily._dependencies,
+                  : _$setGeminiModelNameHash,
+          dependencies: SetGeminiModelNameFamily._dependencies,
           allTransitiveDependencies:
-              SetGeminiApiKeyFamily._allTransitiveDependencies,
-          apiKey: apiKey,
+              SetGeminiModelNameFamily._allTransitiveDependencies,
+          modelName: modelName,
         );
 
-  SetGeminiApiKeyProvider._internal(
+  SetGeminiModelNameProvider._internal(
     super._createNotifier, {
     required super.name,
     required super.dependencies,
     required super.allTransitiveDependencies,
     required super.debugGetCreateSourceHash,
     required super.from,
-    required this.apiKey,
+    required this.modelName,
   }) : super.internal();
 
-  final String apiKey;
+  final String modelName;
 
   @override
   Override overrideWith(
-    FutureOr<void> Function(SetGeminiApiKeyRef provider) create,
+    FutureOr<void> Function(SetGeminiModelNameRef provider) create,
   ) {
     return ProviderOverride(
       origin: this,
-      override: SetGeminiApiKeyProvider._internal(
-        (ref) => create(ref as SetGeminiApiKeyRef),
+      override: SetGeminiModelNameProvider._internal(
+        (ref) => create(ref as SetGeminiModelNameRef),
         from: from,
         name: null,
         dependencies: null,
         allTransitiveDependencies: null,
         debugGetCreateSourceHash: null,
-        apiKey: apiKey,
+        modelName: modelName,
       ),
     );
   }
 
   @override
   AutoDisposeFutureProviderElement<void> createElement() {
-    return _SetGeminiApiKeyProviderElement(this);
+    return _SetGeminiModelNameProviderElement(this);
   }
 
   @override
   bool operator ==(Object other) {
-    return other is SetGeminiApiKeyProvider && other.apiKey == apiKey;
+    return other is SetGeminiModelNameProvider && other.modelName == modelName;
   }
 
   @override
   int get hashCode {
     var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, apiKey.hashCode);
+    hash = _SystemHash.combine(hash, modelName.hashCode);
 
     return _SystemHash.finish(hash);
   }
@@ -144,17 +145,17 @@ class SetGeminiApiKeyProvider extends AutoDisposeFutureProvider<void> {
 
 @Deprecated('Will be removed in 3.0. Use Ref instead')
 // ignore: unused_element
-mixin SetGeminiApiKeyRef on AutoDisposeFutureProviderRef<void> {
-  /// The parameter `apiKey` of this provider.
-  String get apiKey;
+mixin SetGeminiModelNameRef on AutoDisposeFutureProviderRef<void> {
+  /// The parameter `modelName` of this provider.
+  String get modelName;
 }
 
-class _SetGeminiApiKeyProviderElement
-    extends AutoDisposeFutureProviderElement<void> with SetGeminiApiKeyRef {
-  _SetGeminiApiKeyProviderElement(super.provider);
+class _SetGeminiModelNameProviderElement
+    extends AutoDisposeFutureProviderElement<void> with SetGeminiModelNameRef {
+  _SetGeminiModelNameProviderElement(super.provider);
 
   @override
-  String get apiKey => (origin as SetGeminiApiKeyProvider).apiKey;
+  String get modelName => (origin as SetGeminiModelNameProvider).modelName;
 }
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

@@ -7,7 +7,7 @@ part of 'generate_content_with_multiple_cell.dart';
 // **************************************************************************
 
 String _$generateContentWithMultipleCellHash() =>
-    r'8cb6d4b4ddae0a476e6a759c0f0d072906cad3a4';
+    r'4f15ebb0e00d3a44021ba09dc6a136f282c72edc';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -159,6 +159,8 @@ class GenerateContentWithMultipleCellProvider
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GenerateContentWithMultipleCellRef
     on AutoDisposeProviderRef<Raw<Stream<String>>> {
   /// The parameter `cells` of this provider.
@@ -180,4 +182,4 @@ class _GenerateContentWithMultipleCellProviderElement
   String get text => (origin as GenerateContentWithMultipleCellProvider).text;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

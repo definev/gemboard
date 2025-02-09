@@ -13,10 +13,12 @@ Future<List<String>> getBrainstormingSuggestions(
   required String question,
 }) async {
   final apiKey = await ref.watch(getGeminiApiKeyProvider.future);
+  final modelName = await ref.watch(getGeminiModelNameProvider.future);
   if (apiKey == null) throw Exception('API key is required');
+  if (modelName == null) throw Exception('Model name is required');
 
   final model = GenerativeModel(
-    model: 'gemini-1.5-flash-latest',
+    model: modelName,
     apiKey: apiKey,
     generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     safetySettings: safetySettings,

@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder/src/domain/model/folder.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -47,7 +48,7 @@ class FolderDatabase extends _$FolderDatabase {
 }
 
 @Riverpod(keepAlive: true)
-FolderDatabase folderDatabase(FolderDatabaseRef ref) {
+FolderDatabase folderDatabase(Ref ref) {
   return FolderDatabase();
 }
 

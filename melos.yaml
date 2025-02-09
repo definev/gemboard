@@ -46,8 +46,9 @@ command:
       super_drag_and_drop: ^0.8.19
       super_clipboard: ^0.8.19
       flutter_markdown_latex:
-        git: https://github.com/definev/flutter_markdown_latex.git
-        ref: main
+        git: 
+          url: https://github.com/definev/flutter_markdown_latex.git
+          ref: main
       shared_preferences: ^2.3.2
     
     dev_dependencies:

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:utils/utils.dart';
@@ -8,7 +9,7 @@ import 'package:whiteboard/whiteboard.dart';
 part 'whiteboard_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-WhiteboardRepository whiteboardRepositoryHive(WhiteboardRepositoryHiveRef ref) {
+WhiteboardRepository whiteboardRepositoryHive(Ref ref) {
   return WhiteboardRepositoryHive();
 }
 

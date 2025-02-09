@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:folder/src/domain/model/folder.dart';
 import 'package:folder/src/domain/repository/drift/model/folder.dart';
 import 'package:folder/src/domain/repository/folder_repository.dart';
@@ -7,7 +8,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'folder_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-FolderRepository folderRepositoryDrift(FolderRepositoryDriftRef ref) {
+FolderRepository folderRepositoryDrift(Ref ref) {
   return FolderRepositoryDrift(
     database: ref.read(folderDatabaseProvider),
   );

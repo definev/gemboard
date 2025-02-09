@@ -398,11 +398,11 @@ class WhiteboardCursorTool extends HookWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: ColorVariant.blue.resolve(context).withOpacity(
+                      color: ColorVariant.blue.resolve(context).withValues(alpha:
                             OpacityVariant.blend.resolve(context).value,
                           ),
                     ),
-                    color: ColorVariant.blue.resolve(context).withOpacity(
+                    color: ColorVariant.blue.resolve(context).withValues(alpha:
                           OpacityVariant.hightlight.resolve(context).value,
                         ),
                   ),

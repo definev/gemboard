@@ -7,7 +7,7 @@ part of 'folder_repository.dart';
 // **************************************************************************
 
 String _$folderRepositoryMemoryHash() =>
-    r'1e0e3b3ecf5d2dbc9cca6ebe31e1af33df06f661';
+    r'41061a641becf16b7b967e551bbbb998d2e096d8';
 
 /// See also [folderRepositoryMemory].
 @ProviderFor(folderRepositoryMemory)
@@ -22,6 +22,8 @@ final folderRepositoryMemoryProvider =
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef FolderRepositoryMemoryRef = ProviderRef<FolderRepositoryMemory>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

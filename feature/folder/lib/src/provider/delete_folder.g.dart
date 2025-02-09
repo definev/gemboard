@@ -6,7 +6,7 @@ part of 'delete_folder.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$deleteFolderHash() => r'529959ba9a0129063231f8cf733b52486bb4a88b';
+String _$deleteFolderHash() => r'ccf92bcf14a29b059dc82345e46384b0b6c179e7';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -142,6 +142,8 @@ class DeleteFolderProvider extends AutoDisposeFutureProvider<void> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin DeleteFolderRef on AutoDisposeFutureProviderRef<void> {
   /// The parameter `id` of this provider.
   FolderId get id;
@@ -155,4 +157,4 @@ class _DeleteFolderProviderElement
   FolderId get id => (origin as DeleteFolderProvider).id;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

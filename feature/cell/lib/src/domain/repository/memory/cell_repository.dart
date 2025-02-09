@@ -1,3 +1,4 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
 
@@ -7,7 +8,7 @@ import '../cell_repository.dart';
 part 'cell_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-CellRepository cellRepositoryMemory(CellRepositoryMemoryRef ref) {
+CellRepository cellRepositoryMemory(Ref ref) {
   return CellRepositoryMemory();
 }
 

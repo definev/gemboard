@@ -7,7 +7,7 @@ part of 'cell_repository.dart';
 // **************************************************************************
 
 String _$cellRepositoryHiveHash() =>
-    r'2f58d07c3a2d318fe3c35cba7ae72488ff073335';
+    r'ed1b934b20953e84b22316b18e40d9fa7ad6e45c';
 
 /// See also [cellRepositoryHive].
 @ProviderFor(cellRepositoryHive)
@@ -21,6 +21,8 @@ final cellRepositoryHiveProvider = Provider<CellRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CellRepositoryHiveRef = ProviderRef<CellRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

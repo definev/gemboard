@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:whiteboard/src/domain/data/whiteboard_position.dart';
 import 'package:whiteboard/src/domain/model/whiteboard.dart';
@@ -55,7 +56,7 @@ class WhiteboardDatabase extends _$WhiteboardDatabase {
 }
 
 @Riverpod(keepAlive: true)
-WhiteboardDatabase whiteboardDatabase(WhiteboardDatabaseRef ref) {
+WhiteboardDatabase whiteboardDatabase(Ref ref) {
   return WhiteboardDatabase();
 }
 

@@ -7,7 +7,7 @@ part of 'generate_label_for_cells.dart';
 // **************************************************************************
 
 String _$generateLabelForCellsHash() =>
-    r'c6c1fe3490f50ef5118bc4b4b68c628decff3499';
+    r'51d89cb53dfeee8afba8a1c5116a462dd518ea3b';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -155,6 +155,8 @@ class GenerateLabelForCellsProvider extends AutoDisposeFutureProvider<String> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GenerateLabelForCellsRef on AutoDisposeFutureProviderRef<String> {
   /// The parameter `source` of this provider.
   Cell get source;
@@ -174,4 +176,4 @@ class _GenerateLabelForCellsProviderElement
   Cell get target => (origin as GenerateLabelForCellsProvider).target;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

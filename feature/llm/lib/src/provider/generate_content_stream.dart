@@ -1,8 +1,10 @@
 import 'dart:io' as io;
 
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:llm/llm.dart';
 import 'package:llm/src/domain/model/gemini_configuration.dart';
 import 'package:llm/src/provider/get_gemini_api_key.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -108,10 +110,16 @@ Raw<Stream<GenerateContentResponse>> generateContentStream(
 
 @riverpod
 Raw<Stream<String>> generateTextFromCoreData(
-  GenerateTextFromCoreDataRef ref, {
+  Ref ref, {
   GeminiConfiguration configuration = GeminiConfiguration.flashModel,
   required List<CoreData> coreDataList,
 }) async* {
+  final apiKey = await ref.watch(getGeminiApiKeyProvider.future);
+  final modelName = await ref.watch(getGeminiModelNameProvider.future);
+  if (apiKey == null) throw Exception('API key is required');
+  if (modelName == null) throw Exception('Model name is required');
+  configuration = GeminiConfiguration(model: modelName, apiKey: apiKey);
+
   final data = ref.watch(
     generateContentStreamProvider(
       configuration: configuration,

@@ -72,7 +72,7 @@ class DSMarkdownBody extends StatelessWidget {
       horizontalRuleDecoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: ColorVariant.outline.resolve(context).withOpacity(0.5),
+            color: ColorVariant.outline.resolve(context).withValues(alpha:0.5),
             width: 1.5 * scale,
           ),
         ),

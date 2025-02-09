@@ -129,8 +129,8 @@ class EmojiLabelEditor extends HookWidget {
                           style: labelStyle.copyWith(
                             color: ColorVariant.onSurface
                                 .resolve(context)
-                                .withOpacity(
-                                  OpacityVariant.hightlight
+                                .withValues(
+                                  alpha: OpacityVariant.hightlight
                                       .resolve(context)
                                       .value,
                                 ),

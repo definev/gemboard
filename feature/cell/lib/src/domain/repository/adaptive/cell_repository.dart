@@ -1,5 +1,6 @@
 import 'package:cell/src/domain/repository/shared_preferences/cell_repository.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:utils/utils.dart';
 
@@ -11,7 +12,7 @@ import '../memory/cell_repository.dart';
 part 'cell_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-CellRepository cellRepositoryAdaptive(CellRepositoryAdaptiveRef ref) {
+CellRepository cellRepositoryAdaptive(Ref ref) {
   final memory = ref.watch(cellRepositoryMemoryProvider);
 
   if (kIsWasm) {

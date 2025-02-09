@@ -6,3 +6,5 @@ export 'src/navigation/navigation.dart';
 export 'src/provider/generate_content_stream.dart';
 export 'src/provider/get_gemini_api_key.dart';
 export 'src/provider/set_gemini_api_key.dart';
+export 'src/provider/get_gemini_model_name.dart';
+export 'src/provider/set_gemini_model_name.dart';

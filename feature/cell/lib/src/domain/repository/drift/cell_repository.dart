@@ -2,13 +2,14 @@ import 'package:cell/cell.dart';
 import 'package:cell/src/domain/repository/cell_repository.dart';
 import 'package:cell/src/domain/repository/drift/model/cell.dart';
 import 'package:drift/drift.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'cell_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-CellRepository cellRepositoryDrift(CellRepositoryDriftRef ref) {
+CellRepository cellRepositoryDrift(Ref ref) {
   return CellRepositoryDrift(
     database: ref.read(cellDatabaseProvider),
   );

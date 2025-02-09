@@ -650,61 +650,81 @@ typedef $$WhiteboardItemTableUpdateCompanionBuilder = WhiteboardItemCompanion
 });
 
 class $$WhiteboardItemTableFilterComposer
-    extends FilterComposer<_$WhiteboardDatabase, $WhiteboardItemTable> {
-  $$WhiteboardItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$WhiteboardDatabase, $WhiteboardItemTable> {
+  $$WhiteboardItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get parentFolderId => $state.composableBuilder(
-      column: $state.table.parentFolderId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get parentFolderId => $composableBuilder(
+      column: $table.parentFolderId,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get emoji => $state.composableBuilder(
-      column: $state.table.emoji,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get emoji => $composableBuilder(
+      column: $table.emoji, builder: (column) => ColumnFilters(column));
 }
 
 class $$WhiteboardItemTableOrderingComposer
-    extends OrderingComposer<_$WhiteboardDatabase, $WhiteboardItemTable> {
-  $$WhiteboardItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$WhiteboardDatabase, $WhiteboardItemTable> {
+  $$WhiteboardItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get parentFolderId => $state.composableBuilder(
-      column: $state.table.parentFolderId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get parentFolderId => $composableBuilder(
+      column: $table.parentFolderId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get emoji => $state.composableBuilder(
-      column: $state.table.emoji,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get emoji => $composableBuilder(
+      column: $table.emoji, builder: (column) => ColumnOrderings(column));
+}
+
+class $$WhiteboardItemTableAnnotationComposer
+    extends Composer<_$WhiteboardDatabase, $WhiteboardItemTable> {
+  $$WhiteboardItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get parentFolderId => $composableBuilder(
+      column: $table.parentFolderId, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get emoji =>
+      $composableBuilder(column: $table.emoji, builder: (column) => column);
 }
 
 class $$WhiteboardItemTableTableManager extends RootTableManager<
@@ -713,6 +733,7 @@ class $$WhiteboardItemTableTableManager extends RootTableManager<
     WhiteboardItemData,
     $$WhiteboardItemTableFilterComposer,
     $$WhiteboardItemTableOrderingComposer,
+    $$WhiteboardItemTableAnnotationComposer,
     $$WhiteboardItemTableCreateCompanionBuilder,
     $$WhiteboardItemTableUpdateCompanionBuilder,
     (
@@ -727,10 +748,12 @@ class $$WhiteboardItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$WhiteboardItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$WhiteboardItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$WhiteboardItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WhiteboardItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WhiteboardItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String?> parentFolderId = const Value.absent(),
@@ -772,6 +795,7 @@ typedef $$WhiteboardItemTableProcessedTableManager = ProcessedTableManager<
     WhiteboardItemData,
     $$WhiteboardItemTableFilterComposer,
     $$WhiteboardItemTableOrderingComposer,
+    $$WhiteboardItemTableAnnotationComposer,
     $$WhiteboardItemTableCreateCompanionBuilder,
     $$WhiteboardItemTableUpdateCompanionBuilder,
     (
@@ -799,61 +823,79 @@ typedef $$WhiteboardPositionItemTableUpdateCompanionBuilder
 });
 
 class $$WhiteboardPositionItemTableFilterComposer
-    extends FilterComposer<_$WhiteboardDatabase, $WhiteboardPositionItemTable> {
-  $$WhiteboardPositionItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$WhiteboardDatabase, $WhiteboardPositionItemTable> {
+  $$WhiteboardPositionItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get scale => $state.composableBuilder(
-      column: $state.table.scale,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get scale => $composableBuilder(
+      column: $table.scale, builder: (column) => ColumnFilters(column));
 }
 
-class $$WhiteboardPositionItemTableOrderingComposer extends OrderingComposer<
-    _$WhiteboardDatabase, $WhiteboardPositionItemTable> {
-  $$WhiteboardPositionItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+class $$WhiteboardPositionItemTableOrderingComposer
+    extends Composer<_$WhiteboardDatabase, $WhiteboardPositionItemTable> {
+  $$WhiteboardPositionItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get scale => $state.composableBuilder(
-      column: $state.table.scale,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get scale => $composableBuilder(
+      column: $table.scale, builder: (column) => ColumnOrderings(column));
+}
+
+class $$WhiteboardPositionItemTableAnnotationComposer
+    extends Composer<_$WhiteboardDatabase, $WhiteboardPositionItemTable> {
+  $$WhiteboardPositionItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get scale =>
+      $composableBuilder(column: $table.scale, builder: (column) => column);
 }
 
 class $$WhiteboardPositionItemTableTableManager extends RootTableManager<
@@ -862,6 +904,7 @@ class $$WhiteboardPositionItemTableTableManager extends RootTableManager<
     WhiteboardPositionItemData,
     $$WhiteboardPositionItemTableFilterComposer,
     $$WhiteboardPositionItemTableOrderingComposer,
+    $$WhiteboardPositionItemTableAnnotationComposer,
     $$WhiteboardPositionItemTableCreateCompanionBuilder,
     $$WhiteboardPositionItemTableUpdateCompanionBuilder,
     (
@@ -876,10 +919,15 @@ class $$WhiteboardPositionItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$WhiteboardPositionItemTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$WhiteboardPositionItemTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$WhiteboardPositionItemTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$WhiteboardPositionItemTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$WhiteboardPositionItemTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -922,6 +970,7 @@ typedef $$WhiteboardPositionItemTableProcessedTableManager
         WhiteboardPositionItemData,
         $$WhiteboardPositionItemTableFilterComposer,
         $$WhiteboardPositionItemTableOrderingComposer,
+        $$WhiteboardPositionItemTableAnnotationComposer,
         $$WhiteboardPositionItemTableCreateCompanionBuilder,
         $$WhiteboardPositionItemTableUpdateCompanionBuilder,
         (
@@ -947,7 +996,7 @@ class $WhiteboardDatabaseManager {
 // **************************************************************************
 
 String _$whiteboardDatabaseHash() =>
-    r'c26dc06b0bc392756dfd4816ec0283a602fa1305';
+    r'946392fbca87576e534f1112dd3170c0218a1962';
 
 /// See also [whiteboardDatabase].
 @ProviderFor(whiteboardDatabase)
@@ -961,6 +1010,8 @@ final whiteboardDatabaseProvider = Provider<WhiteboardDatabase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef WhiteboardDatabaseRef = ProviderRef<WhiteboardDatabase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

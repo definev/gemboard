@@ -164,7 +164,7 @@ class UrlCellView extends ConsumerWidget {
                         child: ColoredBox(
                           color: ColorVariant.yellow
                               .resolve(context)
-                              .withOpacity(0.2),
+                              .withValues(alpha:0.2),
                           child: switch (imageProvider) {
                             _ when imageProvider.image != null => Image(
                                 image: imageProvider.image!,

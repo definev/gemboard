@@ -85,7 +85,7 @@ class BrainstormingCellView extends HookWidget {
                 style: Style(
                   $box.color(colors[index]
                       .resolve(context)
-                      .withOpacity(1 - index * 0.2)),
+                      .withValues(alpha: 1 - index * 0.2)),
                   $box.margin.horizontal(1.5),
                   $box.minHeight(32 * scale),
                   $box.padding.left.ref(SpaceVariant.small),
@@ -207,7 +207,7 @@ class BrainstormingCellView extends HookWidget {
           $flex.crossAxisAlignment.start(),
           $box.color(ColorVariant.surface
               .resolve(context)
-              .withOpacity(OpacityVariant.surface.resolve(context).value))),
+              .withValues(alpha:OpacityVariant.surface.resolve(context).value))),
       children: [
         DSTextbox(
           controller: askForSuggestionTextController,

@@ -1147,7 +1147,7 @@ class WhiteboardViewState extends ConsumerState<WhiteboardView> {
               target: newTarget,
             );
           })
-          .whereNotNull()
+          .nonNulls
           .toList(),
     );
 
@@ -1757,7 +1757,7 @@ CONTENT: ${cell.content}''',
                   crossAxisMargin: 0,
                   interactive: true,
                   thumbColor: WidgetStatePropertyAll(
-                      ColorVariant.outline.resolve(context).withOpacity(0.5)),
+                      ColorVariant.outline.resolve(context).withValues(alpha:0.5)),
                 ),
               ),
               child: child,

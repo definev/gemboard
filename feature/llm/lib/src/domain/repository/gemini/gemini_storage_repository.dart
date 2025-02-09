@@ -1,11 +1,11 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:llm/src/domain/repository/gemini/shared_preferences/gemini_storage_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'gemini_storage_repository.g.dart';
 
 @riverpod
-GeminiStorageRepository geminiStorageRepository(
-    GeminiStorageRepositoryRef ref) {
+GeminiStorageRepository geminiStorageRepository(Ref ref) {
   return ref.read(geminiStorageRepositorySharedPreferencesProvider);
 }
 
@@ -15,4 +15,10 @@ abstract class GeminiStorageRepository {
 
   /// Save the API key
   Future<String?> getApiKey();
+
+  /// Save the model name
+  Future<void> saveGeminiModelName(String modelName);
+
+  /// Get the model name
+  Future<String?> getGeminiModelName();
 }

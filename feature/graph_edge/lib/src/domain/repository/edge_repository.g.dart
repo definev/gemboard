@@ -6,7 +6,7 @@ part of 'edge_repository.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$edgeRepositoryHash() => r'80c5b7f4bdc67d48098b8b510d305140d2a7bbe6';
+String _$edgeRepositoryHash() => r'af4135a03a82805f9e7928b97e1109e4770fd701';
 
 /// See also [edgeRepository].
 @ProviderFor(edgeRepository)
@@ -20,6 +20,8 @@ final edgeRepositoryProvider = Provider<EdgeRepository>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef EdgeRepositoryRef = ProviderRef<EdgeRepository>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

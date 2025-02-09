@@ -23,7 +23,9 @@ dependencies:
 
   flutter_markdown:
   flutter_markdown_latex:
-    git: https://github.com/definev/flutter_markdown_latex.git
+    git:
+      url: https://github.com/definev/flutter_markdown_latex.git
+      ref: main
   flutter_highlighter:
 
   url_launcher: 

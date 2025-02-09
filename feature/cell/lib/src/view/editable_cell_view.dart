@@ -70,7 +70,7 @@ class EditableCellView extends HookWidget {
                 hintTextStyle: TextStyleVariant.p //
                     .resolve(context)
                     .copyWith(
-                        color: cellDecoration.onColorValue(context).withOpacity(
+                        color: cellDecoration.onColorValue(context).withValues(alpha:
                             OpacityVariant.surface.resolve(context).value)),
                 textStyle: TextStyleVariant.p
                     .resolve(context)
@@ -121,7 +121,7 @@ class EditableCellView extends HookWidget {
                         onContentChanged(titleController.text, content),
                     hintTextStyle: TextStyleVariant.p.resolve(context).copyWith(
                         color: (textSpec.style?.color ?? onBackground)
-                            .withOpacity(
+                            .withValues(alpha:
                                 OpacityVariant.surface.resolve(context).value)),
                     textStyle: TextStyleVariant.p
                         .resolve(context)

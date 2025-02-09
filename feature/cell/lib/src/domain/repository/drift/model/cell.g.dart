@@ -4813,181 +4813,191 @@ typedef $$BrainstormingCellItemTableUpdateCompanionBuilder
 });
 
 class $$BrainstormingCellItemTableFilterComposer
-    extends FilterComposer<_$CellDatabase, $BrainstormingCellItemTable> {
-  $$BrainstormingCellItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $BrainstormingCellItemTable> {
+  $$BrainstormingCellItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get question => $state.composableBuilder(
-      column: $state.table.question,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get question => $composableBuilder(
+      column: $table.question, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get suggestions => $state.composableBuilder(
-      column: $state.table.suggestions,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get suggestions => $composableBuilder(
+      column: $table.suggestions, builder: (column) => ColumnFilters(column));
 }
 
 class $$BrainstormingCellItemTableOrderingComposer
-    extends OrderingComposer<_$CellDatabase, $BrainstormingCellItemTable> {
-  $$BrainstormingCellItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $BrainstormingCellItemTable> {
+  $$BrainstormingCellItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get question => $state.composableBuilder(
-      column: $state.table.question,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get question => $composableBuilder(
+      column: $table.question, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get suggestions => $state.composableBuilder(
-      column: $state.table.suggestions,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get suggestions => $composableBuilder(
+      column: $table.suggestions, builder: (column) => ColumnOrderings(column));
+}
+
+class $$BrainstormingCellItemTableAnnotationComposer
+    extends Composer<_$CellDatabase, $BrainstormingCellItemTable> {
+  $$BrainstormingCellItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get cellId =>
+      $composableBuilder(column: $table.cellId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<bool> get selected =>
+      $composableBuilder(column: $table.selected, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get cardKind =>
+      $composableBuilder(column: $table.cardKind, builder: (column) => column);
+
+  GeneratedColumn<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => column);
+
+  GeneratedColumn<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => column);
+
+  GeneratedColumn<String> get question =>
+      $composableBuilder(column: $table.question, builder: (column) => column);
+
+  GeneratedColumn<String> get suggestions => $composableBuilder(
+      column: $table.suggestions, builder: (column) => column);
 }
 
 class $$BrainstormingCellItemTableTableManager extends RootTableManager<
@@ -4996,6 +5006,7 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
     BrainstormingCellItemData,
     $$BrainstormingCellItemTableFilterComposer,
     $$BrainstormingCellItemTableOrderingComposer,
+    $$BrainstormingCellItemTableAnnotationComposer,
     $$BrainstormingCellItemTableCreateCompanionBuilder,
     $$BrainstormingCellItemTableUpdateCompanionBuilder,
     (
@@ -5010,10 +5021,15 @@ class $$BrainstormingCellItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer: $$BrainstormingCellItemTableFilterComposer(
-              ComposerState(db, table)),
-          orderingComposer: $$BrainstormingCellItemTableOrderingComposer(
-              ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$BrainstormingCellItemTableFilterComposer(
+                  $db: db, $table: table),
+          createOrderingComposer: () =>
+              $$BrainstormingCellItemTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$BrainstormingCellItemTableAnnotationComposer(
+                  $db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -5104,6 +5120,7 @@ typedef $$BrainstormingCellItemTableProcessedTableManager
         BrainstormingCellItemData,
         $$BrainstormingCellItemTableFilterComposer,
         $$BrainstormingCellItemTableOrderingComposer,
+        $$BrainstormingCellItemTableAnnotationComposer,
         $$BrainstormingCellItemTableCreateCompanionBuilder,
         $$BrainstormingCellItemTableUpdateCompanionBuilder,
         (
@@ -5155,181 +5172,191 @@ typedef $$EditableCellItemTableUpdateCompanionBuilder
 });
 
 class $$EditableCellItemTableFilterComposer
-    extends FilterComposer<_$CellDatabase, $EditableCellItemTable> {
-  $$EditableCellItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $EditableCellItemTable> {
+  $$EditableCellItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
 }
 
 class $$EditableCellItemTableOrderingComposer
-    extends OrderingComposer<_$CellDatabase, $EditableCellItemTable> {
-  $$EditableCellItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $EditableCellItemTable> {
+  $$EditableCellItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
+}
+
+class $$EditableCellItemTableAnnotationComposer
+    extends Composer<_$CellDatabase, $EditableCellItemTable> {
+  $$EditableCellItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get cellId =>
+      $composableBuilder(column: $table.cellId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<bool> get selected =>
+      $composableBuilder(column: $table.selected, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get cardKind =>
+      $composableBuilder(column: $table.cardKind, builder: (column) => column);
+
+  GeneratedColumn<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => column);
+
+  GeneratedColumn<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
 }
 
 class $$EditableCellItemTableTableManager extends RootTableManager<
@@ -5338,6 +5365,7 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
     EditableCellItemData,
     $$EditableCellItemTableFilterComposer,
     $$EditableCellItemTableOrderingComposer,
+    $$EditableCellItemTableAnnotationComposer,
     $$EditableCellItemTableCreateCompanionBuilder,
     $$EditableCellItemTableUpdateCompanionBuilder,
     (
@@ -5352,10 +5380,12 @@ class $$EditableCellItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$EditableCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$EditableCellItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$EditableCellItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$EditableCellItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$EditableCellItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -5445,6 +5475,7 @@ typedef $$EditableCellItemTableProcessedTableManager = ProcessedTableManager<
     EditableCellItemData,
     $$EditableCellItemTableFilterComposer,
     $$EditableCellItemTableOrderingComposer,
+    $$EditableCellItemTableAnnotationComposer,
     $$EditableCellItemTableCreateCompanionBuilder,
     $$EditableCellItemTableUpdateCompanionBuilder,
     (
@@ -5494,171 +5525,182 @@ typedef $$ImageCellItemTableUpdateCompanionBuilder = ImageCellItemCompanion
 });
 
 class $$ImageCellItemTableFilterComposer
-    extends FilterComposer<_$CellDatabase, $ImageCellItemTable> {
-  $$ImageCellItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $ImageCellItemTable> {
+  $$ImageCellItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnFilters(column));
 }
 
 class $$ImageCellItemTableOrderingComposer
-    extends OrderingComposer<_$CellDatabase, $ImageCellItemTable> {
-  $$ImageCellItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $ImageCellItemTable> {
+  $$ImageCellItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ImageCellItemTableAnnotationComposer
+    extends Composer<_$CellDatabase, $ImageCellItemTable> {
+  $$ImageCellItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get cellId =>
+      $composableBuilder(column: $table.cellId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<bool> get selected =>
+      $composableBuilder(column: $table.selected, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get cardKind =>
+      $composableBuilder(column: $table.cardKind, builder: (column) => column);
+
+  GeneratedColumn<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => column);
+
+  GeneratedColumn<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => column);
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
 }
 
 class $$ImageCellItemTableTableManager extends RootTableManager<
@@ -5667,6 +5709,7 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
     ImageCellItemData,
     $$ImageCellItemTableFilterComposer,
     $$ImageCellItemTableOrderingComposer,
+    $$ImageCellItemTableAnnotationComposer,
     $$ImageCellItemTableCreateCompanionBuilder,
     $$ImageCellItemTableUpdateCompanionBuilder,
     (
@@ -5679,10 +5722,12 @@ class $$ImageCellItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ImageCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ImageCellItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ImageCellItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImageCellItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImageCellItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -5768,6 +5813,7 @@ typedef $$ImageCellItemTableProcessedTableManager = ProcessedTableManager<
     ImageCellItemData,
     $$ImageCellItemTableFilterComposer,
     $$ImageCellItemTableOrderingComposer,
+    $$ImageCellItemTableAnnotationComposer,
     $$ImageCellItemTableCreateCompanionBuilder,
     $$ImageCellItemTableUpdateCompanionBuilder,
     (
@@ -5818,181 +5864,191 @@ typedef $$ArticleCellItemTableUpdateCompanionBuilder = ArticleCellItemCompanion
 });
 
 class $$ArticleCellItemTableFilterComposer
-    extends FilterComposer<_$CellDatabase, $ArticleCellItemTable> {
-  $$ArticleCellItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $ArticleCellItemTable> {
+  $$ArticleCellItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnFilters(column));
 }
 
 class $$ArticleCellItemTableOrderingComposer
-    extends OrderingComposer<_$CellDatabase, $ArticleCellItemTable> {
-  $$ArticleCellItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $ArticleCellItemTable> {
+  $$ArticleCellItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get content => $state.composableBuilder(
-      column: $state.table.content,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get content => $composableBuilder(
+      column: $table.content, builder: (column) => ColumnOrderings(column));
+}
+
+class $$ArticleCellItemTableAnnotationComposer
+    extends Composer<_$CellDatabase, $ArticleCellItemTable> {
+  $$ArticleCellItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get cellId =>
+      $composableBuilder(column: $table.cellId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<bool> get selected =>
+      $composableBuilder(column: $table.selected, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get cardKind =>
+      $composableBuilder(column: $table.cardKind, builder: (column) => column);
+
+  GeneratedColumn<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => column);
+
+  GeneratedColumn<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
+
+  GeneratedColumn<String> get content =>
+      $composableBuilder(column: $table.content, builder: (column) => column);
 }
 
 class $$ArticleCellItemTableTableManager extends RootTableManager<
@@ -6001,6 +6057,7 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
     ArticleCellItemData,
     $$ArticleCellItemTableFilterComposer,
     $$ArticleCellItemTableOrderingComposer,
+    $$ArticleCellItemTableAnnotationComposer,
     $$ArticleCellItemTableCreateCompanionBuilder,
     $$ArticleCellItemTableUpdateCompanionBuilder,
     (
@@ -6014,10 +6071,12 @@ class $$ArticleCellItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$ArticleCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$ArticleCellItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$ArticleCellItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ArticleCellItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ArticleCellItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -6107,6 +6166,7 @@ typedef $$ArticleCellItemTableProcessedTableManager = ProcessedTableManager<
     ArticleCellItemData,
     $$ArticleCellItemTableFilterComposer,
     $$ArticleCellItemTableOrderingComposer,
+    $$ArticleCellItemTableAnnotationComposer,
     $$ArticleCellItemTableCreateCompanionBuilder,
     $$ArticleCellItemTableUpdateCompanionBuilder,
     (
@@ -6155,171 +6215,182 @@ typedef $$UrlCellItemTableUpdateCompanionBuilder = UrlCellItemCompanion
 });
 
 class $$UrlCellItemTableFilterComposer
-    extends FilterComposer<_$CellDatabase, $UrlCellItemTable> {
-  $$UrlCellItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $UrlCellItemTable> {
+  $$UrlCellItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnFilters(column));
 }
 
 class $$UrlCellItemTableOrderingComposer
-    extends OrderingComposer<_$CellDatabase, $UrlCellItemTable> {
-  $$UrlCellItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $UrlCellItemTable> {
+  $$UrlCellItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get url => $state.composableBuilder(
-      column: $state.table.url,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get url => $composableBuilder(
+      column: $table.url, builder: (column) => ColumnOrderings(column));
+}
+
+class $$UrlCellItemTableAnnotationComposer
+    extends Composer<_$CellDatabase, $UrlCellItemTable> {
+  $$UrlCellItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get cellId =>
+      $composableBuilder(column: $table.cellId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<bool> get selected =>
+      $composableBuilder(column: $table.selected, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get cardKind =>
+      $composableBuilder(column: $table.cardKind, builder: (column) => column);
+
+  GeneratedColumn<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => column);
+
+  GeneratedColumn<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => column);
+
+  GeneratedColumn<String> get url =>
+      $composableBuilder(column: $table.url, builder: (column) => column);
 }
 
 class $$UrlCellItemTableTableManager extends RootTableManager<
@@ -6328,6 +6399,7 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
     UrlCellItemData,
     $$UrlCellItemTableFilterComposer,
     $$UrlCellItemTableOrderingComposer,
+    $$UrlCellItemTableAnnotationComposer,
     $$UrlCellItemTableCreateCompanionBuilder,
     $$UrlCellItemTableUpdateCompanionBuilder,
     (
@@ -6340,10 +6412,12 @@ class $$UrlCellItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$UrlCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$UrlCellItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$UrlCellItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$UrlCellItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$UrlCellItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -6429,6 +6503,7 @@ typedef $$UrlCellItemTableProcessedTableManager = ProcessedTableManager<
     UrlCellItemData,
     $$UrlCellItemTableFilterComposer,
     $$UrlCellItemTableOrderingComposer,
+    $$UrlCellItemTableAnnotationComposer,
     $$UrlCellItemTableCreateCompanionBuilder,
     $$UrlCellItemTableUpdateCompanionBuilder,
     (
@@ -6477,171 +6552,182 @@ typedef $$HeaderCellItemTableUpdateCompanionBuilder = HeaderCellItemCompanion
 });
 
 class $$HeaderCellItemTableFilterComposer
-    extends FilterComposer<_$CellDatabase, $HeaderCellItemTable> {
-  $$HeaderCellItemTableFilterComposer(super.$state);
-  ColumnFilters<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $HeaderCellItemTable> {
+  $$HeaderCellItemTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnFilters(column));
 
-  ColumnFilters<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnFilters(column, joinBuilders: joinBuilders));
+  ColumnFilters<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnFilters(column));
 }
 
 class $$HeaderCellItemTableOrderingComposer
-    extends OrderingComposer<_$CellDatabase, $HeaderCellItemTable> {
-  $$HeaderCellItemTableOrderingComposer(super.$state);
-  ColumnOrderings<int> get id => $state.composableBuilder(
-      column: $state.table.id,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+    extends Composer<_$CellDatabase, $HeaderCellItemTable> {
+  $$HeaderCellItemTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+      column: $table.id, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get whiteboardId => $state.composableBuilder(
-      column: $state.table.whiteboardId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cellId => $state.composableBuilder(
-      column: $state.table.cellId,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cellId => $composableBuilder(
+      column: $table.cellId, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDx => $state.composableBuilder(
-      column: $state.table.offsetDx,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDx => $composableBuilder(
+      column: $table.offsetDx, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get offsetDy => $state.composableBuilder(
-      column: $state.table.offsetDy,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get offsetDy => $composableBuilder(
+      column: $table.offsetDy, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get width => $state.composableBuilder(
-      column: $state.table.width,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get width => $composableBuilder(
+      column: $table.width, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredWidth => $state.composableBuilder(
-      column: $state.table.preferredWidth,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get height => $state.composableBuilder(
-      column: $state.table.height,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get height => $composableBuilder(
+      column: $table.height, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<double> get preferredHeight => $state.composableBuilder(
-      column: $state.table.preferredHeight,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight,
+      builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<int> get layer => $state.composableBuilder(
-      column: $state.table.layer,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<int> get layer => $composableBuilder(
+      column: $table.layer, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get selected => $state.composableBuilder(
-      column: $state.table.selected,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get selected => $composableBuilder(
+      column: $table.selected, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get color => $state.composableBuilder(
-      column: $state.table.color,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get color => $composableBuilder(
+      column: $table.color, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get cardKind => $state.composableBuilder(
-      column: $state.table.cardKind,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get cardKind => $composableBuilder(
+      column: $table.cardKind, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<bool> get constraints => $state.composableBuilder(
-      column: $state.table.constraints,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get preContext => $state.composableBuilder(
-      column: $state.table.preContext,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => ColumnOrderings(column));
 
-  ColumnOrderings<String> get title => $state.composableBuilder(
-      column: $state.table.title,
-      builder: (column, joinBuilders) =>
-          ColumnOrderings(column, joinBuilders: joinBuilders));
+  ColumnOrderings<String> get title => $composableBuilder(
+      column: $table.title, builder: (column) => ColumnOrderings(column));
+}
+
+class $$HeaderCellItemTableAnnotationComposer
+    extends Composer<_$CellDatabase, $HeaderCellItemTable> {
+  $$HeaderCellItemTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get whiteboardId => $composableBuilder(
+      column: $table.whiteboardId, builder: (column) => column);
+
+  GeneratedColumn<String> get cellId =>
+      $composableBuilder(column: $table.cellId, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDx =>
+      $composableBuilder(column: $table.offsetDx, builder: (column) => column);
+
+  GeneratedColumn<double> get offsetDy =>
+      $composableBuilder(column: $table.offsetDy, builder: (column) => column);
+
+  GeneratedColumn<double> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredWidth => $composableBuilder(
+      column: $table.preferredWidth, builder: (column) => column);
+
+  GeneratedColumn<double> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<double> get preferredHeight => $composableBuilder(
+      column: $table.preferredHeight, builder: (column) => column);
+
+  GeneratedColumn<int> get layer =>
+      $composableBuilder(column: $table.layer, builder: (column) => column);
+
+  GeneratedColumn<bool> get selected =>
+      $composableBuilder(column: $table.selected, builder: (column) => column);
+
+  GeneratedColumn<String> get color =>
+      $composableBuilder(column: $table.color, builder: (column) => column);
+
+  GeneratedColumn<String> get cardKind =>
+      $composableBuilder(column: $table.cardKind, builder: (column) => column);
+
+  GeneratedColumn<bool> get constraints => $composableBuilder(
+      column: $table.constraints, builder: (column) => column);
+
+  GeneratedColumn<String> get preContext => $composableBuilder(
+      column: $table.preContext, builder: (column) => column);
+
+  GeneratedColumn<String> get title =>
+      $composableBuilder(column: $table.title, builder: (column) => column);
 }
 
 class $$HeaderCellItemTableTableManager extends RootTableManager<
@@ -6650,6 +6736,7 @@ class $$HeaderCellItemTableTableManager extends RootTableManager<
     HeaderCellItemData,
     $$HeaderCellItemTableFilterComposer,
     $$HeaderCellItemTableOrderingComposer,
+    $$HeaderCellItemTableAnnotationComposer,
     $$HeaderCellItemTableCreateCompanionBuilder,
     $$HeaderCellItemTableUpdateCompanionBuilder,
     (
@@ -6663,10 +6750,12 @@ class $$HeaderCellItemTableTableManager extends RootTableManager<
       : super(TableManagerState(
           db: db,
           table: table,
-          filteringComposer:
-              $$HeaderCellItemTableFilterComposer(ComposerState(db, table)),
-          orderingComposer:
-              $$HeaderCellItemTableOrderingComposer(ComposerState(db, table)),
+          createFilteringComposer: () =>
+              $$HeaderCellItemTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$HeaderCellItemTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$HeaderCellItemTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> id = const Value.absent(),
             Value<String> whiteboardId = const Value.absent(),
@@ -6752,6 +6841,7 @@ typedef $$HeaderCellItemTableProcessedTableManager = ProcessedTableManager<
     HeaderCellItemData,
     $$HeaderCellItemTableFilterComposer,
     $$HeaderCellItemTableOrderingComposer,
+    $$HeaderCellItemTableAnnotationComposer,
     $$HeaderCellItemTableCreateCompanionBuilder,
     $$HeaderCellItemTableUpdateCompanionBuilder,
     (
@@ -6782,7 +6872,7 @@ class $CellDatabaseManager {
 // RiverpodGenerator
 // **************************************************************************
 
-String _$cellDatabaseHash() => r'a19ee037692aa181a96753f27eaa4f22c474039f';
+String _$cellDatabaseHash() => r'd9091c57e154d9040b647ea43f4501900e09967b';
 
 /// See also [cellDatabase].
 @ProviderFor(cellDatabase)
@@ -6795,6 +6885,8 @@ final cellDatabaseProvider = Provider<CellDatabase>.internal(
   allTransitiveDependencies: null,
 );
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 typedef CellDatabaseRef = ProviderRef<CellDatabase>;
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

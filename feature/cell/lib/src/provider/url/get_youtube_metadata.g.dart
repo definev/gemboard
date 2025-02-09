@@ -7,7 +7,7 @@ part of 'get_youtube_metadata.dart';
 // **************************************************************************
 
 String _$getYoutubeMetadataHash() =>
-    r'd8a1966c7dbdd2bad29caa62a72f06c322a70b5d';
+    r'0dd33c9093e4d7e7f0c52daf5e4c66d539d5d358';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -143,6 +143,8 @@ class GetYoutubeMetadataProvider extends FutureProvider<Metadata?> {
   }
 }
 
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
 mixin GetYoutubeMetadataRef on FutureProviderRef<Metadata?> {
   /// The parameter `url` of this provider.
   Uri get url;
@@ -156,4 +158,4 @@ class _GetYoutubeMetadataProviderElement
   Uri get url => (origin as GetYoutubeMetadataProvider).url;
 }
 // ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
+// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

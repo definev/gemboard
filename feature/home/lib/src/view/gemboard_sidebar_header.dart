@@ -37,7 +37,7 @@ class GemboardSidebarHeader extends StatelessWidget {
                         child: ColoredBox(
                           color: ColorVariant.background //
                               .resolve(context)
-                              .withOpacity(OpacityVariant.blend
+                              .withValues(alpha:OpacityVariant.blend
                                   .resolve(context)
                                   .value),
                         ),
@@ -81,7 +81,7 @@ class GemboardSidebarHeader extends StatelessWidget {
                             child: ColoredBox(
                               color: ColorVariant.background //
                                   .resolve(context)
-                                  .withOpacity(OpacityVariant.blend
+                                  .withValues(alpha:OpacityVariant.blend
                                       .resolve(context)
                                       .value),
                             ),

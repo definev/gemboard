@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:graph_edge/graph_edge.dart';
 import 'package:graph_edge/src/domain/repository/edge_repository.dart';
 import 'package:graph_edge/src/domain/repository/shared_preferences/edge_repository.dart';
@@ -11,7 +12,7 @@ import '../memory/edge_repository.dart';
 part 'edge_repository.g.dart';
 
 @Riverpod(keepAlive: true)
-EdgeRepository edgeRepositoryAdaptive(EdgeRepositoryAdaptiveRef ref) {
+EdgeRepository edgeRepositoryAdaptive(Ref ref) {
   final memory = ref.watch(edgeRepositoryMemoryProvider);
   if (kIsWasm) {
     final sharedPrefereneces = ref.read(
