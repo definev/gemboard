@@ -1,0 +1,162 @@
+name: Build
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build_web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: melos exec --scope="*app*" -- flutter build web --web-renderer=canvaskit
+      - run: zip -r web.zip app/gemboard_app/build/web
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: web.zip
+      - run: zip -r extensions.zip app/gemboard_app/extensions
+      - name: Release extension
+        uses: softprops/action-gh-release@v2
+        with:
+          files: extensions.zip
+
+  build_web_wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: melos exec --scope="*app*" -- flutter build web --wasm
+      - run: zip -r web_wasm.zip app/gemboard_app/build/web
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: web_wasm.zip
+  build_ios:
+    runs-on: macos-latest
+    steps:
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: melos exec --scope="*app*" -- flutter build ios --release --no-codesign
+      - run: zip -r gemboard.ipa app/gemboard_app/build/ios/iphoneos/Runner.app
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gemboard.ipa
+
+  build_android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup JDK 11
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '17'
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: melos exec --scope="*app*" -- flutter build apk --split-per-abi
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            app/gemboard_app/build/app/outputs/apk/release/app-arm64-v8a-release.apk
+            app/gemboard_app/build/app/outputs/apk/release/app-armeabi-v7a-release.apk
+            app/gemboard_app/build/app/outputs/apk/release/app-x86_64-release.apk
+  
+  build_windows:
+    runs-on: windows-latest
+    steps:
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+
+      - run: cd app/gemboard_app && flutter build windows
+
+      - name: Build iss script
+        run: cd app/gemboard_app && dart run inno_bundle:build --no-app --release --no-installer
+
+      - name: Preview iss script
+        run: cd app/gemboard_app && echo "Previewing inno script" && cat build/windows/x64/installer/Release/inno-script.iss
+
+      - name: Build installer
+        uses: Minionguyjpro/Inno-Setup-Action@v1.2.2
+        with:
+          path: app/gemboard_app/build/windows/x64/installer/Release/inno-script.iss
+
+      - run: Compress-Archive -Path 'app/gemboard_app/build/windows/x64/installer/Release/*' -DestinationPath 'gemboard_windows.zip'
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gemboard_windows.zip
+
+  build_macos:
+    runs-on: macos-latest
+    steps:
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: cd app/gemboard_app && flutter build macos
+      - run: zip -r gemboard_macos.zip app/gemboard_app/build/macos/Build/Products/Release/Gemboard.app
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gemboard_macos.zip
+  
+  build_linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: master
+      - name: Melos
+        uses: bluefireteam/melos-action@v3
+        with:
+          run-bootstrap: true
+      - run: |
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
+      - run: cd app/gemboard_app && flutter build linux
+      - run: zip -r gemboard_linux.zip app/gemboard_app/build/linux
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: gemboard_linux.zip
