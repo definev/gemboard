@@ -15,8 +15,9 @@ class SettingsView extends HookConsumerWidget {
     final geminiApiKeyAsyncValue = ref.watch(getGeminiApiKeyProvider);
     final geminiApiKeyTextController =
         useTextEditingController(text: geminiApiKeyAsyncValue.valueOrNull);
+    final geminiModelNameAsyncValue = ref.watch(getGeminiModelNameProvider);
     final geminiModelNameTextController =
-        useTextEditingController(text: geminiApiKeyAsyncValue.valueOrNull);
+        useTextEditingController(text: geminiModelNameAsyncValue.valueOrNull);
 
     ref.listen(
       getGeminiApiKeyProvider,
@@ -100,24 +101,9 @@ class SettingsView extends HookConsumerWidget {
                         DSTextbox(
                           controller: geminiModelNameTextController,
                           label: StyledText('Gemini Model Name'),
-                          obscureText: obscureGeminiApiKey.value,
                           hintText: 'Enter Gemini Model Name',
                           onChanged: (value) => ref
                               .read(setGeminiModelNameProvider(value).future),
-                          trailing: Box(
-                            inherit: true,
-                            child: GestureDetector(
-                              onTap: () => obscureGeminiApiKey.value =
-                                  !obscureGeminiApiKey.value,
-                              child: StyledIcon(
-                                inherit: true,
-                                switch (obscureGeminiApiKey.value) {
-                                  true => IconlyLight.unlock,
-                                  _ => IconlyLight.lock,
-                                },
-                              ),
-                            ),
-                          ),
                         ),
                       ],
                     ),
