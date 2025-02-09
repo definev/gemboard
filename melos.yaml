@@ -1,6 +1,6 @@
 name: gemboard
 
-# sdkPath: .fvm/flutter_sdk
+sdkPath: .fvm/flutter_sdk
 
 packages:
   - app/*
@@ -17,6 +17,7 @@ command:
       flutter: ">=3.0.0 <4.0.0"
 
     dependencies:
+      intl: ^0.20.2
       collection: ^1.18.0
       flow_builder: ^0.1.0
       go_router: ^14.2.1
