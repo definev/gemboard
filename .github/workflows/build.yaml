@@ -20,7 +20,7 @@ jobs:
         uses: bluefireteam/melos-action@v3
         with:
           run-bootstrap: true
-      - run: melos exec --scope="*app*" -- flutter build web --web-renderer=canvaskit
+      - run: melos exec --scope="*app*" -- flutter build web
       - run: zip -r web.zip app/gemboard_app/build/web
       - name: Release
         uses: softprops/action-gh-release@v2
